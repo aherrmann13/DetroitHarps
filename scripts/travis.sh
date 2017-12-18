@@ -2,6 +2,6 @@ case "$TRAVIS_BRANCH" in
   "master")
     ;;
   "client")
-    travis-client.sh
+    ./scripts/travis-client.sh
     ;;    
 esac
