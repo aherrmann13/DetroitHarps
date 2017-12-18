@@ -1,0 +1,18 @@
+.title{
+    text-align: center;
+    font-size: 72px;
+}
+.container{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;    
+    .display-box{
+        // TODO media query to stack
+        width : calc(33%);
+        display: flex;
+        div {
+            background: white;
+            padding: 15px;
+        }
+    }
+}

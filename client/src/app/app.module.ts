@@ -10,11 +10,15 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 
 import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
+
+import { Client } from './app.client'
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +28,11 @@ import { AppComponent } from './app.component';
     MatSidenavModule,
     MatToolbarModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    Client
+  ],
+  bootstrap: [
+    AppComponent
+  ]
 })
 export class AppModule { }
