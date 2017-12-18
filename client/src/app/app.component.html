@@ -1,0 +1,12 @@
+<mat-sidenav-container fullscreen (backdropClick)="sidenav.close()">
+    <mat-sidenav #sidenav>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-toolbar color="primary">
+            <button mat-button class="navbar-button" (click)="sidenav.open()">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <span class="title">{{title}}</span>
+            </mat-toolbar>
+    </mat-sidenav-content>
+</mat-sidenav-container>
