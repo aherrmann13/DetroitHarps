@@ -7,6 +7,7 @@ branches:
     - api
     - client
 before_script:
+  - npm install -g angular-cli
   - chmod -R a+x scripts
 script:
   - ./scripts/travis.sh
