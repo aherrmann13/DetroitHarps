@@ -12,13 +12,17 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 
-import { Client } from './app.client'
+import { Client } from './app.client';
+import { ScheduleComponent } from './schedule/schedule.component'
+
+import { routing } from './app.routes'
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    ScheduleComponent,
   ],
   imports: [
     BrowserModule,
@@ -26,7 +30,8 @@ import { Client } from './app.client'
     MatButtonModule,
     MatIconModule,
     MatSidenavModule,
-    MatToolbarModule
+    MatToolbarModule,
+    routing
   ],
   providers: [
     Client

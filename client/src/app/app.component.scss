@@ -2,10 +2,17 @@ mat-sidenav {
     // TODO : media selector
     width: 250px;
 }
-
-.navbar-button {
-    min-width: 24px;
-    height: 100%;
+mat-sidenav{
+    button{
+        text-align: left;    
+        width: 100%;
+    }
+}
+mat-toolbar{
+    button {
+        min-width: 24px;
+        height: 100%;
+    }
 }
 
 .title {
