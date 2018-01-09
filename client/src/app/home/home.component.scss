@@ -7,8 +7,9 @@
     flex-flow: row wrap;
     justify-content: space-around;    
     .display-box{
-        // TODO media query to stack
-        width : calc(33%);
+        // TODO : media query switch to span to edges
+        margin: 10px;
+        width : calc(100%);
         display: flex;
         div {
             background: white;
