@@ -7,8 +7,8 @@ body {
 };
 
 .single-card-container{
-    padding-top : 20px; 
-
+    // TODO selector for mobile
+    margin: 20px calc(15%) 0px calc(15%);
     .form-container {
         display: flex;
         flex-direction: column;
@@ -28,4 +28,19 @@ body {
 
 .spacer{
     flex: 1 1 auto;
+}
+
+app-root{
+    top: 64px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    position: absolute;
 }

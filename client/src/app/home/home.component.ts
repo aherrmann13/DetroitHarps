@@ -10,6 +10,7 @@ import { Client } from '../app.client'
 export class HomeComponent implements OnInit {
 
   announcements: string[];
+  title: string = "Detroit Harps";
 
   constructor(private _client: Client) { }
 
