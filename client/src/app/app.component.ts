@@ -1,4 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild} from '@angular/core';
+import { Router } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry} from '@angular/material/icon';
@@ -17,8 +18,11 @@ export class AppComponent {
   instagramUrl = 'https://www.instagram.com/detroitharps/';
   shopUrl = 'https://www.oneills.com/shop-by-team/gaa/usa/detroit-harps-gaa.html';
 
-  constructor(private _mdIconRegistry: MatIconRegistry, 
-    private _sanitizer: DomSanitizer) {
+
+  constructor(
+      private _mdIconRegistry: MatIconRegistry, 
+        private _sanitizer: DomSanitizer,
+        private _router: Router) {
         _mdIconRegistry
             .addSvgIcon('facebook',
             _sanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebook.svg'));

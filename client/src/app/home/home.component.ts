@@ -4,13 +4,13 @@ import { Client } from '../app.client'
 
 @Component({
   selector: 'app-home',
-  templateUrl: "./home.component.html",
-  styleUrls: [ "./home.component.scss" ]
+  templateUrl: './home.component.html',
+  styleUrls: [ './home.component.scss' ]
 })
 export class HomeComponent implements OnInit {
 
   announcements: string[];
-  title: string = "Detroit Harps";
+  title: string = 'Detroit Harps';
 
   constructor(private _client: Client) { }
 
