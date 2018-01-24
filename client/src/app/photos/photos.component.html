@@ -1,0 +1,5 @@
+<div class='photos-container sides-container'>
+    <div class='single-photo' *ngFor='let photo of photos'>
+        <div [style.background-image]="'url('+photo.url+')'"></div>
+    </div>
+</div>

@@ -20,7 +20,8 @@ import { ScheduleComponent } from './schedule/schedule.component'
 import { Client } from './app.client';
 
 import { routing } from './app.routes';
-import { ContactComponent } from './contact/contact.component'
+import { ContactComponent } from './contact/contact.component';
+import { PhotosComponent } from './photos/photos.component'
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { ContactComponent } from './contact/contact.component'
     HomeComponent,
     ScheduleComponent,
     ContactComponent,
+    PhotosComponent,
   ],
   imports: [
     BrowserModule,

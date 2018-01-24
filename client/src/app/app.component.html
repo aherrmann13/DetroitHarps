@@ -39,6 +39,12 @@
             (click)='sidenav.close()'>
             <mat-icon>chat</mat-icon>Contact
         </button>
+        <button mat-button class='sidenav-button' 
+            [class.mat-primary]="_router.url == '/photos'"
+            [routerLink]="['photos']" 
+            (click)='sidenav.close()'>
+            <mat-icon>folder</mat-icon>Photos
+        </button>
     </mat-sidenav>
     <mat-sidenav-content>
         <div class='content'>
