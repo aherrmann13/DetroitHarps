@@ -1,5 +1,5 @@
 <div class='photos-container sides-container'>
     <div class='single-photo' *ngFor='let photo of photos'>
-        <div [style.background-image]="'url('+photo.url+')'"></div>
+        <div (click)="openDialog(photo)" class='mat-elevation-z4' [style.background-image]="'url('+photo.url+')'"></div>
     </div>
 </div>
