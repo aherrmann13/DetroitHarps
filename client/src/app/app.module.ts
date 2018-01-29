@@ -5,7 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -14,7 +13,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { AppComponent } from './app.component';
-import { PhotosModalComponent } from './photos/photos-modal.component';
+import { SinglePhotoComponent } from './photos/single-photo.component';
 import { HomeComponent } from './home/home.component';
 import { ScheduleComponent } from './schedule/schedule.component'
 
@@ -32,7 +31,7 @@ import { PhotosComponent } from './photos/photos.component'
     ScheduleComponent,
     ContactComponent,
     PhotosComponent,
-    PhotosModalComponent
+    SinglePhotoComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +39,6 @@ import { PhotosComponent } from './photos/photos.component'
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
-    MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
@@ -48,10 +46,6 @@ import { PhotosComponent } from './photos/photos.component'
     MatSidenavModule,
     MatToolbarModule,
     routing
-  ],
-  entryComponents: [ 
-    AppComponent,
-    PhotosModalComponent
   ],
   providers: [
     Client
