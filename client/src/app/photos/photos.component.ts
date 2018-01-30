@@ -1,5 +1,4 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material';
 
 
 import { Client } from '../app.client'
@@ -14,7 +13,7 @@ export class PhotosComponent implements OnInit {
 
   photos: Photo[];
 
-  constructor(private _client: Client, public dialog: MatDialog) { }
+  constructor(private _client: Client) { }
 
   ngOnInit() {
     this.photos = this._client.getPhotos();

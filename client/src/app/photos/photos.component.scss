@@ -40,6 +40,7 @@
         max-height: 90%;
     }
     .arrow{
+        cursor: pointer;
         top: 0px;
         position: absolute;
         height: 100%;
@@ -56,6 +57,10 @@
             right: 0px;
         }
         mat-icon { 
+            -webkit-user-select: none;        
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none; 
             position: absolute;
             top: 50%;
             left: 50%;

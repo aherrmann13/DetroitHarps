@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 
@@ -15,8 +15,7 @@ export class SinglePhotoComponent implements OnInit {
   currentPhoto: Photo;
   photos: Photo[];
   private sub: any;
-
-
+  
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -36,12 +35,14 @@ export class SinglePhotoComponent implements OnInit {
     this.sub.unsubscribe();
   }
 
+  @HostListener('document:keydown.ArrowRight', ['$event'])
   forward(): void {
     let index = this.photos.findIndex(x => x.id == this.currentPhoto.id);
     let newIndex = this.photos.length - 1 > index ? index + 1 : 0;
     this._router.navigate(['/photos', this.photos[newIndex].id]);
   }
 
+  @HostListener('document:keydown.ArrowLeft', ['$event'])
   back(): void {
     let index = this.photos.findIndex(x => x.id == this.currentPhoto.id);
     let newIndex =  index != 0 ? index - 1 : this.photos.length-1;
