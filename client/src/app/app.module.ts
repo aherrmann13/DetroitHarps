@@ -12,15 +12,16 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
-
 import { AppComponent } from './app.component';
+import { SinglePhotoComponent } from './photos/single-photo.component';
 import { HomeComponent } from './home/home.component';
 import { ScheduleComponent } from './schedule/schedule.component'
 
 import { Client } from './app.client';
 
 import { routing } from './app.routes';
-import { ContactComponent } from './contact/contact.component'
+import { ContactComponent } from './contact/contact.component';
+import { PhotosComponent } from './photos/photos.component'
 
 
 @NgModule({
@@ -29,6 +30,8 @@ import { ContactComponent } from './contact/contact.component'
     HomeComponent,
     ScheduleComponent,
     ContactComponent,
+    PhotosComponent,
+    SinglePhotoComponent
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Event } from './models/event.model'
+import { Photo } from './models/photo.model'
 
 @Injectable()
 export class Client {
@@ -34,4 +35,17 @@ export class Client {
         ];
         return tempEvents;
     }
+
+    getPhotos(): Photo[]{
+        let tempEvents: Photo[] = [
+            { id: 1, title: 'Photo1', url: 'assets/photos/2013_group.jpg', sortOrder: 1 },
+            { id: 2, title: 'Photo2', url: 'assets/photos/2014_group.jpg', sortOrder: 2 },
+            { id: 3, title: 'Photo3', url: 'assets/photos/2015_group.jpg', sortOrder: 3 },
+            { id: 4, title: 'Photo4', url: 'assets/photos/2016_group1.jpg', sortOrder: 4 },
+            { id: 5, title: 'Photo5', url: 'assets/photos/vertical.png', sortOrder: 5 },
+            { id: 6, title: 'Photo6', url: 'assets/photos/2016_group2.jpg', sortOrder: 6 },
+            { id: 7, title: 'Photo7', url: 'assets/photos/2016_group3.jpg', sortOrder: 7 }
+        ];
+        return tempEvents;
+    } 
 }
