@@ -4,10 +4,10 @@
     </button>
     <span class='title hide-mobile'>{{title}}</span>
     <span class='spacer'></span>
-    <a mat-button class='toolbar-icon' [class.test]='true === true' href='{{facebookUrl}}'>
+    <a mat-button class='toolbar-icon' href='{{facebookUrl}}'>
         <mat-icon svgIcon='facebook'></mat-icon>
     </a>
-    <a mat-button class='toolbar-icon' [class.test]='true === false' href='{{twitterUrl}}'>
+    <a mat-button class='toolbar-icon' href='{{twitterUrl}}'>
         <mat-icon svgIcon='twitter'></mat-icon>
     </a>
     <a mat-button class='toolbar-icon' href='{{instagramUrl}}'>
@@ -22,25 +22,25 @@
         <!--Empty button to deal with highlighting first button on navbar (hacky)-->
         <button mat-button></button>
         <button mat-button class='sidenav-button' 
-            [class.mat-primary]="_router.url == '/'" 
+            [class.mat-primary]="router.url === '/'" 
             [routerLink]="['']" 
             (click)='sidenav.close()'>
             <mat-icon>home</mat-icon>Home
         </button>
         <button mat-button class='sidenav-button'
-            [class.mat-primary]="_router.url == '/schedule'"
+            [class.mat-primary]="router.url === '/schedule'"
             [routerLink]="['schedule']"
             (click)='sidenav.close()'>
             <mat-icon>event</mat-icon>Schedule
         </button>
         <button mat-button class='sidenav-button' 
-            [class.mat-primary]="_router.url == '/contact'"
+            [class.mat-primary]="router.url === '/contact'"
             [routerLink]="['contact']" 
             (click)='sidenav.close()'>
             <mat-icon>chat</mat-icon>Contact
         </button>
         <button mat-button class='sidenav-button' 
-            [class.mat-primary]="_router.url == '/photos'"
+            [class.mat-primary]="router.url === '/photos'"
             [routerLink]="['photos']" 
             (click)='sidenav.close()'>
             <mat-icon>folder</mat-icon>Photos

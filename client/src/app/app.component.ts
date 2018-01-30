@@ -17,6 +17,7 @@ export class AppComponent {
   twitterUrl = 'https://twitter.com/DetroitHarps';
   instagramUrl = 'https://www.instagram.com/detroitharps/';
   shopUrl = 'https://www.oneills.com/shop-by-team/gaa/usa/detroit-harps-gaa.html';
+  router = this._router;
 
 
   constructor(
