@@ -39,6 +39,23 @@ body {
     }
 }
 
+.sides-container {
+    margin: 20px calc(15%) 0px calc(15%);
+    @media (max-width: 600px) {
+        margin: 20px 5px 0px 5px;
+    }
+}
+
+.flex-div {
+    display: flex;
+}
+
+.fit-img { 
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain
+}
+
 app-root{
     @media (max-width: 600px) {
         top: 56px;

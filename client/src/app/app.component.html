@@ -45,6 +45,12 @@
             (click)='sidenav.close()'>
             <mat-icon>folder</mat-icon>Photos
         </button>
+        <button mat-button class='sidenav-button' 
+            [class.mat-primary]="router.url === '/about'"
+            [routerLink]="['about']" 
+            (click)='sidenav.close()'>
+            <mat-icon>info</mat-icon>About
+        </button>
     </mat-sidenav>
     <mat-sidenav-content>
         <div class='content'>

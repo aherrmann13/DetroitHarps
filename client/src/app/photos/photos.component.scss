@@ -1,12 +1,6 @@
 .photos-container{
     display: flex;
     flex-wrap: wrap;
-    //align-items: center;
-    //justify-content: center;
-    @media (max-width: 600px) {
-        margin: 20px 5px 0px 5px;
-    }
-    margin: 20px calc(15%) 0px calc(15%);
     .photos-group{
         width: calc(100%);
         display: flex;

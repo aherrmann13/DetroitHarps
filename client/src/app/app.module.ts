@@ -21,7 +21,8 @@ import { Client } from './app.client';
 
 import { routing } from './app.routes';
 import { ContactComponent } from './contact/contact.component';
-import { PhotosComponent } from './photos/photos.component'
+import { PhotosComponent } from './photos/photos.component';
+import { AboutComponent } from './about/about.component'
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { PhotosComponent } from './photos/photos.component'
     ScheduleComponent,
     ContactComponent,
     PhotosComponent,
-    SinglePhotoComponent
+    SinglePhotoComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

@@ -6,7 +6,7 @@ import { Event } from '../models/event.model'
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule.component.html',
-  styleUrls: [ './schedule.component.scss' ]
+  styleUrls: [ ]
 })
 export class ScheduleComponent implements OnInit {
 
