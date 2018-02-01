@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: 'schedule', component: ScheduleComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'photos', component: PhotosComponent },
-  { path: 'photos/:id', component: SinglePhotoComponent }
+  { path: 'photos/:groupName/:id', component: SinglePhotoComponent }
 ];
 
 const appRoutes = [

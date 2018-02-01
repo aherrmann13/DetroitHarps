@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Client } from '../app.client'
 import { Photo } from '../models/photo.model';
+import { PhotoGroup } from '../models/photo-group.model';
 
 @Component({
   selector: 'app-single-photo',
@@ -11,9 +12,10 @@ import { Photo } from '../models/photo.model';
   styleUrls: [ './photos.component.scss' ]
 })
 export class SinglePhotoComponent implements OnInit {
-  id: number; 
   currentPhoto: Photo;
-  photos: Photo[];
+  private id: number; 
+  private groupName: string;
+  private photoGroups: PhotoGroup[];
   private sub: any;
   
   constructor(
@@ -22,30 +24,37 @@ export class SinglePhotoComponent implements OnInit {
     private _client: Client) { }
 
   ngOnInit() {
-    this.photos = this._client.getPhotos().sort(x => x.sortOrder).reverse();
+    this.photoGroups = this._client.getPhotos();
     this.sub = this._route.params.subscribe(params => {
+      this.groupName = params['groupName'];
       this.id = +params['id'];
-      console.log(this.id);
-      this.currentPhoto = this.photos.find(x => x.id === this.id);
+      this.currentPhoto = this.photoGroups
+        .find(x => x.groupName === this.groupName).photos
+        .find(x => x.id === this.id);
    });
   }
 
   ngOnDestroy() {
-    console.log("new");
     this.sub.unsubscribe();
   }
 
   @HostListener('document:keydown.ArrowRight', ['$event'])
   forward(): void {
-    let index = this.photos.findIndex(x => x.id == this.currentPhoto.id);
-    let newIndex = this.photos.length - 1 > index ? index + 1 : 0;
-    this._router.navigate(['/photos', this.photos[newIndex].id]);
+    let currentGroupPhotos = this.getCurrentPhotoGroupPhotos();
+    let index = currentGroupPhotos.findIndex(x => x.id == this.currentPhoto.id);
+    let newIndex = currentGroupPhotos.length - 1 > index ? index + 1 : 0;
+    this._router.navigate(['/photos', this.groupName, currentGroupPhotos[newIndex].id]);
   }
 
   @HostListener('document:keydown.ArrowLeft', ['$event'])
   back(): void {
-    let index = this.photos.findIndex(x => x.id == this.currentPhoto.id);
-    let newIndex =  index != 0 ? index - 1 : this.photos.length-1;
-    this._router.navigate(['/photos', this.photos[newIndex].id]);
+    let currentGroupPhotos = this.getCurrentPhotoGroupPhotos();
+    let index = currentGroupPhotos.findIndex(x => x.id == this.currentPhoto.id);
+    let newIndex =  index != 0 ? index - 1 : currentGroupPhotos.length-1;
+    this._router.navigate(['/photos', this.groupName, currentGroupPhotos[newIndex].id]);
+  }
+
+  private getCurrentPhotoGroupPhotos() : Photo[]{
+    return this.photoGroups.find(x => x.groupName === this.groupName).photos;
   }
 }

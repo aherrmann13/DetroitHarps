@@ -1,8 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 
-
 import { Client } from '../app.client'
-import { Photo } from '../models/photo.model'
+import { PhotoGroup } from '../models/photo-group.model';
 
 @Component({
   selector: 'app-photos',
@@ -11,12 +10,11 @@ import { Photo } from '../models/photo.model'
 })
 export class PhotosComponent implements OnInit {
 
-  photos: Photo[];
+  photoGroups: PhotoGroup[];
 
   constructor(private _client: Client) { }
 
   ngOnInit() {
-    this.photos = this._client.getPhotos();
+    this.photoGroups = this._client.getPhotos();
   }
-
 }
