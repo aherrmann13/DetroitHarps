@@ -55,7 +55,7 @@
                         </mat-form-field>
                     </form>
                 </mat-step>
-                <mat-step [stepControl]='thirdFormGroup'>
+                <mat-step [stepControl]='thirdFormGroupArray[0]'>
                     <form *ngFor='let thirdFormGroup of thirdFormGroupArray' [formGroup]='thirdFormGroup'>
                         <ng-template matStepLabel>Child Information</ng-template>
                         <mat-form-field>
