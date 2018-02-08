@@ -30,7 +30,8 @@ import { routing } from './app.routes';
 import { ContactComponent } from './contact/contact.component';
 import { PhotosComponent } from './photos/photos.component';
 import { AboutComponent } from './about/about.component';
-import { RegisterComponent } from './register/register.component'
+import { RegisterComponent } from './register/register.component';
+import { SupportComponent } from './support/support.component'
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { RegisterComponent } from './register/register.component'
     PhotosComponent,
     SinglePhotoComponent,
     AboutComponent,
-    RegisterComponent
+    RegisterComponent,
+    SupportComponent
   ],
   imports: [
     BrowserModule,
