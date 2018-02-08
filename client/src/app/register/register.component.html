@@ -1,0 +1,103 @@
+<div class='single-card-container sides-container'>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>
+                <span class='mat-title'>Register</span>
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-horizontal-stepper [linear]='true' #stepper (selectionChange)='test(stepper)'>
+                <mat-step [stepControl]='firstFormGroup'>
+                    <form [formGroup]='firstFormGroup'>
+                        <ng-template matStepLabel>Contact Information</ng-template>
+                        <mat-form-field>
+                            <input matInput placeholder='First name' formControlName='parentFirstName' required>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <input matInput placeholder='Last name' formControlName='parentLastName' required>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <input matInput placeholder='Phone Number' formControlName='phoneNumber' required>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <input matInput placeholder='Email' formControlName='emailAddress' required>
+                        </mat-form-field>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]='secondFormGroup'>
+                    <form [formGroup]='secondFormGroup'>
+                        <ng-template matStepLabel>Address</ng-template>
+                        <mat-form-field>
+                            <input matInput placeholder='Street Address' formControlName='address' required>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                                <input matInput placeholder='Street Address 2' formControlName='address2'>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <input matInput placeholder='City' formControlName='city' required>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <mat-select placeholder='State' formControlName='state' required>
+                                <mat-option *ngFor='let state of states' value="{{state}}">
+                                    {{state}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <input matInput placeholder='Zip' formControlName='zip' required>
+                        </mat-form-field>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]='thirdFormGroup'>
+                    <form *ngFor='let thirdFormGroup of thirdFormGroupArray' [formGroup]='thirdFormGroup'>
+                        <ng-template matStepLabel>Child Information</ng-template>
+                        <mat-form-field>
+                            <input matInput placeholder='Child First name' formControlName='childFirstName'>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <input matInput placeholder='Child Last name' formControlName='childLastName'>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <input matInput [matDatepicker]="genderPicker" placeholder="Choose a date" formControlName='childDob'>
+                            <mat-datepicker-toggle matSuffix [for]="genderPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #genderPicker></mat-datepicker>
+                        </mat-form-field>
+                        <br />
+                        <mat-radio-group formControlName='childGender'>
+                            <mat-radio-button value="male">Male </mat-radio-button>
+                            <mat-radio-button value="female">Female </mat-radio-button>
+                        </mat-radio-group>
+                        <br />
+                        <mat-form-field>
+                            <mat-select placeholder='Shirt Size' formControlName='childShirtSize'>
+                                <mat-option *ngFor='let shirtSize of shirtSizes' value="{{shirtSize}}">
+                                    {{shirtSize}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </form>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Done</ng-template>
+                    TODO : add payment
+                </mat-step>
+            </mat-horizontal-stepper>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color='primary' *ngIf='formIndex === 2' (click)="addChild()">Add Child</button>
+            <span class='spacer'></span>
+            <button mat-raised-button color='primary' *ngIf='formIndex !== 0' (click)="goBack(stepper)">Previous</button>
+            <button mat-raised-button color='primary' *ngIf='formIndex !== 3' (click)="goForward(stepper)">Next</button>
+            <button mat-raised-button color='primary' *ngIf='formIndex === 3'>Register</button>
+        </mat-card-actions>
+    </mat-card>
+</div>

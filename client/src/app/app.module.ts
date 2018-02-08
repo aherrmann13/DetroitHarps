@@ -3,14 +3,21 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { MatButtonModule,
+  MatCardModule ,
+  MatDatepickerModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatNativeDateModule,
+  MatRadioModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatStepperModule,
+  MatToolbarModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { SinglePhotoComponent } from './photos/single-photo.component';
@@ -22,7 +29,8 @@ import { Client } from './app.client';
 import { routing } from './app.routes';
 import { ContactComponent } from './contact/contact.component';
 import { PhotosComponent } from './photos/photos.component';
-import { AboutComponent } from './about/about.component'
+import { AboutComponent } from './about/about.component';
+import { RegisterComponent } from './register/register.component'
 
 
 @NgModule({
@@ -33,20 +41,28 @@ import { AboutComponent } from './about/about.component'
     ContactComponent,
     PhotosComponent,
     SinglePhotoComponent,
-    AboutComponent
+    AboutComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    FormsModule,
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
+    MatDatepickerModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
+    MatNativeDateModule,
+    MatRadioModule,
+    MatSelectModule,
     MatSidenavModule,
+    MatStepperModule,
     MatToolbarModule,
+    ReactiveFormsModule,
     routing
   ],
   providers: [

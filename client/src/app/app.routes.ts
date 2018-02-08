@@ -6,6 +6,7 @@ import { ContactComponent } from './contact/contact.component';
 import { PhotosComponent } from './photos/photos.component';
 import { SinglePhotoComponent } from './photos/single-photo.component';
 import { AboutComponent } from './about/about.component';
+import { RegisterComponent } from './register/register.component'
 
 const defaultRoutes = [
   {
@@ -20,7 +21,8 @@ const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'photos', component: PhotosComponent },
   { path: 'photos/:groupName/:id', component: SinglePhotoComponent },
-  { path: 'about', component: AboutComponent }
+  { path: 'about', component: AboutComponent },
+  { path: 'register', component: RegisterComponent }
 ];
 
 const appRoutes = [
