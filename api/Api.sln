@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "src\Repositor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository.Migrator", "src\Repository.Migrator\Repository.Migrator.csproj", "{D6F2EDCA-E4A8-4914-8E8D-0B9023C4E878}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{5325C551-BDC2-45CF-BEAB-0DADF305BB40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess.Test", "test\DataAccess.Test\DataAccess.Test.csproj", "{87D397A1-EDF6-4AC4-9192-2596BBB2D899}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,9 +50,22 @@ Global
 		{D6F2EDCA-E4A8-4914-8E8D-0B9023C4E878}.Release|x64.Build.0 = Release|x64
 		{D6F2EDCA-E4A8-4914-8E8D-0B9023C4E878}.Release|x86.ActiveCfg = Release|x86
 		{D6F2EDCA-E4A8-4914-8E8D-0B9023C4E878}.Release|x86.Build.0 = Release|x86
+		{87D397A1-EDF6-4AC4-9192-2596BBB2D899}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87D397A1-EDF6-4AC4-9192-2596BBB2D899}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87D397A1-EDF6-4AC4-9192-2596BBB2D899}.Debug|x64.ActiveCfg = Debug|x64
+		{87D397A1-EDF6-4AC4-9192-2596BBB2D899}.Debug|x64.Build.0 = Debug|x64
+		{87D397A1-EDF6-4AC4-9192-2596BBB2D899}.Debug|x86.ActiveCfg = Debug|x86
+		{87D397A1-EDF6-4AC4-9192-2596BBB2D899}.Debug|x86.Build.0 = Debug|x86
+		{87D397A1-EDF6-4AC4-9192-2596BBB2D899}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87D397A1-EDF6-4AC4-9192-2596BBB2D899}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87D397A1-EDF6-4AC4-9192-2596BBB2D899}.Release|x64.ActiveCfg = Release|x64
+		{87D397A1-EDF6-4AC4-9192-2596BBB2D899}.Release|x64.Build.0 = Release|x64
+		{87D397A1-EDF6-4AC4-9192-2596BBB2D899}.Release|x86.ActiveCfg = Release|x86
+		{87D397A1-EDF6-4AC4-9192-2596BBB2D899}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CA3A2880-7397-4D71-91E2-66AF2C8C4700} = {B51C921E-C553-49E6-BB69-F0752BCB9B91}
 		{D6F2EDCA-E4A8-4914-8E8D-0B9023C4E878} = {B51C921E-C553-49E6-BB69-F0752BCB9B91}
+		{87D397A1-EDF6-4AC4-9192-2596BBB2D899} = {5325C551-BDC2-45CF-BEAB-0DADF305BB40}
 	EndGlobalSection
 EndGlobal
