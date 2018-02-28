@@ -1,6 +1,7 @@
 namespace Repository
 {
     using Microsoft.EntityFrameworkCore;
+    using Repository.Entities;
     
     public class ApiDbContext : DbContext
     {

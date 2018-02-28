@@ -2,7 +2,6 @@ namespace DataAccess.Test
 {
     using System;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.DependencyInjection;
     using Repository;
     using Xunit;
 
@@ -14,13 +13,8 @@ namespace DataAccess.Test
         {
             name = name ?? Guid.NewGuid().ToString();
 
-            var serviceProvider = new ServiceCollection()
-                .AddEntityFrameworkInMemoryDatabase()
-                .BuildServiceProvider();
-
             var builder = new DbContextOptionsBuilder<ApiDbContext>()
-                .UseInMemoryDatabase(name)
-                .UseInternalServiceProvider(serviceProvider);
+                .UseInMemoryDatabase(name);
 
             return builder.Options;
         }

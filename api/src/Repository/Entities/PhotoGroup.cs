@@ -1,4 +1,4 @@
-namespace Repository
+namespace Repository.Entities
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
