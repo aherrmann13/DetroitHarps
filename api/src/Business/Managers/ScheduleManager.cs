@@ -20,7 +20,7 @@ namespace Business.Managers
             _dbContext = dbContext;
         }
 
-        public IEnumerable<int> CreateEvent(params EventCreateModel[] models)
+        public IEnumerable<int> Create(params EventCreateModel[] models)
         {
             if(models == null || models.Length == 0)
             {
@@ -35,7 +35,7 @@ namespace Business.Managers
             return events.Select(x => x.Id);
         }
 
-        public IEnumerable<int> UpdateEvent(params EventUpdateModel[] models)
+        public IEnumerable<int> Update(params EventUpdateModel[] models)
         {
             if(models == null || models.Length == 0)
             {
@@ -54,7 +54,7 @@ namespace Business.Managers
             return entities.Select(x => x.Id);
         }
 
-        public IEnumerable<int> DeleteEvent(params int[] ids)
+        public IEnumerable<int> Delete(params int[] ids)
         {
             if(ids == null || ids.Length == 0)
             {
@@ -72,7 +72,7 @@ namespace Business.Managers
             return entities.Select(x => x.Id);
         }
 
-        public IEnumerable<EventReadModel> GetAllEvents() =>
+        public IEnumerable<EventReadModel> GetAll() =>
             _dbContext.Set<Event>()
                 .AsNoTracking()
                 .Select(x => new EventReadModel
@@ -84,7 +84,7 @@ namespace Business.Managers
                 });
         
 
-        public IEnumerable<EventReadModel> GetEvents(params int[] ids) =>
+        public IEnumerable<EventReadModel> Get(params int[] ids) =>
             _dbContext.Set<Event>()
                 .AsNoTracking()
                 .Where(x => ids != null && ids.Contains(x.Id))
