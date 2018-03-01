@@ -40,7 +40,7 @@ namespace Business.Test
         [Fact]
         public void CreateNullInputTest()
         {
-            var response = _manager.CreateEvent(null);
+            var response = _manager.CreateEvent((EventCreateModel[])null);
 
             Assert.Empty(response);
         }
@@ -96,7 +96,7 @@ namespace Business.Test
         [Fact]
         public void UpdateNullInputTest()
         {
-            var response = _manager.UpdateEvent(null);
+            var response = _manager.UpdateEvent((EventUpdateModel[])null);
 
             Assert.Empty(response);
         }
@@ -166,6 +166,133 @@ namespace Business.Test
             AssertUpdated(updateModels.Where(x => response.Contains(x.Id)).ToList(), updatedEntities);
             AssertResponseCorrect(response, updatedEntities);
         }
+        
+        [Fact]
+        public void DeleteSuccess()
+        {
+            var entities = SeedEvents(DbContext);
+
+            var deleteIds = entities.Select(x => x.Id).Take(3).ToArray();
+
+            var response = _manager.DeleteEvent(deleteIds);
+
+            var remainingEntities = DbContext.Set<Event>()
+                .AsNoTracking()
+                .ToList();
+
+            Assert.Equal(response, deleteIds);
+            Assert.Equal(entities.Count() - response.Count(), remainingEntities.Count);
+
+            Assert.Empty(remainingEntities.Where(x => deleteIds.Contains(x.Id)));
+        }
+
+        [Fact]
+        public void DeleteNullInputTest()
+        {
+            var response = _manager.DeleteEvent((int[])null);
+
+            Assert.Empty(response);
+        }
+
+        [Fact]
+        public void DeleteEmptyInputTest()
+        {
+            var response = _manager.DeleteEvent(new int[0]);
+
+            Assert.Empty(response);
+        }
+
+        [Fact]
+        public void DeleteOneIdDoesntExistTest()
+        {
+            var entities = SeedEvents(DbContext);
+
+            var deleteIds = entities.Select(x => x.Id).Take(3).ToList();
+
+            deleteIds.Add(DbContext.Set<Event>().AsNoTracking().Max(x => x.Id) + 1);
+
+            var response = _manager.DeleteEvent(deleteIds.ToArray()).ToList();
+
+            var remainingEntities = DbContext.Set<Event>()
+                .AsNoTracking()
+                .ToList();
+
+            Assert.Equal(response.Count, deleteIds.Count - 1);
+            Assert.Equal(entities.Count() - response.Count(), remainingEntities.Count);
+
+            Assert.Empty(remainingEntities.Where(x => deleteIds.Contains(x.Id)));
+        }
+
+        [Fact]
+        public void GetAllSuccessTest()
+        {
+            var entities = SeedEvents(DbContext);
+
+            var response = _manager.GetAllEvents();
+
+            AssertEqual(response, entities);
+        }
+
+        [Fact]
+        public void GetSuccessTest()
+        {
+            var entities = SeedEvents(DbContext);
+            var ids = entities.Select(x => x.Id).Take(3).ToList();
+
+            var response = _manager.GetEvents(ids.ToArray());
+
+            AssertEqual(response, entities.Where(x => ids.Contains(x.Id)));
+        }
+
+        [Fact]
+        public void GetSomeIdsExistTest()
+        {
+            var entities = SeedEvents(DbContext);
+            var ids = entities.Select(x => x.Id).Take(3).ToList();
+
+            ids.Add(DbContext.Set<Event>().AsNoTracking().Max(x => x.Id) + 1);
+
+            var response = _manager.GetEvents(ids.ToArray());
+
+            Assert.Equal(response.Count(), ids.Count - 1);
+            AssertEqual(response, entities.Where(x => ids.Contains(x.Id)));
+        }
+
+        [Fact]
+        public void GetNoIdsExistTest()
+        {
+            var entities = SeedEvents(DbContext);
+
+            var ids = new List<int>
+            {
+                DbContext.Set<Event>().AsNoTracking().Max(x => x.Id) + 1,
+                DbContext.Set<Event>().AsNoTracking().Max(x => x.Id) + 2
+            };
+
+            var response = _manager.GetEvents(ids.ToArray());
+
+            Assert.Empty(response);
+        }
+
+        [Fact]
+        public void GetNullInputTest()
+        {
+            var entities = SeedEvents(DbContext);
+
+            var response = _manager.GetEvents((int[])null);
+
+            Assert.Empty(response);
+        }
+
+        [Fact]
+        public void GetEmptyInputTest()
+        {
+            var entities = SeedEvents(DbContext);
+
+            var response = _manager.GetEvents(new int[0]);
+
+            Assert.Empty(response);
+        }
 
         private static IEnumerable<EventCreateModel> GetValidModels()
         {
@@ -200,17 +327,15 @@ namespace Business.Test
             return eventList;
         }
 
-        private static void AssertCreated(IList<EventCreateModel> models, IList<Event> entities)
+        private static void AssertCreated(IEnumerable<EventCreateModel> models, IEnumerable<Event> entities)
         {
-            Assert.Equal(models.Count, entities.Count);
+            Assert.Equal(models.Count(), entities.Count());
 
             var editableEntityList = entities.ToList();
             // TODO : ForEach on IList, IEnumerable in tools
             foreach(var model in models)
             {
-                var entity = editableEntityList.FirstOrDefault(x => x.Date.Equals(model.Date.Date) && 
-                    model.Title.EqualOrdinal(x.Title) && 
-                    model.Description.EqualOrdinal(x.Description));
+                var entity = editableEntityList.FirstOrDefault(x => IsEqual(model, x));
 
                 Assert.NotNull(entity);
 
@@ -218,21 +343,41 @@ namespace Business.Test
             }
         }
 
-        private static void AssertUpdated(IList<EventUpdateModel> models, IList<Event> entities)
+        private static void AssertUpdated(IEnumerable<EventUpdateModel> models, IEnumerable<Event> entities)
         {
-            Assert.Equal(models.Count, entities.Count);
+            Assert.Equal(models.Count(), entities.Count());
 
-            // TODO : ForEach on IList, IEnumerable in tools
+            // TODO : ForEach on IEnumerable in tools
             foreach(var model in models)
             {
                 var entity = entities.FirstOrDefault(x => x.Id.Equals(model.Id));
 
                 Assert.NotNull(entity);
 
-                Assert.Equal(model.Date.Date, entity.Date);
-                Assert.Equal(model.Description, entity.Description);
-                Assert.Equal(model.Title, entity.Title);
+                Assert.True(IsEqual(model, entity));
             }
+        }
+
+        private static void AssertEqual(IEnumerable<EventReadModel> models, IEnumerable<Event> entities)
+        {
+            Assert.Equal(models.Count(), entities.Count());
+
+            // TODO : ForEach on IEnumerable in tools
+            foreach(var model in models)
+            {
+                var entity = entities.FirstOrDefault(x => x.Id.Equals(model.Id));
+
+                Assert.NotNull(entity);
+
+                Assert.True(IsEqual(model, entity));
+            }
+        }
+
+        private static bool IsEqual(EventModelBase model, Event entity)
+        {
+            return model.Date.Date.Equals(entity.Date) && 
+                    model.Title.EqualOrdinal(entity.Title) && 
+                    model.Description.EqualOrdinal(entity.Description);
         }
 
         private static void AssertResponseCorrect(IList<int> response, IList<Event> entities)

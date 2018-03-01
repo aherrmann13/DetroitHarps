@@ -77,6 +77,7 @@ namespace Business.Managers
                 .AsNoTracking()
                 .Select(x => new EventReadModel
                 {
+                    Id = x.Id,
                     Date = x.Date,
                     Title = x.Title,
                     Description = x.Description
@@ -86,9 +87,10 @@ namespace Business.Managers
         public IEnumerable<EventReadModel> GetEvents(params int[] ids) =>
             _dbContext.Set<Event>()
                 .AsNoTracking()
-                .Where(x => ids.Contains(x.Id))
+                .Where(x => ids != null && ids.Contains(x.Id))
                 .Select(x => new EventReadModel
                 {
+                    Id = x.Id,
                     Date = x.Date,
                     Title = x.Title,
                     Description = x.Description
