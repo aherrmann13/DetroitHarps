@@ -41,7 +41,7 @@ namespace Business.Managers
             {
                 return new List<int>();
             }
-            var eventIds = models.Select(x => x.Id);
+            var eventIds = models.Where(x => x != null).Select(x => x.Id);
 
             var entities = _dbContext.Set<Event>()
                 .Where(x => eventIds.Contains(x.Id))
