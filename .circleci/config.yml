@@ -15,6 +15,12 @@ jobs:
           name: testing dotnet version
           command: dotnet --info
       - run:
+          name: Restore
+          command: dotnet restore api/Api.sln
+      - run:
+          name: Build
+          command: dotnet build api/Api.sln
+      - run:
           name: DataAccess.Test
           command: dotnet test api/test/DataAccess.Test/DataAccess.Test.csproj
       - run:

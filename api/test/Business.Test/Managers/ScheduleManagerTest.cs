@@ -27,7 +27,7 @@ namespace Business.Test
         {
             var createModels = GetValidModels().ToArray();
 
-            var response = _manager.CreateEvent(createModels).ToList();
+            var response = _manager.Create(createModels).ToList();
 
             var entities = DbContext.Set<Event>()
                 .AsNoTracking()
@@ -40,7 +40,7 @@ namespace Business.Test
         [Fact]
         public void CreateNullInputTest()
         {
-            var response = _manager.CreateEvent((EventCreateModel[])null);
+            var response = _manager.Create((EventCreateModel[])null);
 
             Assert.Empty(response);
         }
@@ -48,7 +48,7 @@ namespace Business.Test
         [Fact]
         public void CreateEmptyInputTest()
         {
-            var response = _manager.CreateEvent(new EventCreateModel[0]);
+            var response = _manager.Create(new EventCreateModel[0]);
 
             Assert.Empty(response);
         }
@@ -59,7 +59,7 @@ namespace Business.Test
             var createModels = GetValidModels().ToList();
             createModels.Add((EventCreateModel)null);
 
-            var response = _manager.CreateEvent(createModels.ToArray()).ToList();
+            var response = _manager.Create(createModels.ToArray()).ToList();
 
             var entities = DbContext.Set<Event>()
                 .AsNoTracking()
@@ -83,7 +83,7 @@ namespace Business.Test
                 Description = Guid.NewGuid().ToString()
             }).ToArray();
 
-            var response = _manager.UpdateEvent(updateModels).ToList();
+            var response = _manager.Update(updateModels).ToList();
 
             var updatedEntities = DbContext.Set<Event>()
                 .AsNoTracking()
@@ -96,7 +96,7 @@ namespace Business.Test
         [Fact]
         public void UpdateNullInputTest()
         {
-            var response = _manager.UpdateEvent((EventUpdateModel[])null);
+            var response = _manager.Update((EventUpdateModel[])null);
 
             Assert.Empty(response);
         }
@@ -104,7 +104,7 @@ namespace Business.Test
         [Fact]
         public void UpdateEmptyInputTest()
         {
-            var response = _manager.UpdateEvent(new EventUpdateModel[0]);
+            var response = _manager.Update(new EventUpdateModel[0]);
 
             Assert.Empty(response);
         }
@@ -124,7 +124,7 @@ namespace Business.Test
 
             updateModels.Add((EventUpdateModel)null);
 
-            var response = _manager.UpdateEvent(updateModels.ToArray()).ToList();
+            var response = _manager.Update(updateModels.ToArray()).ToList();
 
             var updatedEntities = DbContext.Set<Event>()
                 .AsNoTracking()
@@ -156,7 +156,7 @@ namespace Business.Test
                 Description = Guid.NewGuid().ToString()
             });
 
-            var response = _manager.UpdateEvent(updateModels.ToArray()).ToList();
+            var response = _manager.Update(updateModels.ToArray()).ToList();
 
             var updatedEntities = DbContext.Set<Event>()
                 .AsNoTracking()
@@ -174,7 +174,7 @@ namespace Business.Test
 
             var deleteIds = entities.Select(x => x.Id).Take(3).ToArray();
 
-            var response = _manager.DeleteEvent(deleteIds);
+            var response = _manager.Delete(deleteIds);
 
             var remainingEntities = DbContext.Set<Event>()
                 .AsNoTracking()
@@ -189,7 +189,7 @@ namespace Business.Test
         [Fact]
         public void DeleteNullInputTest()
         {
-            var response = _manager.DeleteEvent((int[])null);
+            var response = _manager.Delete((int[])null);
 
             Assert.Empty(response);
         }
@@ -197,7 +197,7 @@ namespace Business.Test
         [Fact]
         public void DeleteEmptyInputTest()
         {
-            var response = _manager.DeleteEvent(new int[0]);
+            var response = _manager.Delete(new int[0]);
 
             Assert.Empty(response);
         }
@@ -211,7 +211,7 @@ namespace Business.Test
 
             deleteIds.Add(DbContext.Set<Event>().AsNoTracking().Max(x => x.Id) + 1);
 
-            var response = _manager.DeleteEvent(deleteIds.ToArray()).ToList();
+            var response = _manager.Delete(deleteIds.ToArray()).ToList();
 
             var remainingEntities = DbContext.Set<Event>()
                 .AsNoTracking()
@@ -228,7 +228,7 @@ namespace Business.Test
         {
             var entities = SeedEvents(DbContext);
 
-            var response = _manager.GetAllEvents();
+            var response = _manager.GetAll();
 
             AssertEqual(response, entities);
         }
@@ -239,7 +239,7 @@ namespace Business.Test
             var entities = SeedEvents(DbContext);
             var ids = entities.Select(x => x.Id).Take(3).ToList();
 
-            var response = _manager.GetEvents(ids.ToArray());
+            var response = _manager.Get(ids.ToArray());
 
             AssertEqual(response, entities.Where(x => ids.Contains(x.Id)));
         }
@@ -252,7 +252,7 @@ namespace Business.Test
 
             ids.Add(DbContext.Set<Event>().AsNoTracking().Max(x => x.Id) + 1);
 
-            var response = _manager.GetEvents(ids.ToArray());
+            var response = _manager.Get(ids.ToArray());
 
             Assert.Equal(response.Count(), ids.Count - 1);
             AssertEqual(response, entities.Where(x => ids.Contains(x.Id)));
@@ -269,7 +269,7 @@ namespace Business.Test
                 DbContext.Set<Event>().AsNoTracking().Max(x => x.Id) + 2
             };
 
-            var response = _manager.GetEvents(ids.ToArray());
+            var response = _manager.Get(ids.ToArray());
 
             Assert.Empty(response);
         }
@@ -279,7 +279,7 @@ namespace Business.Test
         {
             var entities = SeedEvents(DbContext);
 
-            var response = _manager.GetEvents((int[])null);
+            var response = _manager.Get((int[])null);
 
             Assert.Empty(response);
         }
@@ -289,7 +289,7 @@ namespace Business.Test
         {
             var entities = SeedEvents(DbContext);
 
-            var response = _manager.GetEvents(new int[0]);
+            var response = _manager.Get(new int[0]);
 
             Assert.Empty(response);
         }
