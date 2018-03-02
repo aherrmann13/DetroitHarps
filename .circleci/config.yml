@@ -14,10 +14,10 @@ jobs:
       - run:
           name: testing dotnet version
           command: dotnet --info
-      -run:
+      - run:
           name: DataAccess.Test
           command: dotnet test api/test/DataAccess.Test/DataAccess.Test.csproj
-      -run:
+      - run:
           name: Business.Test
           command: dotnet test api/test/Business.Test/Business.Test.csproj
   client:
