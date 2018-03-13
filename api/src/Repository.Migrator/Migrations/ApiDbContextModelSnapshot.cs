@@ -20,7 +20,7 @@ namespace Repository.Migrator.Migrations
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
 
-            modelBuilder.Entity("Repository.Event", b =>
+            modelBuilder.Entity("Repository.Entities.Event", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -36,7 +36,7 @@ namespace Repository.Migrator.Migrations
                     b.ToTable("Event");
                 });
 
-            modelBuilder.Entity("Repository.PaymentDetails", b =>
+            modelBuilder.Entity("Repository.Entities.PaymentDetails", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -54,7 +54,7 @@ namespace Repository.Migrator.Migrations
                     b.ToTable("PaymentDetails");
                 });
 
-            modelBuilder.Entity("Repository.Photo", b =>
+            modelBuilder.Entity("Repository.Entities.Photo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -74,7 +74,7 @@ namespace Repository.Migrator.Migrations
                     b.ToTable("Photo");
                 });
 
-            modelBuilder.Entity("Repository.PhotoGroup", b =>
+            modelBuilder.Entity("Repository.Entities.PhotoGroup", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -88,12 +88,12 @@ namespace Repository.Migrator.Migrations
                     b.ToTable("PhotoGroup");
                 });
 
-            modelBuilder.Entity("Repository.RegisteredChild", b =>
+            modelBuilder.Entity("Repository.Entities.RegisteredChild", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("BirthDate");
+                    b.Property<DateTime>("DateOfBirth");
 
                     b.Property<string>("FirstName");
 
@@ -110,7 +110,7 @@ namespace Repository.Migrator.Migrations
                     b.ToTable("RegisteredChild");
                 });
 
-            modelBuilder.Entity("Repository.RegisteredPerson", b =>
+            modelBuilder.Entity("Repository.Entities.RegisteredPerson", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -142,7 +142,7 @@ namespace Repository.Migrator.Migrations
                     b.ToTable("RegisteredPerson");
                 });
 
-            modelBuilder.Entity("Repository.Season", b =>
+            modelBuilder.Entity("Repository.Entities.Season", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -154,7 +154,7 @@ namespace Repository.Migrator.Migrations
                     b.ToTable("Season");
                 });
 
-            modelBuilder.Entity("Repository.User", b =>
+            modelBuilder.Entity("Repository.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -170,33 +170,33 @@ namespace Repository.Migrator.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("Repository.PaymentDetails", b =>
+            modelBuilder.Entity("Repository.Entities.PaymentDetails", b =>
                 {
-                    b.HasOne("Repository.RegisteredPerson", "RegisteredPerson")
+                    b.HasOne("Repository.Entities.RegisteredPerson", "RegisteredPerson")
                         .WithMany("PaymentDetails")
                         .HasForeignKey("RegisteredPersonId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Repository.Photo", b =>
+            modelBuilder.Entity("Repository.Entities.Photo", b =>
                 {
-                    b.HasOne("Repository.PhotoGroup", "PhotoGroup")
+                    b.HasOne("Repository.Entities.PhotoGroup", "PhotoGroup")
                         .WithMany("Photos")
                         .HasForeignKey("PhotoGroupId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Repository.RegisteredChild", b =>
+            modelBuilder.Entity("Repository.Entities.RegisteredChild", b =>
                 {
-                    b.HasOne("Repository.RegisteredPerson", "RegisteredPerson")
+                    b.HasOne("Repository.Entities.RegisteredPerson", "RegisteredPerson")
                         .WithMany("Children")
                         .HasForeignKey("RegisteredPersonId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Repository.RegisteredPerson", b =>
+            modelBuilder.Entity("Repository.Entities.RegisteredPerson", b =>
                 {
-                    b.HasOne("Repository.Season", "Season")
+                    b.HasOne("Repository.Entities.Season", "Season")
                         .WithMany("RegisteredPeople")
                         .HasForeignKey("SeasonId")
                         .OnDelete(DeleteBehavior.Restrict);

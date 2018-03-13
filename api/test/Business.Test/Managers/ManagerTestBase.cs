@@ -36,6 +36,7 @@ namespace Business.Test
                 ServiceLifetime.Scoped);
 
             serviceCollection.AddTransient<IScheduleManager, ScheduleManager>();
+            serviceCollection.AddTransient<IRegistrationManager, RegistrationManager>();
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
 

@@ -9,13 +9,9 @@ namespace Business.Interfaces
         IEnumerable<int> Register(params RegistrationCreateModel[] models);
 
         // TODO : by season?
-        IEnumerable<RegistrationReadModel> GetRegisteredPersons();
+        IEnumerable<RegistrationReadModel> GetAll();
 
-        IEnumerable<RegistrationReadModel> GetPaidPersons();
-
-        IEnumerable<RegistrationReadModel> GetUnpaidPersons();
-
-        IEnumerable<ChildInformationReadModel> GetRegisteredChildren();
+        IEnumerable<ChildInformationReadModel> GetAllChildren();
 
     }
 }

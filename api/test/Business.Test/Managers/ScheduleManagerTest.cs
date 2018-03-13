@@ -73,7 +73,7 @@ namespace Business.Test
         [Fact]
         public void UpdateSuccessTest()
         {
-            var entities = SeedEvents(DbContext);
+            var entities = SeedEvents();
 
             var updateModels = entities.Select(x => new EventUpdateModel
             {
@@ -112,7 +112,7 @@ namespace Business.Test
         [Fact]
         public void UpdateNullInInputTest()
         {
-            var entities = SeedEvents(DbContext);
+            var entities = SeedEvents();
 
             var updateModels = entities.Select(x => new EventUpdateModel
             {
@@ -138,7 +138,7 @@ namespace Business.Test
         [Fact]
         public void UpdateOneIdDoesntExistTest()
         {
-            var entities = SeedEvents(DbContext);
+            var entities = SeedEvents();
 
             var updateModels = entities.Select(x => new EventUpdateModel
             {
@@ -170,7 +170,7 @@ namespace Business.Test
         [Fact]
         public void DeleteSuccess()
         {
-            var entities = SeedEvents(DbContext);
+            var entities = SeedEvents();
 
             var deleteIds = entities.Select(x => x.Id).Take(3).ToArray();
 
@@ -205,7 +205,7 @@ namespace Business.Test
         [Fact]
         public void DeleteOneIdDoesntExistTest()
         {
-            var entities = SeedEvents(DbContext);
+            var entities = SeedEvents();
 
             var deleteIds = entities.Select(x => x.Id).Take(3).ToList();
 
@@ -226,7 +226,7 @@ namespace Business.Test
         [Fact]
         public void GetAllSuccessTest()
         {
-            var entities = SeedEvents(DbContext);
+            var entities = SeedEvents();
 
             var response = _manager.GetAll();
 
@@ -236,7 +236,7 @@ namespace Business.Test
         [Fact]
         public void GetSuccessTest()
         {
-            var entities = SeedEvents(DbContext);
+            var entities = SeedEvents();
             var ids = entities.Select(x => x.Id).Take(3).ToList();
 
             var response = _manager.Get(ids.ToArray());
@@ -247,7 +247,7 @@ namespace Business.Test
         [Fact]
         public void GetSomeIdsExistTest()
         {
-            var entities = SeedEvents(DbContext);
+            var entities = SeedEvents();
             var ids = entities.Select(x => x.Id).Take(3).ToList();
 
             ids.Add(DbContext.Set<Event>().AsNoTracking().Max(x => x.Id) + 1);
@@ -261,7 +261,7 @@ namespace Business.Test
         [Fact]
         public void GetNoIdsExistTest()
         {
-            var entities = SeedEvents(DbContext);
+            var entities = SeedEvents();
 
             var ids = new List<int>
             {
@@ -277,7 +277,7 @@ namespace Business.Test
         [Fact]
         public void GetNullInputTest()
         {
-            var entities = SeedEvents(DbContext);
+            var entities = SeedEvents();
 
             var response = _manager.Get((int[])null);
 
@@ -287,7 +287,7 @@ namespace Business.Test
         [Fact]
         public void GetEmptyInputTest()
         {
-            var entities = SeedEvents(DbContext);
+            var entities = SeedEvents();
 
             var response = _manager.Get(new int[0]);
 
@@ -307,27 +307,9 @@ namespace Business.Test
             }
         }
 
-        private static IEnumerable<Event> SeedEvents(ApiDbContext dbContext)
-        {
-            var eventList = new List<Event>();
-            for(var i = 0; i < 5; i ++)
-            {
-               var entity = new Event
-               {
-                    Date = DateTimeOffset.Now.AddDays(i * -1).Date,
-                    Title = $"title{i}",
-                    Description = $"description{i}"
-               };
-
-               eventList.Add(entity);
-            }
-            dbContext.AddRange(eventList);
-            dbContext.SaveChanges();
-
-            return eventList;
-        }
-
-        private static void AssertCreated(IEnumerable<EventCreateModel> models, IEnumerable<Event> entities)
+        private static void AssertCreated(
+            IEnumerable<EventCreateModel> models,
+            IEnumerable<Event> entities)
         {
             Assert.Equal(models.Count(), entities.Count());
 
@@ -343,7 +325,9 @@ namespace Business.Test
             }
         }
 
-        private static void AssertUpdated(IEnumerable<EventUpdateModel> models, IEnumerable<Event> entities)
+        private static void AssertUpdated(
+            IEnumerable<EventUpdateModel> models,
+            IEnumerable<Event> entities)
         {
             Assert.Equal(models.Count(), entities.Count());
 
@@ -385,6 +369,26 @@ namespace Business.Test
             Assert.Equal(response.Count, entities.Count);
 
             Assert.Equal(response.OrderBy(x => x), entities.Select(x => x.Id).OrderBy(x => x));
+        }
+
+        private IEnumerable<Event> SeedEvents()
+        {
+            var eventList = new List<Event>();
+            for(var i = 0; i < 5; i ++)
+            {
+               var entity = new Event
+               {
+                    Date = DateTimeOffset.Now.AddDays(i * -1).Date,
+                    Title = $"title{i}",
+                    Description = $"description{i}"
+               };
+
+               eventList.Add(entity);
+            }
+            DbContext.AddRange(eventList);
+            DbContext.SaveChanges();
+
+            return eventList;
         }
     }
 }
