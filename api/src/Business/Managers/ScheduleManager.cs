@@ -27,7 +27,7 @@ namespace Business.Managers
                 return new List<int>();
             }
 
-            var events = models.Where(x => x != null).Select(Create).ToList();
+            var events = models.Where(x => x != null).Select(CreateInternal).ToList();
 
             _dbContext.AddRange(events);
             _dbContext.SaveChanges();
@@ -47,7 +47,7 @@ namespace Business.Managers
                 .Where(x => eventIds.Contains(x.Id))
                 .ToList();
 
-            entities.ForEach(x => Update(models.First(y => y.Id.Equals(x.Id)), x));
+            entities.ForEach(x => UpdateInternal(models.First(y => y.Id.Equals(x.Id)), x));
 
             _dbContext.SaveChanges();
 
@@ -96,7 +96,7 @@ namespace Business.Managers
                     Description = x.Description
                 });
 
-        private Event Create(EventCreateModel model) =>
+        private Event CreateInternal(EventCreateModel model) =>
             new Event
             {
                 Date = model.Date.Date,
@@ -104,7 +104,7 @@ namespace Business.Managers
                 Description = model.Description,
             };
 
-        private Event Update(EventUpdateModel model, Event entity)
+        private Event UpdateInternal(EventUpdateModel model, Event entity)
         {
             entity.Date = model.Date.Date;
             entity.Title = model.Title;

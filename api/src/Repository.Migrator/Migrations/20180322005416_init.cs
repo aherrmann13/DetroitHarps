@@ -72,7 +72,7 @@ namespace Repository.Migrator.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Path = table.Column<string>(nullable: true),
+                    Data = table.Column<byte[]>(nullable: true),
                     PhotoGroupId = table.Column<int>(nullable: false),
                     SortOrder = table.Column<int>(nullable: false),
                     Title = table.Column<string>(nullable: true)

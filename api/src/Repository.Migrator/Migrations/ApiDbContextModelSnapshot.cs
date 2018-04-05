@@ -59,7 +59,7 @@ namespace Repository.Migrator.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Path");
+                    b.Property<byte[]>("Data");
 
                     b.Property<int>("PhotoGroupId");
 

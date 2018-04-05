@@ -11,7 +11,7 @@ using System;
 namespace Repository.Migrator.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20180313012932_init")]
+    [Migration("20180322005416_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,7 +60,7 @@ namespace Repository.Migrator.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Path");
+                    b.Property<byte[]>("Data");
 
                     b.Property<int>("PhotoGroupId");
 

@@ -37,7 +37,7 @@ namespace Business.Managers
 
             var registeredPersons = models
                 .Where(x => x != null)
-                .Select(x => Create(x, season.Id))
+                .Select(x => CreateInternal(x, season.Id))
                 .ToList();
 
             _dbContext.AddRange(registeredPersons);
@@ -51,15 +51,15 @@ namespace Business.Managers
                 .AsNoTracking()
                 .Include(x => x.PaymentDetails)
                 .Where(x => x.Season.Year.Equals(_currentYear))
-                .Select(Create);
+                .Select(CreateInternal);
 
         public IEnumerable<ChildInformationReadModel> GetAllChildren() =>
             _dbContext.Set<RegisteredChild>()
                 .AsNoTracking()
                 .Where(x => x.RegisteredPerson.Season.Year.Equals(_currentYear))
-                .Select(Create);
+                .Select(CreateInternal);
 
-        private static RegisteredPerson Create(RegistrationCreateModel model, int seasonId) =>
+        private static RegisteredPerson CreateInternal(RegistrationCreateModel model, int seasonId) =>
             new RegisteredPerson
             {
                 SeasonId = seasonId,
@@ -72,10 +72,10 @@ namespace Business.Managers
                 City = model.City,
                 State = model.State,
                 Zip = model.Zip,
-                Children = model.Children.Select(Create).ToList()
+                Children = model.Children.Select(CreateInternal).ToList()
             };
 
-        private static RegisteredChild Create(ChildInformationCreateModel model) =>
+        private static RegisteredChild CreateInternal(ChildInformationCreateModel model) =>
             new RegisteredChild
             {
                 FirstName = model.FirstName,
@@ -84,7 +84,7 @@ namespace Business.Managers
                 ShirtSize = model.ShirtSize
             };
 
-        private static RegistrationReadModel Create(RegisteredPerson entity) =>
+        private static RegistrationReadModel CreateInternal(RegisteredPerson entity) =>
             new RegistrationReadModel
             {
                 Id = entity.Id,
@@ -100,7 +100,7 @@ namespace Business.Managers
                 HasPaid = entity.PaymentDetails.Any()
             };
 
-        private static ChildInformationReadModel Create(RegisteredChild entity) =>
+        private static ChildInformationReadModel CreateInternal(RegisteredChild entity) =>
             new ChildInformationReadModel
             {
                 ParentId = entity.RegisteredPersonId,

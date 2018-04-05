@@ -11,12 +11,11 @@ namespace Repository.Entities
 
         public PhotoGroup PhotoGroup { get; set; }
 
-        public string Path { get; set; }
-
         public string Title { get; set; }
 
         public int SortOrder { get; set; }
 
-        
+        // TODO : move to seperate entity for performance
+        public byte[] Data { get; set; }
     }
 }
