@@ -16,7 +16,7 @@ namespace Business.Test
 
     public class PhotoManagerTest : ManagerTestBase
     {
-        private const string TestPhotoPath = "Data/test.jpeg";
+        private const string TestPhotoPath = "Data/test.jpg";
         private readonly IPhotoManager _manager;
         private readonly IList<PhotoGroup> _photoGroups;
 
