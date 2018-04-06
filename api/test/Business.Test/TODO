@@ -1,0 +1,26 @@
+Update: 
+  Success
+  Success not all ids exist 
+  Null model list
+  Null in model list
+  Not all groups exist
+Delete:
+  Success
+  Success not all ids exist
+  Success no ids exist
+GetAllMetadata:
+  Success
+Get
+  Success all ids exist
+  Success some ids exist
+  Success no ids exist
+
+TODO 
+  Get Single bytes
+
+
+
+
+
+
+
