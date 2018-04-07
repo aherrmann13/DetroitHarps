@@ -150,6 +150,170 @@ namespace Business.Test
             Assert.Throws<InvalidOperationException>(() => _manager.Update(models.ToArray()));
         }
 
+        [Fact]
+        public void DeleteSuccessTest()
+        {
+            var seededEntities = SeedPhotos().ToList();
+
+            var idsToDelete = seededEntities.Select(x => x.Id).Take(2).ToList();
+
+            var response = _manager.Delete(idsToDelete.ToArray()).ToList();
+
+            var entities = DbContext.Set<Photo>()
+                .AsNoTracking()
+                .ToList();
+
+            Assert.Equal(seededEntities.Count - idsToDelete.Count, entities.Count);
+            Assert.Empty(entities.Where(x => idsToDelete.Contains(x.Id)));
+            Assert.Equal(idsToDelete, response);
+        }
+
+        [Fact]
+        public void DeleteSuccessNotAllIdsExistTest()
+        {
+            var seededEntities = SeedPhotos().ToList();
+
+            var idsToDelete = seededEntities.Select(x => x.Id).Take(2).ToList();
+
+            idsToDelete.Add(seededEntities.Select(x => x.Id).Max() + 1);
+
+            var seededEntityIds = seededEntities.Select(x => x.Id).ToList();
+
+            var response = _manager.Delete(idsToDelete.ToArray()).ToList();
+
+            var entities = DbContext.Set<Photo>()
+                .AsNoTracking()
+                .ToList();
+
+            Assert.Equal(seededEntities.Count - idsToDelete.Count + 1, entities.Count);
+            Assert.Empty(entities.Where(x => idsToDelete.Contains(x.Id)));
+            Assert.Equal(idsToDelete.Where(x => seededEntityIds.Contains(x)).ToList(), response);
+        }
+
+        [Fact]
+        public void DeleteSuccessNoIdsExistTest()
+        {
+            var seededEntities = SeedPhotos().ToList();
+
+            var maxId = seededEntities.Select(x => x.Id).Max();
+
+            var idsToDelete = new List<int> { maxId + 1, maxId + 2 };
+
+            var response = _manager.Delete(idsToDelete.ToArray());
+
+            var entities = DbContext.Set<Photo>()
+                .AsNoTracking()
+                .ToList();
+
+            Assert.Equal(seededEntities.Count, entities.Count);
+            Assert.Empty(entities.Where(x => idsToDelete.Contains(x.Id)));
+            Assert.Empty(response);
+        }
+
+        [Fact]
+        public void DeleteNullModelExceptionTest()
+        {
+            Assert.Throws<ArgumentNullException>(() => _manager.Delete(null));
+        }
+
+        [Fact]
+        public void GetAllMetadataTest()
+        {
+            SeedPhotos();
+
+            var response = _manager.GetAll().ToList();
+
+            var entities = DbContext.Set<Photo>()
+                .AsNoTracking()
+                .ToList();
+
+            AssertEqual(response, entities);
+        }
+
+        [Fact]
+        public void GetByIdAllExistTest()
+        {
+            var seededEntities = SeedPhotos().ToList();
+
+            var ids = seededEntities.Select(x => x.Id).Take(2).ToList();
+
+            var response = _manager.Get(ids.ToArray()).ToList();
+
+            var entities = DbContext.Set<Photo>()
+                .AsNoTracking()
+                .ToList();
+
+            Assert.Equal(ids.Count, response.Count);
+            AssertEqual(response, entities.Where(x => ids.Contains(x.Id)).ToList());
+        }
+
+        [Fact]
+        public void GetByIdSomeExistTest()
+        {
+            var seededEntities = SeedPhotos().ToList();
+
+            var ids = seededEntities.Select(x => x.Id).Take(2).ToList();
+
+            ids.Add(seededEntities.Select(x => x.Id).Max() + 1);
+
+            var response = _manager.Get(ids.ToArray()).ToList();
+
+            var entities = DbContext.Set<Photo>()
+                .AsNoTracking()
+                .ToList();
+
+            Assert.Equal(ids.Count - 1, response.Count);
+            AssertEqual(response, entities.Where(x => ids.Contains(x.Id)).ToList());
+        }
+
+        [Fact]
+        public void GetByIdNoneExistTest()
+        {
+            var seededEntities = SeedPhotos().ToList();
+
+            var maxId = seededEntities.Select(x => x.Id).Max();
+
+            var idsToDelete = new List<int> { maxId + 1, maxId + 2 };
+
+            var response = _manager.Get(idsToDelete.ToArray()).ToList();
+
+            var entities = DbContext.Set<Photo>()
+                .AsNoTracking()
+                .ToList();
+
+            Assert.Empty(response);
+            Assert.Empty(entities.Where(x => idsToDelete.Contains(x.Id)));
+        }
+
+        [Fact]
+        public void GetByIdNullModelTest()
+        {
+            Assert.Throws<ArgumentNullException>(() => _manager.Get(null));
+        }
+
+        [Fact]
+        public void GetSingleByIdSuccessTest()
+        {
+            var entities = SeedPhotos().ToList();
+            var id = entities.First().Id;
+
+            var response = _manager.GetSingle(id);
+
+            var entity = DbContext.Set<Photo>()
+                .AsNoTracking()
+                .First(x => x.Id.Equals(id));
+
+            AssertEqual(response, entity);
+        }
+
+        public void GetSingleDoesNotExistExceptionTest()
+        {
+            var entities = SeedPhotos().ToList();
+            var id = entities.Select(x => x.Id).Max() + 1;
+
+            Assert.Throws<InvalidOperationException>(() => _manager.GetSingle(id));
+        }
+
         private static void AssertEqual(PhotoCreateModel model, Photo entity)
         {
             Assert.Equal(model.Title, entity.Title);
@@ -166,7 +330,35 @@ namespace Business.Test
             Assert.Equal(model.GroupId, entity.PhotoGroupId);
         }
 
+        private static void AssertEqual(PhotoMetadataReadModel model, Photo entity)
+        {
+            Assert.Equal(model.Id, entity.Id);
+            Assert.Equal(model.Title, entity.Title);
+            Assert.Equal(model.SortOrder, entity.SortOrder);
+            Assert.Equal(model.GroupId, entity.PhotoGroupId);
+        }
+
+        private static void AssertEqual(PhotoReadModel model, Photo entity)
+        {
+            Assert.Equal(model.Id, entity.Id);
+            Assert.Equal(model.Title, entity.Title);
+            Assert.Equal(model.SortOrder, entity.SortOrder);
+            Assert.Equal(model.GroupId, entity.PhotoGroupId);
+            Assert.Equal(model.Photo, entity.Data);
+        }
+
         private static void AssertEqual(IList<PhotoMetadataUpdateModel> models, IList<Photo> entities)
+        {
+            Assert.Equal(models.Count, entities.Count);
+            foreach(var model in models)
+            {
+                var entity = entities.First(x => x.Id.Equals(model.Id));
+
+                AssertEqual(model, entity);
+            }
+        }
+
+        private static void AssertEqual(IList<PhotoMetadataReadModel> models, IList<Photo> entities)
         {
             Assert.Equal(models.Count, entities.Count);
             foreach(var model in models)

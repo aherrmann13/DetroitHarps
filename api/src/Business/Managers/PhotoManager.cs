@@ -27,6 +27,8 @@ namespace Business.Managers
 
         public int Create(PhotoCreateModel model)
         {
+            // TODO null or fail silently?
+            // TODO make this behavior consistant
             if(model == null)
             {
                 throw new ArgumentNullException("cannot post null model");
@@ -48,6 +50,13 @@ namespace Business.Managers
 
         public IEnumerable<int> Update(params PhotoMetadataUpdateModel[] models)
         {
+            // TODO null or fail silently?
+            // TODO make this behavior consistant
+            if(models == null)
+            {
+                throw new ArgumentNullException("cannot post null models");
+            }
+
             models = models.Where(x => x != null).ToArray();
 
             var ids = models.Select(x => x.Id).Distinct();
@@ -77,6 +86,13 @@ namespace Business.Managers
 
         public IEnumerable<int> Delete(params int[] ids)
         {
+            // TODO null or fail silently?
+            // TODO make this behavior consistant
+            if(ids == null)
+            {
+                throw new ArgumentNullException("cannot post null models");
+            }
+
              var entities = _dbContext.Set<Photo>()
                 .AsNoTracking()
                 .Where(x => ids.Contains(x.Id))
@@ -100,8 +116,16 @@ namespace Business.Managers
                     SortOrder = x.SortOrder
                 });
 
-        public IEnumerable<PhotoMetadataReadModel> Get(params int[] ids) =>
-            _dbContext.Set<Photo>()
+        public IEnumerable<PhotoMetadataReadModel> Get(params int[] ids)
+        {
+            // TODO null or fail silently?
+            // TODO make this behavior consistant
+            if(ids == null)
+            {
+                throw new ArgumentNullException("cannot post null models");
+            }
+            
+            return _dbContext.Set<Photo>()
                 .AsNoTracking()
                 .Where(x => ids.Contains(x.Id))
                 .Select(x => new PhotoMetadataReadModel
@@ -111,7 +135,24 @@ namespace Business.Managers
                     GroupId = x.PhotoGroupId,
                     SortOrder = x.SortOrder
                 });
+        }
 
+        public PhotoReadModel GetSingle(int id)
+        {
+            var entity = _dbContext.Set<Photo>()
+                .AsNoTracking()
+                .First(x => x.Id.Equals(id));
+
+            return new PhotoReadModel
+            {
+                Id = entity.Id,
+                Title = entity.Title,
+                GroupId = entity.PhotoGroupId,
+                SortOrder = entity.SortOrder,
+                Photo = entity.Data
+            };
+        }
+            
         private Photo CreateInternal(PhotoCreateModel model) =>
             new Photo
             {

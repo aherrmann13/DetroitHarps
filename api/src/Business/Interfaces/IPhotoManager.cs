@@ -16,5 +16,7 @@ namespace Business.Interfaces
 
         IEnumerable<PhotoMetadataReadModel> Get(params int[] ids);
 
+        PhotoReadModel GetSingle(int id);
+
     }
 }
