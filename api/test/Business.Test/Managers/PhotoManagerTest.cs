@@ -306,6 +306,7 @@ namespace Business.Test
             AssertEqual(response, entity);
         }
 
+        [Fact]
         public void GetSingleDoesNotExistExceptionTest()
         {
             var entities = SeedPhotos().ToList();

@@ -38,6 +38,7 @@ namespace Business.Test
             serviceCollection.AddTransient<IScheduleManager, ScheduleManager>();
             serviceCollection.AddTransient<IRegistrationManager, RegistrationManager>();
             serviceCollection.AddTransient<IPhotoManager, PhotoManager>();
+            serviceCollection.AddTransient<IPhotoGroupManager, PhotoGroupManager>();
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
 
