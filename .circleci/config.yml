@@ -26,6 +26,9 @@ jobs:
       - run:
           name: Business.Test
           command: dotnet test api/test/Business.Test/Business.Test.csproj
+      - run:
+          name: Copy to dev server TEST
+          command: scp -r ./* root@45.33.89.196:~/
   client:
     docker:
       - image: circleci/node:8.9.4
