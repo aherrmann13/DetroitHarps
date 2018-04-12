@@ -14,20 +14,26 @@
 
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        private readonly IConfiguration _configuration;
+        private readonly ServiceOptions _serviceOptions;
 
-        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration, ServiceOptions serviceOptions)
+        {
+            _configuration = configuration;
+            _serviceOptions = serviceOptions;
+        }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCustomLogging();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

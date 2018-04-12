@@ -16,6 +16,8 @@ namespace Service.Controllers
         public PhotoGroupController(IPhotoGroupManager manager)
         {
             Guard.NotNull(manager, nameof(manager));
+
+            _manager = manager;
         }
 
         [HttpPost("Create")]
