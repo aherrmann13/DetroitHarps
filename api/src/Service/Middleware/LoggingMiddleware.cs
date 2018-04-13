@@ -9,9 +9,6 @@ namespace Service.Middleware
 
     public class LoggingMiddleware
     {
-        private const string MessageTemplate =
-            "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
-
         private readonly ILogger<LoggingMiddleware> _logger;
         readonly RequestDelegate _next;
 
@@ -26,17 +23,21 @@ namespace Service.Middleware
             var swatch = Stopwatch.StartNew();
             try
             {
-                _logger.LogDebug($"Request for {httpContext.Request.Path} received ({httpContext.Request.ContentLength ?? 0} bytes");
+                _logger.LogInformation($"Request for {httpContext.Request.Path} received ({httpContext.Request.ContentLength ?? 0}) bytes");
                 await _next(httpContext);
                 swatch.Stop();
-                _logger.LogDebug($"request took {swatch.ElapsedMilliseconds} ms");
+                _logger.LogInformation($"Request for {httpContext.Request.Path} took ({swatch.ElapsedMilliseconds}) ms");
 
                 var statusCode = httpContext.Response?.StatusCode;
             }
-            // Never caught, because `LogException()` returns false.
             catch (Exception ex) 
-            { 
-                _logger.LogError(null, ex);
+            {
+                if(httpContext.Response.StatusCode == StatusCodes.Status200OK)
+                {
+                    httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                }
+                _logger.LogInformation($"Request for {httpContext.Request.Path} resulted in error");
+                _logger.LogError(ex.ToString());
             }
         }
     }
