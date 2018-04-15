@@ -32,7 +32,9 @@ namespace Repository.Migrator
         private static IConfiguration CreateConfiguration() =>
             new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+#if DEBUG
                 .AddJsonFile("appsettings.debug.json", optional: true, reloadOnChange: true)
+#endif
                 .Build();
     }
 }
