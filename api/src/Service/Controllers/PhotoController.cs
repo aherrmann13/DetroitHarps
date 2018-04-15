@@ -21,6 +21,8 @@ namespace Service.Controllers
         public PhotoController(IPhotoManager manager)
         {
             Guard.NotNull(manager, nameof(manager));
+
+            _manager = manager;
         }
 
         //// // TODO use data loader for now
