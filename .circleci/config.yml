@@ -42,7 +42,7 @@ jobs:
           command: echo $PUBLIC_KEY >> ~/.ssh/known_hosts
       - run:
           name: Clear old files
-          command: ssh root@45.33.89.196 "rm -r /deploy/api/*"
+          command: ssh root@45.33.89.196 "if [ -d /deploy/api/ ]; then rm -rf /deploy/api/*; fi"
       - run:
           name: Copy to dev server
           command: scp -r ./publish/* root@45.33.89.196:/deploy/api/
