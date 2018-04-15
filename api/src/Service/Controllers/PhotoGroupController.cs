@@ -67,7 +67,7 @@ namespace Service.Controllers
         [SwaggerOperation(operationId: "Get")]
         public IActionResult Get(int id)
         {
-            var response = _manager.Get(id).ToList();
+            var response = _manager.Get(id);
 
             return Json(response);
         }
