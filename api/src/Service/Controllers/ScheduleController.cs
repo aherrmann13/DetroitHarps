@@ -1,6 +1,7 @@
 namespace Service.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Business.Interfaces;
     using Business.Models;
     using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace Service.Controllers
         [SwaggerOperation(operationId: "Create")]
         public IActionResult Create([FromBody] EventCreateModel[] models)
         {
-            var response = _manager.Create(models);
+            var response = _manager.Create(models).ToList();
 
             return Json(response);
         }
@@ -35,7 +36,7 @@ namespace Service.Controllers
         [SwaggerOperation(operationId: "Update")]
         public IActionResult Update([FromBody] EventUpdateModel[] models)
         {
-            var response = _manager.Update(models);
+            var response = _manager.Update(models).ToList();
 
             return Json(response);
         }
@@ -45,7 +46,7 @@ namespace Service.Controllers
         [SwaggerOperation(operationId: "Delete")]
         public IActionResult Delete([FromBody] int[] ids)
         {
-            var response = _manager.Delete(ids);
+            var response = _manager.Delete(ids).ToList();
 
             return Json(response);
         }
@@ -55,7 +56,7 @@ namespace Service.Controllers
         [SwaggerOperation(operationId: "GetAll")]
         public IActionResult GetAll()
         {
-            var response = _manager.GetAll();
+            var response = _manager.GetAll().ToList();
 
             return Json(response);
         }
@@ -68,7 +69,7 @@ namespace Service.Controllers
         [SwaggerOperation(operationId: "Get")]
         public IActionResult Get([FromQuery] int[] ids)
         {
-            var response = _manager.Get(ids);
+            var response = _manager.Get(ids).ToList();
 
             return Json(response);
         }

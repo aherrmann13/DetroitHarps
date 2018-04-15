@@ -5,4 +5,4 @@ dotnet /deploy/api/Repository.Migrator/Repository.Migrator.dll Delete
 
 dotnet /deploy/api/Repository.Migrator/Repository.Migrator.dll Migrate
 
-dotnet /deploy/api/Repository.Dataloader/Repository.Dataloader.dll Migrate
+dotnet /deploy/api/Repository.Dataloader/Repository.Dataloader.dll

@@ -1,6 +1,7 @@
 namespace Service.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Business.Interfaces;
     using Business.Models;
     using Microsoft.AspNetCore.Mvc;
@@ -56,7 +57,7 @@ namespace Service.Controllers
         [SwaggerOperation(operationId: "GetAll")]
         public IActionResult GetAll()
         {
-            var response = _manager.GetAll();
+            var response = _manager.GetAll().ToList();
 
             return Json(response);
         }
@@ -66,7 +67,7 @@ namespace Service.Controllers
         [SwaggerOperation(operationId: "Get")]
         public IActionResult Get(int id)
         {
-            var response = _manager.Get(id);
+            var response = _manager.Get(id).ToList();
 
             return Json(response);
         }

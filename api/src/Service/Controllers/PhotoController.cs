@@ -3,6 +3,7 @@ namespace Service.Controllers
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
     using Business.Interfaces;
     using Business.Models;
@@ -57,7 +58,7 @@ namespace Service.Controllers
         [SwaggerOperation(operationId: "Update")]
         public IActionResult Update([FromBody] PhotoMetadataUpdateModel[] models)
         {
-            var response = _manager.Update(models);
+            var response = _manager.Update(models).ToList();
 
             return Json(response);
         }
@@ -68,7 +69,7 @@ namespace Service.Controllers
         [SwaggerOperation(operationId: "Delete")]
         public IActionResult Delete([FromBody] int[] ids)
         {
-            var response = _manager.Delete(ids);
+            var response = _manager.Delete(ids).ToList();
 
             return Json(response);
         }
@@ -78,7 +79,7 @@ namespace Service.Controllers
         [SwaggerOperation(operationId: "GetAll")]
         public IActionResult GetAll()
         {
-            var response = _manager.GetAll();
+            var response = _manager.GetAll().ToList();
 
             return Json(response);
         }
@@ -89,7 +90,7 @@ namespace Service.Controllers
         [SwaggerOperation(operationId: "Get")]
         public IActionResult Get([FromQuery] int[] ids)
         {
-            var response = _manager.Get(ids);
+            var response = _manager.Get(ids).ToList();
 
             return Json(response);
         }

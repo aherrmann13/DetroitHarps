@@ -1,6 +1,7 @@
 namespace Service.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Business.Interfaces;
     using Business.Models;
     using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace Service.Controllers
         [SwaggerOperation(operationId: "Register")]
         public IActionResult Register([FromBody] RegistrationCreateModel[] models)
         {
-            var response = _manager.Register(models);
+            var response = _manager.Register(models).ToList();
 
             return Json(response);
         }
@@ -35,7 +36,7 @@ namespace Service.Controllers
         [SwaggerOperation(operationId: "GetAll")]
         public IActionResult GetAll()
         {
-            var response = _manager.GetAll();
+            var response = _manager.GetAll().ToList();
 
             return Json(response);
         }
@@ -45,7 +46,7 @@ namespace Service.Controllers
         [SwaggerOperation(operationId: "GetAllChildren")]
         public IActionResult GetAllChildren()
         {
-            var response = _manager.GetAllChildren();
+            var response = _manager.GetAllChildren().ToList();
 
             return Json(response);
         }

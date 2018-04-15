@@ -32,10 +32,20 @@ namespace Service.Middleware
             }
             catch (Exception ex) 
             {
-                if(httpContext.Response.StatusCode == StatusCodes.Status200OK)
+                // TODO work on what to do if response has already started
+                // IEnumerables that throw start the response before they throw
+                if (httpContext.Response.HasStarted)
                 {
-                    httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    _logger.LogWarning("The response has already started, status code will not be changed");
                 }
+                else
+                {
+                    if(httpContext.Response.StatusCode == StatusCodes.Status200OK)
+                    {
+                        httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    }
+                }
+                
                 _logger.LogInformation($"Request for {httpContext.Request.Path} resulted in error");
                 _logger.LogError(ex.ToString());
             }
