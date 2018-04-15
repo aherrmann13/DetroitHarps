@@ -59,7 +59,7 @@ namespace Repository.Migrator.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Email = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
-                    PasswordSalt = table.Column<string>(nullable: true)
+                    PasswordSalt = table.Column<byte[]>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -85,7 +85,7 @@ namespace Repository.Migrator.Migrations
                         column: x => x.PhotoGroupId,
                         principalTable: "PhotoGroup",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

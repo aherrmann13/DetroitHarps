@@ -11,6 +11,6 @@ namespace Repository.Entities
 
         public string Password { get; set; }
 
-        public string PasswordSalt { get; set; }
+        public byte[] PasswordSalt { get; set; }
     }
 }

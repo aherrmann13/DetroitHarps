@@ -34,7 +34,7 @@ namespace Repository
                 .HasOne(x => x.PhotoGroup)
                 .WithMany(x => x.Photos)
                 .HasForeignKey(x => x.PhotoGroupId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Event>();
             modelBuilder.Entity<Season>();

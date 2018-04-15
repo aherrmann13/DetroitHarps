@@ -11,7 +11,7 @@ using System;
 namespace Repository.Migrator.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20180322005416_init")]
+    [Migration("20180415011220_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -164,7 +164,7 @@ namespace Repository.Migrator.Migrations
 
                     b.Property<string>("Password");
 
-                    b.Property<string>("PasswordSalt");
+                    b.Property<byte[]>("PasswordSalt");
 
                     b.HasKey("Id");
 
@@ -184,7 +184,7 @@ namespace Repository.Migrator.Migrations
                     b.HasOne("Repository.Entities.PhotoGroup", "PhotoGroup")
                         .WithMany("Photos")
                         .HasForeignKey("PhotoGroupId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Repository.Entities.RegisteredChild", b =>

@@ -43,9 +43,10 @@
             services.AddDbContext<ApiDbContext>(ServiceLifetime.Scoped);
 
             var repositoryOptions = _configuration.GetSection(RepositoryOptions.SectionName).Get<RepositoryOptions>();
-            services.AddSingleton(builder => 
+            services.AddSingleton(x => 
                 new DbContextOptionsBuilder<ApiDbContext>()
-                    .UseNpgsql(repositoryOptions.ConnectionString));
+                    .UseNpgsql(repositoryOptions.ConnectionString)
+                    .Options);
 
             services.AddTransient<IPhotoGroupManager, PhotoGroupManager>();
             services.AddTransient<IPhotoManager, PhotoManager>();
