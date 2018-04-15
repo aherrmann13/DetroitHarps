@@ -23,7 +23,7 @@ namespace Service.Controllers
 
         [HttpPost("Create")]
         [Produces("application/json", Type = typeof(int))]
-        [SwaggerOperation(operationId: "Create")]
+        [SwaggerOperation(operationId: "CreatePhotoGroup")]
         public IActionResult Create([FromBody] PhotoGroupCreateModel model)
         {
             var response = _manager.Create(model);
@@ -33,7 +33,7 @@ namespace Service.Controllers
 
         [HttpPost("Update")]
         [Produces("application/json", Type = typeof(int))]
-        [SwaggerOperation(operationId: "Update")]
+        [SwaggerOperation(operationId: "UpdatePhotoGroup")]
         public IActionResult Update(PhotoGroupUpdateModel model)
         {
             var response = _manager.Update(model);
@@ -44,7 +44,7 @@ namespace Service.Controllers
         // TODO : make this consistant with other deletes
         [HttpDelete("Delete/{id}")]
         [Produces("application/json", Type = typeof(int))]
-        [SwaggerOperation(operationId: "Delete")]
+        [SwaggerOperation(operationId: "DeletePhotoGroup")]
         public IActionResult Delete(int id)
         {
             var response = _manager.Delete(id);
@@ -54,7 +54,7 @@ namespace Service.Controllers
 
         [HttpGet("GetAll")]
         [Produces("application/json", Type = typeof(IList<PhotoGroupReadModel>))]
-        [SwaggerOperation(operationId: "GetAll")]
+        [SwaggerOperation(operationId: "GetAllPhotoGroups")]
         public IActionResult GetAll()
         {
             var response = _manager.GetAll().ToList();
@@ -64,7 +64,7 @@ namespace Service.Controllers
 
         [HttpGet("Get/{id}")]
         [Produces("application/json", Type = typeof(PhotoGroupReadModel))]
-        [SwaggerOperation(operationId: "Get")]
+        [SwaggerOperation(operationId: "GetPhotoGroup")]
         public IActionResult Get(int id)
         {
             var response = _manager.Get(id);

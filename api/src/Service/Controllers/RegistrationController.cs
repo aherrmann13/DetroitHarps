@@ -33,7 +33,7 @@ namespace Service.Controllers
 
         [HttpPost("GetAll")]
         [Produces("application/json", Type = typeof(IList<RegistrationReadModel>))]
-        [SwaggerOperation(operationId: "GetAll")]
+        [SwaggerOperation(operationId: "GetAllRegistered")]
         public IActionResult GetAll()
         {
             var response = _manager.GetAll().ToList();
@@ -43,7 +43,7 @@ namespace Service.Controllers
 
         [HttpPost("GetAllChildren")]
         [Produces("application/json", Type = typeof(IList<ChildInformationReadModel>))]
-        [SwaggerOperation(operationId: "GetAllChildren")]
+        [SwaggerOperation(operationId: "GetAllRegisteredChildren")]
         public IActionResult GetAllChildren()
         {
             var response = _manager.GetAllChildren().ToList();

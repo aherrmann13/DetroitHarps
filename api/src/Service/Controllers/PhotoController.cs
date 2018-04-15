@@ -57,7 +57,7 @@ namespace Service.Controllers
 
         [HttpPost("Update")]
         [Produces("application/json", Type = typeof(IList<int>))]
-        [SwaggerOperation(operationId: "Update")]
+        [SwaggerOperation(operationId: "UpdatePhoto")]
         public IActionResult Update([FromBody] PhotoMetadataUpdateModel[] models)
         {
             var response = _manager.Update(models).ToList();
@@ -68,7 +68,7 @@ namespace Service.Controllers
         // TODO : make this consistant with other deletes
         [HttpPost("Delete")]
         [Produces("application/json", Type = typeof(IList<int>))]
-        [SwaggerOperation(operationId: "Delete")]
+        [SwaggerOperation(operationId: "DeletePhoto")]
         public IActionResult Delete([FromBody] int[] ids)
         {
             var response = _manager.Delete(ids).ToList();
@@ -78,7 +78,7 @@ namespace Service.Controllers
 
         [HttpGet("GetAll")]
         [Produces("application/json", Type = typeof(IList<PhotoMetadataReadModel>))]
-        [SwaggerOperation(operationId: "GetAll")]
+        [SwaggerOperation(operationId: "GetAllPhotoMetadata")]
         public IActionResult GetAll()
         {
             var response = _manager.GetAll().ToList();
@@ -89,7 +89,7 @@ namespace Service.Controllers
         // TODO : post? (prefer ids in body)
         [HttpGet("Get")]
         [Produces("application/json", Type = typeof(IList<PhotoMetadataReadModel>))]
-        [SwaggerOperation(operationId: "Get")]
+        [SwaggerOperation(operationId: "GetPhotoMetadata")]
         public IActionResult Get([FromQuery] int[] ids)
         {
             var response = _manager.Get(ids).ToList();
@@ -99,7 +99,7 @@ namespace Service.Controllers
 
         [HttpGet("Get/{id}")]
         [Produces("application/json", Type = typeof(PhotoReadModel))]
-        [SwaggerOperation(operationId: "GetSingle")]
+        [SwaggerOperation(operationId: "GetSinglePhoto")]
         public IActionResult Get(int id)
         {
             var response = _manager.GetSingle(id);

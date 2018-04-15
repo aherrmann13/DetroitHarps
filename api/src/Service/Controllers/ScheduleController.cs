@@ -23,7 +23,7 @@ namespace Service.Controllers
 
         [HttpPost("Create")]
         [Produces("application/json", Type = typeof(IList<int>))]
-        [SwaggerOperation(operationId: "Create")]
+        [SwaggerOperation(operationId: "CreateEvent")]
         public IActionResult Create([FromBody] EventCreateModel[] models)
         {
             var response = _manager.Create(models).ToList();
@@ -33,7 +33,7 @@ namespace Service.Controllers
 
         [HttpPost("Update")]
         [Produces("application/json", Type = typeof(IList<int>))]
-        [SwaggerOperation(operationId: "Update")]
+        [SwaggerOperation(operationId: "UpdateEvent")]
         public IActionResult Update([FromBody] EventUpdateModel[] models)
         {
             var response = _manager.Update(models).ToList();
@@ -43,7 +43,7 @@ namespace Service.Controllers
 
         [HttpPost("Delete")]
         [Produces("application/json", Type = typeof(IList<int>))]
-        [SwaggerOperation(operationId: "Delete")]
+        [SwaggerOperation(operationId: "DeleteEvent")]
         public IActionResult Delete([FromBody] int[] ids)
         {
             var response = _manager.Delete(ids).ToList();
@@ -53,7 +53,7 @@ namespace Service.Controllers
 
         [HttpGet("GetAll")]
         [Produces("application/json", Type = typeof(IList<EventReadModel>))]
-        [SwaggerOperation(operationId: "GetAll")]
+        [SwaggerOperation(operationId: "GetAllEvents")]
         public IActionResult GetAll()
         {
             var response = _manager.GetAll().ToList();
@@ -66,7 +66,7 @@ namespace Service.Controllers
         // expecting that number of events
         [HttpGet("Get")]
         [Produces("application/json", Type = typeof(IList<EventReadModel>))]
-        [SwaggerOperation(operationId: "Get")]
+        [SwaggerOperation(operationId: "GetEvent")]
         public IActionResult Get([FromQuery] int[] ids)
         {
             var response = _manager.Get(ids).ToList();
