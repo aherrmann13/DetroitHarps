@@ -24,7 +24,7 @@ import { SinglePhotoComponent } from './photos/single-photo.component';
 import { HomeComponent } from './home/home.component';
 import { ScheduleComponent } from './schedule/schedule.component'
 
-import { Client } from './app.client';
+import { Client, API_BASE_URL } from './api.client';
 
 import { routing } from './app.routes';
 import { ContactComponent } from './contact/contact.component';
@@ -32,7 +32,12 @@ import { PhotosComponent } from './photos/photos.component';
 import { AboutComponent } from './about/about.component';
 import { RegisterComponent } from './register/register.component';
 import { SupportComponent } from './support/support.component'
+import { APP_BASE_HREF } from '@angular/common';
+import { environment } from '../environments/environment.prod';
 
+function getApiUrl(){
+  return environment.apiUrl;
+}
 
 @NgModule({
   declarations: [
@@ -68,7 +73,8 @@ import { SupportComponent } from './support/support.component'
     routing
   ],
   providers: [
-    Client
+    Client,
+    { provide: API_BASE_URL, useFactory: getApiUrl }
   ],
   bootstrap: [
     AppComponent

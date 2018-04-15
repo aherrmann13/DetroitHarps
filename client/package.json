@@ -8,7 +8,8 @@
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "generate": "nswag swagger2tsclient /runtime:NetCore20 /input:http://api.dev.detroitharps.com/swagger/doc/swagger.json /output:./src/app/api.client.ts /Template:Angular /ClientBaseClass:BaseClient /ExtensionCode:\"import { BaseClient } from './api.client.base'\" /BaseUrlTokenName:\"API_BASE_URL\" /UseTransformOptionsMethod:true /UseTransformResultMethod:true /InjectionTokenType:InjectionToken"
   },
   "private": true,
   "dependencies": {
@@ -32,6 +33,7 @@
     "@angular/cli": "1.6.1",
     "@angular/compiler-cli": "^5.0.0",
     "@angular/language-service": "^5.0.0",
+    "nswag": "^11.17.0",
     "typescript": "~2.4.2"
   }
 }
