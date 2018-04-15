@@ -28,13 +28,13 @@ jobs:
           command: dotnet test api/test/Business.Test/Business.Test.csproj
       - run:
           name: Publish Repository.Migrator
-          command: dotnet publish api/src/Repository.Migrator/Repository.Migrator.csproj -o /root/project/publish/Repository.Migrator
+          command: dotnet publish api/src/Repository.Migrator/Repository.Migrator.csproj -c RELEASE -o /root/project/publish/Repository.Migrator
       - run:
           name: Publish Repository.Dataloader
-          command: dotnet publish api/src/Repository.Dataloader/Repository.Dataloader.csproj -o /root/project/publish/Repository.Dataloader
+          command: dotnet publish api/src/Repository.Dataloader/Repository.Dataloader.csproj -c RELEASE -o /root/project/publish/Repository.Dataloader
       - run:
           name: Publish Service
-          command: dotnet publish api/src/Service/Service.csproj -o ./publish/Service
+          command: dotnet publish api/src/Service/Service.csproj -c RELEASE -o /root/project/publish/Service
       - run:
           name: Add Server to known_hosts
           environment:

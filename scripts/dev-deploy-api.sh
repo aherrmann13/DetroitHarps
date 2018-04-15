@@ -1,6 +1,8 @@
-dotnet build ../api/src/Repository.Migrator/Repository.Migrator.csproj -c Debug -o ~/dist/
 
-cd ~/dist/
-dotnet Repository.Migrator.dll Delete
+## TODO : make this less "magic stringy", maybe take "/deploy/api" as parameter?
 
-dotnet Repository.Migrator.dll Migrate
+dotnet /deploy/api/Repository.Migrator/Repository.Migrator.dll Delete
+
+dotnet /deploy/api/Repository.Migrator/Repository.Migrator.dll Migrate
+
+dotnet /deploy/api/Repository.Dataloader/Repository.Dataloader.dll Migrate
