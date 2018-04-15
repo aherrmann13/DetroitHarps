@@ -1,5 +1,5 @@
 <div class='single-photo-container'>
-    <img src='{{currentPhoto.url}}' (swipeleft)="back()" (swiperight)="forward()"/>
+    <img *ngIf='currentPhotoId' src='{{toPhotoUrl(currentPhotoId)}}' (swipeleft)="back()" (swiperight)="forward()"/>
     <div class='arrow arrow-left hide-mobile' (click)='back()'><mat-icon>navigate_before</mat-icon></div>
     <div class='arrow arrow-right hide-mobile' (click)='forward()'><mat-icon>navigate_next</mat-icon></div>
 </div>

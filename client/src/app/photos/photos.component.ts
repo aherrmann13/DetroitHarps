@@ -1,7 +1,6 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Optional } from '@angular/core';
 
-import { Client } from '../app.client'
-import { PhotoGroup } from '../models/photo-group.model';
+import { Client, PhotoGroupReadModel, API_BASE_URL } from '../api.client'
 
 @Component({
   selector: 'app-photos',
@@ -10,11 +9,18 @@ import { PhotoGroup } from '../models/photo-group.model';
 })
 export class PhotosComponent implements OnInit {
 
-  photoGroups: PhotoGroup[];
+  photoGroups: PhotoGroupReadModel[];
 
-  constructor(private _client: Client) { }
+  constructor(private _client: Client, @Optional() @Inject(API_BASE_URL) private _baseUrl?: string) { }
 
   ngOnInit() {
-    this.photoGroups = this._client.getPhotos();
+    this._client.getAllPhotoGroups().subscribe(
+      data => this.photoGroups = data,
+      error => console.log(error)
+    );
+  }
+
+  toPhotoUrl(id: number): string{
+    return this._baseUrl + "/Photo/Get/" + id;
   }
 }

@@ -21,7 +21,7 @@ const routes: Routes = [
   { path: 'schedule', component: ScheduleComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'photos', component: PhotosComponent },
-  { path: 'photos/:groupName/:id', component: SinglePhotoComponent },
+  { path: 'photos/:groupId/:id', component: SinglePhotoComponent },
   { path: 'about', component: AboutComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'support', component: SupportComponent }

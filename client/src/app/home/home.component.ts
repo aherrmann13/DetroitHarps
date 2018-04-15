@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Client } from '../app.client'
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -12,10 +10,9 @@ export class HomeComponent implements OnInit {
   announcements: string[];
   title: string = 'Detroit Harps';
 
-  constructor(private _client: Client) { }
+  constructor() { }
 
   ngOnInit() {
-    this.announcements = this._client.getAnnouncements();
   }
 
 }

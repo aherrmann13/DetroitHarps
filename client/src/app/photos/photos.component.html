@@ -1,8 +1,8 @@
 <div class='photos-container sides-container'>
     <div class='photos-group' *ngFor='let group of photoGroups'>
         <h1>{{group.groupName}}</h1>
-        <div class='single-photo' *ngFor='let photo of group.photos'>
-            <div [routerLink]="['/photos', group.groupName, photo.id]" class='mat-elevation-z4' [style.background-image]="'url('+photo.url+')'"></div>
+        <div class='single-photo' *ngFor='let photo of group.photoIds'>
+            <div [routerLink]="['/photos', group.id, photo]" class='mat-elevation-z4' [style.background-image]="'url('+toPhotoUrl(photo)+')'"></div>
         </div>
     </div>
 </div>

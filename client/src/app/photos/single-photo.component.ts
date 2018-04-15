@@ -1,10 +1,8 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, Inject, Optional } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 
-import { Client } from '../app.client'
-import { Photo } from '../models/photo.model';
-import { PhotoGroup } from '../models/photo-group.model';
+import { Client, PhotoGroupReadModel, API_BASE_URL } from '../api.client'
 
 @Component({
   selector: 'app-single-photo',
@@ -12,26 +10,24 @@ import { PhotoGroup } from '../models/photo-group.model';
   styleUrls: [ './photos.component.scss' ]
 })
 export class SinglePhotoComponent implements OnInit {
-  currentPhoto: Photo;
+  currentPhotoId: number;
   private id: number; 
-  private groupName: string;
-  private photoGroups: PhotoGroup[];
+  private groupId: number;
+  private photoGroups: PhotoGroupReadModel[];
   private sub: any;
   
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _client: Client) { }
+    private _client: Client,
+    @Optional() @Inject(API_BASE_URL) private _baseUrl?: string) { }
 
   ngOnInit() {
-    this.photoGroups = this._client.getPhotos();
-    this.sub = this._route.params.subscribe(params => {
-      this.groupName = params['groupName'];
-      this.id = +params['id'];
-      this.currentPhoto = this.photoGroups
-        .find(x => x.groupName === this.groupName).photos
-        .find(x => x.id === this.id);
-   });
+    this._client.getAllPhotoGroups().subscribe(
+      data => this.processPhotoGroupsReturned(data),
+      error => console.error(error)
+    );
+    
   }
 
   ngOnDestroy() {
@@ -41,20 +37,37 @@ export class SinglePhotoComponent implements OnInit {
   @HostListener('document:keydown.ArrowRight', ['$event'])
   forward(): void {
     let currentGroupPhotos = this.getCurrentPhotoGroupPhotos();
-    let index = currentGroupPhotos.findIndex(x => x.id == this.currentPhoto.id);
+    let index = currentGroupPhotos.findIndex(x => x == this.currentPhotoId);
     let newIndex = currentGroupPhotos.length - 1 > index ? index + 1 : 0;
-    this._router.navigate(['/photos', this.groupName, currentGroupPhotos[newIndex].id]);
+    this._router.navigate(['/photos', this.groupId, currentGroupPhotos[newIndex]]);
   }
 
   @HostListener('document:keydown.ArrowLeft', ['$event'])
   back(): void {
     let currentGroupPhotos = this.getCurrentPhotoGroupPhotos();
-    let index = currentGroupPhotos.findIndex(x => x.id == this.currentPhoto.id);
+    let index = currentGroupPhotos.findIndex(x => x == this.currentPhotoId);
     let newIndex =  index != 0 ? index - 1 : currentGroupPhotos.length-1;
-    this._router.navigate(['/photos', this.groupName, currentGroupPhotos[newIndex].id]);
+    this._router.navigate(['/photos', this.groupId, currentGroupPhotos[newIndex]]);
   }
 
-  private getCurrentPhotoGroupPhotos() : Photo[]{
-    return this.photoGroups.find(x => x.groupName === this.groupName).photos;
+  toPhotoUrl(id: number): string{
+    return this._baseUrl + "/Photo/Get/" + id;
+  }
+
+  private getCurrentPhotoGroupPhotos() : number[]{
+    return this.photoGroups.find(x => x.id === this.groupId).photoIds;
+  }
+
+  private processPhotoGroupsReturned(groups: PhotoGroupReadModel[]): void {
+    this.photoGroups = groups;
+    this.sub = this._route.params.subscribe(params => {
+      this.groupId = +params['groupId'];
+      this.id = +params['id'];
+      this.currentPhotoId = this.photoGroups
+        .find(x => x.id === this.groupId).photoIds
+        .find(x => x === this.id);
+   });
+
+   
   }
 }

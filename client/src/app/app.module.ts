@@ -2,11 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule,
-  MatCardModule ,
+  MatCardModule,
   MatDatepickerModule,
   MatFormFieldModule,
   MatIconModule,
@@ -33,7 +34,8 @@ import { AboutComponent } from './about/about.component';
 import { RegisterComponent } from './register/register.component';
 import { SupportComponent } from './support/support.component'
 import { APP_BASE_HREF } from '@angular/common';
-import { environment } from '../environments/environment.prod';
+// TODO what to do about this?
+import { environment } from '../environments/environment';
 
 function getApiUrl(){
   return environment.apiUrl;
@@ -55,6 +57,7 @@ function getApiUrl(){
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    HttpModule,
     HttpClientModule,
     MatButtonModule,
     MatCardModule,

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Client } from '../app.client'
+import { Client, EventReadModel } from '../api.client'
 import { Event } from '../models/event.model'
+import {  } from '../api.client';
 
 @Component({
   selector: 'app-schedule',
@@ -10,12 +11,14 @@ import { Event } from '../models/event.model'
 })
 export class ScheduleComponent implements OnInit {
 
-  events: Event[];
+  events: EventReadModel[];
   
   constructor(private _client: Client) { }
   
   ngOnInit() {
-    this.events = this._client.getEvents();
+    this._client.getAllEvents().subscribe(
+      data => this.events = data,
+      error => console.error(error)
+    );
   }
-
 }
