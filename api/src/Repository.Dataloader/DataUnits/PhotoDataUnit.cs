@@ -44,6 +44,34 @@ namespace Repository.Dataloader.DataUnit
                             Data = GetPhotoData("Files/2016_group3.jpg")
                         }
                     }
+                },
+                new PhotoGroup
+                {
+                    SortOrder = 1,
+                    Name = "2015 team photos",
+                    Photos = new List<Photo>
+                    {
+                        new Photo
+                        {
+                            Title = "Photo 1",
+                            SortOrder = 0,
+                            Data = GetPhotoData("Files/2015_group.jpg")
+                        }
+                    }
+                },
+                new PhotoGroup
+                {
+                    SortOrder = 2,
+                    Name = "2014 team photos",
+                    Photos = new List<Photo>
+                    {
+                        new Photo
+                        {
+                            Title = "Photo 1",
+                            SortOrder = 0,
+                            Data = GetPhotoData("Files/2014_group.jpg")
+                        }
+                    }
                 }
             };
 

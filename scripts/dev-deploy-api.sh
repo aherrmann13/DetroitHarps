@@ -7,4 +7,10 @@ dotnet /deploy/api/Repository.Migrator/Repository.Migrator.dll Migrate
 
 dotnet /deploy/api/Repository.Dataloader/Repository.Dataloader.dll
 
-dotnet cp -r /deploy/api/Service /detroitharps/api/Service
+systemctl stop detroitharps-api.service
+
+cp -r /deploy/api/Service /detroitharps/api/
+
+systemctl start detroitharps-api.service
+
+service nginx restart

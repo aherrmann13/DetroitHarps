@@ -1,7 +1,8 @@
 namespace Business.Models
 {
+    using System;
     using System.Collections.Generic;
-    
+
     public class PhotoGroupReadModel : PhotoGroupModelBase
     {
         public PhotoGroupReadModel()
@@ -12,5 +13,10 @@ namespace Business.Models
         public int Id { get; set; }
 
         public IList<int> PhotoIds { get; set; }
+
+        public object ToList()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

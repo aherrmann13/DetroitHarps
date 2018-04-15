@@ -15,6 +15,7 @@
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Repository;
+    using Swashbuckle.AspNetCore.Swagger;
     using Tools;
 
     public class Startup
@@ -38,6 +39,12 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            services.AddSwaggerGen(options => 
+            {
+                // TODO documentation files
+                options.SwaggerDoc("doc", new Info() { Version = "v1", Title = $"{_serviceOptions.ServiceName}"});
+            });
 
             //TODO:add sql query logging
             services.AddDbContext<ApiDbContext>(ServiceLifetime.Scoped);
@@ -63,6 +70,9 @@
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseSwagger();
+            app.UseStaticFiles();
+            
             app.UseMvc();
         }
     }
