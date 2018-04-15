@@ -41,8 +41,11 @@ jobs:
             PUBLIC_KEY: "|1|Zj1eT2OEObP2Ovh83T7dKNqaIqA=|lqu/pS4Wey1FHtQho7kFy2NJYJs= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFmUQu3aTDNgYdhAtuUDQxq+OLFHAQ0Y6XCtpam+ZNZzos4p7s7MBbjPsyQeKKiUimwn11C3Xd8tednO8TikJOg="
           command: echo $PUBLIC_KEY >> ~/.ssh/known_hosts
       - run:
+          name: Create folder to publish to
+          command: ssh root@45.33.89.196 "mkdir -p /deploy/api/"
+      - run:
           name: Clear old files
-          command: ssh root@45.33.89.196 "if [ -d /deploy/api/ ]; then rm -rf /deploy/api/*; fi"
+          command: ssh root@45.33.89.196 "rm -r /deploy/api/*"
       - run:
           name: Copy to dev server
           command: scp -r /root/project/publish/* root@45.33.89.196:/deploy/api/
