@@ -9,6 +9,8 @@ dotnet /deploy/api/Repository.Dataloader/Repository.Dataloader.dll
 
 systemctl stop detroitharps-api.service
 
+rm -r /detroitharps/api/Service
+
 cp -r /deploy/api/Service /detroitharps/api/
 
 systemctl start detroitharps-api.service

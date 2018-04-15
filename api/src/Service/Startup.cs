@@ -55,6 +55,15 @@
                     .UseNpgsql(repositoryOptions.ConnectionString)
                     .Options);
 
+            // TODO only in dev
+            services.AddCors(o => o.AddPolicy("AllowAll", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+            }));
+
             services.AddTransient<IPhotoGroupManager, PhotoGroupManager>();
             services.AddTransient<IPhotoManager, PhotoManager>();
             services.AddTransient<IRegistrationManager, RegistrationManager>();
@@ -63,12 +72,14 @@
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors("AllowAll");
             app.UseCustomLogging();
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            
 
             app.UseSwagger();
             app.UseStaticFiles();
