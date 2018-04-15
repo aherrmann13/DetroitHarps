@@ -24,7 +24,7 @@ namespace Service.Middleware
             try
             {
                 _logger.LogInformation($"Request for {httpContext.Request.Path} received ({httpContext.Request.ContentLength ?? 0}) bytes");
-                await _next(httpContext);
+                await _next.Invoke(httpContext).ConfigureAwait(false);
                 swatch.Stop();
                 _logger.LogInformation($"Request for {httpContext.Request.Path} took ({swatch.ElapsedMilliseconds}) ms");
 
