@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Client, EventReadModel } from '../api.client'
-import { Event } from '../models/event.model'
-import {  } from '../api.client';
 
 @Component({
   selector: 'app-schedule',

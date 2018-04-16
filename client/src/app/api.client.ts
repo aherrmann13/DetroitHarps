@@ -567,14 +567,14 @@ export class Client extends BaseClient {
     }
 
     /**
-     * @models (optional) 
+     * @model (optional) 
      * @return Success
      */
-    register(models: RegistrationCreateModel[]): Observable<number[]> {
+    register(model: RegistrationCreateModel): Observable<number> {
         let url_ = this.baseUrl + "/Registration/Register";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(models);
+        const content_ = JSON.stringify(model);
 
         let options_ : any = {
             body: content_,
@@ -594,14 +594,14 @@ export class Client extends BaseClient {
                 try {
                     return this.transformResult(url_, response_, (r) => this.processRegister(<any>r));
                 } catch (e) {
-                    return <Observable<number[]>><any>Observable.throw(e);
+                    return <Observable<number>><any>Observable.throw(e);
                 }
             } else
-                return <Observable<number[]>><any>Observable.throw(response_);
+                return <Observable<number>><any>Observable.throw(response_);
         });
     }
 
-    protected processRegister(response: Response): Observable<number[]> {
+    protected processRegister(response: Response): Observable<number> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -609,17 +609,13 @@ export class Client extends BaseClient {
             const _responseText = response.text();
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200 && resultData200.constructor === Array) {
-                result200 = [];
-                for (let item of resultData200)
-                    result200.push(item);
-            }
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
             return Observable.of(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Observable.of<number[]>(<any>null);
+        return Observable.of<number>(<any>null);
     }
 
     /**
@@ -1248,6 +1244,7 @@ export interface IPhotoGroupReadModel {
 
 export class RegistrationCreateModel implements IRegistrationCreateModel {
     children?: ChildInformationCreateModel[];
+    stripeToken?: string;
     firstName?: string;
     lastName?: string;
     emailAddress?: string;
@@ -1274,6 +1271,7 @@ export class RegistrationCreateModel implements IRegistrationCreateModel {
                 for (let item of data["children"])
                     this.children.push(ChildInformationCreateModel.fromJS(item));
             }
+            this.stripeToken = data["stripeToken"];
             this.firstName = data["firstName"];
             this.lastName = data["lastName"];
             this.emailAddress = data["emailAddress"];
@@ -1300,6 +1298,7 @@ export class RegistrationCreateModel implements IRegistrationCreateModel {
             for (let item of this.children)
                 data["children"].push(item.toJSON());
         }
+        data["stripeToken"] = this.stripeToken;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
         data["emailAddress"] = this.emailAddress;
@@ -1315,6 +1314,7 @@ export class RegistrationCreateModel implements IRegistrationCreateModel {
 
 export interface IRegistrationCreateModel {
     children?: ChildInformationCreateModel[];
+    stripeToken?: string;
     firstName?: string;
     lastName?: string;
     emailAddress?: string;
