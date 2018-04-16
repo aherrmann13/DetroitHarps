@@ -8,6 +8,8 @@ namespace Business.Models
 
         public string LastName { get; set; }
 
+        public string Gender { get; set; }
+
         public DateTimeOffset DateOfBirth { get; set; }
         
         // TODO : Enum? 

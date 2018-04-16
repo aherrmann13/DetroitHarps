@@ -16,7 +16,7 @@ namespace Repository.Migrator
         {
             var config = CreateConfiguration();
 
-            _options = config.GetSection(MigratorOptions.SectionName).Get<MigratorOptions>();
+            _options = config.GetSection(nameof(MigratorOptions)).Get<MigratorOptions>();
         }
 
         public ApiDbContext CreateDbContext() => CreateDbContext(null);

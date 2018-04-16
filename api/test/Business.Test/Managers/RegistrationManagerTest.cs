@@ -86,6 +86,7 @@ namespace Business.Test
                     {
                         FirstName = $"child1-firstname",
                         LastName = $"child1-lastname",
+                        Gender = "male",
                         DateOfBirth = DateTimeOffset.Now.AddYears(-10),
                         ShirtSize = $"child1-shirtsize",
                     },
@@ -93,6 +94,7 @@ namespace Business.Test
                     {
                         FirstName = $"child2-firstname",
                         LastName = $"child2-lastname",
+                        Gender = "male",
                         DateOfBirth = DateTimeOffset.Now.AddYears(-10),
                         ShirtSize = $"child2-shirtsize",
                     }
@@ -190,6 +192,7 @@ namespace Business.Test
         private static bool IsEqual(ChildInformationModelBase model, RegisteredChild entity) =>
             model.FirstName.EqualOrdinal(entity.FirstName) &&
             model.LastName.EqualOrdinal(entity.LastName) &&
+            model.Gender.EqualOrdinal(entity.Gender) &&
             model.DateOfBirth.Date.Equals(entity.DateOfBirth.Date) &&
             model.ShirtSize.EqualOrdinal(entity.ShirtSize);
 

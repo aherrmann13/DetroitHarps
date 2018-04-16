@@ -13,7 +13,7 @@
         static void Main(string[] args)
         {
             var config = CreateConfiguration();
-            var options = config.GetSection(DataloaderOptions.SectionName).Get<DataloaderOptions>();
+            var options = config.GetSection(nameof(DataloaderOptions)).Get<DataloaderOptions>();
             options.LogFolder = options.LogFolder.EndsWith("/") ? options.LogFolder : options.LogFolder + "/";
             var logFile = options.LogFolder + "/" + $"Dataloader-{DateTime.Now:yyyyMMdd}.txt";
 

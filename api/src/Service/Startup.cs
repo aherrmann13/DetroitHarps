@@ -51,11 +51,14 @@
             //TODO:add sql query logging
             services.AddDbContext<ApiDbContext>(ServiceLifetime.Scoped);
 
-            var repositoryOptions = _configuration.GetSection(RepositoryOptions.SectionName).Get<RepositoryOptions>();
+            var repositoryOptions = _configuration.GetSection(nameof(RepositoryOptions)).Get<RepositoryOptions>();
             services.AddSingleton(x => 
                 new DbContextOptionsBuilder<ApiDbContext>()
                     .UseNpgsql(repositoryOptions.ConnectionString)
                     .Options);
+
+            var contactManagerOptions = _configuration.GetSection(nameof(ContactManagerOptions)).Get<ContactManagerOptions>();
+            services.AddSingleton(contactManagerOptions);
 
             // TODO only in dev
             services.AddCors(o => o.AddPolicy("AllowAll", builder =>
@@ -70,6 +73,7 @@
             services.AddTransient<IPhotoManager, PhotoManager>();
             services.AddTransient<IRegistrationManager, RegistrationManager>();
             services.AddTransient<IScheduleManager, ScheduleManager>();
+            services.AddTransient<IContactManager, ContactManager>();
 
             var stripeManagerMock = new Mock<IStripeManager>();
             stripeManagerMock.Setup(x => x.Charge(It.IsAny<StripeChargeModel>()))

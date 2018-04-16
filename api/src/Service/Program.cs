@@ -16,7 +16,7 @@
         public static void Main(string[] args)
         {
             var config = CreateConfiguration();
-            var serviceOptions = config.GetSection(ServiceOptions.SectionName).Get<ServiceOptions>();
+            var serviceOptions = config.GetSection(nameof(ServiceOptions)).Get<ServiceOptions>();
 
             new WebHostBuilder()
                 .UseKestrel()

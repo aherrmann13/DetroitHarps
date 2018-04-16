@@ -83,6 +83,7 @@ namespace Business.Managers
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
+                Gender = model.Gender,
                 DateOfBirth = model.DateOfBirth.Date,
                 ShirtSize = model.ShirtSize
             };
@@ -109,6 +110,7 @@ namespace Business.Managers
                 ParentId = entity.RegisteredPersonId,
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
+                Gender = entity.Gender,
                 DateOfBirth = entity.DateOfBirth,
                 ShirtSize = entity.ShirtSize
             };
