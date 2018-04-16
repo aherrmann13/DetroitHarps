@@ -37,7 +37,7 @@ import { APP_BASE_HREF } from '@angular/common';
 // TODO what to do about this?
 import { environment } from '../environments/environment';
 
-function getApiUrl(){
+export function getApiUrl(){
   return environment.apiUrl;
 }
 

@@ -27,7 +27,7 @@ jobs:
           command: cd client && npm install
       - run:
           name: Npm install 
-          command: cd client && npm build-dev -- -o /root/project/publish/client/dist
+          command: cd client && npm build-dev -- --aot --output-path /root/project/publish/client/dist
       - run:
           name: Add Server to known_hosts
           environment:
