@@ -114,6 +114,7 @@ export class RegisterComponent implements OnInit {
     return this.thirdFormGroupArray.map(x => new ChildInformationCreateModel({
       firstName: x.value.childFirstName,
       lastName: x.value.childLastName,
+      gender: x.value.gender,
       dateOfBirth: x.value.childDob,
       shirtSize: x.value.shirtSize
     }));

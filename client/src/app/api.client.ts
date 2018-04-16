@@ -34,6 +34,54 @@ export class Client extends BaseClient {
     }
 
     /**
+     * @model (optional) 
+     * @return Success
+     */
+    contact(model: ContactModel): Observable<void> {
+        let url_ = this.baseUrl + "/Contact/Contact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_ : any = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processContact(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processContact(<any>r));
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processContact(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
      * @models (optional) 
      * @return Success
      */
@@ -998,6 +1046,50 @@ export class Client extends BaseClient {
     }
 }
 
+export class ContactModel implements IContactModel {
+    name?: string;
+    email?: string;
+    message?: string;
+
+    constructor(data?: IContactModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.name = data["name"];
+            this.email = data["email"];
+            this.message = data["message"];
+        }
+    }
+
+    static fromJS(data: any): ContactModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContactModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["email"] = this.email;
+        data["message"] = this.message;
+        return data; 
+    }
+}
+
+export interface IContactModel {
+    name?: string;
+    email?: string;
+    message?: string;
+}
+
 export class PhotoMetadataUpdateModel implements IPhotoMetadataUpdateModel {
     id?: number;
     title?: string;
@@ -1329,6 +1421,7 @@ export interface IRegistrationCreateModel {
 export class ChildInformationCreateModel implements IChildInformationCreateModel {
     firstName?: string;
     lastName?: string;
+    gender?: string;
     dateOfBirth?: Date;
     shirtSize?: string;
 
@@ -1345,6 +1438,7 @@ export class ChildInformationCreateModel implements IChildInformationCreateModel
         if (data) {
             this.firstName = data["firstName"];
             this.lastName = data["lastName"];
+            this.gender = data["gender"];
             this.dateOfBirth = data["dateOfBirth"] ? new Date(data["dateOfBirth"].toString()) : <any>undefined;
             this.shirtSize = data["shirtSize"];
         }
@@ -1361,6 +1455,7 @@ export class ChildInformationCreateModel implements IChildInformationCreateModel
         data = typeof data === 'object' ? data : {};
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
+        data["gender"] = this.gender;
         data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
         data["shirtSize"] = this.shirtSize;
         return data; 
@@ -1370,6 +1465,7 @@ export class ChildInformationCreateModel implements IChildInformationCreateModel
 export interface IChildInformationCreateModel {
     firstName?: string;
     lastName?: string;
+    gender?: string;
     dateOfBirth?: Date;
     shirtSize?: string;
 }
@@ -1454,6 +1550,7 @@ export class ChildInformationReadModel implements IChildInformationReadModel {
     parentId?: number;
     firstName?: string;
     lastName?: string;
+    gender?: string;
     dateOfBirth?: Date;
     shirtSize?: string;
 
@@ -1471,6 +1568,7 @@ export class ChildInformationReadModel implements IChildInformationReadModel {
             this.parentId = data["parentId"];
             this.firstName = data["firstName"];
             this.lastName = data["lastName"];
+            this.gender = data["gender"];
             this.dateOfBirth = data["dateOfBirth"] ? new Date(data["dateOfBirth"].toString()) : <any>undefined;
             this.shirtSize = data["shirtSize"];
         }
@@ -1488,6 +1586,7 @@ export class ChildInformationReadModel implements IChildInformationReadModel {
         data["parentId"] = this.parentId;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
+        data["gender"] = this.gender;
         data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
         data["shirtSize"] = this.shirtSize;
         return data; 
@@ -1498,6 +1597,7 @@ export interface IChildInformationReadModel {
     parentId?: number;
     firstName?: string;
     lastName?: string;
+    gender?: string;
     dateOfBirth?: Date;
     shirtSize?: string;
 }

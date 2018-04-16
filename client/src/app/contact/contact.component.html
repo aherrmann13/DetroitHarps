@@ -13,19 +13,20 @@
             </p>
             <div class='form-container'>
                 <mat-form-field>
-                    <input matInput placeholder='Name'>
+                    <input matInput placeholder='Name' [formControl]="name" required>
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput placeholder='Email'>
+                    <input matInput placeholder='Email' [formControl]="email" required>
+                    <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
                 </mat-form-field>
                 <mat-form-field>
-                    <textarea matInput placeholder='Message'></textarea>
+                    <textarea matInput placeholder='Message' [formControl]="message" required></textarea>
                 </mat-form-field>
             </div>
         </mat-card-content>
         <mat-card-actions>
             <span class='spacer'></span>
-            <button mat-raised-button color='primary'>Send</button>
+            <button mat-raised-button color='primary' [disabled]='!isValidForm()' (click)='send()'>Send</button>
         </mat-card-actions>
     </mat-card>
 </div>
