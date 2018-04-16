@@ -21,8 +21,8 @@ jobs:
           name: Build
           command: dotnet build api/Api.sln
       - run:
-          name: DataAccess.Test
-          command: dotnet test api/test/DataAccess.Test/DataAccess.Test.csproj
+          name: Repository.Test
+          command: dotnet test api/test/Repository.Test/Repository.Test.csproj
       - run:
           name: Business.Test
           command: dotnet test api/test/Business.Test/Business.Test.csproj

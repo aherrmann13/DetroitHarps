@@ -55,26 +55,26 @@ namespace Service.Controllers
         ////    return Json(response);
         ////}
 
-        [HttpPost("Update")]
-        [Produces("application/json", Type = typeof(IList<int>))]
-        [SwaggerOperation(operationId: "UpdatePhoto")]
-        public IActionResult Update([FromBody] PhotoMetadataUpdateModel[] models)
-        {
-            var response = _manager.Update(models).ToList();
-
-            return Json(response);
-        }
-
-        // TODO : make this consistant with other deletes
-        [HttpPost("Delete")]
-        [Produces("application/json", Type = typeof(IList<int>))]
-        [SwaggerOperation(operationId: "DeletePhoto")]
-        public IActionResult Delete([FromBody] int[] ids)
-        {
-            var response = _manager.Delete(ids).ToList();
-
-            return Json(response);
-        }
+        ////[HttpPost("Update")]
+        ////[Produces("application/json", Type = typeof(IList<int>))]
+        ////[SwaggerOperation(operationId: "UpdatePhoto")]
+        ////public IActionResult Update([FromBody] PhotoMetadataUpdateModel[] models)
+        ////{
+        ////    var response = _manager.Update(models).ToList();
+        ////
+        ////    return Json(response);
+        ////}
+        ////
+        ////// TODO : make this consistant with other deletes
+        ////[HttpPost("Delete")]
+        ////[Produces("application/json", Type = typeof(IList<int>))]
+        ////[SwaggerOperation(operationId: "DeletePhoto")]
+        ////public IActionResult Delete([FromBody] int[] ids)
+        ////{
+        ////    var response = _manager.Delete(ids).ToList();
+        ////
+        ////    return Json(response);
+        ////}
 
         [HttpGet("GetAll")]
         [Produces("application/json", Type = typeof(IList<PhotoMetadataReadModel>))]

@@ -1,4 +1,4 @@
-namespace DataAccess.Test
+namespace Repository.Test
 {
     using System;
     using Microsoft.EntityFrameworkCore;
