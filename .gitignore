@@ -1,5 +1,7 @@
 .vscode
 obj/
 bin/
-
 node_modules/
+src\**\*.js
+npm-debug.log*
+dist/

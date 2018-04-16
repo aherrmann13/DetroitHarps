@@ -1,0 +1,17 @@
+language: python
+dist: trusty
+sudo: required
+branches:
+  only:
+    - master
+    - api
+    - client
+before_script:
+  - npm install -g @angular/cli
+  - chmod -R a+x scripts
+script:
+  - ./scripts/travis.sh
+notifications:
+  email:
+    on_success: never
+    on_failure: always

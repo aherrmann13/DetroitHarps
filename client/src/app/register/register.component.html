@@ -1,0 +1,123 @@
+<div class='single-card-container sides-container'>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>
+                <span class='mat-title'>Register</span>
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-horizontal-stepper [linear]='true' #stepper (selectionChange)='step(stepper)'>
+                <mat-step [stepControl]='firstFormGroup'>
+                    <form [formGroup]='firstFormGroup'>
+                        <ng-template matStepLabel>Contact Information</ng-template>
+                        <mat-form-field>
+                            <input matInput placeholder='First name' formControlName='parentFirstName' required>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <input matInput placeholder='Last name' formControlName='parentLastName' required>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <input matInput placeholder='Phone Number' formControlName='phoneNumber' required>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <input matInput placeholder='Email' formControlName='emailAddress' required>
+                        </mat-form-field>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]='secondFormGroup'>
+                    <form [formGroup]='secondFormGroup'>
+                        <ng-template matStepLabel>Address</ng-template>
+                        <mat-form-field>
+                            <input matInput placeholder='Street Address' formControlName='address' required>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                                <input matInput placeholder='Street Address 2' formControlName='address2'>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <input matInput placeholder='City' formControlName='city' required>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <mat-select placeholder='State' formControlName='state' required>
+                                <mat-option *ngFor='let state of states' value="{{state}}">
+                                    {{state}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <input matInput placeholder='Zip' formControlName='zip' required>
+                        </mat-form-field>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]='thirdFormGroupArray[0]'>
+                    <form *ngFor='let thirdFormGroup of thirdFormGroupArray' [formGroup]='thirdFormGroup'>
+                        <ng-template matStepLabel>Child Information</ng-template>
+                        <mat-form-field>
+                            <input matInput placeholder='Child First name' formControlName='childFirstName'>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <input matInput placeholder='Child Last name' formControlName='childLastName'>
+                        </mat-form-field>
+                        <br />
+                        <mat-form-field>
+                            <input matInput [matDatepicker]="genderPicker" placeholder="Choose a date" formControlName='childDob'>
+                            <mat-datepicker-toggle matSuffix [for]="genderPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #genderPicker></mat-datepicker>
+                        </mat-form-field>
+                        <br />
+                        <mat-radio-group formControlName='childGender'>
+                            <mat-radio-button value="male">Male </mat-radio-button>
+                            <mat-radio-button value="female">Female </mat-radio-button>
+                        </mat-radio-group>
+                        <br />
+                        <mat-form-field>
+                            <mat-select placeholder='Shirt Size' formControlName='childShirtSize'>
+                                <mat-option *ngFor='let shirtSize of shirtSizes' value="{{shirtSize}}">
+                                    {{shirtSize}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </form>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Done</ng-template>
+                    <div class='register-success'>
+                        <p>Thank for registering for the 2018 summer program.
+                            The registration fee is $20 per child or $30 per
+                            family and can be paid throug PayPal using the link below.
+                         </p>
+                         <form ngNoForm action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                            <input type="hidden" name="cmd" value="_s-xclick">
+                            <input type="hidden" name="hosted_button_id" value="YELLJL3VMKMLC">
+                            <table>
+                              <tr><td><input type="hidden" name="on0" value="Registration">Registration</td></tr><tr><td><select name="os0">
+                                  <option value="1 Child">1 Child $20.00 USD</option>
+                                  <option value="Family">Family $30.00 USD</option>
+                                </select>
+                              </td></tr>
+                            </table>
+                            <input type="hidden" name="currency_code" value="USD">
+                            <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                            <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                        </form>
+                    </div>
+                    
+                </mat-step>
+            </mat-horizontal-stepper>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color='primary' *ngIf='formIndex === 2' (click)="addChild()">Add Child</button>
+            <span class='spacer'></span>
+            <button mat-raised-button color='primary' *ngIf='formIndex !== 0 && formIndex != 3' (click)="goBack(stepper)">Previous</button>
+            <button mat-raised-button color='primary' *ngIf='formIndex !== 2 && formIndex != 3' (click)="goForward(stepper)">Next</button>
+            <button mat-raised-button color='primary' *ngIf='formIndex === 2' (click)="register(stepper)">Register</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
