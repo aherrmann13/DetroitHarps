@@ -10,7 +10,7 @@
                 <mat-list-item *ngFor='let event of events'>
                     <mat-icon mat-list-icon>event</mat-icon>
                     <h4 mat-line>{{event.title}}</h4>
-                    <p mat-line> {{event.date | date:"MMM, dd yyyy hh:mm a"}} </p>
+                    <p mat-line> {{event.date | date}} </p>
                 </mat-list-item>
             </mat-list>
         </mat-card-content>
