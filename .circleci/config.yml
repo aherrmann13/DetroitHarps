@@ -47,7 +47,7 @@ jobs:
           command: scp -r scripts root@45.33.89.196:/deploy/client/
       - run:
           name: Deploy
-          command: ssh root@45.33.89.196 "/deploy/client/scripts/dev-deploy-client.sh"
+          command: ssh root@45.33.89.196 "/deploy/client/scripts/dev-deploy-site.sh"
 
 workflows:
   version: 2
