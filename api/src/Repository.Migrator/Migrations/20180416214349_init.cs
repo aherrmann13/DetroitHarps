@@ -146,6 +146,7 @@ namespace Repository.Migrator.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     DateOfBirth = table.Column<DateTime>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
+                    Gender = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
                     RegisteredPersonId = table.Column<int>(nullable: false),
                     ShirtSize = table.Column<string>(nullable: true)

@@ -99,6 +99,8 @@ namespace Repository.Migrator.Migrations
 
                     b.Property<string>("FirstName");
 
+                    b.Property<string>("Gender");
+
                     b.Property<string>("LastName");
 
                     b.Property<int>("RegisteredPersonId");

@@ -11,7 +11,7 @@ using System;
 namespace Repository.Migrator.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20180415224324_init")]
+    [Migration("20180416214349_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,6 +99,8 @@ namespace Repository.Migrator.Migrations
                     b.Property<DateTime>("DateOfBirth");
 
                     b.Property<string>("FirstName");
+
+                    b.Property<string>("Gender");
 
                     b.Property<string>("LastName");
 
