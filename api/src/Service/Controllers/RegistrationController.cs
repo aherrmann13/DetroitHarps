@@ -22,11 +22,11 @@ namespace Service.Controllers
         }
 
         [HttpPost("Register")]
-        [Produces("application/json", Type = typeof(IList<int>))]
+        [Produces("application/json", Type = typeof(int))]
         [SwaggerOperation(operationId: "Register")]
-        public IActionResult Register([FromBody] RegistrationCreateModel[] models)
+        public IActionResult Register([FromBody] RegistrationCreateModel model)
         {
-            var response = _manager.Register(models).ToList();
+            var response = _manager.Register(model);
 
             return Json(response);
         }

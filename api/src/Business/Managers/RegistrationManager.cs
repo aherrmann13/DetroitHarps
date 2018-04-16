@@ -14,36 +14,39 @@ namespace Business.Managers
     public class RegistrationManager : IRegistrationManager
     {
         private readonly ApiDbContext _dbContext;
+        private readonly IStripeManager _stripeManager;
         private int _currentYear;
 
-        public RegistrationManager(ApiDbContext dbContext)
+        public RegistrationManager(ApiDbContext dbContext, IStripeManager stripeManager)
         {
             Guard.NotNull(dbContext, nameof(dbContext));
+            Guard.NotNull(stripeManager, nameof(stripeManager));
 
             _dbContext = dbContext;
+            _stripeManager = stripeManager;
             _currentYear = DateTime.Now.Year;
         }
 
-        public IEnumerable<int> Register(params RegistrationCreateModel[] models)
+        public int Register(RegistrationCreateModel model)
         {
+            Guard.NotNull(model, nameof(model));
+
             var season = _dbContext.Set<Season>()
                 .AsNoTracking()
                 .FirstOrDefault(x => x.Year.Equals(_currentYear));
 
-            if(models == null || models.Length == 0 || season == null)
-            {
-                return new List<int>();
-            }
+            var registeredPerson = CreateInternal(model, season.Id);
 
-            var registeredPersons = models
-                .Where(x => x != null)
-                .Select(x => CreateInternal(x, season.Id))
-                .ToList();
+            var stripeChargeModel = CreateStripeCharge(model);
+            var customerId = _stripeManager.Charge(stripeChargeModel);
+            var paymentDetails = CreateChargeRecord(stripeChargeModel, customerId);
 
-            _dbContext.AddRange(registeredPersons);
+            registeredPerson.PaymentDetails = new List<PaymentDetails> { paymentDetails };
+
+            _dbContext.Add(registeredPerson);
             _dbContext.SaveChanges();
 
-            return registeredPersons.Select(x => x.Id);
+            return registeredPerson.Id;
         }
 
         public IEnumerable<RegistrationReadModel> GetAll() =>
@@ -108,6 +111,23 @@ namespace Business.Managers
                 LastName = entity.LastName,
                 DateOfBirth = entity.DateOfBirth,
                 ShirtSize = entity.ShirtSize
+            };
+
+        private static StripeChargeModel CreateStripeCharge(RegistrationCreateModel model) =>
+            new StripeChargeModel
+            {
+                Email = model.EmailAddress,
+                Token = model.StripeToken,
+                Description = "Registration Fee",
+                Amount = model.Children.Count > 1 ? 3000 : 2000
+            };
+
+        private static PaymentDetails CreateChargeRecord(StripeChargeModel model, string stripeCustomerId) =>
+            new PaymentDetails
+            {
+                PaymentTimestamp = DateTimeOffset.Now,
+                StripeCustomerId = stripeCustomerId,
+                Amount = model.Amount / 100.0
             };
     }
 }

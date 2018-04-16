@@ -27,55 +27,25 @@ namespace Business.Test
         [Fact]
         public void CreateSuccessTest()
         {
-            var createModels = GetValidModels().ToArray();
+            // TODO confirm payment details created
+            var createModel = GetValidModel();
 
-            var response = _manager.Register(createModels).ToList();
+            var response = _manager.Register(createModel);
 
-            var entities = DbContext.Set<RegisteredPerson>()
+            var entity = DbContext.Set<RegisteredPerson>()
                 .Include(x => x.Children)
                 .Include(x => x.PaymentDetails)
-                .Where(x => x.Season.Year.Equals(DateTime.Now.Year))
                 .AsNoTracking()
-                .ToList();
+                .First(x => x.Season.Year.Equals(DateTime.Now.Year));
 
-            AssertCreated(createModels, entities);
-            AssertResponseCorrect(response, entities);
+            AssertEqual(createModel, entity);
+            Assert.Equal(response, entity.Id);
         }
 
                 [Fact]
-        public void CreateNullInputTest()
+        public void CreateNullInputThrowsExceptionTest()
         {
-            var response = _manager.Register((RegistrationCreateModel[])null);
-
-            Assert.Empty(response);
-        }
-
-        [Fact]
-        public void CreateEmptyInputTest()
-        {
-            var response = _manager.Register(new RegistrationCreateModel[0]);
-
-            Assert.Empty(response);
-        }
-
-        [Fact]
-        public void CreateNullInInputTest()
-        {
-            var createModels = GetValidModels().ToList();
-            createModels.Add((RegistrationCreateModel)null);
-
-            var response = _manager.Register(createModels.ToArray()).ToList();
-
-            var entities = DbContext.Set<RegisteredPerson>()
-                .Include(x => x.Children)
-                .Include(x => x.PaymentDetails)
-                .Where(x => x.Season.Year.Equals(DateTime.Now.Year))
-                .AsNoTracking()
-                .ToList();
-
-            Assert.Equal(createModels.Count() - 1, response.Count());
-            AssertCreated(createModels.Where(x => x != null).ToList(), entities);
-            AssertResponseCorrect(response, entities);
+            Assert.Throws<ArgumentNullException>(() => _manager.Register((RegistrationCreateModel)null));
         }
 
         [Fact]
@@ -98,60 +68,46 @@ namespace Business.Test
             AssertEqual(response, entities.SelectMany(x => x.Children));
         }
 
-        private IEnumerable<RegistrationCreateModel> GetValidModels()
-        {
-            for(var i = 0; i < 5; i ++)
+        private RegistrationCreateModel GetValidModel() =>
+            new RegistrationCreateModel
             {
-                yield return new RegistrationCreateModel
+                FirstName = $"firstname",
+                LastName = $"lastname",
+                EmailAddress = $"emailaddress",
+                PhoneNumber = $"phonenumber",
+                Address = $"address",
+                Address2 = $"address2",
+                City = $"city",
+                State = $"state",
+                Zip = $"zip",
+                Children = 
                 {
-                    FirstName = $"firstname{i}",
-                    LastName = $"lastname{i}",
-                    EmailAddress = $"emailaddress{i}",
-                    PhoneNumber = $"phonenumber{i}",
-                    Address = $"address{i}",
-                    Address2 = $"address2{i}",
-                    City = $"city{i}",
-                    State = $"state{i}",
-                    Zip = $"zip{i}",
-                    Children = 
+                    new ChildInformationCreateModel
                     {
-                        new ChildInformationCreateModel
-                        {
-                            FirstName = $"child1-firstname{i}",
-                            LastName = $"child1-lastname{i}",
-                            DateOfBirth = DateTimeOffset.Now.AddYears(-10),
-                            ShirtSize = $"child1-shirtsize{i}",
-                        },
-                        new ChildInformationCreateModel
-                        {
-                            FirstName = $"child2-firstname{i}",
-                            LastName = $"child2-lastname{i}",
-                            DateOfBirth = DateTimeOffset.Now.AddYears(-10),
-                            ShirtSize = $"child2-shirtsize{i}",
-                        }
+                        FirstName = $"child1-firstname",
+                        LastName = $"child1-lastname",
+                        DateOfBirth = DateTimeOffset.Now.AddYears(-10),
+                        ShirtSize = $"child1-shirtsize",
+                    },
+                    new ChildInformationCreateModel
+                    {
+                        FirstName = $"child2-firstname",
+                        LastName = $"child2-lastname",
+                        DateOfBirth = DateTimeOffset.Now.AddYears(-10),
+                        ShirtSize = $"child2-shirtsize",
                     }
-                };
-            }
-        }
+                }
+            };
 
-        private static void AssertCreated(
-            IEnumerable<RegistrationCreateModel> models,
-            IEnumerable<RegisteredPerson> entities)
+        private static void AssertEqual(RegistrationCreateModel model, RegisteredPerson entity)
         {
-            Assert.Equal(models.Count(), entities.Count()); 
+            Assert.True(IsEqual(model, entity));
 
-            var editableEntityList = entities.ToList();
-            // TODO : ForEach on IList, IEnumerable in tools
-            foreach(var model in models)
-            {
-                var entity = editableEntityList.FirstOrDefault(x => IsEqual(model, x));
+            Assert.Single(entity.PaymentDetails);
+            var payment = entity.PaymentDetails.First();
+            Assert.Equal(payment.Amount, model.Children.Count > 1 ? 30.0 : 20.0);
 
-                Assert.NotNull(entity);
-                Assert.Empty(entity.PaymentDetails);
-                AssertEqual(model.Children, entity.Children);
-
-                editableEntityList.Remove(entity);
-            }
+            AssertEqual(model.Children, entity.Children);
         }
 
         private static void AssertEqual(

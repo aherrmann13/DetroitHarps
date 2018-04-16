@@ -55,6 +55,7 @@
                 .AddTransient<IDataUnit, EventDataUnit>()
                 .AddTransient<IDataUnit, UserDataUnit>()
                 .AddTransient<IDataUnit, PhotoDataUnit>()
+                .AddTransient<IDataUnit, SeasonDataUnit>()
                 .BuildServiceProvider();
 
         private static IConfiguration CreateConfiguration() =>

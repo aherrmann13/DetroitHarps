@@ -6,15 +6,19 @@ namespace Business.Test
     using System.Reflection;
     using Business.Interfaces;
     using Business.Managers;
+    using Business.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Diagnostics;
     using Microsoft.Extensions.DependencyInjection;
+    using Moq;
     using Repository;
     using Xunit;
 
     public abstract class ManagerTestBase
     {
         protected IServiceProvider ServiceProvider { get; set; }
+
+        protected Mock<IStripeManager> StripeManagerMock { get; set;}
 
         protected ApiDbContext DbContext { get; set; }
 
@@ -39,6 +43,13 @@ namespace Business.Test
             serviceCollection.AddTransient<IRegistrationManager, RegistrationManager>();
             serviceCollection.AddTransient<IPhotoManager, PhotoManager>();
             serviceCollection.AddTransient<IPhotoGroupManager, PhotoGroupManager>();
+
+            StripeManagerMock = new Mock<IStripeManager>();
+            StripeManagerMock.Setup(x => x.Charge(It.IsAny<StripeChargeModel>()))
+                .Returns(Guid.NewGuid().ToString);
+
+            serviceCollection.AddSingleton(StripeManagerMock.Object);
+
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
 

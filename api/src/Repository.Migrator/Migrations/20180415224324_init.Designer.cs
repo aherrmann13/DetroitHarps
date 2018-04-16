@@ -11,7 +11,7 @@ using System;
 namespace Repository.Migrator.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20180415011220_init")]
+    [Migration("20180415224324_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,8 @@ namespace Repository.Migrator.Migrations
                     b.Property<DateTimeOffset>("PaymentTimestamp");
 
                     b.Property<int>("RegisteredPersonId");
+
+                    b.Property<string>("StripeCustomerId");
 
                     b.HasKey("Id");
 

@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using Business.Interfaces;
     using Business.Managers;
+    using Business.Models;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -14,6 +15,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+    using Moq;
     using Repository;
     using Swashbuckle.AspNetCore.Swagger;
     using Tools;
@@ -68,6 +70,12 @@
             services.AddTransient<IPhotoManager, PhotoManager>();
             services.AddTransient<IRegistrationManager, RegistrationManager>();
             services.AddTransient<IScheduleManager, ScheduleManager>();
+
+            var stripeManagerMock = new Mock<IStripeManager>();
+            stripeManagerMock.Setup(x => x.Charge(It.IsAny<StripeChargeModel>()))
+                .Returns("paypal");
+            
+            services.AddSingleton(stripeManagerMock.Object);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

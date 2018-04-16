@@ -6,7 +6,7 @@ namespace Business.Interfaces
 
     public interface IRegistrationManager
     {
-        IEnumerable<int> Register(params RegistrationCreateModel[] models);
+        int Register(RegistrationCreateModel model);
 
         // TODO : by season?
         IEnumerable<RegistrationReadModel> GetAll();

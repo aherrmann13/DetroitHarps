@@ -124,7 +124,8 @@ namespace Repository.Migrator.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Amount = table.Column<double>(nullable: false),
                     PaymentTimestamp = table.Column<DateTimeOffset>(nullable: false),
-                    RegisteredPersonId = table.Column<int>(nullable: false)
+                    RegisteredPersonId = table.Column<int>(nullable: false),
+                    StripeCustomerId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

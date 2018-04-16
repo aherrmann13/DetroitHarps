@@ -47,6 +47,8 @@ namespace Repository.Migrator.Migrations
 
                     b.Property<int>("RegisteredPersonId");
 
+                    b.Property<string>("StripeCustomerId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RegisteredPersonId");
