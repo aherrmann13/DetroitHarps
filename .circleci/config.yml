@@ -88,11 +88,19 @@ jobs:
           command: scp -r scripts root@45.33.89.196:/deploy/client/
       - run:
           name: Deploy
-          command: ssh root@45.33.89.196 "/deploy/api/scripts/dev-deploy-site.sh"
+          command: ssh root@45.33.89.196 "sudo /deploy/client/scripts/dev-deploy-site.sh"
 
 workflows:
   version: 2
   build_api_client:
     jobs:
       - api
+          filters:
+            branches:
+              only:
+                - api
       - client
+          filters:
+            branches:
+              only:
+                - client
