@@ -8,6 +8,7 @@ namespace Business.Test
     using Business.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
+    using Moq;
     using Repository;
     using Repository.Entities;
     using Tools;
@@ -27,7 +28,6 @@ namespace Business.Test
         [Fact]
         public void CreateSuccessTest()
         {
-            // TODO confirm payment details created
             var createModel = GetValidModel();
 
             var response = _manager.Register(createModel);
@@ -42,7 +42,54 @@ namespace Business.Test
             Assert.Equal(response, entity.Id);
         }
 
-                [Fact]
+        [Fact]
+        public void CreateSuccessDifferentPaymentTypeTest()
+        {
+            var createModel = GetValidModel();
+
+            createModel.RegistrationType = RegistrationType.Paypal;
+
+            var response = _manager.Register(createModel);
+
+            var entity = DbContext.Set<RegisteredPerson>()
+                .Include(x => x.Children)
+                .Include(x => x.PaymentDetails)
+                .AsNoTracking()
+                .First(x => x.Season.Year.Equals(DateTime.Now.Year));
+
+            AssertEqual(createModel, entity);
+            Assert.Equal(response, entity.Id);
+        }
+
+        [Fact]
+        public void CreateSuccessEmailSentTest()
+        {
+            var createModel = GetValidModel();
+
+            var response = _manager.Register(createModel);
+
+            var subjectString = $"Registration comments from {createModel.FirstName} {createModel.LastName}";
+            ContactManagerMock.Verify(x => 
+                x.Contact(
+                    It.Is<string>(y => y.EqualOrdinal(subjectString)),
+                    It.Is<string>(y => y.EqualOrdinal(createModel.Comments))),
+                Times.Once());
+        }
+
+        [Fact]
+        public void CreateSuccessNoEmailSentTest()
+        {
+            var createModel = GetValidModel();
+            createModel.Comments = string.Empty;
+
+            var response = _manager.Register(createModel);
+
+            ContactManagerMock.Verify(x => 
+                x.Contact(It.IsAny<string>(), It.IsAny<string>()),
+                Times.Never());
+        }
+
+        [Fact]
         public void CreateNullInputThrowsExceptionTest()
         {
             Assert.Throws<ArgumentNullException>(() => _manager.Register((RegistrationCreateModel)null));
@@ -71,32 +118,34 @@ namespace Business.Test
         private RegistrationCreateModel GetValidModel() =>
             new RegistrationCreateModel
             {
-                FirstName = $"firstname",
-                LastName = $"lastname",
-                EmailAddress = $"emailaddress",
-                PhoneNumber = $"phonenumber",
-                Address = $"address",
-                Address2 = $"address2",
-                City = $"city",
-                State = $"state",
-                Zip = $"zip",
+                FirstName = "firstname",
+                LastName = "lastname",
+                EmailAddress = "emailaddress",
+                PhoneNumber = "phonenumber",
+                Address = "address",
+                Address2 = "address2",
+                City = "city",
+                State = "state",
+                Zip = "zip",
+                RegistrationType = RegistrationType.Cash,
+                Comments = "comments",
                 Children = 
                 {
                     new ChildInformationCreateModel
                     {
-                        FirstName = $"child1-firstname",
-                        LastName = $"child1-lastname",
+                        FirstName = "child1-firstname",
+                        LastName = "child1-lastname",
                         Gender = "male",
                         DateOfBirth = DateTimeOffset.Now.AddYears(-10),
-                        ShirtSize = $"child1-shirtsize",
+                        ShirtSize = "child1-shirtsize",
                     },
                     new ChildInformationCreateModel
                     {
-                        FirstName = $"child2-firstname",
-                        LastName = $"child2-lastname",
+                        FirstName = "child2-firstname",
+                        LastName = "child2-lastname",
                         Gender = "male",
                         DateOfBirth = DateTimeOffset.Now.AddYears(-10),
-                        ShirtSize = $"child2-shirtsize",
+                        ShirtSize = "child2-shirtsize",
                     }
                 }
             };
@@ -108,6 +157,8 @@ namespace Business.Test
             Assert.Single(entity.PaymentDetails);
             var payment = entity.PaymentDetails.First();
             Assert.Equal(payment.Amount, model.Children.Count > 1 ? 30.0 : 20.0);
+            Assert.Equal(model.RegistrationType.ToString(), payment.PaymentType);
+            Assert.False(payment.VerfiedPayment);
 
             AssertEqual(model.Children, entity.Children);
         }

@@ -34,5 +34,16 @@ namespace Business.Managers
                           $"{model.Message}{Environment.NewLine}";          
             client.Send(_contactManagerOptions.FromEmail, _contactManagerOptions.ToEmail, $"Message from {model.Name}", message);
         }
+
+        public void Contact(string subject, string message)
+        {
+            var client = new SmtpClient("smtp.gmail.com", 587)
+            {
+                Credentials = new NetworkCredential(_contactManagerOptions.FromEmail, _contactManagerOptions.Password),
+                EnableSsl = true
+            };
+       
+            client.Send(_contactManagerOptions.FromEmail, _contactManagerOptions.ToEmail, subject, message);
+        }
     }
 }

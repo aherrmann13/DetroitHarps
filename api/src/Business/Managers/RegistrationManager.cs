@@ -15,15 +15,18 @@ namespace Business.Managers
     {
         private readonly ApiDbContext _dbContext;
         private readonly IStripeManager _stripeManager;
+        private readonly IContactManager _contactManager;
         private int _currentYear;
 
-        public RegistrationManager(ApiDbContext dbContext, IStripeManager stripeManager)
+        public RegistrationManager(ApiDbContext dbContext, IStripeManager stripeManager, IContactManager contactManager)
         {
             Guard.NotNull(dbContext, nameof(dbContext));
             Guard.NotNull(stripeManager, nameof(stripeManager));
+            Guard.NotNull(contactManager, nameof(contactManager));
 
             _dbContext = dbContext;
             _stripeManager = stripeManager;
+            _contactManager = contactManager;
             _currentYear = DateTime.Now.Year;
         }
 
@@ -37,14 +40,10 @@ namespace Business.Managers
 
             var registeredPerson = CreateInternal(model, season.Id);
 
-            var stripeChargeModel = CreateStripeCharge(model);
-            var customerId = _stripeManager.Charge(stripeChargeModel);
-            var paymentDetails = CreateChargeRecord(stripeChargeModel, customerId);
-
-            registeredPerson.PaymentDetails = new List<PaymentDetails> { paymentDetails };
-
             _dbContext.Add(registeredPerson);
             _dbContext.SaveChanges();
+
+            SendRegistrationComments($"{model.FirstName} {model.LastName}", model.Comments);
 
             return registeredPerson.Id;
         }
@@ -62,8 +61,25 @@ namespace Business.Managers
                 .Where(x => x.RegisteredPerson.Season.Year.Equals(_currentYear))
                 .Select(CreateInternal);
 
-        private static RegisteredPerson CreateInternal(RegistrationCreateModel model, int seasonId) =>
-            new RegisteredPerson
+        private static RegisteredPerson CreateInternal(RegistrationCreateModel model, int seasonId)
+        {
+            PaymentDetails paymentDetails;
+
+            switch(model.RegistrationType)
+            {
+                case RegistrationType.Cash:
+                case RegistrationType.Paypal:
+                    paymentDetails = CreateUnverifiedPaymentDetails(model);
+                    break;
+                default:
+                    throw new InvalidOperationException("Unmapped enum for payment type");
+            }
+
+            //var stripeChargeModel = CreateStripeCharge(model);
+            //var customerId = _stripeManager.Charge(stripeChargeModel);
+            //var paymentDetails = CreateChargeRecord(stripeChargeModel, customerId);
+
+            return new RegisteredPerson
             {
                 SeasonId = seasonId,
                 FirstName = model.FirstName,
@@ -75,8 +91,10 @@ namespace Business.Managers
                 City = model.City,
                 State = model.State,
                 Zip = model.Zip,
-                Children = model.Children.Select(CreateInternal).ToList()
+                Children = model.Children.Select(CreateInternal).ToList(),
+                PaymentDetails = new List<PaymentDetails> { paymentDetails }
             };
+        }
 
         private static RegisteredChild CreateInternal(ChildInformationCreateModel model) =>
             new RegisteredChild
@@ -124,12 +142,21 @@ namespace Business.Managers
                 Amount = model.Children.Count > 1 ? 3000 : 2000
             };
 
-        private static PaymentDetails CreateChargeRecord(StripeChargeModel model, string stripeCustomerId) =>
+        private static PaymentDetails CreateUnverifiedPaymentDetails(RegistrationCreateModel model) =>
             new PaymentDetails
             {
                 PaymentTimestamp = DateTimeOffset.Now,
-                StripeCustomerId = stripeCustomerId,
-                Amount = model.Amount / 100.0
+                VerfiedPayment = false,
+                PaymentType = model.RegistrationType.ToString(),
+                Amount = model.Children.Count > 1 ? 30 : 20
             };
+    
+        private void SendRegistrationComments(string from, string comments)
+        {
+            if(!string.IsNullOrWhiteSpace(comments))
+            {
+                _contactManager.Contact($"Registration comments from {from}", comments);
+            }
+        }
     }
 }

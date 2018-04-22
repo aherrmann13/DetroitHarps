@@ -8,5 +8,7 @@ namespace Business.Interfaces
     {
         void Contact(ContactModel model);
 
+        void Contact(string subject, string message);
+
     }
 }

@@ -20,6 +20,8 @@ namespace Business.Test
 
         protected Mock<IStripeManager> StripeManagerMock { get; set;}
 
+        protected Mock<IContactManager> ContactManagerMock { get; set;}
+
         protected ApiDbContext DbContext { get; set; }
 
         public ManagerTestBase()
@@ -48,7 +50,11 @@ namespace Business.Test
             StripeManagerMock.Setup(x => x.Charge(It.IsAny<StripeChargeModel>()))
                 .Returns(Guid.NewGuid().ToString);
 
+            ContactManagerMock = new Mock<IContactManager>();
+            ContactManagerMock.Setup(x => x.Contact(It.IsAny<string>(), It.IsAny<string>()));
+
             serviceCollection.AddSingleton(StripeManagerMock.Object);
+            serviceCollection.AddSingleton(ContactManagerMock.Object);
 
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
