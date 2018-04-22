@@ -4,6 +4,9 @@
             <mat-card-title>
                 <span class='mat-title'>Register</span>
             </mat-card-title>
+            <mat-card-subtitle>
+                <span>Summer 2018 Program, Sunday Evenings at Flodin Park, Canton, MI, $20/child or $30/family</span>
+            </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
             <mat-horizontal-stepper [linear]='true' #stepper (selectionChange)='step(stepper)'>
@@ -11,11 +14,11 @@
                     <form [formGroup]='firstFormGroup'>
                         <ng-template matStepLabel>Contact Information</ng-template>
                         <mat-form-field>
-                            <input matInput placeholder='First name' formControlName='parentFirstName' required>
+                            <input matInput placeholder='Parent first name' formControlName='parentFirstName' required>
                         </mat-form-field>
                         <br />
                         <mat-form-field>
-                            <input matInput placeholder='Last name' formControlName='parentLastName' required>
+                            <input matInput placeholder='Parent last name' formControlName='parentLastName' required>
                         </mat-form-field>
                         <br />
                         <mat-form-field>
@@ -67,7 +70,7 @@
                         </mat-form-field>
                         <br />
                         <mat-form-field>
-                            <input matInput [matDatepicker]="genderPicker" placeholder="Choose a date" formControlName='childDob'>
+                            <input matInput [matDatepicker]="genderPicker" placeholder="Child Birth Date" formControlName='childDob'>
                             <mat-datepicker-toggle matSuffix [for]="genderPicker"></mat-datepicker-toggle>
                             <mat-datepicker #genderPicker></mat-datepicker>
                         </mat-form-field>
