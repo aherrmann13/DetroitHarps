@@ -2,7 +2,7 @@ server {
     listen 80 default_server;
     root /sites/detroitharps;
     index index.html index.htm;
-    server_name dev.detroitharps.com;
+    server_name detroitharps.com;
     location / {
         try_files $uri $uri/ /index.html;
     }

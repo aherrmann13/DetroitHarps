@@ -54,7 +54,7 @@ jobs:
           command: scp -r /root/project/scripts root@45.33.89.196:/deploy/api/
       - run:
           name: Deploy
-          command: ssh root@45.33.89.196 "/deploy/api/scripts/dev-deploy-api.sh"
+          command: ssh root@45.33.89.196 "/deploy/api/scripts/deploy-api.sh dev"
   client:
     docker:
       - image: circleci/node:8.9.4
@@ -88,7 +88,7 @@ jobs:
           command: scp -r scripts root@45.33.89.196:/deploy/client/
       - run:
           name: Deploy
-          command: ssh root@45.33.89.196 "sudo bash /deploy/client/scripts/dev-deploy-site.sh"
+          command: ssh root@45.33.89.196 "sudo bash /deploy/client/scripts/deploy-site.sh dev"
 
 workflows:
   version: 2
