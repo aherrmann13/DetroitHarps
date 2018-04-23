@@ -154,15 +154,15 @@ namespace Business.Managers
             };
 
         private static string GenerateRegistrationEmailBodyForParent(RegistrationCreateModel model) =>
-            $"FirstName: {model.FirstName}{Environment.NewLine}"+
-            $"LastName: {model.LastName}{Environment.NewLine}"+
+            $"First Name: {model.FirstName}{Environment.NewLine}"+
+            $"Last Name: {model.LastName}{Environment.NewLine}"+
             $"EmailAddress: {model.EmailAddress}{Environment.NewLine}"+
             $"PhoneNumber: {model.PhoneNumber}{Environment.NewLine}"+
             $"Address: {model.Address}{Environment.NewLine}"+
             $"Address2: {model.Address2}{Environment.NewLine}"+
             $"City: {model.City}{Environment.NewLine}"+
             $"State: {model.State}{Environment.NewLine}"+
-            $"Zip: {model.Zip}{Environment.NewLine}";
+            $"Zip: {model.Zip}{Environment.NewLine}{Environment.NewLine}";
 
         private static string GenerateRegistrationEmailBodyForChildren(IEnumerable<ChildInformationCreateModel> models)
         {
@@ -171,13 +171,13 @@ namespace Business.Managers
             foreach(var child in models)
             {
                 childNumber ++;
-                var childString = $"FirstName: {child.FirstName}{Environment.NewLine}"+
-                $"LastName: {child.LastName}{Environment.NewLine}"+
+                var childString = $"First Name: {child.FirstName}{Environment.NewLine}"+
+                $"Last Name: {child.LastName}{Environment.NewLine}"+
                 $"Gender: {child.Gender}{Environment.NewLine}"+
                 $"DateOfBirth: {child.DateOfBirth}{Environment.NewLine}"+
                 $"ShirtSize: {child.ShirtSize}{Environment.NewLine}";
 
-                returnString += $"Child {childNumber}:";
+                returnString += $"Child {childNumber}:{Environment.NewLine}";
                 returnString += childString;
             }
 
