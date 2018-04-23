@@ -62,22 +62,54 @@ namespace Business.Test
         }
 
         [Fact]
-        public void CreateSuccessEmailSentTest()
+        public void CreateSuccessEmailsSentTest()
         {
             var createModel = GetValidModel();
+            var subject1 = string.Empty;
+            var subject2 = string.Empty;
+            var body1 = string.Empty;
+            var body2 = string.Empty;
+            var index = 0;
+            ContactManagerMock
+                .Setup(x => x.Contact(It.IsAny<string>(), It.IsAny<string>()))
+                .Callback<string, string>((x, y) => {
+                    if(index == 0)
+                    {
+                        subject1 = x;
+                        body1 = y;
+                        index ++;
+                    }
+                    else if(index == 1)
+                    {
+                        subject2 = x;
+                        body2 = y;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Method called too many times");
+                    }
+                });
 
             var response = _manager.Register(createModel);
+            var subject1String = $"New Registration! {createModel.FirstName} {createModel.LastName}";
+            var subject2String = $"Registration comments from {createModel.FirstName} {createModel.LastName}";
 
-            var subjectString = $"Registration comments from {createModel.FirstName} {createModel.LastName}";
+            var generatedBody1 = GenerateRegistrationEmailBodyForParent(createModel) + GenerateRegistrationEmailBodyForChildren(createModel.Children);
+
+            Assert.Equal(subject1String, subject1);
+            Assert.Equal(generatedBody1, body1);
+            Assert.Equal(subject2String, subject2);
+            Assert.Equal(createModel.Comments, body2);
+            
             ContactManagerMock.Verify(x => 
                 x.Contact(
-                    It.Is<string>(y => y.EqualOrdinal(subjectString)),
-                    It.Is<string>(y => y.EqualOrdinal(createModel.Comments))),
-                Times.Once());
+                    It.IsAny<string>(),
+                    It.IsAny<string>()),
+                Times.Exactly(2));
         }
 
         [Fact]
-        public void CreateSuccessNoEmailSentTest()
+        public void CreateSuccessNoCommentEmailSentTest()
         {
             var createModel = GetValidModel();
             createModel.Comments = string.Empty;
@@ -86,7 +118,7 @@ namespace Business.Test
 
             ContactManagerMock.Verify(x => 
                 x.Contact(It.IsAny<string>(), It.IsAny<string>()),
-                Times.Never());
+                Times.Once());
         }
 
         [Fact]
@@ -293,6 +325,37 @@ namespace Business.Test
                 Amount = 20,
                 PaymentTimestamp = DateTimeOffset.Now
             };
+
+        private static string GenerateRegistrationEmailBodyForParent(RegistrationCreateModel model) =>
+            $"FirstName: {model.FirstName}{Environment.NewLine}"+
+            $"LastName: {model.LastName}{Environment.NewLine}"+
+            $"EmailAddress: {model.EmailAddress}{Environment.NewLine}"+
+            $"PhoneNumber: {model.PhoneNumber}{Environment.NewLine}"+
+            $"Address: {model.Address}{Environment.NewLine}"+
+            $"Address2: {model.Address2}{Environment.NewLine}"+
+            $"City: {model.City}{Environment.NewLine}"+
+            $"State: {model.State}{Environment.NewLine}"+
+            $"Zip: {model.Zip}{Environment.NewLine}";
+
+        private static string GenerateRegistrationEmailBodyForChildren(IEnumerable<ChildInformationCreateModel> models)
+        {
+            var returnString = string.Empty;
+            var childNumber = 0;
+            foreach(var child in models)
+            {
+                childNumber ++;
+                var childString = $"FirstName: {child.FirstName}{Environment.NewLine}"+
+                $"LastName: {child.LastName}{Environment.NewLine}"+
+                $"Gender: {child.Gender}{Environment.NewLine}"+
+                $"DateOfBirth: {child.DateOfBirth}{Environment.NewLine}"+
+                $"ShirtSize: {child.ShirtSize}{Environment.NewLine}";
+
+                returnString += $"Child {childNumber}:";
+                returnString += childString;
+            }
+
+            return returnString;
+        }
 
         private void SeedSeason()
         {
