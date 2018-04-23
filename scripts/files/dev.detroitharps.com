@@ -1,6 +1,6 @@
 server {
     listen 80 default_server;
-    root /sites/detroitharps;
+    root /detroitharps/client;
     index index.html index.htm;
     server_name dev.detroitharps.com;
     location / {

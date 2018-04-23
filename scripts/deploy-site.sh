@@ -19,6 +19,8 @@ echo "Files copied over"
 
 chown -R detroitharps /detroitharps
 
+service nginx stop
+
 echo "nginx config..."
 if [ "$environment" = "dev" ]
 then

@@ -86,6 +86,9 @@ jobs:
       - run:
           name: Copy scripts to dev server
           command: scp -r scripts root@45.33.89.196:/deploy/client/
+      - run:
+          name: Deploy
+          command: ssh root@45.33.89.196 "sudo bash /deploy/client/scripts/deploy-site.sh dev"
 
 workflows:
   version: 2

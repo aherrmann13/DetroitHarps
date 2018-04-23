@@ -9,6 +9,7 @@ export class HomeComponent implements OnInit {
 
   announcements: string[];
   title: string = 'Detroit Harps';
+  registrationText = 'Register Summer 2018'
 
   constructor() { }
 
