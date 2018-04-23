@@ -69,6 +69,7 @@ namespace Business.Managers
             {
                 case RegistrationType.Cash:
                 case RegistrationType.Paypal:
+                case RegistrationType.Other:
                     paymentDetails = CreateUnverifiedPaymentDetails(model);
                     break;
                 default:

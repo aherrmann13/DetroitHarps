@@ -46,6 +46,7 @@
             {
                 // TODO documentation files
                 options.SwaggerDoc("doc", new Info() { Version = "v1", Title = $"{_serviceOptions.ServiceName}"});
+                options.DescribeAllEnumsAsStrings();
             });
 
             //TODO:add sql query logging
