@@ -133,7 +133,7 @@ export class RegisterComponent implements OnInit {
   }
 
   private getRegistrationTypeEnum(): RegistrationCreateModelRegistrationType{
-    switch(this.fourthFormGroup.value.paymentType){
+    switch(this.fifthFormGroup.value.paymentType){
       case("cash"):
         return RegistrationCreateModelRegistrationType.Cash;
       case("paypal"):
