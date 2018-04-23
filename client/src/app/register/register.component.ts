@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatStepper } from '@angular/material';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Client, RegistrationCreateModel, ChildInformationCreateModel } from '../api.client';
+import { Client, RegistrationCreateModel, ChildInformationCreateModel, RegistrationCreateModelRegistrationType } from '../api.client';
 
 
 @Component({
@@ -14,6 +14,8 @@ export class RegisterComponent implements OnInit {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   thirdFormGroupArray: FormGroup[];
+  fourthFormGroup: FormGroup;
+  fifthFormGroup: FormGroup;
   states: string[] = [
     "AK","AL","AR","AZ","CA","CO","CT","DE","FL","GA",
     "HI","IA","ID","IL","IN","KS","KY","LA","MA","MD",
@@ -50,6 +52,14 @@ export class RegisterComponent implements OnInit {
         childShirtSize: ['', Validators.required]
       })
     ];
+    this.fourthFormGroup = this._formBuilder.group({
+      comments: ['']
+    });
+    this.fifthFormGroup = this._formBuilder.group({
+      paymentType: ['', Validators.required]
+    });
+
+    this.fifthFormGroup.setValue({paymentType: 'paypal'});
   }
 
   addChild(): void{
@@ -96,7 +106,9 @@ export class RegisterComponent implements OnInit {
     let registrationCreateModel : RegistrationCreateModel = new RegistrationCreateModel({
       children: this.getRegistrationCreateModelChildren(),
       // TODO integrate stripe
-      stripeToken: "paypal",
+      stripeToken: "",
+      registrationType: this.getRegistrationTypeEnum(),
+      comments: this.fourthFormGroup.value.comments,
       firstName: this.firstFormGroup.value.parentFirstName,
       lastName: this.firstFormGroup.value.parentLastName,
       emailAddress:  this.firstFormGroup.value.emailAddress,
@@ -118,5 +130,17 @@ export class RegisterComponent implements OnInit {
       dateOfBirth: x.value.childDob,
       shirtSize: x.value.childShirtSize
     }));
+  }
+
+  private getRegistrationTypeEnum(): RegistrationCreateModelRegistrationType{
+    switch(this.fourthFormGroup.value.paymentType){
+      case("cash"):
+        return RegistrationCreateModelRegistrationType.Cash;
+      case("paypal"):
+        return RegistrationCreateModelRegistrationType.Paypal;
+      case("other"):
+      default:
+        return RegistrationCreateModelRegistrationType.Other; 
+    }
   }
 }
