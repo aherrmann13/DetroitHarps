@@ -49,7 +49,7 @@ fi
 if [ ! "$environment" = "dev" ]
 then
     echo "copying appsettings.json"
-    if [ ! -f /root/appsetting.json ]
+    if [ ! -f /root/appsettings.json ]
     then
         echo "appsettings.json not found!"
         exit 1
@@ -58,9 +58,9 @@ then
     rm /detroitharps/tools/Repository.Dataloader/appsettings*.json
     rm /detroitharps/api/Service/appsettings*.json
 
-    cp /root/appsetting.json /detroitharps/tools/Repository.Migrator/
-    cp /root/appsetting.json /detroitharps/tools/Repository.Dataloader/
-    cp /root/appsetting.json /detroitharps/api/Service/
+    cp /root/appsettings.json /detroitharps/tools/Repository.Migrator/
+    cp /root/appsettings.json /detroitharps/tools/Repository.Dataloader/
+    cp /root/appsettings.json /detroitharps/api/Service/
 fi
 
 
