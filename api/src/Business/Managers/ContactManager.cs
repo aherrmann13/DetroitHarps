@@ -22,17 +22,12 @@ namespace Business.Managers
         public void Contact(ContactModel model)
         {
             Guard.NotNull(model, nameof(model));
-            var client = new SmtpClient("smtp.gmail.com", 587)
-            {
-                Credentials = new NetworkCredential(_contactManagerOptions.FromEmail, _contactManagerOptions.Password),
-                EnableSsl = true
-            };
 
             var message = $"Message from: {model.Name}{Environment.NewLine}" +
                           $"Email Address: {model.Email}{Environment.NewLine}" +
                           $"Body:{Environment.NewLine}" +
                           $"{model.Message}{Environment.NewLine}";          
-            client.Send(_contactManagerOptions.FromEmail, _contactManagerOptions.ToEmail, $"Message from {model.Name}", message);
+            Contact($"Message from {model.Name}", message);
         }
 
         public void Contact(string subject, string message)

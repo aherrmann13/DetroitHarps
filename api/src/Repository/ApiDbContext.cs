@@ -36,7 +36,10 @@ namespace Repository
                 .HasForeignKey(x => x.PhotoGroupId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Event>();
+            modelBuilder.Entity<Event>()
+                .Property(x=> x.Date)
+                .HasColumnType("date");
+                
             modelBuilder.Entity<Season>();
             modelBuilder.Entity<User>();
             modelBuilder.Entity<PhotoGroup>();

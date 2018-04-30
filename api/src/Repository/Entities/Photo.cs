@@ -1,8 +1,9 @@
 namespace Repository.Entities
 {
     using System.ComponentModel.DataAnnotations;
+    using Repository.Interfaces;
 
-    public class Photo
+    public class Photo : IHasId
     {
         [Key]
         public int Id { get; set; }

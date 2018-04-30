@@ -27,17 +27,8 @@ namespace Business.Managers
 
         public int Create(PhotoCreateModel model)
         {
-            // TODO null or fail silently?
-            // TODO make this behavior consistant
-            if(model == null)
-            {
-                throw new ArgumentNullException("cannot post null model");
-            }
-
-            if(!_dbContext.Set<PhotoGroup>().Any(x => x.Id.Equals(model.GroupId)))
-            {
-                throw new InvalidOperationException("Photo group does not exist");
-            }
+            Guard.NotNull(model, nameof(model));
+            ValidatePhotoGroupExists(model.GroupId);
 
             // TODO : virus scan
             // for now, only one (known) user will be provided a login
@@ -48,110 +39,66 @@ namespace Business.Managers
             return entity.Id;
         }
 
-        public IEnumerable<int> Update(params PhotoMetadataUpdateModel[] models)
+        public int Update(PhotoMetadataUpdateModel model)
         {
-            // TODO null or fail silently?
-            // TODO make this behavior consistant
-            if(models == null)
-            {
-                throw new ArgumentNullException("cannot post null models");
-            }
+            Guard.NotNull(model, nameof(model));
+                       
+            var entity = _dbContext.Set<Photo>()
+                .First(x => x.Id.Equals(model.Id));
 
-            models = models.Where(x => x != null).ToArray();
+            ValidatePhotoGroupExists(model.GroupId);
 
-            var ids = models.Select(x => x.Id).Distinct();
-            var groupIds = models.Select(x => x.GroupId).Distinct();
-
-            var existingPhotoMetadata = _dbContext.Set<Photo>()
-                .Where(x => ids.Contains(x.Id))
-                .ToList();
-
-            var existingGroupIds = _dbContext.Set<PhotoGroup>()
-                .Where(x => groupIds.Contains(x.Id))
-                .Select(x => x.Id)
-                .ToList();
-
-            if(!groupIds.All(x => existingGroupIds.Contains(x)))
-            {
-                throw new InvalidOperationException("not all group ids exist");
-            }
-
-            existingPhotoMetadata.ForEach(x => 
-                UpdateInternal(models.First(y => y.Id.Equals(x.Id)), x));
-
+            UpdateInternal(model, entity);
             _dbContext.SaveChanges();
 
-            return existingPhotoMetadata.Select(x => x.Id);
+            return model.Id;
         }
 
-        public IEnumerable<int> Delete(params int[] ids)
-        {
-            // TODO null or fail silently?
-            // TODO make this behavior consistant
-            if(ids == null)
-            {
-                throw new ArgumentNullException("cannot post null models");
-            }
-
-             var entities = _dbContext.Set<Photo>()
-                .AsNoTracking()
-                .Where(x => ids.Contains(x.Id))
-                .ToList();
-
-            _dbContext.RemoveRange(entities);
-
-            _dbContext.SaveChanges();
-
-            return entities.Select(x => x.Id);
-        }
-
-        public IEnumerable<PhotoMetadataReadModel> GetAll()=>
-            _dbContext.Set<Photo>()
-                .AsNoTracking()
-                .Select(x => new PhotoMetadataReadModel
-                {
-                    Id = x.Id,
-                    Title = x.Title,
-                    GroupId = x.PhotoGroupId,
-                    SortOrder = x.SortOrder
-                });
-
-        public IEnumerable<PhotoMetadataReadModel> Get(params int[] ids)
-        {
-            // TODO null or fail silently?
-            // TODO make this behavior consistant
-            if(ids == null)
-            {
-                throw new ArgumentNullException("cannot post null models");
-            }
-            
-            return _dbContext.Set<Photo>()
-                .AsNoTracking()
-                .Where(x => ids.Contains(x.Id))
-                .Select(x => new PhotoMetadataReadModel
-                {
-                    Id = x.Id,
-                    Title = x.Title,
-                    GroupId = x.PhotoGroupId,
-                    SortOrder = x.SortOrder
-                });
-        }
-
-        public PhotoReadModel GetSingle(int id)
+        public int Delete(int id)
         {
             var entity = _dbContext.Set<Photo>()
-                .AsNoTracking()
                 .First(x => x.Id.Equals(id));
 
-            return new PhotoReadModel
-            {
-                Id = entity.Id,
-                Title = entity.Title,
-                GroupId = entity.PhotoGroupId,
-                SortOrder = entity.SortOrder,
-                Photo = entity.Data
-            };
+            _dbContext.Remove(entity);
+
+            _dbContext.SaveChanges();
+
+            return id;
         }
+
+        public IEnumerable<PhotoMetadataReadModel> GetMetadata()=>
+            _dbContext.Set<Photo>()
+                .Select(x => new PhotoMetadataReadModel
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    GroupId = x.PhotoGroupId,
+                    SortOrder = x.SortOrder
+                });
+
+        public PhotoMetadataReadModel GetMetadata(int id) =>
+            _dbContext.Set<Photo>()
+                .Select(x => new PhotoMetadataReadModel
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    GroupId = x.PhotoGroupId,
+                    SortOrder = x.SortOrder
+                })
+                .First(x => x.Id.Equals(id));
+
+        public PhotoReadModel Get(int id) =>
+            _dbContext.Set<Photo>()
+                .AsNoTracking()
+                .Select(x => new PhotoReadModel
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    GroupId = x.PhotoGroupId,
+                    SortOrder = x.SortOrder,
+                    Photo = x.Data
+                })
+                .First(x => x.Id.Equals(id));
             
         private Photo CreateInternal(PhotoCreateModel model) =>
             new Photo
@@ -168,6 +115,14 @@ namespace Business.Managers
             entity.PhotoGroupId = model.GroupId;
             entity.Title = model.Title;
             entity.SortOrder = model.SortOrder;
+        }
+
+        private void ValidatePhotoGroupExists(int groupId)
+        {
+            if(!_dbContext.Set<PhotoGroup>().Any(x => x.Id.Equals(groupId)))
+            {
+                throw new InvalidOperationException($"Photo Group with id {groupId} does not exist");
+            }
         }
     }
 }

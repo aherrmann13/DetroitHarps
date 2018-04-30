@@ -24,12 +24,7 @@ namespace Business.Managers
 
         public int Create(PhotoGroupCreateModel model)
         {
-            // TODO null or fail silently?
-            // TODO make this behavior consistant
-            if(model == null)
-            {
-                throw new ArgumentNullException("cannot post null model");
-            }
+            Guard.NotNull(model, nameof(model));
 
             var entity = CreateInternal(model);
 
@@ -41,24 +36,12 @@ namespace Business.Managers
 
         public int Update(PhotoGroupUpdateModel model)
         {
-            // TODO null or fail silently?
-            // TODO make this behavior consistant
-            if(model == null)
-            {
-                throw new ArgumentNullException("cannot post null model");
-            }
+            Guard.NotNull(model, nameof(model));
 
-            var entity = _dbContext
-                .Set<PhotoGroup>()
+            var entity = _dbContext.Set<PhotoGroup>()
                 .First(x => x.Id.Equals(model.Id));
 
-            if(entity == null)
-            {
-                throw new InvalidOperationException($"Entity with id {model.Id} does not exist");
-            }
-
             UpdateInternal(model, entity);
-
             _dbContext.SaveChanges();
 
             return entity.Id;
@@ -67,17 +50,9 @@ namespace Business.Managers
         public int Delete(int id)
         {
             var entity = _dbContext.Set<PhotoGroup>()
-                .AsNoTracking()
-                .First(x => id.Equals(x.Id));
+                .First(x => x.Id.Equals(id));
 
-            var relatedEntities = _dbContext.Set<Photo>()
-                .AsNoTracking()
-                .Any(x => x.PhotoGroupId.Equals(x.Id));
-
-            if(relatedEntities)
-            {
-                throw new InvalidOperationException($"PhotoGroup with id {id} has photos");
-            }
+            ValidateGroupContainsNoPhotos(id);
 
             _dbContext.Remove(entity);
 
@@ -86,7 +61,7 @@ namespace Business.Managers
             return entity.Id;
         }
 
-        public IEnumerable<PhotoGroupReadModel> GetAll() =>
+        public IEnumerable<PhotoGroupReadModel> Get() =>
             _dbContext.Set<PhotoGroup>()
                 .AsNoTracking()
                 .Select(x => new PhotoGroupReadModel
@@ -102,12 +77,12 @@ namespace Business.Managers
                 .AsNoTracking()
                 .Where(x => x.Id.Equals(id))
                 .Select(x => new PhotoGroupReadModel
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        SortOrder = x.SortOrder,
-                        PhotoIds = x.Photos.Select(y => y.Id).ToList()
-                    })
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    SortOrder = x.SortOrder,
+                    PhotoIds = x.Photos.Select(y => y.Id).ToList()
+                })
                 .First();
 
         private PhotoGroup CreateInternal(PhotoGroupCreateModel model) =>
@@ -121,6 +96,14 @@ namespace Business.Managers
         {
             entity.Name = model.Name;
             entity.SortOrder = model.SortOrder;
+        }
+
+        private void ValidateGroupContainsNoPhotos(int groupId)
+        {
+            if(_dbContext.Set<Photo>().Any(x => x.PhotoGroupId.Equals(x.Id)))
+            {
+                throw new InvalidOperationException($"Photo Group with id {groupId} has photos");
+            }
         }
     }
 }

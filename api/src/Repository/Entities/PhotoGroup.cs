@@ -2,8 +2,9 @@ namespace Repository.Entities
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Repository.Interfaces;
 
-    public class PhotoGroup
+    public class PhotoGroup : IHasId
     {
         public PhotoGroup()
         {

@@ -25,84 +25,33 @@ namespace Service.Controllers
             _manager = manager;
         }
 
-        //// // TODO use data loader for now
-        ////[HttpPost("Create")]
-        ////[Produces("application/json", Type = typeof(int))]
-        ////[SwaggerOperation(operationId: "Create")]
-        ////public async Task<IActionResult> Create(PhotoUploadModel uploadModel)
-        ////{
-        ////    if(uploadModel == null)
-        ////    {
-        ////        throw new ArgumentNullException("null model posted");
-        ////    }
-        ////    var createModel = new PhotoCreateModel
-        ////    {
-        ////        Title = uploadModel.Title,
-        ////        GroupId = uploadModel.GroupId,
-        ////        SortOrder = uploadModel.SortOrder
-        ////    };
-        ////
-        ////    //TODO validate file name
-        ////
-        ////    using (var memoryStream = new MemoryStream())
-        ////    {
-        ////        await uploadModel.Photo.CopyToAsync(memoryStream);
-        ////        createModel.Photo = memoryStream.ToArray();
-        ////    }
-        ////
-        ////    var response = _manager.Create(createModel);
-        ////
-        ////    return Json(response);
-        ////}
-
-        ////[HttpPost("Update")]
-        ////[Produces("application/json", Type = typeof(IList<int>))]
-        ////[SwaggerOperation(operationId: "UpdatePhoto")]
-        ////public IActionResult Update([FromBody] PhotoMetadataUpdateModel[] models)
-        ////{
-        ////    var response = _manager.Update(models).ToList();
-        ////
-        ////    return Json(response);
-        ////}
-        ////
-        ////// TODO : make this consistant with other deletes
-        ////[HttpPost("Delete")]
-        ////[Produces("application/json", Type = typeof(IList<int>))]
-        ////[SwaggerOperation(operationId: "DeletePhoto")]
-        ////public IActionResult Delete([FromBody] int[] ids)
-        ////{
-        ////    var response = _manager.Delete(ids).ToList();
-        ////
-        ////    return Json(response);
-        ////}
-
-        [HttpGet("GetAll")]
+        [HttpGet("GetMetadata")]
         [Produces("application/json", Type = typeof(IList<PhotoMetadataReadModel>))]
         [SwaggerOperation(operationId: "GetAllPhotoMetadata")]
-        public IActionResult GetAll()
+        public IActionResult GetMetadata()
         {
-            var response = _manager.GetAll().ToList();
+            var response = _manager.GetMetadata().ToList();
 
             return Json(response);
         }
 
-        // TODO : post? (prefer ids in body)
-        [HttpGet("Get")]
-        [Produces("application/json", Type = typeof(IList<PhotoMetadataReadModel>))]
+        [HttpGet("GetMetadata/{id}")]
+        [Produces("application/json", Type = typeof(PhotoMetadataReadModel))]
         [SwaggerOperation(operationId: "GetPhotoMetadata")]
-        public IActionResult Get([FromQuery] int[] ids)
+        public IActionResult GetMetadata(int id)
         {
-            var response = _manager.Get(ids).ToList();
+            var response = _manager.GetMetadata(id);
 
             return Json(response);
         }
 
+        // TODO how to return this
         [HttpGet("Get/{id}")]
-        [Produces("application/json", Type = typeof(PhotoReadModel))]
-        [SwaggerOperation(operationId: "GetSinglePhoto")]
+        //[Produces("application/json", Type = typeof(PhotoReadModel))]
+        //[SwaggerOperation(operationId: "GetPhoto")]
         public IActionResult Get(int id)
         {
-            var response = _manager.GetSingle(id);
+            var response = _manager.Get(id);
 
             // TODO image/jpeg or other type saved in db
             // this needs to be tested by swagger client

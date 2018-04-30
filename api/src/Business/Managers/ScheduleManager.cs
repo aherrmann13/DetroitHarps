@@ -20,56 +20,41 @@ namespace Business.Managers
             _dbContext = dbContext;
         }
 
-        public IEnumerable<int> Create(params EventCreateModel[] models)
+        public int Create(EventCreateModel model)
         {
-            if(models == null || models.Length == 0)
-            {
-                return new List<int>();
-            }
+            Guard.NotNull(model, nameof(model));
+            var entity = CreateInternal(model);
 
-            var events = models.Where(x => x != null).Select(CreateInternal).ToList();
-
-            _dbContext.AddRange(events);
+            _dbContext.Add(entity);
             _dbContext.SaveChanges();
 
-            return events.Select(x => x.Id);
+            return entity.Id;
         }
 
-        public IEnumerable<int> Update(params EventUpdateModel[] models)
+        public int Update(EventUpdateModel model)
         {
-            if(models == null || models.Length == 0)
-            {
-                return new List<int>();
-            }
-            var eventIds = models.Where(x => x != null).Select(x => x.Id);
+            Guard.NotNull(model, nameof(model));
+            
+            var entity = _dbContext.Set<Event>()
+                .First(x => x.Id.Equals(model.Id));
 
-            var entities = _dbContext.Set<Event>()
-                .Where(x => eventIds.Contains(x.Id))
-                .ToList();
-
-            entities.ForEach(x => UpdateInternal(models.First(y => y.Id.Equals(x.Id)), x));
+            UpdateInternal(model, entity);
 
             _dbContext.SaveChanges();
 
-            return entities.Select(x => x.Id);
+            return entity.Id;
         }
 
-        public IEnumerable<int> Delete(params int[] ids)
+        public int Delete(int id)
         {
-            if(ids == null || ids.Length == 0)
-            {
-                return new List<int>();
-            }
+            var entity = _dbContext.Set<Event>()
+                .First(x => x.Id.Equals(id));
 
-            var entities = _dbContext.Set<Event>()
-                .Where(x => ids.Contains(x.Id))
-                .ToList();
-
-            _dbContext.RemoveRange(entities);
+            _dbContext.Remove(entity);
 
             _dbContext.SaveChanges();
 
-            return entities.Select(x => x.Id);
+            return entity.Id;
         }
 
         public IEnumerable<EventReadModel> GetAll() =>
@@ -84,17 +69,17 @@ namespace Business.Managers
                 });
         
 
-        public IEnumerable<EventReadModel> Get(params int[] ids) =>
+        public EventReadModel Get(int id) =>
             _dbContext.Set<Event>()
                 .AsNoTracking()
-                .Where(x => ids != null && ids.Contains(x.Id))
                 .Select(x => new EventReadModel
                 {
                     Id = x.Id,
                     Date = x.Date,
                     Title = x.Title,
                     Description = x.Description
-                });
+                })
+                .First(x => x.Id.Equals(id));
 
         private Event CreateInternal(EventCreateModel model) =>
             new Event

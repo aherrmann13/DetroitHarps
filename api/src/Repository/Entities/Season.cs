@@ -2,8 +2,9 @@ namespace Repository.Entities
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Repository.Interfaces;
 
-    public class Season
+    public class Season : IHasId
     {
 
         public Season()

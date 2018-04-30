@@ -21,43 +21,12 @@ namespace Service.Controllers
             _manager = manager;
         }
 
-        ////[HttpPost("Create")]
-        ////[Produces("application/json", Type = typeof(int))]
-        ////[SwaggerOperation(operationId: "CreatePhotoGroup")]
-        ////public IActionResult Create([FromBody] PhotoGroupCreateModel model)
-        ////{
-        ////    var response = _manager.Create(model);
-        ////
-        ////    return Json(response);
-        ////}
-        ////
-        ////[HttpPost("Update")]
-        ////[Produces("application/json", Type = typeof(int))]
-        ////[SwaggerOperation(operationId: "UpdatePhotoGroup")]
-        ////public IActionResult Update(PhotoGroupUpdateModel model)
-        ////{
-        ////    var response = _manager.Update(model);
-        ////
-        ////    return Json(response);
-        ////}
-        ////
-        ////// TODO : make this consistant with other deletes
-        ////[HttpDelete("Delete/{id}")]
-        ////[Produces("application/json", Type = typeof(int))]
-        ////[SwaggerOperation(operationId: "DeletePhotoGroup")]
-        ////public IActionResult Delete(int id)
-        ////{
-        ////    var response = _manager.Delete(id);
-        ////
-        ////    return Json(response);
-        ////}
-
-        [HttpGet("GetAll")]
+        [HttpGet("Get")]
         [Produces("application/json", Type = typeof(IList<PhotoGroupReadModel>))]
         [SwaggerOperation(operationId: "GetAllPhotoGroups")]
-        public IActionResult GetAll()
+        public IActionResult Get()
         {
-            var response = _manager.GetAll().ToList();
+            var response = _manager.Get().ToList();
 
             return Json(response);
         }
