@@ -85,7 +85,7 @@ export class Client extends BaseClient {
      * @return Success
      */
     getAllPhotoMetadata(): Observable<PhotoMetadataReadModel[]> {
-        let url_ = this.baseUrl + "/Photo/GetAll";
+        let url_ = this.baseUrl + "/Photo/GetMetadata";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -134,13 +134,13 @@ export class Client extends BaseClient {
     }
 
     /**
-     * @ids (optional) 
      * @return Success
      */
-    getPhotoMetadata(ids: number[]): Observable<PhotoMetadataReadModel[]> {
-        let url_ = this.baseUrl + "/Photo/Get?";
-        if (ids !== undefined)
-            ids && ids.forEach(item => { url_ += "ids=" + encodeURIComponent("" + item) + "&"; });
+    getPhotoMetadata(id: number): Observable<PhotoMetadataReadModel> {
+        let url_ = this.baseUrl + "/Photo/GetMetadata/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -160,14 +160,14 @@ export class Client extends BaseClient {
                 try {
                     return this.transformResult(url_, response_, (r) => this.processGetPhotoMetadata(<any>r));
                 } catch (e) {
-                    return <Observable<PhotoMetadataReadModel[]>><any>Observable.throw(e);
+                    return <Observable<PhotoMetadataReadModel>><any>Observable.throw(e);
                 }
             } else
-                return <Observable<PhotoMetadataReadModel[]>><any>Observable.throw(response_);
+                return <Observable<PhotoMetadataReadModel>><any>Observable.throw(response_);
         });
     }
 
-    protected processGetPhotoMetadata(response: Response): Observable<PhotoMetadataReadModel[]> {
+    protected processGetPhotoMetadata(response: Response): Observable<PhotoMetadataReadModel> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -175,23 +175,19 @@ export class Client extends BaseClient {
             const _responseText = response.text();
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200 && resultData200.constructor === Array) {
-                result200 = [];
-                for (let item of resultData200)
-                    result200.push(PhotoMetadataReadModel.fromJS(item));
-            }
+            result200 = resultData200 ? PhotoMetadataReadModel.fromJS(resultData200) : new PhotoMetadataReadModel();
             return Observable.of(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Observable.of<PhotoMetadataReadModel[]>(<any>null);
+        return Observable.of<PhotoMetadataReadModel>(<any>null);
     }
 
     /**
      * @return Success
      */
-    getSinglePhoto(id: number): Observable<PhotoReadModel> {
+    photoGetByIdGet(id: number): Observable<void> {
         let url_ = this.baseUrl + "/Photo/Get/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -202,48 +198,44 @@ export class Client extends BaseClient {
             method: "get",
             headers: new Headers({
                 "Content-Type": "application/json", 
-                "Accept": "application/json"
             })
         };
 
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGetSinglePhoto(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processPhotoGetByIdGet(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processGetSinglePhoto(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processPhotoGetByIdGet(<any>r));
                 } catch (e) {
-                    return <Observable<PhotoReadModel>><any>Observable.throw(e);
+                    return <Observable<void>><any>Observable.throw(e);
                 }
             } else
-                return <Observable<PhotoReadModel>><any>Observable.throw(response_);
+                return <Observable<void>><any>Observable.throw(response_);
         });
     }
 
-    protected processGetSinglePhoto(response: Response): Observable<PhotoReadModel> {
+    protected processPhotoGetByIdGet(response: Response): Observable<void> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
         if (status === 200) {
             const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? PhotoReadModel.fromJS(resultData200) : new PhotoReadModel();
-            return Observable.of(result200);
+            return Observable.of<void>(<any>null);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Observable.of<PhotoReadModel>(<any>null);
+        return Observable.of<void>(<any>null);
     }
 
     /**
      * @return Success
      */
     getAllPhotoGroups(): Observable<PhotoGroupReadModel[]> {
-        let url_ = this.baseUrl + "/PhotoGroup/GetAll";
+        let url_ = this.baseUrl + "/PhotoGroup/Get";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -447,13 +439,13 @@ export class Client extends BaseClient {
     }
 
     /**
-     * @ids (optional) 
      * @return Success
      */
-    getEvent(ids: number[]): Observable<EventReadModel[]> {
-        let url_ = this.baseUrl + "/Schedule/Get?";
-        if (ids !== undefined)
-            ids && ids.forEach(item => { url_ += "ids=" + encodeURIComponent("" + item) + "&"; });
+    getEvent(id: number): Observable<EventReadModel> {
+        let url_ = this.baseUrl + "/Schedule/Get/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -473,14 +465,14 @@ export class Client extends BaseClient {
                 try {
                     return this.transformResult(url_, response_, (r) => this.processGetEvent(<any>r));
                 } catch (e) {
-                    return <Observable<EventReadModel[]>><any>Observable.throw(e);
+                    return <Observable<EventReadModel>><any>Observable.throw(e);
                 }
             } else
-                return <Observable<EventReadModel[]>><any>Observable.throw(response_);
+                return <Observable<EventReadModel>><any>Observable.throw(response_);
         });
     }
 
-    protected processGetEvent(response: Response): Observable<EventReadModel[]> {
+    protected processGetEvent(response: Response): Observable<EventReadModel> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -488,17 +480,13 @@ export class Client extends BaseClient {
             const _responseText = response.text();
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200 && resultData200.constructor === Array) {
-                result200 = [];
-                for (let item of resultData200)
-                    result200.push(EventReadModel.fromJS(item));
-            }
+            result200 = resultData200 ? EventReadModel.fromJS(resultData200) : new EventReadModel();
             return Observable.of(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Observable.of<EventReadModel[]>(<any>null);
+        return Observable.of<EventReadModel>(<any>null);
     }
 }
 
@@ -589,58 +577,6 @@ export class PhotoMetadataReadModel implements IPhotoMetadataReadModel {
 
 export interface IPhotoMetadataReadModel {
     id?: number;
-    title?: string;
-    groupId?: number;
-    sortOrder?: number;
-}
-
-export class PhotoReadModel implements IPhotoReadModel {
-    id?: number;
-    photo?: string;
-    title?: string;
-    groupId?: number;
-    sortOrder?: number;
-
-    constructor(data?: IPhotoReadModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.id = data["id"];
-            this.photo = data["photo"];
-            this.title = data["title"];
-            this.groupId = data["groupId"];
-            this.sortOrder = data["sortOrder"];
-        }
-    }
-
-    static fromJS(data: any): PhotoReadModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new PhotoReadModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["photo"] = this.photo;
-        data["title"] = this.title;
-        data["groupId"] = this.groupId;
-        data["sortOrder"] = this.sortOrder;
-        return data; 
-    }
-}
-
-export interface IPhotoReadModel {
-    id?: number;
-    photo?: string;
     title?: string;
     groupId?: number;
     sortOrder?: number;
