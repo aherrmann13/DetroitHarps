@@ -1,9 +1,11 @@
 namespace Repository.Entities
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Repository.Interfaces;
 
-    public class RegisteredPerson
+    public class RegisteredPerson : IHasId
     {
         public RegisteredPerson()
         {
@@ -35,6 +37,8 @@ namespace Repository.Entities
         public string State { get; set; }
 
         public string Zip { get; set; }
+
+        public DateTimeOffset RegistrationTimestamp { get; set; }
 
         public IList<RegisteredChild> Children { get; set; }
 

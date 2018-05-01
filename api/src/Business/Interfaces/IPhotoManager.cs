@@ -8,15 +8,15 @@ namespace Business.Interfaces
     {
         int Create(PhotoCreateModel model);
 
-        IEnumerable<int> Update(params PhotoMetadataUpdateModel[] models);
+        int Update(PhotoMetadataUpdateModel models);
 
-        IEnumerable<int> Delete(params int[] ids);
+        int Delete(int id);
 
-        IEnumerable<PhotoMetadataReadModel> GetAll();
+        IEnumerable<PhotoMetadataReadModel> GetMetadata();
 
-        IEnumerable<PhotoMetadataReadModel> Get(params int[] ids);
+        PhotoMetadataReadModel GetMetadata(int id);
 
-        PhotoReadModel GetSingle(int id);
+        PhotoReadModel Get(int id);
 
     }
 }

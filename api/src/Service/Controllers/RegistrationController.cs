@@ -30,25 +30,5 @@ namespace Service.Controllers
 
             return Json(response);
         }
-
-        ////[HttpPost("GetAll")]
-        ////[Produces("application/json", Type = typeof(IList<RegistrationReadModel>))]
-        ////[SwaggerOperation(operationId: "GetAllRegistered")]
-        ////public IActionResult GetAll()
-        ////{
-        ////    var response = _manager.GetAll().ToList();
-        ////
-        ////    return Json(response);
-        ////}
-        ////
-        ////[HttpPost("GetAllChildren")]
-        ////[Produces("application/json", Type = typeof(IList<ChildInformationReadModel>))]
-        ////[SwaggerOperation(operationId: "GetAllRegisteredChildren")]
-        ////public IActionResult GetAllChildren()
-        ////{
-        ////    var response = _manager.GetAllChildren().ToList();
-        ////
-        ////    return Json(response);
-        ////}
     }
 }

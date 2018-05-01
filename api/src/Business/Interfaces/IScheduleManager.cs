@@ -6,15 +6,15 @@ namespace Business.Interfaces
 
     public interface IScheduleManager
     {
-        IEnumerable<int> Create(params EventCreateModel[] models);
+        int Create(EventCreateModel models);
 
-        IEnumerable<int> Update(params EventUpdateModel[] models);
+        int Update(EventUpdateModel models);
 
-        IEnumerable<int> Delete(params int[] ids);
+        int Delete(int id);
 
         IEnumerable<EventReadModel> GetAll();
 
-        IEnumerable<EventReadModel> Get(params int[] ids);
+        EventReadModel Get(int id);
 
 
     }

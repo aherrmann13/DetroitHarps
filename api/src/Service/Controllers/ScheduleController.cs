@@ -4,6 +4,7 @@ namespace Service.Controllers
     using System.Linq;
     using Business.Interfaces;
     using Business.Models;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore;
     using Swashbuckle.AspNetCore.SwaggerGen;
@@ -21,36 +22,6 @@ namespace Service.Controllers
             _manager = manager;
         }
 
-        ////[HttpPost("Create")]
-        ////[Produces("application/json", Type = typeof(IList<int>))]
-        ////[SwaggerOperation(operationId: "CreateEvent")]
-        ////public IActionResult Create([FromBody] EventCreateModel[] models)
-        ////{
-        ////    var response = _manager.Create(models).ToList();
-        ////
-        ////    return Json(response);
-        ////}
-        ////
-        ////[HttpPost("Update")]
-        ////[Produces("application/json", Type = typeof(IList<int>))]
-        ////[SwaggerOperation(operationId: "UpdateEvent")]
-        ////public IActionResult Update([FromBody] EventUpdateModel[] models)
-        ////{
-        ////    var response = _manager.Update(models).ToList();
-        ////
-        ////    return Json(response);
-        ////}
-        ////
-        ////[HttpPost("Delete")]
-        ////[Produces("application/json", Type = typeof(IList<int>))]
-        ////[SwaggerOperation(operationId: "DeleteEvent")]
-        ////public IActionResult Delete([FromBody] int[] ids)
-        ////{
-        ////    var response = _manager.Delete(ids).ToList();
-        ////
-        ////    return Json(response);
-        ////}
-
         [HttpGet("GetAll")]
         [Produces("application/json", Type = typeof(IList<EventReadModel>))]
         [SwaggerOperation(operationId: "GetAllEvents")]
@@ -61,15 +32,12 @@ namespace Service.Controllers
             return Json(response);
         }
 
-        // TODO : post? (prefer ids in body)
-        // ie caps query length although not
-        // expecting that number of events
-        [HttpGet("Get")]
-        [Produces("application/json", Type = typeof(IList<EventReadModel>))]
+        [HttpGet("Get/{id}")]
+        [Produces("application/json", Type = typeof(EventReadModel))]
         [SwaggerOperation(operationId: "GetEvent")]
-        public IActionResult Get([FromQuery] int[] ids)
+        public IActionResult Get(int id)
         {
-            var response = _manager.Get(ids).ToList();
+            var response = _manager.Get(id);
 
             return Json(response);
         }

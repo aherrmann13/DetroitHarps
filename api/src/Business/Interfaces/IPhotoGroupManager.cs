@@ -12,7 +12,7 @@ namespace Business.Interfaces
 
         int Delete(int id);
 
-        IEnumerable<PhotoGroupReadModel> GetAll();
+        IEnumerable<PhotoGroupReadModel> Get();
 
         PhotoGroupReadModel Get(int id);
     }

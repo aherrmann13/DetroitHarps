@@ -107,7 +107,7 @@ namespace Business.Test
         }
 
         [Fact]
-        public void DeleteWithPhotosExcepttionTest()
+        public void DeleteWithPhotosExceptionTest()
         {
             var entities = SeedPhotoGroups().ToList();
 
@@ -131,7 +131,7 @@ namespace Business.Test
         {
             SeedPhotoGroups();
 
-            var response = _manager.GetAll().ToList();
+            var response = _manager.Get().ToList();
 
             var entities  = DbContext.Set<PhotoGroup>()
                 .AsNoTracking()

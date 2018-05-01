@@ -3,8 +3,9 @@ namespace Repository.Entities
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Repository.Interfaces;
 
-    public class RegisteredChild
+    public class RegisteredChild : IHasId
     {
         [Key]
         public int Id { get; set; }

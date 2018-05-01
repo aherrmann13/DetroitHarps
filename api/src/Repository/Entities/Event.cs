@@ -2,8 +2,9 @@ namespace Repository.Entities
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using Repository.Interfaces;
 
-    public class Event
+    public class Event : IHasId
     {
         [Key]
         public int Id { get; set; }

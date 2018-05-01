@@ -12,6 +12,7 @@ namespace Business.Test
     using Microsoft.Extensions.DependencyInjection;
     using Moq;
     using Repository;
+    using Repository.Interfaces;
     using Xunit;
 
     public abstract class ManagerTestBase
@@ -22,9 +23,9 @@ namespace Business.Test
 
         protected Mock<IContactManager> ContactManagerMock { get; set;}
 
-        protected ApiDbContext DbContext { get; set; }
+        protected ApiDbContext DbContext { get; set; } 
 
-        public ManagerTestBase()
+        protected ManagerTestBase()
         {
             var serviceCollection = new ServiceCollection();
 
@@ -61,5 +62,19 @@ namespace Business.Test
 
             DbContext = ServiceProvider.GetRequiredService<ApiDbContext>();
         }
+
+        protected int GetNonExistantId<T> ()
+            where T : class, IHasId
+        {
+            if(this.DbContext.Set<T>().Any())
+            {
+                return this.DbContext.Set<T>().Max(x => x.Id) + 1;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+            
     }
 }

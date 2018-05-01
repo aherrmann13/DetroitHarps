@@ -94,7 +94,8 @@ namespace Business.Managers
                 State = model.State,
                 Zip = model.Zip,
                 Children = model.Children.Select(CreateInternal).ToList(),
-                PaymentDetails = new List<PaymentDetails> { paymentDetails }
+                PaymentDetails = new List<PaymentDetails> { paymentDetails },
+                RegistrationTimestamp = DateTimeOffset.Now
             };
         }
 
@@ -121,7 +122,8 @@ namespace Business.Managers
                 City = entity.City,
                 State = entity.State,
                 Zip = entity.Zip,
-                HasPaid = entity.PaymentDetails.Any()
+                HasPaid = entity.PaymentDetails.Any(),
+                RegistrationTimestamp = entity.RegistrationTimestamp
             };
 
         private static ChildInformationReadModel CreateInternal(RegisteredChild entity) =>

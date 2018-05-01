@@ -57,8 +57,7 @@ namespace Business.Test
         public void CreateNonExistantGroupIdExceptionTest()
         {
             var model = GetValidCreateModel();
-
-            model.GroupId = _photoGroups.Select(x => x.Id).Max() + 1;
+            model.GroupId = GetNonExistantId<PhotoGroup>();
 
             Assert.Throws<InvalidOperationException>(() => _manager.Create(model));
 
@@ -73,39 +72,16 @@ namespace Business.Test
         public void UpdateSuccessTest()
         {
             SeedPhotos();
-            var models = GetValidUpdateModels().ToList();
+            var model = GetValidUpdateModel();
 
-            var response = _manager.Update(models.ToArray()).ToList();
+            var response = _manager.Update(model);
 
-            var updatedEntities = DbContext.Set<Photo>()
+            var entity = DbContext.Set<Photo>()
                 .AsNoTracking()
-                .ToList();
+                .First(x => x.Id.Equals(model.Id));
 
-            AssertEqual(models, updatedEntities);
-            AssertResponseCorrect(response, updatedEntities);
-        }
-
-        [Fact]
-        public void UpdateSuccessNotAllIdsExistTest()
-        {
-            SeedPhotos();
-            var models = GetValidUpdateModels().ToList();
-
-            var nonExistantId = models.Select(x => x.Id).Max() + 1;
-            models[0].Id = nonExistantId;
-
-            var response = _manager.Update(models.ToArray()).ToList();
-
-            var entities = DbContext.Set<Photo>()
-                .AsNoTracking()
-                .ToList();
-
-            Assert.Equal(models.Count, entities.Count);
-
-            var updatedEntities = entities.Where(x => models.Select(y => y.Id).Contains(x.Id)).ToList();
-
-            AssertEqual(models.Where(x => !x.Id.Equals(nonExistantId)).ToList(), updatedEntities);
-            AssertResponseCorrect(response, updatedEntities);
+            AssertEqual(model, entity);
+            Assert.Equal(response, entity.Id);
         }
 
         [Fact]
@@ -115,39 +91,31 @@ namespace Business.Test
         }
 
         [Fact]
-        public void UpdateSuccessNullInModelTest()
+        public void UpdateIdDoesntExistExceptionTest()
         {
-            SeedPhotos();
-            var models = GetValidUpdateModels().ToList();
-
-            var nonExistantId = models.Select(x => x.Id).Max() + 1;
-            models[0] = null;
-
-            var modelIds = models.Where(x => x != null).Select(x => x.Id).ToList();
-
-            var response = _manager.Update(models.ToArray()).ToList();
-
-            var entities = DbContext.Set<Photo>()
-                .AsNoTracking()
-                .ToList();
-
-            Assert.Equal(models.Count, entities.Count);
-
-            var updatedEntities = entities.Where(x => modelIds.Contains(x.Id)).ToList();
-
-            AssertEqual(models.Where(x => x != null).ToList(), updatedEntities);
-            AssertResponseCorrect(response, updatedEntities);
+            Assert.Throws<ArgumentNullException>(() => _manager.Update(null));
         }
 
         [Fact]
         public void UpdateNonExistantGroupIdExceptionTest()
         {
             SeedPhotos();
-            var models = GetValidUpdateModels().ToList();
+            var model = GetValidUpdateModel();
 
-            models[0].GroupId = _photoGroups.Select(x => x.Id).Max() + 1;
+            model.GroupId = GetNonExistantId<PhotoGroup>();
 
-            Assert.Throws<InvalidOperationException>(() => _manager.Update(models.ToArray()));
+            Assert.Throws<InvalidOperationException>(() => _manager.Update(model));
+        }
+
+        [Fact]
+        public void UpdateNonExistantIdExceptionTest()
+        {
+            SeedPhotos();
+            var model = GetValidUpdateModel();
+
+            model.Id = GetNonExistantId<Photo>();
+
+            Assert.Throws<InvalidOperationException>(() => _manager.Update(model));
         }
 
         [Fact]
@@ -155,73 +123,35 @@ namespace Business.Test
         {
             var seededEntities = SeedPhotos().ToList();
 
-            var idsToDelete = seededEntities.Select(x => x.Id).Take(2).ToList();
+            var id = seededEntities.First().Id;
 
-            var response = _manager.Delete(idsToDelete.ToArray()).ToList();
-
-            var entities = DbContext.Set<Photo>()
-                .AsNoTracking()
-                .ToList();
-
-            Assert.Equal(seededEntities.Count - idsToDelete.Count, entities.Count);
-            Assert.Empty(entities.Where(x => idsToDelete.Contains(x.Id)));
-            Assert.Equal(idsToDelete, response);
-        }
-
-        [Fact]
-        public void DeleteSuccessNotAllIdsExistTest()
-        {
-            var seededEntities = SeedPhotos().ToList();
-
-            var idsToDelete = seededEntities.Select(x => x.Id).Take(2).ToList();
-
-            idsToDelete.Add(seededEntities.Select(x => x.Id).Max() + 1);
-
-            var seededEntityIds = seededEntities.Select(x => x.Id).ToList();
-
-            var response = _manager.Delete(idsToDelete.ToArray()).ToList();
+            var response = _manager.Delete(id);
 
             var entities = DbContext.Set<Photo>()
                 .AsNoTracking()
                 .ToList();
 
-            Assert.Equal(seededEntities.Count - idsToDelete.Count + 1, entities.Count);
-            Assert.Empty(entities.Where(x => idsToDelete.Contains(x.Id)));
-            Assert.Equal(idsToDelete.Where(x => seededEntityIds.Contains(x)).ToList(), response);
+            Assert.Equal(seededEntities.Count - 1, entities.Count);
+            Assert.Null(entities.FirstOrDefault(x => x.Id.Equals(id)));
+            Assert.Equal(response, id);
         }
 
         [Fact]
-        public void DeleteSuccessNoIdsExistTest()
-        {
-            var seededEntities = SeedPhotos().ToList();
-
-            var maxId = seededEntities.Select(x => x.Id).Max();
-
-            var idsToDelete = new List<int> { maxId + 1, maxId + 2 };
-
-            var response = _manager.Delete(idsToDelete.ToArray());
-
-            var entities = DbContext.Set<Photo>()
-                .AsNoTracking()
-                .ToList();
-
-            Assert.Equal(seededEntities.Count, entities.Count);
-            Assert.Empty(entities.Where(x => idsToDelete.Contains(x.Id)));
-            Assert.Empty(response);
-        }
-
-        [Fact]
-        public void DeleteNullModelExceptionTest()
-        {
-            Assert.Throws<ArgumentNullException>(() => _manager.Delete(null));
-        }
-
-        [Fact]
-        public void GetAllMetadataTest()
+        public void DeleteNonExistantIdExceptionTest()
         {
             SeedPhotos();
 
-            var response = _manager.GetAll().ToList();
+            var id = GetNonExistantId<Photo>();
+
+            Assert.Throws<InvalidOperationException>(() => _manager.Delete(id));
+        }
+
+        [Fact]
+        public void GetMetadataTest()
+        {
+            SeedPhotos();
+
+            var response = _manager.GetMetadata().ToList();
 
             var entities = DbContext.Set<Photo>()
                 .AsNoTracking()
@@ -231,73 +161,13 @@ namespace Business.Test
         }
 
         [Fact]
-        public void GetByIdAllExistTest()
-        {
-            var seededEntities = SeedPhotos().ToList();
-
-            var ids = seededEntities.Select(x => x.Id).Take(2).ToList();
-
-            var response = _manager.Get(ids.ToArray()).ToList();
-
-            var entities = DbContext.Set<Photo>()
-                .AsNoTracking()
-                .ToList();
-
-            Assert.Equal(ids.Count, response.Count);
-            AssertEqual(response, entities.Where(x => ids.Contains(x.Id)).ToList());
-        }
-
-        [Fact]
-        public void GetByIdSomeExistTest()
-        {
-            var seededEntities = SeedPhotos().ToList();
-
-            var ids = seededEntities.Select(x => x.Id).Take(2).ToList();
-
-            ids.Add(seededEntities.Select(x => x.Id).Max() + 1);
-
-            var response = _manager.Get(ids.ToArray()).ToList();
-
-            var entities = DbContext.Set<Photo>()
-                .AsNoTracking()
-                .ToList();
-
-            Assert.Equal(ids.Count - 1, response.Count);
-            AssertEqual(response, entities.Where(x => ids.Contains(x.Id)).ToList());
-        }
-
-        [Fact]
-        public void GetByIdNoneExistTest()
-        {
-            var seededEntities = SeedPhotos().ToList();
-
-            var maxId = seededEntities.Select(x => x.Id).Max();
-
-            var idsToDelete = new List<int> { maxId + 1, maxId + 2 };
-
-            var response = _manager.Get(idsToDelete.ToArray()).ToList();
-
-            var entities = DbContext.Set<Photo>()
-                .AsNoTracking()
-                .ToList();
-
-            Assert.Empty(response);
-            Assert.Empty(entities.Where(x => idsToDelete.Contains(x.Id)));
-        }
-
-        [Fact]
-        public void GetByIdNullModelTest()
-        {
-            Assert.Throws<ArgumentNullException>(() => _manager.Get(null));
-        }
-
-        [Fact]
-        public void GetSingleByIdSuccessTest()
+        public void GetMetadataByIdTest()
         {
             var entities = SeedPhotos().ToList();
+
             var id = entities.First().Id;
 
-            var response = _manager.GetSingle(id);
+            var response = _manager.GetMetadata(id);
 
             var entity = DbContext.Set<Photo>()
                 .AsNoTracking()
@@ -307,12 +177,37 @@ namespace Business.Test
         }
 
         [Fact]
-        public void GetSingleDoesNotExistExceptionTest()
+        public void GetMetadataNonExistantIdExceptionTest()
+        {
+            SeedPhotos();
+
+            var id = GetNonExistantId<Photo>();
+
+            Assert.Throws<InvalidOperationException>(() => _manager.GetMetadata(id));
+        }
+        
+        [Fact]
+        public void GetSuccessTest()
+        {
+            var entities = SeedPhotos().ToList();
+            var id = entities.First().Id;
+
+            var response = _manager.Get(id);
+
+            var entity = DbContext.Set<Photo>()
+                .AsNoTracking()
+                .First(x => x.Id.Equals(id));
+
+            AssertEqual(response, entity);
+        }
+
+        [Fact]
+        public void GetDoesNotExistExceptionTest()
         {
             var entities = SeedPhotos().ToList();
             var id = entities.Select(x => x.Id).Max() + 1;
 
-            Assert.Throws<InvalidOperationException>(() => _manager.GetSingle(id));
+            Assert.Throws<InvalidOperationException>(() => _manager.Get(id));
         }
 
         private static void AssertEqual(PhotoCreateModel model, Photo entity)
@@ -347,18 +242,7 @@ namespace Business.Test
             Assert.Equal(model.GroupId, entity.PhotoGroupId);
             Assert.Equal(model.Photo, entity.Data);
         }
-
-        private static void AssertEqual(IList<PhotoMetadataUpdateModel> models, IList<Photo> entities)
-        {
-            Assert.Equal(models.Count, entities.Count);
-            foreach(var model in models)
-            {
-                var entity = entities.First(x => x.Id.Equals(model.Id));
-
-                AssertEqual(model, entity);
-            }
-        }
-
+        
         private static void AssertEqual(IList<PhotoMetadataReadModel> models, IList<Photo> entities)
         {
             Assert.Equal(models.Count, entities.Count);
@@ -370,13 +254,6 @@ namespace Business.Test
             }
         }
 
-        private static void AssertResponseCorrect(IList<int> response, IList<Photo> entities)
-        {
-            Assert.Equal(response.Count, entities.Count);
-
-            Assert.Equal(response.OrderBy(x => x), entities.Select(x => x.Id).OrderBy(x => x));
-        }
-
         private PhotoCreateModel GetValidCreateModel() =>
             new PhotoCreateModel
             {
@@ -386,27 +263,24 @@ namespace Business.Test
                 Photo = GetTestPhotoByteArray()
             };
 
-        private IEnumerable<PhotoMetadataUpdateModel> GetValidUpdateModels()
+        private PhotoMetadataUpdateModel GetValidUpdateModel()
         {
-            var photos = DbContext.Set<Photo>().AsNoTracking().ToList();
+            var photo = DbContext.Set<Photo>().AsNoTracking().First();
 
-            for(var i = 0; i < photos.Count; i++)
+            return new PhotoMetadataUpdateModel
             {
-                yield return new PhotoMetadataUpdateModel
-                {
-                    Id = photos[i].Id,
-                    Title = Guid.NewGuid().ToString(),
-                    SortOrder = i + 10,
-                    GroupId = _photoGroups
-                        .Where(x => !x.Id.Equals(photos[i].PhotoGroupId))
-                        .First()
-                        .Id
-                };
-            }
+                Id = photo.Id,
+                Title = Guid.NewGuid().ToString(),
+                SortOrder = 10,
+                GroupId = _photoGroups
+                    .First(x => !x.Id.Equals(photo.PhotoGroupId))
+                    .Id
+            };
         }
 
         private byte[] GetTestPhotoByteArray() =>
             System.IO.File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), TestPhotoPath));
+
         private IEnumerable<PhotoGroup> SeedPhotoGroups()
         {
             var list = new List<PhotoGroup>();
