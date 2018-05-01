@@ -9,7 +9,7 @@
             </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            <mat-horizontal-stepper [linear]='false' #stepper (selectionChange)='step(stepper)'>
+            <mat-horizontal-stepper [linear]='true' #stepper (selectionChange)='step(stepper)'>
                 <mat-step [stepControl]='firstFormGroup'>
                     <form [formGroup]='firstFormGroup'>
                         <ng-template matStepLabel>Contact Information</ng-template>
