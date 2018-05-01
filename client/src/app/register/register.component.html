@@ -115,12 +115,12 @@
                             <br />
                         </mat-radio-group>
                         <p *ngIf='fifthFormGroup.value.paymentType === "cash"'>
-                            If paying by check please make them out to "Detroit Youth GAA"
-                            or give cash to Garret O'Donohue directly.
+                            If paying by check please make out to "Detroit Youth GAA"
+                            and send to 28156 North Clement Circle, Livonia MI 48150.
+                            For cash payments catch up with us this summer.
                         </p>
                         <div *ngIf='fifthFormGroup.value.paymentType === "paypal"'>
-                            This will open a paypal link in a new window
-
+                            PayPal (select from menu below and then click Buy Now)
                             <form ngNoForm action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_blank'>
                                 <input type='hidden' name='cmd' value='_s-xclick'>
                                 <input type='hidden' name='hosted_button_id' value='YELLJL3VMKMLC'>
