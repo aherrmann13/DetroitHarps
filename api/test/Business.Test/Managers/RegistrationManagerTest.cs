@@ -191,6 +191,7 @@ namespace Business.Test
             Assert.Equal(payment.Amount, model.Children.Count > 1 ? 30.0 : 20.0);
             Assert.Equal(model.RegistrationType.ToString(), payment.PaymentType);
             Assert.False(payment.VerfiedPayment);
+            Assert.InRange(entity.RegistrationTimestamp, DateTimeOffset.Now.AddMinutes(-1), DateTimeOffset.Now);
 
             AssertEqual(model.Children, entity.Children);
         }
@@ -247,6 +248,7 @@ namespace Business.Test
                 Assert.NotNull(entity);
                 Assert.True(IsEqual(model, entity));
                 Assert.True(model.HasPaid == entity.PaymentDetails.Any());
+                Assert.Equal(model.RegistrationTimestamp, entity.RegistrationTimestamp);
 
                 editableEntityList.Remove(entity);
             }
@@ -306,7 +308,8 @@ namespace Business.Test
                 State = Guid.NewGuid().ToString(),
                 Zip = Guid.NewGuid().ToString(),
                 Children = children,
-                PaymentDetails = paymentDetails
+                PaymentDetails = paymentDetails,
+                RegistrationTimestamp = DateTimeOffset.Now
             };
         }
 
