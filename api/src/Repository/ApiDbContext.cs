@@ -30,6 +30,10 @@ namespace Repository
                 .HasForeignKey(x => x.RegisteredPersonId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<RegisteredChild>()
+                .Property(x=> x.DateOfBirth)
+                .HasColumnType("date");
+
             modelBuilder.Entity<Photo>()
                 .HasOne(x => x.PhotoGroup)
                 .WithMany(x => x.Photos)
