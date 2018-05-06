@@ -47,12 +47,5 @@ namespace Service.Controllers
                 return Ok(_jwtTokenFactory.GenerateToken(userId.Value));
             }
         }
-
-        [Authorize]
-        [HttpGet]
-        public IActionResult Test()
-        {
-            return Ok();
-        }
     }
 }

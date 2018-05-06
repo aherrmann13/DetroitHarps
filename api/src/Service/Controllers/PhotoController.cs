@@ -7,6 +7,7 @@ namespace Service.Controllers
     using System.Threading.Tasks;
     using Business.Interfaces;
     using Business.Models;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Service.Models;
     using Swashbuckle.AspNetCore;
@@ -25,6 +26,7 @@ namespace Service.Controllers
             _manager = manager;
         }
 
+        [AllowAnonymous]
         [HttpGet("GetMetadata")]
         [Produces("application/json", Type = typeof(IList<PhotoMetadataReadModel>))]
         [SwaggerOperation(operationId: "GetAllPhotoMetadata")]
@@ -35,6 +37,7 @@ namespace Service.Controllers
             return Json(response);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetMetadata/{id}")]
         [Produces("application/json", Type = typeof(PhotoMetadataReadModel))]
         [SwaggerOperation(operationId: "GetPhotoMetadata")]
@@ -45,6 +48,7 @@ namespace Service.Controllers
             return Json(response);
         }
 
+        [AllowAnonymous]
         // TODO how to return this
         [HttpGet("Get/{id}")]
         //[Produces("application/json", Type = typeof(PhotoReadModel))]

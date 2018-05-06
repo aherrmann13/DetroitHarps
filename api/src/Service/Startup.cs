@@ -48,12 +48,12 @@
 
             services.AddSwaggerGen(options => 
             {
-                // TODO documentation files
+                // TODO: documentation files
                 options.SwaggerDoc("doc", new Info() { Version = "v1", Title = $"{_serviceOptions.ServiceName}"});
                 options.DescribeAllEnumsAsStrings();
             });
 
-            //TODO:add sql query logging
+            // TODO: add sql query logging
             services.AddDbContext<ApiDbContext>(ServiceLifetime.Scoped);
 
             var repositoryOptions = _configuration.GetSection(nameof(RepositoryOptions)).Get<RepositoryOptions>();
@@ -79,6 +79,7 @@
             services.AddTransient<IRegistrationManager, RegistrationManager>();
             services.AddTransient<IScheduleManager, ScheduleManager>();
             services.AddTransient<IContactManager, ContactManager>();
+            services.AddTransient<IUserManager, UserManager>();
 
             var stripeManagerMock = new Mock<IStripeManager>();
             stripeManagerMock.Setup(x => x.Charge(It.IsAny<StripeChargeModel>()))
@@ -86,12 +87,6 @@
 
             
             services.AddSingleton(stripeManagerMock.Object);
-
-            var userAuthenticationMock = new Mock<IUserManager>();
-            userAuthenticationMock.Setup(x => x.GetUserId(It.IsAny<UserCredentialsModel>()))
-                .Returns(1);
-
-            services.AddSingleton(userAuthenticationMock.Object);
 
             services.AddCustomJwtAuthentication(_configuration);
         }

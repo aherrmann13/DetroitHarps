@@ -4,6 +4,7 @@ namespace Service.Controllers
     using System.Linq;
     using Business.Interfaces;
     using Business.Models;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore;
     using Swashbuckle.AspNetCore.SwaggerGen;
@@ -21,6 +22,7 @@ namespace Service.Controllers
             _manager = manager;
         }
 
+        [AllowAnonymous]
         [HttpGet("Get")]
         [Produces("application/json", Type = typeof(IList<PhotoGroupReadModel>))]
         [SwaggerOperation(operationId: "GetAllPhotoGroups")]
@@ -31,6 +33,7 @@ namespace Service.Controllers
             return Json(response);
         }
 
+        [AllowAnonymous]
         [HttpGet("Get/{id}")]
         [Produces("application/json", Type = typeof(PhotoGroupReadModel))]
         [SwaggerOperation(operationId: "GetPhotoGroup")]
