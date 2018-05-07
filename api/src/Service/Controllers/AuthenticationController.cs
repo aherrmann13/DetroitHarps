@@ -12,6 +12,7 @@ namespace Service.Controllers
     using Microsoft.IdentityModel.Tokens;
     using Service.Helpers;
     using Service.Models;
+    using Swashbuckle.AspNetCore.SwaggerGen;
     using Tools;
     
 
@@ -34,6 +35,8 @@ namespace Service.Controllers
 
         [AllowAnonymous]
         [HttpPost]
+        [Produces("application/json", Type = typeof(string))]
+        [SwaggerOperation(operationId: "Login")]
         public IActionResult Login([FromBody] UserCredentialsModel userCredentials)
         {
             var userId = _userManager.GetUserId(userCredentials);
