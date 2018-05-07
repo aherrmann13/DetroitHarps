@@ -34,6 +34,58 @@ export class Client extends BaseClient {
     }
 
     /**
+     * @userCredentials (optional) 
+     * @return Success
+     */
+    login(userCredentials: UserCredentialsModel): Observable<string> {
+        let url_ = this.baseUrl + "/Authentication";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(userCredentials);
+
+        let options_ : any = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processLogin(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processLogin(<any>r));
+                } catch (e) {
+                    return <Observable<string>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<string>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processLogin(response: Response): Observable<string> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<string>(<any>null);
+    }
+
+    /**
      * @model (optional) 
      * @return Success
      */
@@ -335,6 +387,110 @@ export class Client extends BaseClient {
     }
 
     /**
+     * @return Success
+     */
+    getAllRegistered(): Observable<RegistrationReadModel[]> {
+        let url_ = this.baseUrl + "/Registration/GetAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processGetAllRegistered(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processGetAllRegistered(<any>r));
+                } catch (e) {
+                    return <Observable<RegistrationReadModel[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<RegistrationReadModel[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetAllRegistered(response: Response): Observable<RegistrationReadModel[]> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(RegistrationReadModel.fromJS(item));
+            }
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<RegistrationReadModel[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllRegisteredChildren(): Observable<ChildInformationReadModel[]> {
+        let url_ = this.baseUrl + "/Registration/GetAllChildren";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processGetAllRegisteredChildren(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processGetAllRegisteredChildren(<any>r));
+                } catch (e) {
+                    return <Observable<ChildInformationReadModel[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<ChildInformationReadModel[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetAllRegisteredChildren(response: Response): Observable<ChildInformationReadModel[]> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(ChildInformationReadModel.fromJS(item));
+            }
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<ChildInformationReadModel[]>(<any>null);
+    }
+
+    /**
      * @model (optional) 
      * @return Success
      */
@@ -490,6 +646,46 @@ export class Client extends BaseClient {
     }
 }
 
+export class UserCredentialsModel implements IUserCredentialsModel {
+    email?: string;
+    password?: string;
+
+    constructor(data?: IUserCredentialsModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.email = data["email"];
+            this.password = data["password"];
+        }
+    }
+
+    static fromJS(data: any): UserCredentialsModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserCredentialsModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["password"] = this.password;
+        return data; 
+    }
+}
+
+export interface IUserCredentialsModel {
+    email?: string;
+    password?: string;
+}
+
 export class ContactModel implements IContactModel {
     name?: string;
     email?: string;
@@ -636,6 +832,142 @@ export interface IPhotoGroupReadModel {
     photoIds?: number[];
     name?: string;
     sortOrder?: number;
+}
+
+export class RegistrationReadModel implements IRegistrationReadModel {
+    id?: number;
+    hasPaid?: boolean;
+    registrationTimestamp?: Date;
+    firstName?: string;
+    lastName?: string;
+    emailAddress?: string;
+    phoneNumber?: string;
+    address?: string;
+    address2?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+
+    constructor(data?: IRegistrationReadModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.hasPaid = data["hasPaid"];
+            this.registrationTimestamp = data["registrationTimestamp"] ? new Date(data["registrationTimestamp"].toString()) : <any>undefined;
+            this.firstName = data["firstName"];
+            this.lastName = data["lastName"];
+            this.emailAddress = data["emailAddress"];
+            this.phoneNumber = data["phoneNumber"];
+            this.address = data["address"];
+            this.address2 = data["address2"];
+            this.city = data["city"];
+            this.state = data["state"];
+            this.zip = data["zip"];
+        }
+    }
+
+    static fromJS(data: any): RegistrationReadModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegistrationReadModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["hasPaid"] = this.hasPaid;
+        data["registrationTimestamp"] = this.registrationTimestamp ? this.registrationTimestamp.toISOString() : <any>undefined;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["emailAddress"] = this.emailAddress;
+        data["phoneNumber"] = this.phoneNumber;
+        data["address"] = this.address;
+        data["address2"] = this.address2;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["zip"] = this.zip;
+        return data; 
+    }
+}
+
+export interface IRegistrationReadModel {
+    id?: number;
+    hasPaid?: boolean;
+    registrationTimestamp?: Date;
+    firstName?: string;
+    lastName?: string;
+    emailAddress?: string;
+    phoneNumber?: string;
+    address?: string;
+    address2?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+}
+
+export class ChildInformationReadModel implements IChildInformationReadModel {
+    parentId?: number;
+    firstName?: string;
+    lastName?: string;
+    gender?: string;
+    dateOfBirth?: Date;
+    shirtSize?: string;
+
+    constructor(data?: IChildInformationReadModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.parentId = data["parentId"];
+            this.firstName = data["firstName"];
+            this.lastName = data["lastName"];
+            this.gender = data["gender"];
+            this.dateOfBirth = data["dateOfBirth"] ? new Date(data["dateOfBirth"].toString()) : <any>undefined;
+            this.shirtSize = data["shirtSize"];
+        }
+    }
+
+    static fromJS(data: any): ChildInformationReadModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ChildInformationReadModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["parentId"] = this.parentId;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["gender"] = this.gender;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["shirtSize"] = this.shirtSize;
+        return data; 
+    }
+}
+
+export interface IChildInformationReadModel {
+    parentId?: number;
+    firstName?: string;
+    lastName?: string;
+    gender?: string;
+    dateOfBirth?: Date;
+    shirtSize?: string;
 }
 
 export class RegistrationCreateModel implements IRegistrationCreateModel {
