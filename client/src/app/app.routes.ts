@@ -8,6 +8,8 @@ import { SinglePhotoComponent } from './photos/single-photo.component';
 import { AboutComponent } from './about/about.component';
 import { RegisterComponent } from './register/register.component'
 import { SupportComponent } from './support/support.component'
+import { LoginComponent } from './admin/login/login.component';
+import { RegistrationComponent } from './admin/registration/registration.component';
 
 const defaultRoutes = [
   {
@@ -24,7 +26,9 @@ const routes: Routes = [
   { path: 'photos/:groupId/:id', component: SinglePhotoComponent },
   { path: 'about', component: AboutComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'support', component: SupportComponent }
+  { path: 'support', component: SupportComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'admin/registration', component: RegistrationComponent }
 ];
 
 const appRoutes = [

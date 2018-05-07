@@ -1,0 +1,29 @@
+<mat-table mat-table [dataSource]='info'>
+    <ng-container matColumnDef='parentName'>
+        <mat-header-cell *matHeaderCellDef> Parent </mat-header-cell>
+        <mat-cell *matCellDef='let child'> {{child.parentName}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef='childName'>
+        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+        <mat-cell *matCellDef='let child'> {{child.childName}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef='gender'>
+        <mat-header-cell *matHeaderCellDef> Gender </mat-header-cell>
+        <mat-cell *matCellDef='let child'> {{child.gender}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef='dateOfBirth'>
+        <mat-header-cell *matHeaderCellDef> Date of birth </mat-header-cell>
+        <mat-cell *matCellDef='let child'> {{child.dateOfBirth | date:'mediumDate':'UTC' }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef='shirtSize'>
+        <mat-header-cell *matHeaderCellDef> Shirt Size </mat-header-cell>
+        <mat-cell *matCellDef='let child'> {{child.shirtSize}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef='columnsToDisplay'></mat-header-row>
+    <mat-row *matRowDef='let child; columns: columnsToDisplay;'></mat-row>
+</mat-table>

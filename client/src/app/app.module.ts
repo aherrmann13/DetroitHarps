@@ -18,6 +18,7 @@ import { MatButtonModule,
   MatSelectModule,
   MatSidenavModule,
   MatStepperModule,
+  MatTableModule,
   MatToolbarModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -33,6 +34,9 @@ import { PhotosComponent } from './photos/photos.component';
 import { AboutComponent } from './about/about.component';
 import { RegisterComponent } from './register/register.component';
 import { SupportComponent } from './support/support.component'
+import { LoginComponent } from './admin/login/login.component'
+import { RegistrationComponent } from './admin/registration/registration.component'
+
 import { APP_BASE_HREF } from '@angular/common';
 // TODO what to do about this?
 import { environment } from '../environments/environment';
@@ -51,7 +55,9 @@ export function getApiUrl(){
     SinglePhotoComponent,
     AboutComponent,
     RegisterComponent,
-    SupportComponent
+    SupportComponent,
+    LoginComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,
@@ -71,6 +77,7 @@ export function getApiUrl(){
     MatSelectModule,
     MatSidenavModule,
     MatStepperModule,
+    MatTableModule,
     MatToolbarModule,
     ReactiveFormsModule,
     routing
