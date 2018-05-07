@@ -23,7 +23,7 @@ namespace Service.Controllers
         }
 
         [Authorize]
-        [HttpPost("GetAll")]
+        [HttpGet("GetAll")]
         [Produces("application/json", Type = typeof(IList<RegistrationReadModel>))]
         [SwaggerOperation(operationId: "GetAllRegistered")]
         public IActionResult GetAll()
@@ -34,7 +34,7 @@ namespace Service.Controllers
         }
 
         [Authorize]
-        [HttpPost("GetAllChildren")]
+        [HttpGet("GetAllChildren")]
         [Produces("application/json", Type = typeof(IList<ChildInformationReadModel>))]
         [SwaggerOperation(operationId: "GetAllRegisteredChildren")]
         public IActionResult GetAllChildren()
