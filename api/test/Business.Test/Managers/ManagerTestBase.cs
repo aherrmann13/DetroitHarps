@@ -46,6 +46,7 @@ namespace Business.Test
             serviceCollection.AddTransient<IRegistrationManager, RegistrationManager>();
             serviceCollection.AddTransient<IPhotoManager, PhotoManager>();
             serviceCollection.AddTransient<IPhotoGroupManager, PhotoGroupManager>();
+            serviceCollection.AddTransient<IUserManager, UserManager>();
 
             StripeManagerMock = new Mock<IStripeManager>();
             StripeManagerMock.Setup(x => x.Charge(It.IsAny<StripeChargeModel>()))

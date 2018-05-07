@@ -22,6 +22,7 @@ namespace Service.Controllers
             _manager = manager;
         }
 
+        [AllowAnonymous]
         [HttpGet("GetAll")]
         [Produces("application/json", Type = typeof(IList<EventReadModel>))]
         [SwaggerOperation(operationId: "GetAllEvents")]
@@ -32,6 +33,7 @@ namespace Service.Controllers
             return Json(response);
         }
 
+        [AllowAnonymous]
         [HttpGet("Get/{id}")]
         [Produces("application/json", Type = typeof(EventReadModel))]
         [SwaggerOperation(operationId: "GetEvent")]

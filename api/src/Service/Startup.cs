@@ -3,10 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
     using Business.Interfaces;
     using Business.Managers;
     using Business.Models;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -15,8 +17,10 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+    using Microsoft.IdentityModel.Tokens;
     using Moq;
     using Repository;
+    using Service.Models;
     using Swashbuckle.AspNetCore.Swagger;
     using Tools;
 
@@ -44,12 +48,12 @@
 
             services.AddSwaggerGen(options => 
             {
-                // TODO documentation files
+                // TODO: documentation files
                 options.SwaggerDoc("doc", new Info() { Version = "v1", Title = $"{_serviceOptions.ServiceName}"});
                 options.DescribeAllEnumsAsStrings();
             });
 
-            //TODO:add sql query logging
+            // TODO: add sql query logging
             services.AddDbContext<ApiDbContext>(ServiceLifetime.Scoped);
 
             var repositoryOptions = _configuration.GetSection(nameof(RepositoryOptions)).Get<RepositoryOptions>();
@@ -75,12 +79,16 @@
             services.AddTransient<IRegistrationManager, RegistrationManager>();
             services.AddTransient<IScheduleManager, ScheduleManager>();
             services.AddTransient<IContactManager, ContactManager>();
+            services.AddTransient<IUserManager, UserManager>();
 
             var stripeManagerMock = new Mock<IStripeManager>();
             stripeManagerMock.Setup(x => x.Charge(It.IsAny<StripeChargeModel>()))
                 .Returns("paypal");
+
             
             services.AddSingleton(stripeManagerMock.Object);
+
+            services.AddCustomJwtAuthentication(_configuration);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -88,12 +96,8 @@
             app.UseCors("AllowAll");
             app.UseCustomLogging();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseAuthentication();
             
-
             app.UseSwagger();
             app.UseStaticFiles();
             

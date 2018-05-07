@@ -7,12 +7,14 @@ namespace Service.Controllers
     using System.Threading.Tasks;
     using Business.Interfaces;
     using Business.Models;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Service.Models;
     using Swashbuckle.AspNetCore;
     using Swashbuckle.AspNetCore.SwaggerGen;
     using Tools;
 
+    [AllowAnonymous]
     [Route("[Controller]")]
     public class ContactController : Controller
     {
@@ -24,7 +26,7 @@ namespace Service.Controllers
 
             _manager = manager;
         }
-
+        
         [HttpPost("Contact")]
         [Produces("application/json", Type = typeof(void))]
         [SwaggerOperation(operationId: "Contact")]
