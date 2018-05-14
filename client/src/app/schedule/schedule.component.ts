@@ -15,8 +15,14 @@ export class ScheduleComponent implements OnInit {
   
   ngOnInit() {
     this._client.getAllEvents().subscribe(
-      data => this.events = data,
+      data => this.orderDates(data),
       error => console.error(error)
     );
+  }
+
+  private orderDates(events: EventReadModel[]): void{
+    this.events = events.sort((a: EventReadModel, b: EventReadModel) => {
+      return a.date.getTime() - b.date.getTime();
+    })
   }
 }
