@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: "http://api.detroitharps.com"
+  apiUrl: "https://api.detroitharps.com"
 };
