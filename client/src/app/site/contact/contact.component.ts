@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
-import { Client, ContactModel } from '../api.client';
+import { Client, ContactModel } from '../../shared/client/api.client';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-contact',
+  selector: 'site-contact',
   templateUrl: './contact.component.html',
   styleUrls: [ ]
 })

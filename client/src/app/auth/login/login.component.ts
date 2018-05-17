@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
-import { Client, ContactModel, UserCredentialsModel } from '../../api.client';
+import { Client, ContactModel, UserCredentialsModel } from '../../shared/client/api.client';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
+  selector: 'auth-login',
   templateUrl: './login.component.html',
-  styleUrls: [ ]
+  styleUrls: [ './login.component.scss' ]
 })
 export class LoginComponent implements OnInit {
 
@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
   private onComplete(token: string){
     localStorage.setItem("token", token);
     this.enableForm = true;
-    this._router.navigate(['/admin/registration']);
+    this._router.navigate(['/admin']);
   }
   
 

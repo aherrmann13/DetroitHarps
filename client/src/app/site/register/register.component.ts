@@ -2,7 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { MatStepper } from '@angular/material';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Client, RegistrationCreateModel, ChildInformationCreateModel, RegistrationCreateModelRegistrationType } from '../api.client';
+import { 
+  Client, 
+  RegistrationCreateModel, 
+  ChildInformationCreateModel, 
+  RegistrationCreateModelRegistrationType 
+}  from '../../shared/client/api.client';
 
 
 @Component({

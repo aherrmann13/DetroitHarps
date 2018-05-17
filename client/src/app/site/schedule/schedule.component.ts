@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Client, EventReadModel } from '../api.client'
+import { Client, EventReadModel } from '../../shared/client/api.client';
 
 @Component({
-  selector: 'app-schedule',
+  selector: 'site-schedule',
   templateUrl: './schedule.component.html',
   styleUrls: [ ]
 })

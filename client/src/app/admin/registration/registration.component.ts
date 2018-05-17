@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
-import { Client, ContactModel, UserCredentialsModel, RegistrationReadModel, ChildInformationReadModel } from '../../api.client';
+import { 
+  Client,
+  ContactModel,
+  UserCredentialsModel,
+  RegistrationReadModel,
+  ChildInformationReadModel 
+} from '../../shared/client/api.client';
 import { Router } from '@angular/router';
 
 import { IRegistrationInformationModel } from './registration.model'

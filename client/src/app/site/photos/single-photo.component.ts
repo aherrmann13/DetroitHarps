@@ -2,10 +2,10 @@ import { Component, OnInit, HostListener, Inject, Optional } from '@angular/core
 import { Router, ActivatedRoute } from '@angular/router';
 
 
-import { Client, PhotoGroupReadModel, API_BASE_URL } from '../api.client'
+import { Client, PhotoGroupReadModel, API_BASE_URL } from '../../shared/client/api.client';
 
 @Component({
-  selector: 'app-single-photo',
+  selector: 'site-single-photo',
   templateUrl: './single-photo.component.html',
   styleUrls: [ './photos.component.scss' ]
 })
