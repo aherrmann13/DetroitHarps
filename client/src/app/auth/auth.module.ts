@@ -14,10 +14,10 @@ import {
 
 import { Client, API_BASE_URL } from '../shared/client/api.client';
 
+import { LayoutModule } from "../shared/layout/layout.module"
 import { AuthRoutingModule } from './auth-routing.module';
 import { AuthComponent } from './auth.component'
 import { LoginComponent } from './login/login.component'
-import { ToolbarComponent } from '../shared/layout/toolbar/toolbar.component'
 
 import { APP_BASE_HREF } from '@angular/common';
 // TODO what to do about this?
@@ -31,7 +31,6 @@ export function getApiUrl(){
   declarations: [
     AuthComponent,
     LoginComponent,
-    ToolbarComponent,
   ],
   imports: [
     CommonModule,
@@ -44,7 +43,8 @@ export function getApiUrl(){
     MatInputModule,
     MatToolbarModule,
     ReactiveFormsModule,
-    AuthRoutingModule
+    AuthRoutingModule,
+    LayoutModule
   ],
   providers: [
     Client,

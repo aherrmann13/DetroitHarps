@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
+import { RouterModule } from '@angular/router'
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -20,27 +21,19 @@ import { MatButtonModule,
   MatTableModule,
   MatToolbarModule } from '@angular/material';
 
-import { Client, API_BASE_URL } from '../shared/client/api.client';
+import { DrawerComponent } from './drawer/drawer.component'
+import { ToolbarComponent } from './toolbar/toolbar.component'
 
-import { AdminRoutingModule } from './admin-routing.module';
-import { RegistrationComponent } from './registration/registration.component'
-import { AdminComponent } from './admin.component'
-
-
-import { LayoutModule } from "../shared/layout/layout.module"
 
 import { APP_BASE_HREF } from '@angular/common';
 // TODO what to do about this?
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
-export function getApiUrl(){
-  return environment.apiUrl;
-}
 
 @NgModule({
   declarations: [
-    RegistrationComponent,
-    AdminComponent
+    ToolbarComponent,
+    DrawerComponent
   ],
   imports: [
     CommonModule,
@@ -62,12 +55,13 @@ export function getApiUrl(){
     MatTableModule,
     MatToolbarModule,
     ReactiveFormsModule,
-    AdminRoutingModule,
-    LayoutModule
+    RouterModule
+  ],
+  exports: [
+    ToolbarComponent,
+    DrawerComponent
   ],
   providers: [
-    Client,
-    { provide: API_BASE_URL, useFactory: getApiUrl }
   ]
 })
-export class AdminModule { }
+export class LayoutModule { }
