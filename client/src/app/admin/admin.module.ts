@@ -5,23 +5,9 @@ import { HttpModule } from '@angular/http';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MatButtonModule,
-  MatCardModule,
-  MatDatepickerModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatListModule,
-  MatNativeDateModule,
-  MatRadioModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatStepperModule,
-  MatTableModule,
-  MatToolbarModule } from '@angular/material';
-
 import { Client, API_BASE_URL } from '../shared/client/api.client';
 
+import { MaterialModule } from '../shared/material.module'
 import { AdminRoutingModule } from './admin-routing.module';
 import { RegistrationComponent } from './registration/registration.component'
 import { AdminComponent } from './admin.component'
@@ -47,20 +33,7 @@ export function getApiUrl(){
     FormsModule,
     HttpModule,
     HttpClientModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatNativeDateModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatStepperModule,
-    MatTableModule,
-    MatToolbarModule,
+    MaterialModule,
     ReactiveFormsModule,
     AdminRoutingModule,
     LayoutModule

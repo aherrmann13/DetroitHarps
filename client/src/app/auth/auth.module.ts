@@ -5,13 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { 
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
-    MatInputModule,
-    MatToolbarModule } from '@angular/material';
-
+import { MaterialModule } from '../shared/material.module'
 import { Client, API_BASE_URL } from '../shared/client/api.client';
 
 import { LayoutModule } from "../shared/layout/layout.module"
@@ -37,11 +31,7 @@ export function getApiUrl(){
     FormsModule,
     HttpModule,
     HttpClientModule,
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
-    MatInputModule,
-    MatToolbarModule,
+    MaterialModule,
     ReactiveFormsModule,
     AuthRoutingModule,
     LayoutModule

@@ -5,21 +5,8 @@ import { HttpModule } from '@angular/http';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MatButtonModule,
-  MatCardModule,
-  MatDatepickerModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatListModule,
-  MatNativeDateModule,
-  MatRadioModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatStepperModule,
-  MatTableModule,
-  MatToolbarModule } from '@angular/material';
 
+import { MaterialModule } from '../shared/material.module'
 import { SinglePhotoComponent } from './photos/single-photo.component';
 import { HomeComponent } from './home/home.component';
 import { ScheduleComponent } from './schedule/schedule.component'
@@ -60,20 +47,7 @@ export function getApiUrl(){
     FormsModule,
     HttpModule,
     HttpClientModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatNativeDateModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatStepperModule,
-    MatTableModule,
-    MatToolbarModule,
+    MaterialModule,
     ReactiveFormsModule,
     SiteRoutingModule,
     LayoutModule

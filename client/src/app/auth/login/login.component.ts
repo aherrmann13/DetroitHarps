@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
     });
     this._client.login(model).subscribe(
       data => this.onComplete(data),
-      error => console.log(error)
+      error => this.onError(error)
     );
   }
 
@@ -50,6 +50,10 @@ export class LoginComponent implements OnInit {
     this.enableForm = true;
     this._router.navigate(['/admin']);
   }
-  
 
+  private onError(error: any){
+    // TODO message if 401
+    console.log(error);
+    this.enableForm = true;
+  }
 }
