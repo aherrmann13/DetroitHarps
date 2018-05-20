@@ -21,8 +21,6 @@ export class BaseClient {
 
     if (response.status === 401) {
       console.warn("The user is not authenticated");
-      // TODO : redirect to login url here
-      return Observable.empty();
     }
 
     return processor(response);

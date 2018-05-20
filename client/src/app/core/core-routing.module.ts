@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthComponent } from '../auth/auth.component';
+import { AuthGuardService as AuthGuard } from './services/auth-guard.service'
 
 const routes: Routes = [
   {
@@ -9,12 +9,14 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    loadChildren: '../admin/admin.module#AdminModule'
+    loadChildren: '../admin/admin.module#AdminModule',
+    canActivate: [ AuthGuard ] 
   },
   {
     path: '',
     loadChildren: '../site/site.module#SiteModule'
-  }
+  },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

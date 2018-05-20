@@ -55,5 +55,7 @@ export class LoginComponent implements OnInit {
     // TODO message if 401
     console.log(error);
     this.enableForm = true;
+    this.email.reset();
+    this.password.reset();
   }
 }
