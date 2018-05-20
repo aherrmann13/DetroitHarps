@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "detroit harps": {
+    "detroit-harps": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -49,18 +49,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "detroit harps:build"
+            "browserTarget": "detroit-harps:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "detroit harps:build:production"
+              "browserTarget": "detroit-harps:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "detroit harps:build"
+            "browserTarget": "detroit-harps:build"
           }
         },
         "test": {
@@ -95,7 +95,7 @@
       }
     }
   },
-  "defaultProject": "detroit harps",
+  "defaultProject": "detroit-harps",
   "schematics": {
     "@schematics/angular:class": {
       "spec": false
