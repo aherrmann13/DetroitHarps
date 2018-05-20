@@ -22,7 +22,8 @@ import { RegistrationComponent } from './registration/registration.component';
     MaterialModule,
     ReactiveFormsModule,
     AdminRoutingModule,
-    LayoutModule
+    LayoutModule,
+    ClientModule
   ]
 })
 export class AdminModule { }
