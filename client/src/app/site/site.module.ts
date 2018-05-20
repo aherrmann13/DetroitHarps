@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { MatIconRegistry } from '@angular/material/icon';
+
 import { MaterialModule } from '../shared/material.module';
 import { LayoutModule } from '../shared/layout/layout.module';
 import { ClientModule } from '../shared/client/client.module';
@@ -39,6 +41,9 @@ import { SupportComponent } from './support/support.component';
     SiteRoutingModule,
     LayoutModule,
     ClientModule
+  ],
+  providers: [
+    MatIconRegistry
   ]
 })
 export class SiteModule { }

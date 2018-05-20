@@ -6,6 +6,7 @@ import {
     MatDatepickerModule,
     MatFormFieldModule,
     MatIconModule,
+    MatIconRegistry,
     MatInputModule,
     MatListModule,
     MatNativeDateModule,

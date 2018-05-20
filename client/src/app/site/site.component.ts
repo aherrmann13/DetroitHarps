@@ -32,22 +32,22 @@ export class SiteComponent {
 
 
   constructor(
-      private _mdIconRegistry: MatIconRegistry,
+      private _matIconRegistry: MatIconRegistry,
         private _sanitizer: DomSanitizer,
         private _router: Router) {
-        _mdIconRegistry
+        _matIconRegistry
             .addSvgIcon('facebook',
             _sanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebook.svg'));
-        _mdIconRegistry
+        _matIconRegistry
             .addSvgIcon('twitter',
             _sanitizer.bypassSecurityTrustResourceUrl('assets/icons/twitter.svg'));
-        _mdIconRegistry
+        _matIconRegistry
             .addSvgIcon('instagram',
             _sanitizer.bypassSecurityTrustResourceUrl('assets/icons/instagram.svg'));
-        _mdIconRegistry
+        _matIconRegistry
             .addSvgIcon('shop',
             _sanitizer.bypassSecurityTrustResourceUrl('assets/icons/shop.svg'));
-        _mdIconRegistry
+        _matIconRegistry
             .addSvgIcon('logo',
             _sanitizer.bypassSecurityTrustResourceUrl('assets/icons/detroitharpslogo.svg'));
   }

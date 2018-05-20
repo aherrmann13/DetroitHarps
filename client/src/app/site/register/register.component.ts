@@ -89,7 +89,7 @@ export class RegisterComponent implements OnInit {
 
   step(stepper: MatStepper): void {
     // mat stepper doesnt update till 1 ms after change
-    setTimeout(() => this.formIndex = stepper._focusIndex, 1);
+    setTimeout(() => this.formIndex = stepper._getFocusIndex(), 1);
   }
 
   register(stepper: MatStepper): void {
