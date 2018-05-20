@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { MatStepper } from '@angular/material';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { 
-  Client, 
-  RegistrationCreateModel, 
-  ChildInformationCreateModel, 
-  RegistrationCreateModelRegistrationType 
-}  from '../../shared/client/api.client';
+import {
+  Client,
+  RegistrationCreateModel,
+  ChildInformationCreateModel,
+  RegistrationCreateModelRegistrationType
+} from '../../shared/client/api.client';
 
 
 @Component({
-  selector: 'app-register',
+  selector: 'dh-register',
   templateUrl: './register.component.html',
   styleUrls: [ './register.component.scss' ]
 })
@@ -22,15 +22,15 @@ export class RegisterComponent implements OnInit {
   fourthFormGroup: FormGroup;
   fifthFormGroup: FormGroup;
   states: string[] = [
-    "AK","AL","AR","AZ","CA","CO","CT","DE","FL","GA",
-    "HI","IA","ID","IL","IN","KS","KY","LA","MA","MD",
-    "ME","MI","MN","MO","MS","MT","NC","ND","NE","NH",
-    "NJ","NM","NV","NY","OH","OK","OR","PA","RI","SC",
-    "SD","TN","TX","UT","VA","VT","WA","WI","WV","WY"
+    'AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
+    'HI', 'IA', 'ID', 'IL', 'IN', 'KS', 'KY', 'LA', 'MA', 'MD',
+    'ME', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE', 'NH',
+    'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
+    'SD', 'TN', 'TX', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY'
   ];
-  shirtSizes: string[] = ["YXS","YS","YM","YL","YXL","AS","AM"];
-  formIndex: number = 0;
-  isRegistering: boolean = false;
+  shirtSizes: string[] = ['YXS', 'YS', 'YM', 'YL', 'YXL', 'AS', 'AM'];
+  formIndex = 0;
+  isRegistering = false;
 
   constructor(private _formBuilder: FormBuilder, private _client: Client) { }
 
@@ -67,7 +67,7 @@ export class RegisterComponent implements OnInit {
     this.fifthFormGroup.setValue({paymentType: 'paypal'});
   }
 
-  addChild(): void{
+  addChild(): void {
     console.log(this.thirdFormGroupArray);
     this.thirdFormGroupArray.push(
       this._formBuilder.group({
@@ -76,7 +76,7 @@ export class RegisterComponent implements OnInit {
       childDob: [''],
       childGender: [''],
       childShirtSize: ['']
-    }))
+    }));
   }
 
   goBack(stepper: MatStepper): void {
@@ -92,26 +92,25 @@ export class RegisterComponent implements OnInit {
     setTimeout(() => this.formIndex = stepper._focusIndex, 1);
   }
 
-  register(stepper: MatStepper): void{
+  register(stepper: MatStepper): void {
     this.isRegistering = true;
-    var model = this.getRegistrationCreateModel();
+    const model = this.getRegistrationCreateModel();
 
     this._client.register(model).subscribe(
-      data => 
-      {
+      data => {
         this.isRegistering = false;
       },
       error => console.error(error)
-    )
+    );
 
     this.goForward(stepper);
   }
 
-  private getRegistrationCreateModel(): RegistrationCreateModel{
-    let registrationCreateModel : RegistrationCreateModel = new RegistrationCreateModel({
+  private getRegistrationCreateModel(): RegistrationCreateModel {
+    const registrationCreateModel: RegistrationCreateModel = new RegistrationCreateModel({
       children: this.getRegistrationCreateModelChildren(),
       // TODO integrate stripe
-      stripeToken: "",
+      stripeToken: '',
       registrationType: this.getRegistrationTypeEnum(),
       comments: this.fourthFormGroup.value.comments,
       firstName: this.firstFormGroup.value.parentFirstName,
@@ -127,7 +126,7 @@ export class RegisterComponent implements OnInit {
     return registrationCreateModel;
   }
 
-  private getRegistrationCreateModelChildren(): ChildInformationCreateModel[]{
+  private getRegistrationCreateModelChildren(): ChildInformationCreateModel[] {
     return this.thirdFormGroupArray.map(x => new ChildInformationCreateModel({
       firstName: x.value.childFirstName,
       lastName: x.value.childLastName,
@@ -137,15 +136,15 @@ export class RegisterComponent implements OnInit {
     }));
   }
 
-  private getRegistrationTypeEnum(): RegistrationCreateModelRegistrationType{
-    switch(this.fifthFormGroup.value.paymentType){
-      case("cash"):
+  private getRegistrationTypeEnum(): RegistrationCreateModelRegistrationType {
+    switch (this.fifthFormGroup.value.paymentType) {
+      case('cash'):
         return RegistrationCreateModelRegistrationType.Cash;
-      case("paypal"):
+      case('paypal'):
         return RegistrationCreateModelRegistrationType.Paypal;
-      case("other"):
+      case('other'):
       default:
-        return RegistrationCreateModelRegistrationType.Other; 
+        return RegistrationCreateModelRegistrationType.Other;
     }
   }
 }

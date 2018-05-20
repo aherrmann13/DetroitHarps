@@ -3,7 +3,7 @@ import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { Client, PhotoGroupReadModel, API_BASE_URL } from '../../shared/client/api.client';
 
 @Component({
-  selector: 'site-photos',
+  selector: 'dh-photos',
   templateUrl: './photos.component.html',
   styleUrls: [ './photos.component.scss' ]
 })
@@ -20,7 +20,7 @@ export class PhotosComponent implements OnInit {
     );
   }
 
-  toPhotoUrl(id: number): string{
-    return this._baseUrl + "/Photo/Get/" + id;
+  toPhotoUrl(id: number): string {
+    return this._baseUrl + '/Photo/Get/' + id;
   }
 }

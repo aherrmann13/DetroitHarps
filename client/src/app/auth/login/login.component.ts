@@ -5,7 +5,7 @@ import { Client, ContactModel, UserCredentialsModel } from '../../shared/client/
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'auth-login',
+  selector: 'dh-login',
   templateUrl: './login.component.html',
   styleUrls: [ './login.component.scss' ]
 })
@@ -15,8 +15,8 @@ export class LoginComponent implements OnInit {
   email = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl('', [Validators.required]);
 
-  enableForm: boolean = true;
-  
+  enableForm = true;
+
   constructor(private _client: Client, private _router: Router) { }
   ngOnInit() {
   }
@@ -27,15 +27,15 @@ export class LoginComponent implements OnInit {
         '';
   }
 
-  isValidForm(){
+  isValidForm() {
     return !this.email.invalid &&
       !this.password.invalid &&
       this.enableForm;
   }
 
-  login(): void{
+  login(): void {
     this.enableForm = false;
-    var model = new UserCredentialsModel({
+    const model = new UserCredentialsModel({
       email: this.email.value,
       password: this.password.value
     });
@@ -45,13 +45,13 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  private onComplete(token: string){
-    localStorage.setItem("token", token);
+  private onComplete(token: string) {
+    localStorage.setItem('token', token);
     this.enableForm = true;
     this._router.navigate(['/admin']);
   }
 
-  private onError(error: any){
+  private onError(error: any) {
     // TODO message if 401
     console.log(error);
     this.enableForm = true;

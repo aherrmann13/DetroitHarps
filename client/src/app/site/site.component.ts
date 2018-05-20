@@ -8,7 +8,7 @@ import { DrawerComponent } from '../shared/layout/drawer/drawer.component';
 
 
 @Component({
-  selector: 'site-root',
+  selector: 'dh-site',
   templateUrl : './site.component.html',
   styleUrls: [ './site.component.scss' ]
 })
@@ -21,7 +21,7 @@ export class SiteComponent {
   shopUrl = 'https://www.oneills.com/shop-by-team/gaa/usa/detroit-harps-gaa.html';
   router = this._router;
 
-  drawerItems : DrawerItemModel[] = [
+  drawerItems: DrawerItemModel[] = [
       { text: 'Home', icon: 'home', path: '/' },
       { text: 'Schedule', icon: 'event', path: '/schedule' },
       { text: 'Contact', icon: 'chat', path: '/contact' },
@@ -32,7 +32,7 @@ export class SiteComponent {
 
 
   constructor(
-      private _mdIconRegistry: MatIconRegistry, 
+      private _mdIconRegistry: MatIconRegistry,
         private _sanitizer: DomSanitizer,
         private _router: Router) {
         _mdIconRegistry

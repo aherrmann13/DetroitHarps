@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'auth-root',
+  selector: 'dh-auth',
   templateUrl: './auth.component.html'
 })
 export class AuthComponent {

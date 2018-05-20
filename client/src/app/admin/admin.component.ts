@@ -3,7 +3,7 @@ import { DrawerItemModel } from '../shared/layout/drawer/drawer.item.model';
 import { DrawerComponent } from '../shared/layout/drawer/drawer.component';
 
 @Component({
-  selector: 'admin-root',
+  selector: 'dh-admin',
   templateUrl: './admin.component.html'
 })
 export class AdminComponent {
@@ -11,7 +11,7 @@ export class AdminComponent {
     @ViewChild(DrawerComponent) sidenav: DrawerComponent;
     title = 'Detroit Harps Admin';
 
-    drawerItems : DrawerItemModel[] = [
+    drawerItems: DrawerItemModel[] = [
         { text: 'Home', icon: 'home', path: '' },
         { text: 'Registration', icon: 'assignment', path: 'registration' }
       ];

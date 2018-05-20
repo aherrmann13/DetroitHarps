@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
-import { RouterModule } from '@angular/router'
+import { RouterModule } from '@angular/router';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MaterialModule } from '../material.module'
-import { DrawerComponent } from './drawer/drawer.component'
-import { ToolbarComponent } from './toolbar/toolbar.component'
+import { MaterialModule } from '../material.module';
+import { DrawerComponent } from './drawer/drawer.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +17,6 @@ import { ToolbarComponent } from './toolbar/toolbar.component'
   imports: [
     CommonModule,
     FormsModule,
-    HttpModule,
     HttpClientModule,
     MaterialModule,
     ReactiveFormsModule,

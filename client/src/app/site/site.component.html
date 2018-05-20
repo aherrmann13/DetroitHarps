@@ -1,4 +1,4 @@
-<app-toolbar [title]='title' (onMenuClick)='sidenav.toggle()'>
+<dh-toolbar [title]='title' (menuClick)='sidenav.toggle()'>
     <a mat-button class='toolbar-icon' href='{{facebookUrl}}'>
         <mat-icon svgIcon='facebook'></mat-icon>
     </a>
@@ -11,7 +11,7 @@
     <a mat-button class='toolbar-icon' href='{{shopUrl}}'>
         <mat-icon>shop</mat-icon>
     </a>
-</app-toolbar>
-<app-drawer [items]='drawerItems'>
+</dh-toolbar>
+<dh-drawer [items]='drawerItems'>
     <router-outlet></router-outlet>
-</app-drawer>
+</dh-drawer>

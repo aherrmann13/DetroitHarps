@@ -5,7 +5,7 @@ import { Client, ContactModel } from '../../shared/client/api.client';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'site-contact',
+  selector: 'dh-contact',
   templateUrl: './contact.component.html',
   styleUrls: [ ]
 })
@@ -16,8 +16,8 @@ export class ContactComponent implements OnInit {
   email = new FormControl('', [Validators.required, Validators.email]);
   message = new FormControl('', [Validators.required]);
 
-  enableForm: boolean = true;
-  
+  enableForm = true;
+
   constructor(private _client: Client, private _router: Router) { }
   ngOnInit() {
   }
@@ -28,16 +28,16 @@ export class ContactComponent implements OnInit {
             '';
   }
 
-  isValidForm(){
+  isValidForm() {
     return !this.name.invalid &&
       !this.email.invalid &&
       !this.message.invalid &&
       this.enableForm;
   }
 
-  send(): void{
+  send(): void {
     this.enableForm = false;
-    var model = new ContactModel({
+    const model = new ContactModel({
       email: this.email.value,
       name: this.name.value,
       message: this.name.value
@@ -48,10 +48,10 @@ export class ContactComponent implements OnInit {
     );
   }
 
-  private onComplete(){
+  private onComplete() {
     this.enableForm = true;
     this._router.navigate(['/']);
   }
-  
+
 
 }
