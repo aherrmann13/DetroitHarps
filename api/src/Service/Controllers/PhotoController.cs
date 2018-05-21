@@ -59,7 +59,7 @@ namespace Service.Controllers
 
             // TODO image/jpeg or other type saved in db
             // this needs to be tested by swagger client
-            return File(response.Photo, "image/jpeg");
+            return File(response.Data, "image/jpeg");
         }
     }
 }

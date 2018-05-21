@@ -4,6 +4,6 @@ namespace Business.Models
 
     public class PhotoCreateModel : PhotoModelBase
     {
-        public byte[] Photo { get; set; } 
+        public byte[] Data { get; set; } 
     }
 }

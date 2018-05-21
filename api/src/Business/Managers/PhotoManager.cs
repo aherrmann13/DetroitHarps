@@ -5,6 +5,7 @@ namespace Business.Managers
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Business.Interfaces;
     using Business.Models;
     using Microsoft.EntityFrameworkCore;
@@ -15,24 +16,21 @@ namespace Business.Managers
     public class PhotoManager : IPhotoManager
     {
         private readonly ApiDbContext _dbContext;
-        private int _currentYear;
 
         public PhotoManager(ApiDbContext dbContext)
         {
             Guard.NotNull(dbContext, nameof(dbContext));
 
             _dbContext = dbContext;
-            _currentYear = DateTime.Now.Year;
         }
 
         public int Create(PhotoCreateModel model)
         {
             Guard.NotNull(model, nameof(model));
             ValidatePhotoGroupExists(model.GroupId);
-
             // TODO : virus scan
             // for now, only one (known) user will be provided a login
-            var entity = CreateInternal(model);
+            var entity = Mapper.Map<Photo>(model);
             _dbContext.Add(entity);
             _dbContext.SaveChanges();
             
@@ -42,13 +40,15 @@ namespace Business.Managers
         public int Update(PhotoMetadataUpdateModel model)
         {
             Guard.NotNull(model, nameof(model));
-                       
-            var entity = _dbContext.Set<Photo>()
-                .First(x => x.Id.Equals(model.Id));
 
+            ValidatePhotoExists(model.Id);
             ValidatePhotoGroupExists(model.GroupId);
 
-            UpdateInternal(model, entity);
+            var entity = Mapper.Map<Photo>(model);
+            _dbContext.Update(entity);
+
+            // TODO : Photo bytes should be seperate table
+            _dbContext.Entry(entity).Property(x => x.Data).IsModified = false;
             _dbContext.SaveChanges();
 
             return model.Id;
@@ -56,11 +56,7 @@ namespace Business.Managers
 
         public int Delete(int id)
         {
-            var entity = _dbContext.Set<Photo>()
-                .First(x => x.Id.Equals(id));
-
-            _dbContext.Remove(entity);
-
+            _dbContext.Remove(_dbContext.Set<Photo>().First(x => x.Id.Equals(id)));
             _dbContext.SaveChanges();
 
             return id;
@@ -68,53 +64,28 @@ namespace Business.Managers
 
         public IEnumerable<PhotoMetadataReadModel> GetMetadata()=>
             _dbContext.Set<Photo>()
-                .Select(x => new PhotoMetadataReadModel
-                {
-                    Id = x.Id,
-                    Title = x.Title,
-                    GroupId = x.PhotoGroupId,
-                    SortOrder = x.SortOrder
-                });
+                .AsNoTracking()
+                .Select(Mapper.Map<PhotoMetadataReadModel>);
 
         public PhotoMetadataReadModel GetMetadata(int id) =>
             _dbContext.Set<Photo>()
-                .Select(x => new PhotoMetadataReadModel
-                {
-                    Id = x.Id,
-                    Title = x.Title,
-                    GroupId = x.PhotoGroupId,
-                    SortOrder = x.SortOrder
-                })
-                .First(x => x.Id.Equals(id));
+                .Where(x => x.Id.Equals(id))
+                .Select(Mapper.Map<PhotoMetadataReadModel>)
+                .First();
 
         public PhotoReadModel Get(int id) =>
             _dbContext.Set<Photo>()
                 .AsNoTracking()
-                .Select(x => new PhotoReadModel
-                {
-                    Id = x.Id,
-                    Title = x.Title,
-                    GroupId = x.PhotoGroupId,
-                    SortOrder = x.SortOrder,
-                    Photo = x.Data
-                })
-                .First(x => x.Id.Equals(id));
-            
-        private Photo CreateInternal(PhotoCreateModel model) =>
-            new Photo
-            {
-                PhotoGroupId = model.GroupId,
-                Title = model.Title,
-                SortOrder = model.SortOrder,
-                Data = model.Photo
-                
-            };
+                .Where(x => x.Id.Equals(id))
+                .Select(Mapper.Map<PhotoReadModel>)
+                .First();
 
-        private void UpdateInternal(PhotoMetadataUpdateModel model, Photo entity) 
+        private void ValidatePhotoExists(int id)
         {
-            entity.PhotoGroupId = model.GroupId;
-            entity.Title = model.Title;
-            entity.SortOrder = model.SortOrder;
+            if(!_dbContext.Set<Photo>().Any(x => x.Id.Equals(id)))
+            {
+                throw new InvalidOperationException($"Photo with id {id} does not exist");
+            }
         }
 
         private void ValidatePhotoGroupExists(int groupId)
