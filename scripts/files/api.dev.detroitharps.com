@@ -24,6 +24,4 @@ server {
     listen        80;
     server_name   api.dev.detroitharps.com;
     return 404; # managed by Certbot
-
-
 }
