@@ -152,7 +152,7 @@ namespace Business.Test
             {
                 FirstName = "firstname",
                 LastName = "lastname",
-                EmailAddress = "emailaddress",
+                Email = "emailaddress",
                 PhoneNumber = "phonenumber",
                 Address = "address",
                 Address2 = "address2",
@@ -266,7 +266,7 @@ namespace Business.Test
         private static bool IsEqual(RegistrationModelBase model, RegisteredPerson entity) =>
             model.FirstName.EqualOrdinal(entity.FirstName) &&
             model.LastName.EqualOrdinal(entity.LastName) &&
-            model.EmailAddress.EqualOrdinal(entity.Email) &&
+            model.Email.EqualOrdinal(entity.Email) &&
             model.PhoneNumber.EqualOrdinal(entity.PhoneNumber) &&
             model.Address.EqualOrdinal(entity.Address) &&
             model.Address2.EqualOrdinal(entity.Address2) &&
@@ -332,7 +332,7 @@ namespace Business.Test
         private static string GenerateRegistrationEmailBodyForParent(RegistrationCreateModel model) =>
             $"First Name: {model.FirstName}{Environment.NewLine}"+
             $"Last Name: {model.LastName}{Environment.NewLine}"+
-            $"EmailAddress: {model.EmailAddress}{Environment.NewLine}"+
+            $"EmailAddress: {model.Email}{Environment.NewLine}"+
             $"PhoneNumber: {model.PhoneNumber}{Environment.NewLine}"+
             $"Address: {model.Address}{Environment.NewLine}"+
             $"Address2: {model.Address2}{Environment.NewLine}"+

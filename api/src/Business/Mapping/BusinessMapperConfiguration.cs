@@ -9,6 +9,7 @@ namespace Business.Mapping
             cfg.AddProfile<EventProfile>();
             cfg.AddProfile<PhotoGroupProfile>();
             cfg.AddProfile<PhotoProfile>();
+            cfg.AddProfile<RegistrationProfile>();
         }
     }
 }

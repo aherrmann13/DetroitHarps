@@ -11,8 +11,6 @@ namespace Business.Models
 
         public IList<ChildInformationCreateModel> Children { get; set; }
 
-        public string StripeToken { get; set; }
-
         public string Comments { get; set; }
 
         public RegistrationType RegistrationType { get; set;  }
