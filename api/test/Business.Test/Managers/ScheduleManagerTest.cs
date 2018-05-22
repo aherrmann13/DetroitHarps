@@ -159,7 +159,7 @@ namespace Business.Test
         private static void AssertEqual<T>(T model, Event entity)
             where T : EventModelBase
         {
-            Assert.Equal(model.Date.Date, entity.Date);
+            Assert.Equal(model.Date.Date, entity.Date.Date);
             Assert.Equal(model.Description, entity.Description);
             Assert.Equal(model.Title, entity.Title);
         }

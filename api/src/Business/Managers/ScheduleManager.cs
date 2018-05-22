@@ -1,8 +1,10 @@
 namespace Business.Managers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Business.Interfaces;
     using Business.Models;
     using Microsoft.EntityFrameworkCore;
@@ -23,8 +25,8 @@ namespace Business.Managers
         public int Create(EventCreateModel model)
         {
             Guard.NotNull(model, nameof(model));
-            var entity = CreateInternal(model);
-
+            
+            var entity = Mapper.Map<Event>(model);
             _dbContext.Add(entity);
             _dbContext.SaveChanges();
 
@@ -35,11 +37,10 @@ namespace Business.Managers
         {
             Guard.NotNull(model, nameof(model));
             
-            var entity = _dbContext.Set<Event>()
-                .First(x => x.Id.Equals(model.Id));
+            ValidateEventExists(model.Id);
 
-            UpdateInternal(model, entity);
-
+            var entity = Mapper.Map<Event>(model);
+            _dbContext.Update(entity);
             _dbContext.SaveChanges();
 
             return entity.Id;
@@ -51,7 +52,6 @@ namespace Business.Managers
                 .First(x => x.Id.Equals(id));
 
             _dbContext.Remove(entity);
-
             _dbContext.SaveChanges();
 
             return entity.Id;
@@ -60,42 +60,20 @@ namespace Business.Managers
         public IEnumerable<EventReadModel> GetAll() =>
             _dbContext.Set<Event>()
                 .AsNoTracking()
-                .Select(x => new EventReadModel
-                {
-                    Id = x.Id,
-                    Date = x.Date,
-                    Title = x.Title,
-                    Description = x.Description
-                });
+                .Select(Mapper.Map<EventReadModel>);
         
-
         public EventReadModel Get(int id) =>
             _dbContext.Set<Event>()
                 .AsNoTracking()
-                .Select(x => new EventReadModel
-                {
-                    Id = x.Id,
-                    Date = x.Date,
-                    Title = x.Title,
-                    Description = x.Description
-                })
+                .Select(Mapper.Map<EventReadModel>)
                 .First(x => x.Id.Equals(id));
 
-        private Event CreateInternal(EventCreateModel model) =>
-            new Event
-            {
-                Date = model.Date.Date,
-                Title = model.Title,
-                Description = model.Description,
-            };
-
-        private Event UpdateInternal(EventUpdateModel model, Event entity)
+        private void ValidateEventExists(int id)
         {
-            entity.Date = model.Date.Date;
-            entity.Title = model.Title;
-            entity.Description = model.Description;
-
-            return entity;
+            if(!_dbContext.Set<Event>().Any(x => x.Id.Equals(id)))
+            {
+                throw new InvalidOperationException($"Event with id {id} does not exist");
+            }
         }
     }
 }
