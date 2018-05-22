@@ -1,8 +1,10 @@
 ﻿namespace Service
 {
     using System.Linq;
+    using AutoMapper;
     using Business.Interfaces;
     using Business.Managers;
+    using Business.Mapping;
     using Business.Models;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
