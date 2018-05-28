@@ -3,7 +3,7 @@ namespace Business.Managers
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using AutoMapper;
+    using System.Threading.Tasks;
     using Business.Interfaces;
     using Business.Models;
     using Microsoft.EntityFrameworkCore;
@@ -26,7 +26,8 @@ namespace Business.Managers
         {
             Guard.NotNull(model, nameof(model));
 
-            var entity = Mapper.Map<PhotoGroupCreateModel, PhotoGroup>(model);
+            var entity = CreateInternal(model);
+
             _dbContext.Add(entity);
             _dbContext.SaveChanges();
 
@@ -37,10 +38,10 @@ namespace Business.Managers
         {
             Guard.NotNull(model, nameof(model));
 
-            ValidateGroupExists(model.Id);
+            var entity = _dbContext.Set<PhotoGroup>()
+                .First(x => x.Id.Equals(model.Id));
 
-            var entity = Mapper.Map<PhotoGroup>(model);
-            _dbContext.Update(entity);
+            UpdateInternal(model, entity);
             _dbContext.SaveChanges();
 
             return entity.Id;
@@ -54,6 +55,7 @@ namespace Business.Managers
             ValidateGroupContainsNoPhotos(id);
 
             _dbContext.Remove(entity);
+
             _dbContext.SaveChanges();
 
             return entity.Id;
@@ -62,28 +64,43 @@ namespace Business.Managers
         public IEnumerable<PhotoGroupReadModel> Get() =>
             _dbContext.Set<PhotoGroup>()
                 .AsNoTracking()
-                .Include(x => x.Photos)
-                .Select(Mapper.Map<PhotoGroupReadModel>);
+                .Select(x => new PhotoGroupReadModel
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        SortOrder = x.SortOrder,
+                        PhotoIds = x.Photos.Select(y => y.Id).ToList()
+                    });
 
         public PhotoGroupReadModel Get(int id) =>
             _dbContext.Set<PhotoGroup>()
                 .AsNoTracking()
-                .Include(x => x.Photos)
                 .Where(x => x.Id.Equals(id))
-                .Select(Mapper.Map<PhotoGroupReadModel>)
+                .Select(x => new PhotoGroupReadModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    SortOrder = x.SortOrder,
+                    PhotoIds = x.Photos.Select(y => y.Id).ToList()
+                })
                 .First();
 
-        private void ValidateGroupExists(int groupId)
-        {
-            if(!_dbContext.Set<PhotoGroup>().Any(x => x.Id.Equals(groupId)))
+        private PhotoGroup CreateInternal(PhotoGroupCreateModel model) =>
+            new PhotoGroup
             {
-                throw new InvalidOperationException($"Photo Group with id {groupId} does not exist");
-            }
+                Name = model.Name,
+                SortOrder = model.SortOrder
+            };
+        
+        private void UpdateInternal(PhotoGroupUpdateModel model, PhotoGroup entity) 
+        {
+            entity.Name = model.Name;
+            entity.SortOrder = model.SortOrder;
         }
 
         private void ValidateGroupContainsNoPhotos(int groupId)
         {
-            if(_dbContext.Set<Photo>().Any(x => x.PhotoGroupId.Equals(groupId)))
+            if(_dbContext.Set<Photo>().Any(x => x.PhotoGroupId.Equals(x.Id)))
             {
                 throw new InvalidOperationException($"Photo Group with id {groupId} has photos");
             }

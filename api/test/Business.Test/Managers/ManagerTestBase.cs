@@ -15,7 +15,6 @@ namespace Business.Test
     using Repository.Interfaces;
     using Xunit;
 
-    [Collection("AutoMapper")]
     public abstract class ManagerTestBase
     {
         protected IServiceProvider ServiceProvider { get; set; }
