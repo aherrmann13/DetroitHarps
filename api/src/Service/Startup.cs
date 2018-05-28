@@ -76,9 +76,6 @@
             services.AddSingleton(stripeManagerMock.Object);
 
             services.AddCustomJwtAuthentication(_configuration);
-
-            Mapper.Initialize(BusinessMapperConfiguration.Configure);
-            Mapper.Configuration.AssertConfigurationIsValid();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
