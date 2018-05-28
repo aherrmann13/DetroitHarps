@@ -23,7 +23,7 @@ import 'rxjs/add/observable/forkJoin';
 })
 export class RegistrationComponent implements OnInit {
   info: IRegistrationInformationModel[];
-  columnsToDisplay: string[] = ['parentName', 'childName', 'gender', 'dateOfBirth', 'shirtSize'];
+  columnsToDisplay: string[] = ['parentName', 'childName', 'emailAddress', 'gender', 'dateOfBirth', 'shirtSize'];
 
   constructor(private _client: Client, private _router: Router) { }
   ngOnInit() {
@@ -44,13 +44,11 @@ export class RegistrationComponent implements OnInit {
       return {
         parentName: parent.firstName + ' ' + parent.lastName,
         childName: x.firstName + ' ' + x.lastName,
+        emailAddress: parent.emailAddress,
         gender: x.gender,
         dateOfBirth: x.dateOfBirth,
         shirtSize: x.shirtSize
       };
     });
-
-    console.log(this.info);
   }
-
 }

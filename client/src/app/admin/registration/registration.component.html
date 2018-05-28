@@ -9,6 +9,11 @@
         <mat-cell *matCellDef='let child'> {{child.childName}} </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef='emailAddress'>
+        <mat-header-cell *matHeaderCellDef> EmailAddress </mat-header-cell>
+        <mat-cell *matCellDef='let child'> {{child.emailAddress}} </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef='gender'>
         <mat-header-cell *matHeaderCellDef> Gender </mat-header-cell>
         <mat-cell *matCellDef='let child'> {{child.gender}} </mat-cell>

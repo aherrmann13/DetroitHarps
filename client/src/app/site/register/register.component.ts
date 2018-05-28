@@ -109,8 +109,6 @@ export class RegisterComponent implements OnInit {
   private getRegistrationCreateModel(): RegistrationCreateModel {
     const registrationCreateModel: RegistrationCreateModel = new RegistrationCreateModel({
       children: this.getRegistrationCreateModelChildren(),
-      // TODO integrate stripe
-      stripeToken: '',
       registrationType: this.getRegistrationTypeEnum(),
       comments: this.fourthFormGroup.value.comments,
       firstName: this.firstFormGroup.value.parentFirstName,
