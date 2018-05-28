@@ -7,7 +7,6 @@ namespace Business.Mapping
         public static void Configure(IMapperConfigurationExpression cfg)
         {
             cfg.AddProfile<PhotoGroupProfile>();
-            cfg.AddProfile<PhotoProfile>();
         }
     }
 }

@@ -6,6 +6,6 @@ namespace Business.Models
     {
         public int Id { get; set; }
         
-        public byte[] Data { get; set; } 
+        public byte[] Photo { get; set; } 
     }
 }

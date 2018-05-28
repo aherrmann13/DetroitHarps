@@ -25,12 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Data/test.jpg">
+    <Content Include="Data/test.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="xunit.runner.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
 
 </Project>

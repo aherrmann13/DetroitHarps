@@ -215,7 +215,7 @@ namespace Business.Test
             Assert.Equal(model.Title, entity.Title);
             Assert.Equal(model.SortOrder, entity.SortOrder);
             Assert.Equal(model.GroupId, entity.PhotoGroupId);
-            Assert.Equal(model.Data, entity.Data);
+            Assert.Equal(model.Photo, entity.Data);
         }
 
         private static void AssertEqual(PhotoMetadataUpdateModel model, Photo entity)
@@ -240,7 +240,7 @@ namespace Business.Test
             Assert.Equal(model.Title, entity.Title);
             Assert.Equal(model.SortOrder, entity.SortOrder);
             Assert.Equal(model.GroupId, entity.PhotoGroupId);
-            Assert.Equal(model.Data, entity.Data);
+            Assert.Equal(model.Photo, entity.Data);
         }
         
         private static void AssertEqual(IList<PhotoMetadataReadModel> models, IList<Photo> entities)
@@ -260,7 +260,7 @@ namespace Business.Test
                 Title = "photo",
                 GroupId = _photoGroups.First().Id,
                 SortOrder = 1,
-                Data = GetTestPhotoByteArray()
+                Photo = GetTestPhotoByteArray()
             };
 
         private PhotoMetadataUpdateModel GetValidUpdateModel()
