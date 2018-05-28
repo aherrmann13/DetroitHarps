@@ -2,6 +2,11 @@ server {
     root /detroitharps/client;
     index index.html index.htm;
     server_name detroitharps.com www.detroitharps.com;
+
+    if ($host = www.dev.detroitharps.com) {
+        return 301 https://detroitharps.com$request_uri;
+    }
+
     location / {
         try_files $uri $uri/ /index.html;
     }
@@ -28,8 +33,4 @@ server {
     listen 80 default_server;
     server_name detroitharps.com www.detroitharps.com;
     return 404; # managed by Certbot
-
-
-
-
 }

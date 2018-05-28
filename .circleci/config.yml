@@ -21,11 +21,8 @@ jobs:
           name: Build
           command: dotnet build api/Api.sln
       - run:
-          name: Repository.Test
-          command: dotnet test api/test/Repository.Test/Repository.Test.csproj
-      - run:
-          name: Business.Test
-          command: dotnet test api/test/Business.Test/Business.Test.csproj
+          name: Test
+          command: scripts/dotnet-test.sh
       - run:
           name: Publish Repository.Migrator
           command: dotnet publish api/src/Repository.Migrator/Repository.Migrator.csproj -c RELEASE -o /root/project/publish/Repository.Migrator
