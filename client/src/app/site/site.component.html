@@ -1,0 +1,17 @@
+<dh-toolbar [title]='title' (menuClick)='sidenav.toggle()'>
+    <a mat-button class='toolbar-icon' href='{{facebookUrl}}'>
+        <mat-icon svgIcon='facebook'></mat-icon>
+    </a>
+    <a mat-button class='toolbar-icon' href='{{twitterUrl}}'>
+        <mat-icon svgIcon='twitter'></mat-icon>
+    </a>
+    <a mat-button class='toolbar-icon' href='{{instagramUrl}}'>
+        <mat-icon svgIcon='instagram'></mat-icon>
+    </a>
+    <a mat-button class='toolbar-icon' href='{{shopUrl}}'>
+        <mat-icon>shop</mat-icon>
+    </a>
+</dh-toolbar>
+<dh-drawer [items]='drawerItems'>
+    <router-outlet></router-outlet>
+</dh-drawer>
