@@ -10,7 +10,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Moq;
-    using Repository;
+    using DataAccess;
     using Service.Models;
     using Swashbuckle.AspNetCore.Swagger;
     using Tools;
@@ -44,10 +44,10 @@
             // TODO: add sql query logging
             services.AddDbContext<ApiDbContext>(ServiceLifetime.Scoped);
 
-            var repositoryOptions = _configuration.GetSection(nameof(RepositoryOptions)).Get<RepositoryOptions>();
+            var dataAccessOptions = _configuration.GetSection(nameof(DataAccessOptions)).Get<DataAccessOptions>();
             services.AddSingleton(x => 
                 new DbContextOptionsBuilder<ApiDbContext>()
-                    .UseNpgsql(repositoryOptions.ConnectionString)
+                    .UseNpgsql(dataAccessOptions.ConnectionString)
                     .Options);
 
             var contactManagerOptions = _configuration.GetSection(nameof(ContactManagerOptions)).Get<ContactManagerOptions>();

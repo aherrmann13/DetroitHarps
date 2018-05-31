@@ -9,8 +9,8 @@ namespace Business.Test
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Moq;
-    using Repository;
-    using Repository.Entities;
+    using DataAccess;
+    using DataAccess.Entities;
     using Tools;
     using Xunit;
 

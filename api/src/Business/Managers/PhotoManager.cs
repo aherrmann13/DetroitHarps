@@ -8,8 +8,8 @@ namespace Business.Managers
     using Business.Interfaces;
     using Business.Models;
     using Microsoft.EntityFrameworkCore;
-    using Repository;
-    using Repository.Entities;
+    using DataAccess;
+    using DataAccess.Entities;
     using Tools;
 
     public class PhotoManager : IPhotoManager

@@ -11,8 +11,8 @@ namespace Business.Test
     using Microsoft.AspNetCore.Cryptography.KeyDerivation;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using Repository;
-    using Repository.Entities;
+    using DataAccess;
+    using DataAccess.Entities;
     using Tools;
     using Xunit;
 

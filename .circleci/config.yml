@@ -24,11 +24,11 @@ jobs:
           name: Test
           command: scripts/dotnet-test.sh
       - run:
-          name: Publish Repository.Migrator
-          command: dotnet publish api/src/Repository.Migrator/Repository.Migrator.csproj -c RELEASE -o /root/project/publish/Repository.Migrator
+          name: Publish DataAccess.Migrator
+          command: dotnet publish api/src/DataAccess.Migrator/DataAccess.Migrator.csproj -c RELEASE -o /root/project/publish/DataAccess.Migrator
       - run:
-          name: Publish Repository.Dataloader
-          command: dotnet publish api/src/Repository.Dataloader/Repository.Dataloader.csproj -c RELEASE -o /root/project/publish/Repository.Dataloader
+          name: Publish DataAccess.Dataloader
+          command: dotnet publish api/src/DataAccess.Dataloader/DataAccess.Dataloader.csproj -c RELEASE -o /root/project/publish/DataAccess.Dataloader
       - run:
           name: Publish Service
           command: dotnet publish api/src/Service/Service.csproj -c RELEASE -o /root/project/publish/Service

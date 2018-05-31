@@ -32,8 +32,8 @@ fi
 mkdir -p /detroitharps/api
 mkdir -p /detroitharps/tools
 
-cp -r /deploy/api/Repository.Migrator /detroitharps/tools/
-cp -r /deploy/api/Repository.Dataloader /detroitharps/tools/
+cp -r /deploy/api/DataAccess.Migrator /detroitharps/tools/
+cp -r /deploy/api/DataAccess.Dataloader /detroitharps/tools/
 
 cp -r /deploy/api/Service /detroitharps/api/
 
@@ -43,7 +43,7 @@ if [ "$environment" = "dev" ]
 then
     echo "Deleting db..."
 
-    dotnet /detroitharps/tools/Repository.Migrator/Repository.Migrator.dll Delete
+    dotnet /detroitharps/tools/DataAccess.Migrator/DataAccess.Migrator.dll Delete
 fi
 
 if [ ! "$environment" = "dev" ]
@@ -54,25 +54,25 @@ then
         echo "appsettings.json not found!"
         exit 1
     fi
-    rm /detroitharps/tools/Repository.Migrator/appsettings*.json
-    rm /detroitharps/tools/Repository.Dataloader/appsettings*.json
+    rm /detroitharps/tools/DataAccess.Migrator/appsettings*.json
+    rm /detroitharps/tools/DataAccess.Dataloader/appsettings*.json
     rm /detroitharps/api/Service/appsettings*.json
 
-    cp /root/appsettings.json /detroitharps/tools/Repository.Migrator/
-    cp /root/appsettings.json /detroitharps/tools/Repository.Dataloader/
+    cp /root/appsettings.json /detroitharps/tools/DataAccess.Migrator/
+    cp /root/appsettings.json /detroitharps/tools/DataAccess.Dataloader/
     cp /root/appsettings.json /detroitharps/api/Service/
 fi
 
 
 echo "Migrating database..."
 
-dotnet /detroitharps/tools/Repository.Migrator/Repository.Migrator.dll Migrate
+dotnet /detroitharps/tools/DataAccess.Migrator/DataAccess.Migrator.dll Migrate
 
 if [ "$environment" = "dev" ]
 then
     echo "Running dataloader..."
 
-    dotnet /detroitharps/tools/Repository.Dataloader/Repository.Dataloader.dll
+    dotnet /detroitharps/tools/DataAccess.Dataloader/DataAccess.Dataloader.dll
 fi
 
 systemctl start detroitharps-api.service

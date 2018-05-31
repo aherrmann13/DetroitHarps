@@ -11,8 +11,8 @@ namespace Business.Test
     using Microsoft.EntityFrameworkCore.Diagnostics;
     using Microsoft.Extensions.DependencyInjection;
     using Moq;
-    using Repository;
-    using Repository.Interfaces;
+    using DataAccess;
+    using DataAccess.Interfaces;
     using Xunit;
 
     public abstract class ManagerTestBase
