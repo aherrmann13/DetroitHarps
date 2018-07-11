@@ -2,256 +2,149 @@ namespace Business.Test
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
-    using System.Reflection;
-    using Business.Interfaces;
+    using Business.Entities;
+    using Business.Abstractions;
+    using Business.Managers;
     using Business.Models;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.DependencyInjection;
-    using Repository;
-    using Repository.Entities;
-    using Tools;
+    using Moq;
     using Xunit;
 
-    public class PhotoGroupManagerTest : ManagerTestBase
+    [Collection("AutoMapper")]
+    public class PhotoGroupManagerTest
     {
-        private const string TestPhotoPath = "Data/test.jpg";
-
-        private readonly IPhotoGroupManager _manager;
-
-        public PhotoGroupManagerTest() : base()
+        private readonly Mock<IPhotoGroupRepository> _photoGroupRepositoryMock;
+        
+        public PhotoGroupManagerTest()
         {
-            _manager = ServiceProvider.GetRequiredService<IPhotoGroupManager>();
+            _photoGroupRepositoryMock = new Mock<IPhotoGroupRepository>();
         }
 
         [Fact]
-        public void CreateSuccessTest()
+        public void NullRepositoryInConstructorThrowsTestTest()
         {
-            var model = GetValidCreateModel();
-
-            var response = _manager.Create(model);
-
-            var entity = DbContext.Set<PhotoGroup>()
-                .AsNoTracking()
-                .First();
-
-            AssertEqual(model, entity);
-            Assert.Equal(response, entity.Id);
+            Assert.Throws<ArgumentNullException>(() => new PhotoGroupManager(null));
         }
 
         [Fact]
-        public void CreateNullModelExceptionTest()
+        public void CreateNullModelThrowsTest()
         {
-            Assert.Throws<ArgumentNullException>(() => _manager.Create(null));
+            var manager = GetManager();
 
-            var entity = DbContext.Set<Photo>()
-                .AsNoTracking()
-                .FirstOrDefault();
-
-            Assert.Null(entity);
+            Assert.Throws<ArgumentNullException>(() => manager.Create(null));  
         }
 
         [Fact]
-        public void UpdateSuccessTest()
+        public void CreateModelPassedToRepositoryTest()
         {
-            SeedPhotoGroups();
+            var manager = GetManager();
+            var model = new PhotoGroupCreateModel();
 
-            var model = GetValidUpdateModel();
+            manager.Create(model);
 
-            var response = _manager.Update(model);
-
-            var entity = DbContext.Set<PhotoGroup>()
-                .AsNoTracking()
-                .First(x => x.Id.Equals(model.Id));
-
-            AssertEqual(model, entity);
-            Assert.Equal(response, entity.Id);
+            _photoGroupRepositoryMock.Verify(
+                x => x.Create(It.Is<PhotoGroup>(y => y != null)),
+                Times.Once);
         }
 
         [Fact]
-        public void UpdateNullModelExceptionTest()
+        public void CreateReturnsIdTest()
         {
-            Assert.Throws<ArgumentNullException>(() => _manager.Create(null));
+            var id = 5;
+            _photoGroupRepositoryMock.Setup(x => x.Create(It.IsAny<PhotoGroup>()))
+                .Returns(id);
+            var manager = GetManager();
+            var model = new PhotoGroupCreateModel();
+
+            var idFromManager = manager.Create(model);
+
+            Assert.Equal(id, idFromManager);
         }
 
         [Fact]
-        public void UpdateIdDoesntExistExceptionTest()
+        public void UpdateNullModelThrowsTest()
         {
-            var entities = SeedPhotoGroups();
-            var model = GetValidUpdateModel();
-            model.Id = entities.Select(x => x.Id).Max() + 1;
-            
-            Assert.Throws<InvalidOperationException>(() => _manager.Update(model));
+            var manager = GetManager();
+
+            Assert.Throws<ArgumentNullException>(() => manager.Update(null));  
         }
 
         [Fact]
-        public void DeleteSuccessTest()
+        public void UpdateModelPassedToRepositoryTest()
         {
-            var entities = SeedPhotoGroups().ToList();
+            var manager = GetManager();
+            var model = new PhotoGroupModel();
 
-            var id = entities.First().Id;
+            manager.Update(model);
 
-            var relatedEntities = entities.First().Photos;
-            DbContext.RemoveRange(relatedEntities);
-            DbContext.SaveChanges();
-
-            var response = _manager.Delete(id);
-
-            var entity = DbContext.Set<PhotoGroup>()
-                .AsNoTracking()
-                .FirstOrDefault(x => x.Id.Equals(id));
-
-            Assert.Null(entity);
-            Assert.Equal(response, id);
+            _photoGroupRepositoryMock.Verify(
+                x => x.Update(It.Is<PhotoGroup>(y => y != null)),
+                Times.Once);
         }
 
         [Fact]
-        public void DeleteWithPhotosExceptionTest()
+        public void DeleteIdPassedToRepositoryTest()
         {
-            var entities = SeedPhotoGroups().ToList();
+            var manager = GetManager();
+            var id = 2;
 
-            var id = entities.First().Id;
+            manager.Delete(id);
 
-            Assert.Throws<InvalidOperationException>(() => _manager.Delete(id));
+            _photoGroupRepositoryMock.Verify(
+                x => x.Delete(It.Is<int>(y => y.Equals(id))),
+                Times.Once);
         }
 
         [Fact]
-        public void DeleteIdDoesntExistExceptionTest()
+        public void GetAllReturnsModelsTest()
         {
-            var entities = SeedPhotoGroups();
-            
-            var id = entities.Select(x => x.Id).Max() + 1;
-            
-            Assert.Throws<InvalidOperationException>(() => _manager.Delete(id));
-        }
-
-        [Fact]
-        public void GetAllTest()
-        {
-            SeedPhotoGroups();
-
-            var response = _manager.Get().ToList();
-
-            var entities  = DbContext.Set<PhotoGroup>()
-                .AsNoTracking()
-                .Include(x => x.Photos)
-                .ToList();
-
-            AssertEqual(response, entities);
-        }
-
-        [Fact]
-        public void GetTest()
-        {
-            var entities = SeedPhotoGroups();
-
-            var id = entities.First().Id;
-
-            var response = _manager.Get(id);
-
-            var entity  = DbContext.Set<PhotoGroup>()
-                .AsNoTracking()
-                .Include(x => x.Photos)
-                .First(x => x.Id.Equals(id));
-
-            AssertEqual(response, entity);
-        }
-
-        [Fact]
-        public void GetIdDoesntExistTest()
-        {
-            var entities = SeedPhotoGroups();
-
-            var id = entities.Select(x => x.Id).Max() + 1;
-
-            Assert.Throws<InvalidOperationException>(() => _manager.Get(id));
-        }
-
-        private static void AssertEqual(PhotoGroupCreateModel model, PhotoGroup entity)
-        {
-            Assert.Equal(model.Name, entity.Name);
-            Assert.Equal(model.SortOrder, entity.SortOrder);
-        }
-
-        private static void AssertEqual(PhotoGroupUpdateModel model, PhotoGroup entity)
-        {
-            Assert.Equal(model.Id, entity.Id);
-            Assert.Equal(model.Name, entity.Name);
-            Assert.Equal(model.SortOrder, entity.SortOrder);
-        }
-
-        private static void AssertEqual(PhotoGroupReadModel model, PhotoGroup entity)
-        {
-            Assert.Equal(model.Id, entity.Id);
-            Assert.Equal(model.Name, entity.Name);
-            Assert.Equal(model.SortOrder, entity.SortOrder);
-            Assert.Equal(
-                model.PhotoIds.OrderBy(x => x),
-                entity.Photos.Select(x => x.Id).OrderBy(x => x));
-        }
-
-        private static void AssertEqual(
-            IList<PhotoGroupReadModel> models,
-            IList<PhotoGroup> entities)
-        {
-            Assert.Equal(models.Count, entities.Count);
-            foreach(var model in models)
+            var models = new List<PhotoGroup>()
             {
-                var entity = entities.FirstOrDefault(x => x.Id.Equals(model.Id));
-
-                Assert.NotNull(entity);
-            }
-
-        }
-
-        private byte[] GetTestPhotoByteArray() =>
-            System.IO.File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), TestPhotoPath));
-
-        private PhotoGroupCreateModel GetValidCreateModel() =>
-            new PhotoGroupCreateModel
-            {
-                Name = Guid.NewGuid().ToString(),
-                SortOrder = 1
+                new PhotoGroup(),
+                new PhotoGroup()
             };
+            _photoGroupRepositoryMock.Setup(x => x.GetAll())
+                .Returns(models);
 
-        private PhotoGroupUpdateModel GetValidUpdateModel() =>
-            new PhotoGroupUpdateModel
-            {
-                Id = DbContext.Set<PhotoGroup>().Select(x => x.Id).First(),
-                Name = Guid.NewGuid().ToString(),
-                SortOrder = 10
-            };
+            var manager = GetManager();
 
-        private IEnumerable<PhotoGroup> SeedPhotoGroups()
-        {
-            var list = new List<PhotoGroup>();
-            for(var i = 0; i < 5; i++)
-            {
-                list.Add(new PhotoGroup
-                {
-                    Name = $"Group{i}",
-                    SortOrder = i,
-                    Photos = 
-                    {
-                        new Photo
-                        {
-                            Title = $"Group{i}-Photo1",
-                            SortOrder = 1
-                        },
-                        new Photo
-                        {
-                            Title = $"Group{i}-Photo2",
-                            SortOrder = 2
-                        }
-                    }
-                });
-            }
+            var modelsFromManager = manager.GetAll();
 
-            DbContext.AddRange(list);
-            DbContext.SaveChanges();
-
-            return list;
+            Assert.Equal(models.Count, modelsFromManager.Count());
+            Assert.All(modelsFromManager, x => Assert.NotNull(x));
         }
-    }
+
+        [Fact]
+        public void GetReturnsNullOnNoIdTest()
+        {
+            var manager = GetManager();
+
+            var modelFromManager = manager.Get(5);
+
+            Assert.Null(modelFromManager);
+        }
+
+        [Fact]
+        public void GetReturnsModelTest()
+        {
+            var id = 4;
+            _photoGroupRepositoryMock.Setup(
+                    x => x.GetSingleOrDefault(It.Is<int>(y => y.Equals(id))))
+                .Returns(new PhotoGroup());
+            var manager = GetManager();
+
+            var modelFromManager = manager.Get(id);
+
+            Assert.NotNull(modelFromManager);
+        }
+
+        [Fact]
+        public void NullRepositoryInConstructorThrowsTest()
+        {
+            Assert.Throws<ArgumentNullException>(() => new PhotoGroupManager(null));
+        }
+
+        private PhotoGroupManager GetManager() =>
+            new PhotoGroupManager(_photoGroupRepositoryMock.Object);
+    } 
 }

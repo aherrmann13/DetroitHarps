@@ -4,106 +4,58 @@ namespace Business.Managers
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Business.Interfaces;
+    using AutoMapper;
+    using Business.Entities;
+    using Business.Abstractions;
     using Business.Models;
     using Microsoft.EntityFrameworkCore;
-    using Repository;
-    using Repository.Entities;
     using Tools;
 
     public class PhotoGroupManager : IPhotoGroupManager
     {
-        private readonly ApiDbContext _dbContext;
+        private readonly IPhotoGroupRepository _photoGroupRepository;
 
-        public PhotoGroupManager(ApiDbContext dbContext)
+        public PhotoGroupManager(IPhotoGroupRepository photoGroupRepository)
         {
-            Guard.NotNull(dbContext, nameof(dbContext));
+            Guard.NotNull(photoGroupRepository, nameof(photoGroupRepository));
 
-            _dbContext = dbContext;
+            _photoGroupRepository = photoGroupRepository;
         }
 
         public int Create(PhotoGroupCreateModel model)
         {
             Guard.NotNull(model, nameof(model));
 
-            var entity = CreateInternal(model);
+            var entity = Mapper.Map<PhotoGroup>(model);
 
-            _dbContext.Add(entity);
-            _dbContext.SaveChanges();
+            var id = _photoGroupRepository.Create(entity);
 
-            return entity.Id;
+            return id;
         }
 
-        public int Update(PhotoGroupUpdateModel model)
+        public void Update(PhotoGroupModel model)
         {
             Guard.NotNull(model, nameof(model));
 
-            var entity = _dbContext.Set<PhotoGroup>()
-                .First(x => x.Id.Equals(model.Id));
+            var entity = Mapper.Map<PhotoGroup>(model);
 
-            UpdateInternal(model, entity);
-            _dbContext.SaveChanges();
-
-            return entity.Id;
+            _photoGroupRepository.Update(entity);
         }
 
-        public int Delete(int id)
+        public void Delete(int id)
         {
-            var entity = _dbContext.Set<PhotoGroup>()
-                .First(x => x.Id.Equals(id));
-
-            ValidateGroupContainsNoPhotos(id);
-
-            _dbContext.Remove(entity);
-
-            _dbContext.SaveChanges();
-
-            return entity.Id;
+            _photoGroupRepository.Delete(id);
         }
 
-        public IEnumerable<PhotoGroupReadModel> Get() =>
-            _dbContext.Set<PhotoGroup>()
-                .AsNoTracking()
-                .Select(x => new PhotoGroupReadModel
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        SortOrder = x.SortOrder,
-                        PhotoIds = x.Photos.Select(y => y.Id).ToList()
-                    });
+        public IEnumerable<PhotoGroupModel> GetAll() =>
+            _photoGroupRepository.GetAll()
+                .Select(Mapper.Map<PhotoGroupModel>);
 
-        public PhotoGroupReadModel Get(int id) =>
-            _dbContext.Set<PhotoGroup>()
-                .AsNoTracking()
-                .Where(x => x.Id.Equals(id))
-                .Select(x => new PhotoGroupReadModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    SortOrder = x.SortOrder,
-                    PhotoIds = x.Photos.Select(y => y.Id).ToList()
-                })
-                .First();
-
-        private PhotoGroup CreateInternal(PhotoGroupCreateModel model) =>
-            new PhotoGroup
-            {
-                Name = model.Name,
-                SortOrder = model.SortOrder
-            };
-        
-        private void UpdateInternal(PhotoGroupUpdateModel model, PhotoGroup entity) 
+        public PhotoGroupModel Get(int id)
         {
-            entity.Name = model.Name;
-            entity.SortOrder = model.SortOrder;
-        }
+            var entity =_photoGroupRepository.GetSingleOrDefault(id);
 
-        private void ValidateGroupContainsNoPhotos(int groupId)
-        {
-            if(_dbContext.Set<Photo>().Any(x => x.PhotoGroupId.Equals(x.Id)))
-            {
-                throw new InvalidOperationException($"Photo Group with id {groupId} has photos");
-            }
+            return entity == null ? null : Mapper.Map<PhotoGroupModel>(entity);
         }
     }
 }

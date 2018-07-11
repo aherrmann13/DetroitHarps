@@ -1,44 +1,45 @@
 namespace Business.Managers
 {
-    using System;
-    using System.Net;
-    using System.Net.Mail;
-    using Business.Interfaces;
+    using System.Text;
+    using Business.Abstractions;
     using Business.Models;
-    using Stripe;
     using Tools;
 
     public class ContactManager : IContactManager
     {
-        private readonly ContactManagerOptions _contactManagerOptions;
+        private readonly IEmailSender _emailSender;
 
-        public ContactManager(ContactManagerOptions contactManagerOptions)
+        public ContactManager(IEmailSender emailSender)
         {
-            Guard.NotNull(contactManagerOptions, nameof(contactManagerOptions));
+            Guard.NotNull(emailSender, nameof(emailSender));
 
-            _contactManagerOptions = contactManagerOptions;
+            _emailSender = emailSender;
         }
 
         public void Contact(ContactModel model)
         {
             Guard.NotNull(model, nameof(model));
 
-            var message = $"Message from: {model.Name}{Environment.NewLine}" +
-                          $"Email Address: {model.Email}{Environment.NewLine}" +
-                          $"Body:{Environment.NewLine}" +
-                          $"{model.Message}{Environment.NewLine}";          
-            Contact($"Message from {model.Name}", message);
+            var subject = FormatSubject(model);
+            var body = FormatBody(model);
+            _emailSender.SendToSelf(subject, body);
         }
 
-        public void Contact(string subject, string message)
+        private string FormatSubject(ContactModel model)
         {
-            var client = new SmtpClient("smtp.gmail.com", 587)
-            {
-                Credentials = new NetworkCredential(_contactManagerOptions.FromEmail, _contactManagerOptions.Password),
-                EnableSsl = true
-            };
-       
-            client.Send(_contactManagerOptions.FromEmail, _contactManagerOptions.ToEmail, subject, message);
+            return $"Message from {model.Name}";
+        }
+
+        private string FormatBody(ContactModel model)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine($"Name: {model.Name}");
+            sb.AppendLine($"Email: {model.Email}");
+            sb.AppendLine($"Body:");
+            sb.Append(model.Body);
+
+            return sb.ToString();
         }
     }
 }

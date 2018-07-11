@@ -1,101 +1,71 @@
 namespace Business.Managers
 {
+    using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Business.Interfaces;
+    using AutoMapper;
+    using Business.Entities;
+    using Business.Abstractions;
     using Business.Models;
     using Microsoft.EntityFrameworkCore;
-    using Repository;
-    using Repository.Entities;
     using Tools;
 
     public class ScheduleManager : IScheduleManager
     {
-        private readonly ApiDbContext _dbContext;
-        public ScheduleManager(ApiDbContext dbContext)
-        {
-            Guard.NotNull(dbContext, nameof(dbContext));
+        private readonly IEventRepository _eventRepository;
 
-            _dbContext = dbContext;
+        public ScheduleManager(IEventRepository eventRepository)
+        {
+            Guard.NotNull(eventRepository, nameof(eventRepository));
+
+            _eventRepository = eventRepository;
         }
 
         public int Create(EventCreateModel model)
         {
             Guard.NotNull(model, nameof(model));
-            var entity = CreateInternal(model);
 
-            _dbContext.Add(entity);
-            _dbContext.SaveChanges();
+            var entity = Mapper.Map<Event>(model);
 
-            return entity.Id;
+            var id = _eventRepository.Create(entity);
+
+            return id;
         }
 
-        public int Update(EventUpdateModel model)
+        public void Update(EventModel model)
         {
             Guard.NotNull(model, nameof(model));
-            
-            var entity = _dbContext.Set<Event>()
-                .First(x => x.Id.Equals(model.Id));
 
-            UpdateInternal(model, entity);
+            var entity = Mapper.Map<Event>(model);
 
-            _dbContext.SaveChanges();
-
-            return entity.Id;
+            _eventRepository.Update(entity);
         }
 
-        public int Delete(int id)
+        public void Delete(int id)
         {
-            var entity = _dbContext.Set<Event>()
-                .First(x => x.Id.Equals(id));
-
-            _dbContext.Remove(entity);
-
-            _dbContext.SaveChanges();
-
-            return entity.Id;
+            _eventRepository.Delete(id);
         }
 
-        public IEnumerable<EventReadModel> GetAll() =>
-            _dbContext.Set<Event>()
-                .AsNoTracking()
-                .Select(x => new EventReadModel
-                {
-                    Id = x.Id,
-                    Date = x.Date,
-                    Title = x.Title,
-                    Description = x.Description
-                });
-        
+        public IEnumerable<EventModel> GetAll() =>
+            _eventRepository.GetAll()
+                .Select(Mapper.Map<EventModel>);
 
-        public EventReadModel Get(int id) =>
-            _dbContext.Set<Event>()
-                .AsNoTracking()
-                .Select(x => new EventReadModel
-                {
-                    Id = x.Id,
-                    Date = x.Date,
-                    Title = x.Title,
-                    Description = x.Description
-                })
-                .First(x => x.Id.Equals(id));
+        public IEnumerable<EventModel> GetUpcoming(DateTime? untilDate = null)
+        {
+            var entities = _eventRepository.GetMany(
+                x => x.Date >= DateTime.Now.ToUniversalTime().Date)?
+                .Select(Mapper.Map<EventModel>);
 
-        private Event CreateInternal(EventCreateModel model) =>
-            new Event
+            if(untilDate != null)
             {
-                Date = model.Date.Date,
-                Title = model.Title,
-                Description = model.Description,
-            };
-
-        private Event UpdateInternal(EventUpdateModel model, Event entity)
-        {
-            entity.Date = model.Date.Date;
-            entity.Title = model.Title;
-            entity.Description = model.Description;
-
-            return entity;
+                return entities.Where(x => x.Date <= untilDate);
+            }
+            else
+            {
+                return entities;
+            }
         }
     }
 }

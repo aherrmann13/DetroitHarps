@@ -3,219 +3,197 @@ namespace Business.Test
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
-    using Business.Interfaces;
+    using System.Linq.Expressions;
+    using Business.Entities;
+    using Business.Abstractions;
+    using Business.Managers;
     using Business.Models;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.DependencyInjection;
-    using Repository;
-    using Repository.Entities;
-    using Tools;
+    using Moq;
     using Xunit;
 
-    public class ScheduleManagerTest : ManagerTestBase
+    [Collection("AutoMapper")]
+    public class ScheduleManagerTest
     {
-        private readonly IScheduleManager _manager;
-
-        public ScheduleManagerTest() : base()
+        private readonly Mock<IEventRepository> _eventRepositoryMock;
+        
+        public ScheduleManagerTest()
         {
-            _manager = ServiceProvider.GetRequiredService<IScheduleManager>();
+            _eventRepositoryMock = new Mock<IEventRepository>();
         }
 
         [Fact]
-        public void CreateSuccessTest()
+        public void NullRepositoryInConstructorThrowsTestTest()
         {
-            var model = GetValidCreateModel();
-
-            var response = _manager.Create(model);
-
-            var entity = DbContext.Set<Event>()
-                .AsNoTracking()
-                .First();
-
-            AssertEqual(model, entity);
-            Assert.Equal(response, entity.Id);
+            Assert.Throws<ArgumentNullException>(() => new ScheduleManager(null));
         }
 
         [Fact]
-        public void CreateNullInputTest()
+        public void CreateNullModelThrowsTest()
         {
-            Assert.Throws<ArgumentNullException>(() => _manager.Create(null));
+            var manager = GetManager();
+
+            Assert.Throws<ArgumentNullException>(() => manager.Create(null));  
         }
 
         [Fact]
-        public void UpdateSuccessTest()
+        public void CreateModelPassedToRepositoryTest()
         {
-            var entities = SeedEvents();
+            var manager = GetManager();
+            var model = new EventCreateModel();
 
-            var model = GetValidUpdateModel();
+            manager.Create(model);
 
-            var response = _manager.Update(model);
-
-            var entity = DbContext.Set<Event>()
-                .AsNoTracking()
-                .First(x => x.Id.Equals(model.Id));
-
-            AssertEqual(model, entity);
-            Assert.Equal(response, entity.Id);
+            _eventRepositoryMock.Verify(
+                x => x.Create(It.Is<Event>(y => y != null)),
+                Times.Once);
         }
 
         [Fact]
-        public void UpdateIdDoesntExistExceptionTest()
+        public void CreateReturnsIdTest()
         {
-            var entities = SeedEvents();
+            var id = 5;
+            _eventRepositoryMock.Setup(x => x.Create(It.IsAny<Event>()))
+                .Returns(id);
+            var manager = GetManager();
+            var model = new EventCreateModel();
 
-            var model = GetValidUpdateModel();
-            model.Id = GetNonExistantId<Event>();
+            var idFromManager = manager.Create(model);
 
-            Assert.Throws<InvalidOperationException>(() => _manager.Update(model));
+            Assert.Equal(id, idFromManager);
         }
 
         [Fact]
-        public void UpdateNullModelTest()
+        public void UpdateNullModelThrowsTest()
         {
-            Assert.Throws<ArgumentNullException>(() => _manager.Update(null));
+            var manager = GetManager();
+
+            Assert.Throws<ArgumentNullException>(() => manager.Update(null));  
         }
 
         [Fact]
-        public void DeleteSuccess()
+        public void UpdateModelPassedToRepositoryTest()
         {
-            var seededEntities = SeedEvents().ToList();
+            var manager = GetManager();
+            var model = new EventModel();
 
-            var id = seededEntities.First().Id;
+            manager.Update(model);
 
-            var response = _manager.Delete(id);
-
-            var entities = DbContext.Set<Event>()
-                .AsNoTracking()
-                .ToList();
-
-            Assert.Equal(seededEntities.Count - 1, entities.Count);
-            Assert.Null(entities.FirstOrDefault(x => x.Id.Equals(id)));
-            Assert.Equal(response, id);
+            _eventRepositoryMock.Verify(
+                x => x.Update(It.Is<Event>(y => y != null)),
+                Times.Once);
         }
 
         [Fact]
-        public void DeleteIdDoesntExistExceptionTest()
+        public void DeleteIdPassedToRepositoryTest()
         {
-            var id = GetNonExistantId<Event>();
-            Assert.Throws<InvalidOperationException>(() => _manager.Delete(id));
+            var manager = GetManager();
+            var id = 2;
+
+            manager.Delete(id);
+
+            _eventRepositoryMock.Verify(
+                x => x.Delete(It.Is<int>(y => y.Equals(id))),
+                Times.Once);
         }
 
         [Fact]
-        public void GetAllSuccessTest()
+        public void GetAllReturnsModelsTest()
         {
-            var entities = SeedEvents();
-
-            var response = _manager.GetAll();
-
-            AssertEqual(response, entities);
-        }
-
-        [Fact]
-        public void GetSuccessTest()
-        {
-            var entities = SeedEvents();
-            var id = entities.Select(x => x.Id).First();
-
-            var response = _manager.Get(id);
-
-            var entity = DbContext.Set<Event>()
-                .AsNoTracking()
-                .First(x => x.Id.Equals(id));
-
-            AssertEqual(response, entity);
-        }
-
-        [Fact]
-        public void GetIdDoesntExistExceptionTest()
-        {
-            var id = GetNonExistantId<Event>();
-            Assert.Throws<InvalidOperationException>(() => _manager.Get(id));
-        }
-
-        private static EventCreateModel GetValidCreateModel() =>
-            new EventCreateModel
+            var models = new List<Event>()
             {
-                Date = DateTimeOffset.Now.AddDays(-2),
-                Title = $"title",
-                Description = $"description"
+                new Event(),
+                new Event()
             };
+            _eventRepositoryMock.Setup(x => x.GetAll())
+                .Returns(models);
 
-        private EventUpdateModel GetValidUpdateModel()
+            var manager = GetManager();
+
+            var modelsFromManager = manager.GetAll();
+
+            Assert.Equal(models.Count, modelsFromManager.Count());
+            Assert.All(modelsFromManager, x => Assert.NotNull(x));
+        }
+
+        [Fact]
+        public void CurrentDatePassedIntoFilterExpressionTest()
         {
-            var entity = DbContext.Set<Event>().AsNoTracking().First();
+            var manager = GetManager();
+            var expectedExpression = 
 
-            return new EventUpdateModel
+            manager.GetUpcoming();
+
+            _eventRepositoryMock.Verify(
+                x => x.GetMany(It.Is<Expression<Func<Event, bool>>>(y => VerifyExpression(y))),
+                Times.Once);
+        }
+
+        [Fact]
+        public void GetUpcomingDoesNotFilterOnNullEndDateTest()
+        {
+            var models = new List<Event>()
             {
-                Id = entity.Id,
-                Date = DateTimeOffset.Now.AddDays(-2),
-                Title = Guid.NewGuid().ToString(),
-                Description = Guid.NewGuid().ToString()
+                new Event(),
+                new Event()
             };
-        }
-            
+            _eventRepositoryMock.Setup(x => x.GetMany(It.IsAny<Expression<Func<Event, bool>>>()))
+                .Returns(models);
 
-        private static void AssertEqual<T>(T model, Event entity)
-            where T : EventModelBase
-        {
-            Assert.Equal(model.Date.Date, entity.Date);
-            Assert.Equal(model.Description, entity.Description);
-            Assert.Equal(model.Title, entity.Title);
-        }
+            var manager = GetManager();
 
-        private static void AssertEqual(EventUpdateModel model, Event entity)
-        {
-            Assert.Equal(model.Id, entity.Id);
-            AssertEqual<EventModelBase>(model, entity);
+            var modelsFromManager = manager.GetUpcoming();
+
+            Assert.Equal(models.Count, modelsFromManager.Count());
+            Assert.All(modelsFromManager, x => Assert.NotNull(x));
         }
 
-        private static void AssertEqual(EventReadModel model, Event entity)
+        [Fact]
+        public void GetUpcomingFiltersOnEndDateTest()
         {
-            Assert.Equal(model.Id, entity.Id);
-            AssertEqual<EventModelBase>(model, entity);
-        }
-
-        private static void AssertEqual(IEnumerable<EventReadModel> models, IEnumerable<Event> entities)
-        {
-            Assert.Equal(models.Count(), entities.Count());
-
-            // TODO : ForEach on IEnumerable in tools
-            foreach(var model in models)
+            var date = DateTime.Now;
+            var models = new List<Event>()
             {
-                var entity = entities.FirstOrDefault(x => x.Id.Equals(model.Id));
+                new Event
+                {
+                    Date = date.AddDays(1)
+                },
+                new Event
+                {
+                    Date = date
+                },
+                new Event
+                {
+                    Date = date.AddDays(-1)
+                },
+            };
+            _eventRepositoryMock.Setup(x => x.GetMany(It.IsAny<Expression<Func<Event, bool>>>()))
+                .Returns(models);
 
-                Assert.NotNull(entity);
+            var manager = GetManager();
 
-                Assert.True(IsEqual(model, entity));
-            }
+            var modelsFromManager = manager.GetUpcoming(date);
+
+            Assert.Equal(models.Count - 1, modelsFromManager.Count());
+            Assert.All(modelsFromManager, x => Assert.NotNull(x));
         }
 
-        private static bool IsEqual(EventModelBase model, Event entity)
+        [Fact]
+        public void NullRepositoryInConstructorThrowsTest()
         {
-            return model.Date.Date.Equals(entity.Date) && 
-                    model.Title.EqualOrdinal(entity.Title) && 
-                    model.Description.EqualOrdinal(entity.Description);
+            Assert.Throws<ArgumentNullException>(() => new ScheduleManager(null));
         }
 
-        private IEnumerable<Event> SeedEvents()
+        private bool VerifyExpression(Expression<Func<Event, bool>> expr)
         {
-            var eventList = new List<Event>();
-            for(var i = 0; i < 5; i ++)
-            {
-               var entity = new Event
-               {
-                    Date = DateTimeOffset.Now.AddDays(i * -1).Date,
-                    Title = $"title{i}",
-                    Description = $"description{i}"
-               };
+            // TODO : this feels like a hack
+            var func = expr.Compile();
+            Assert.True(func.Invoke(new Event { Date = DateTime.Now.ToUniversalTime().Date}));
+            Assert.False(func.Invoke(new Event { Date = DateTime.Now.ToUniversalTime().Date.AddDays(-1)}));
 
-               eventList.Add(entity);
-            }
-            DbContext.AddRange(eventList);
-            DbContext.SaveChanges();
-
-            return eventList;
+            return true;
         }
-    }
+
+        private ScheduleManager GetManager() =>
+            new ScheduleManager(_eventRepositoryMock.Object);
+    } 
 }

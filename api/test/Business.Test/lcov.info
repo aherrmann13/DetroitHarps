@@ -1,0 +1,981 @@
+SF:/home/adam/code/DetroitHarps/api/src/Tools/LinqExtensions.cs
+FN:17,System.Boolean System.Linq.LinqExtensions/<ForEach>d__0`1::MoveNext()
+FNDA:6,System.Boolean System.Linq.LinqExtensions/<ForEach>d__0`1::MoveNext()
+DA:18,6
+DA:19,6
+DA:20,6
+DA:22,42
+BRDA:22,1,1,42
+DA:23,12
+DA:24,12
+DA:25,12
+DA:26,12
+DA:27,6
+LH:9
+LF:9
+BRF:1
+BRH:1
+FNF:1
+FNH:1
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Tools/Compare.cs
+FN:15,System.Boolean Tools.Compare::EqualOrdinal(System.String,System.String)
+FNDA:0,System.Boolean Tools.Compare::EqualOrdinal(System.String,System.String)
+DA:16,0
+DA:17,0
+DA:18,0
+FN:28,System.Boolean Tools.Compare::EqualOrdinalIgnore(System.String,System.String)
+FNDA:2,System.Boolean Tools.Compare::EqualOrdinalIgnore(System.String,System.String)
+DA:29,2
+DA:30,2
+DA:31,2
+BRDA:31,2,2,2
+LH:12
+LF:15
+BRF:2
+BRH:2
+FNF:3
+FNH:2
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Tools/Guard.cs
+FN:14,System.Void Tools.Guard::NotNull(System.Object,System.String)
+FNDA:91,System.Void Tools.Guard::NotNull(System.Object,System.String)
+DA:15,91
+DA:16,91
+DA:17,18
+DA:18,18
+DA:20,73
+BRDA:20,3,3,73
+FN:29,System.Void Tools.Guard::NotNullOrWhiteSpace(System.String,System.String)
+FNDA:0,System.Void Tools.Guard::NotNullOrWhiteSpace(System.String,System.String)
+DA:30,0
+DA:31,0
+DA:32,0
+DA:33,0
+DA:35,0
+LH:17
+LF:25
+BRF:3
+BRH:3
+FNF:5
+FNH:4
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Models/ContactModel.cs
+FN:6,System.String Business.Models.ContactModel::get_Name()
+FNDA:8,System.String Business.Models.ContactModel::get_Name()
+DA:7,8
+FN:7,System.String Business.Models.ContactModel::get_Email()
+FNDA:5,System.String Business.Models.ContactModel::get_Email()
+DA:8,5
+FN:8,System.String Business.Models.ContactModel::get_Body()
+FNDA:5,System.String Business.Models.ContactModel::get_Body()
+DA:9,5
+LH:20
+LF:28
+BRF:3
+BRH:3
+FNF:8
+FNH:7
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Models/EventCreateModel.cs
+FN:6,System.DateTime Business.Models.EventCreateModel::get_Date()
+FNDA:5,System.DateTime Business.Models.EventCreateModel::get_Date()
+DA:7,5
+FN:7,System.String Business.Models.EventCreateModel::get_Title()
+FNDA:5,System.String Business.Models.EventCreateModel::get_Title()
+DA:8,5
+FN:8,System.String Business.Models.EventCreateModel::get_Description()
+FNDA:5,System.String Business.Models.EventCreateModel::get_Description()
+DA:9,5
+LH:23
+LF:31
+BRF:3
+BRH:3
+FNF:11
+FNH:10
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Models/EventModel.cs
+FN:6,System.Int32 Business.Models.EventModel::get_Id()
+FNDA:20,System.Int32 Business.Models.EventModel::get_Id()
+DA:7,20
+FN:7,System.DateTime Business.Models.EventModel::get_Date()
+FNDA:26,System.DateTime Business.Models.EventModel::get_Date()
+DA:8,26
+FN:8,System.String Business.Models.EventModel::get_Title()
+FNDA:20,System.String Business.Models.EventModel::get_Title()
+DA:9,20
+FN:9,System.String Business.Models.EventModel::get_Description()
+FNDA:20,System.String Business.Models.EventModel::get_Description()
+DA:10,20
+LH:27
+LF:35
+BRF:3
+BRH:3
+FNF:15
+FNH:14
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Models/PhotoCreateModel.cs
+FN:6,System.String Business.Models.PhotoCreateModel::get_Title()
+FNDA:7,System.String Business.Models.PhotoCreateModel::get_Title()
+DA:7,7
+FN:7,System.Int32 Business.Models.PhotoCreateModel::get_SortOrder()
+FNDA:7,System.Int32 Business.Models.PhotoCreateModel::get_SortOrder()
+DA:8,7
+FN:8,System.Int32 Business.Models.PhotoCreateModel::get_PhotoGroupId()
+FNDA:7,System.Int32 Business.Models.PhotoCreateModel::get_PhotoGroupId()
+DA:9,7
+FN:9,System.String Business.Models.PhotoCreateModel::get_MimeType()
+FNDA:7,System.String Business.Models.PhotoCreateModel::get_MimeType()
+DA:10,7
+FN:10,System.Byte[] Business.Models.PhotoCreateModel::get_Data()
+FNDA:9,System.Byte[] Business.Models.PhotoCreateModel::get_Data()
+DA:11,9
+LH:32
+LF:40
+BRF:3
+BRH:3
+FNF:20
+FNH:19
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Models/PhotoDataModel.cs
+FN:6,System.String Business.Models.PhotoDataModel::get_MimeType()
+FNDA:3,System.String Business.Models.PhotoDataModel::get_MimeType()
+DA:7,3
+FN:7,System.Byte[] Business.Models.PhotoDataModel::get_Data()
+FNDA:4,System.Byte[] Business.Models.PhotoDataModel::get_Data()
+DA:8,4
+LH:34
+LF:42
+BRF:3
+BRH:3
+FNF:22
+FNH:21
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Models/PhotoDisplayPropertiesModel.cs
+FN:6,System.Int32 Business.Models.PhotoDisplayPropertiesModel::get_Id()
+FNDA:16,System.Int32 Business.Models.PhotoDisplayPropertiesModel::get_Id()
+DA:7,16
+FN:7,System.String Business.Models.PhotoDisplayPropertiesModel::get_Title()
+FNDA:16,System.String Business.Models.PhotoDisplayPropertiesModel::get_Title()
+DA:8,16
+FN:8,System.Int32 Business.Models.PhotoDisplayPropertiesModel::get_SortOrder()
+FNDA:16,System.Int32 Business.Models.PhotoDisplayPropertiesModel::get_SortOrder()
+DA:9,16
+FN:9,System.Int32 Business.Models.PhotoDisplayPropertiesModel::get_PhotoGroupId()
+FNDA:16,System.Int32 Business.Models.PhotoDisplayPropertiesModel::get_PhotoGroupId()
+DA:10,16
+LH:38
+LF:46
+BRF:3
+BRH:3
+FNF:26
+FNH:25
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Models/PhotoGroupCreateModel.cs
+FN:6,System.String Business.Models.PhotoGroupCreateModel::get_Name()
+FNDA:5,System.String Business.Models.PhotoGroupCreateModel::get_Name()
+DA:7,5
+FN:7,System.Int32 Business.Models.PhotoGroupCreateModel::get_SortOrder()
+FNDA:5,System.Int32 Business.Models.PhotoGroupCreateModel::get_SortOrder()
+DA:8,5
+LH:40
+LF:48
+BRF:3
+BRH:3
+FNF:28
+FNH:27
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Models/PhotoGroupModel.cs
+FN:6,System.Int32 Business.Models.PhotoGroupModel::get_Id()
+FNDA:11,System.Int32 Business.Models.PhotoGroupModel::get_Id()
+DA:7,11
+FN:8,System.String Business.Models.PhotoGroupModel::get_Name()
+FNDA:11,System.String Business.Models.PhotoGroupModel::get_Name()
+DA:9,11
+FN:10,System.Int32 Business.Models.PhotoGroupModel::get_SortOrder()
+FNDA:11,System.Int32 Business.Models.PhotoGroupModel::get_SortOrder()
+DA:11,11
+LH:43
+LF:51
+BRF:3
+BRH:3
+FNF:31
+FNH:30
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Models/RegisterAddChildModel.cs
+FN:6,System.String Business.Models.RegisterAddChildModel::get_ParentFirstName()
+FNDA:0,System.String Business.Models.RegisterAddChildModel::get_ParentFirstName()
+DA:7,0
+FN:8,System.String Business.Models.RegisterAddChildModel::get_ParentLastName()
+FNDA:0,System.String Business.Models.RegisterAddChildModel::get_ParentLastName()
+DA:9,0
+FN:10,System.String Business.Models.RegisterAddChildModel::get_FirstName()
+FNDA:2,System.String Business.Models.RegisterAddChildModel::get_FirstName()
+DA:11,2
+FN:12,System.String Business.Models.RegisterAddChildModel::get_LastName()
+FNDA:2,System.String Business.Models.RegisterAddChildModel::get_LastName()
+DA:13,2
+FN:14,System.String Business.Models.RegisterAddChildModel::get_Gender()
+FNDA:2,System.String Business.Models.RegisterAddChildModel::get_Gender()
+DA:15,2
+FN:16,System.DateTimeOffset Business.Models.RegisterAddChildModel::get_DateOfBirth()
+FNDA:2,System.DateTimeOffset Business.Models.RegisterAddChildModel::get_DateOfBirth()
+DA:17,2
+FN:18,System.String Business.Models.RegisterAddChildModel::get_ShirtSize()
+FNDA:2,System.String Business.Models.RegisterAddChildModel::get_ShirtSize()
+DA:19,2
+LH:48
+LF:58
+BRF:3
+BRH:3
+FNF:38
+FNH:35
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Models/RegisterChildModel.cs
+FN:6,System.String Business.Models.RegisterChildModel::get_FirstName()
+FNDA:6,System.String Business.Models.RegisterChildModel::get_FirstName()
+DA:7,6
+FN:7,System.String Business.Models.RegisterChildModel::get_LastName()
+FNDA:6,System.String Business.Models.RegisterChildModel::get_LastName()
+DA:8,6
+FN:8,System.String Business.Models.RegisterChildModel::get_Gender()
+FNDA:6,System.String Business.Models.RegisterChildModel::get_Gender()
+DA:9,6
+FN:9,System.DateTimeOffset Business.Models.RegisterChildModel::get_DateOfBirth()
+FNDA:6,System.DateTimeOffset Business.Models.RegisterChildModel::get_DateOfBirth()
+DA:10,6
+FN:10,System.String Business.Models.RegisterChildModel::get_ShirtSize()
+FNDA:6,System.String Business.Models.RegisterChildModel::get_ShirtSize()
+DA:11,6
+LH:53
+LF:63
+BRF:3
+BRH:3
+FNF:43
+FNH:40
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Models/RegisterContactInformationModel.cs
+FN:6,System.String Business.Models.RegisterContactInformationModel::get_Email()
+FNDA:3,System.String Business.Models.RegisterContactInformationModel::get_Email()
+DA:7,3
+FN:7,System.String Business.Models.RegisterContactInformationModel::get_PhoneNumber()
+FNDA:3,System.String Business.Models.RegisterContactInformationModel::get_PhoneNumber()
+DA:8,3
+FN:8,System.String Business.Models.RegisterContactInformationModel::get_Address()
+FNDA:3,System.String Business.Models.RegisterContactInformationModel::get_Address()
+DA:9,3
+FN:9,System.String Business.Models.RegisterContactInformationModel::get_Address2()
+FNDA:3,System.String Business.Models.RegisterContactInformationModel::get_Address2()
+DA:10,3
+FN:10,System.String Business.Models.RegisterContactInformationModel::get_City()
+FNDA:3,System.String Business.Models.RegisterContactInformationModel::get_City()
+DA:11,3
+FN:11,System.String Business.Models.RegisterContactInformationModel::get_State()
+FNDA:3,System.String Business.Models.RegisterContactInformationModel::get_State()
+DA:12,3
+FN:12,System.String Business.Models.RegisterContactInformationModel::get_Zip()
+FNDA:3,System.String Business.Models.RegisterContactInformationModel::get_Zip()
+DA:13,3
+LH:60
+LF:70
+BRF:3
+BRH:3
+FNF:50
+FNH:47
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Models/RegisteredChildModel.cs
+FN:6,System.String Business.Models.RegisteredChildModel::get_FirstName()
+FNDA:14,System.String Business.Models.RegisteredChildModel::get_FirstName()
+DA:7,14
+FN:8,System.String Business.Models.RegisteredChildModel::get_LastName()
+FNDA:14,System.String Business.Models.RegisteredChildModel::get_LastName()
+DA:9,14
+FN:10,System.String Business.Models.RegisteredChildModel::get_EmailAddress()
+FNDA:17,System.String Business.Models.RegisteredChildModel::get_EmailAddress()
+DA:11,17
+FN:12,System.String Business.Models.RegisteredChildModel::get_Gender()
+FNDA:14,System.String Business.Models.RegisteredChildModel::get_Gender()
+DA:13,14
+FN:14,System.DateTimeOffset Business.Models.RegisteredChildModel::get_DateOfBirth()
+FNDA:14,System.DateTimeOffset Business.Models.RegisteredChildModel::get_DateOfBirth()
+DA:15,14
+FN:16,System.String Business.Models.RegisteredChildModel::get_ShirtSize()
+FNDA:14,System.String Business.Models.RegisteredChildModel::get_ShirtSize()
+DA:17,14
+LH:66
+LF:76
+BRF:3
+BRH:3
+FNF:56
+FNH:53
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Models/RegisterModel.cs
+FN:7,System.Void Business.Models.RegisterModel::.ctor()
+FNDA:2,System.Void Business.Models.RegisterModel::.ctor()
+DA:8,2
+DA:9,2
+DA:10,2
+DA:11,2
+FN:12,Business.Models.RegisterContactInformationModel Business.Models.RegisterModel::get_ContactInformation()
+FNDA:10,Business.Models.RegisterContactInformationModel Business.Models.RegisterModel::get_ContactInformation()
+DA:13,10
+FN:14,Business.Models.RegisterParentModel Business.Models.RegisterModel::get_Parent()
+FNDA:5,Business.Models.RegisterParentModel Business.Models.RegisterModel::get_Parent()
+DA:15,5
+FN:16,System.Collections.Generic.IList`1<Business.Models.RegisterChildModel> Business.Models.RegisterModel::get_Children()
+FNDA:16,System.Collections.Generic.IList`1<Business.Models.RegisterChildModel> Business.Models.RegisterModel::get_Children()
+DA:17,16
+LH:73
+LF:83
+BRF:3
+BRH:3
+FNF:60
+FNH:57
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Models/RegisterParentModel.cs
+FN:6,System.String Business.Models.RegisterParentModel::get_FirstName()
+FNDA:3,System.String Business.Models.RegisterParentModel::get_FirstName()
+DA:7,3
+FN:7,System.String Business.Models.RegisterParentModel::get_LastName()
+FNDA:3,System.String Business.Models.RegisterParentModel::get_LastName()
+DA:8,3
+LH:75
+LF:85
+BRF:3
+BRH:3
+FNF:62
+FNH:59
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Models/UserCredentialsModel.cs
+FN:4,System.String Business.Models.UserCredentialsModel::get_Email()
+FNDA:0,System.String Business.Models.UserCredentialsModel::get_Email()
+DA:5,0
+FN:6,System.String Business.Models.UserCredentialsModel::get_Password()
+FNDA:0,System.String Business.Models.UserCredentialsModel::get_Password()
+DA:7,0
+LH:75
+LF:87
+BRF:3
+BRH:3
+FNF:64
+FNH:59
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Mapping/BusinessMapperConfiguration.cs
+FN:11,System.Void Business.Mapping.BusinessMapperConfiguration::Configure(AutoMapper.IMapperConfigurationExpression)
+FNDA:1,System.Void Business.Mapping.BusinessMapperConfiguration::Configure(AutoMapper.IMapperConfigurationExpression)
+DA:12,1
+DA:13,1
+DA:14,1
+DA:15,1
+DA:16,1
+DA:17,1
+LH:81
+LF:93
+BRF:3
+BRH:3
+FNF:65
+FNH:60
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Mapping/EventProfile.cs
+FN:10,System.Void Business.Mapping.EventProfile::.ctor()
+FNDA:4,System.Void Business.Mapping.EventProfile::.ctor()
+DA:11,4
+DA:12,4
+DA:13,4
+DA:14,4
+DA:15,4
+DA:16,8
+DA:18,4
+DA:20,4
+DA:21,4
+LH:90
+LF:102
+BRF:3
+BRH:3
+FNF:66
+FNH:61
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Mapping/PhotoGroupProfile.cs
+FN:10,System.Void Business.Mapping.PhotoGroupProfile::.ctor()
+FNDA:4,System.Void Business.Mapping.PhotoGroupProfile::.ctor()
+DA:11,4
+DA:12,4
+DA:13,4
+DA:14,4
+DA:15,4
+DA:16,8
+DA:17,4
+DA:18,4
+DA:19,8
+DA:21,4
+DA:22,4
+DA:23,4
+DA:24,8
+DA:26,4
+DA:27,4
+LH:105
+LF:117
+BRF:3
+BRH:3
+FNF:67
+FNH:62
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Mapping/PhotoProfile.cs
+FN:10,System.Void Business.Mapping.PhotoProfile::.ctor()
+FNDA:6,System.Void Business.Mapping.PhotoProfile::.ctor()
+DA:11,6
+DA:12,6
+DA:13,6
+DA:14,6
+DA:15,6
+DA:16,12
+DA:17,6
+DA:18,6
+DA:19,12
+DA:21,6
+DA:22,6
+DA:23,6
+DA:24,12
+DA:26,6
+DA:27,6
+DA:28,6
+DA:29,18
+DA:31,6
+DA:33,6
+DA:34,6
+LH:125
+LF:137
+BRF:3
+BRH:3
+FNF:68
+FNH:63
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Mapping/RegistrationProfile.cs
+FN:10,System.Void Business.Mapping.RegistrationProfile::.ctor()
+FNDA:3,System.Void Business.Mapping.RegistrationProfile::.ctor()
+DA:11,3
+DA:12,3
+DA:13,3
+DA:14,3
+DA:15,3
+DA:16,6
+DA:17,3
+DA:18,3
+DA:19,6
+DA:20,3
+DA:21,3
+DA:22,6
+DA:23,3
+DA:24,3
+DA:25,6
+DA:27,3
+DA:28,3
+DA:29,3
+DA:30,6
+DA:32,3
+DA:33,3
+DA:34,3
+DA:35,6
+DA:36,3
+DA:37,3
+DA:38,6
+DA:40,3
+DA:41,3
+DA:42,3
+DA:43,6
+DA:45,3
+DA:46,3
+DA:47,3
+DA:48,6
+DA:50,3
+LH:160
+LF:172
+BRF:3
+BRH:3
+FNF:69
+FNH:64
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Managers/ContactManager.cs
+FN:11,System.Void Business.Managers.ContactManager::.ctor(Business.Abstractions.IEmailSender)
+FNDA:4,System.Void Business.Managers.ContactManager::.ctor(Business.Abstractions.IEmailSender)
+DA:12,4
+DA:13,4
+DA:14,4
+DA:16,3
+DA:17,3
+FN:19,System.Void Business.Managers.ContactManager::Contact(Business.Models.ContactModel)
+FNDA:3,System.Void Business.Managers.ContactManager::Contact(Business.Models.ContactModel)
+DA:20,3
+DA:21,3
+DA:23,2
+DA:24,2
+DA:25,2
+DA:26,2
+FN:28,System.String Business.Managers.ContactManager::FormatSubject(Business.Models.ContactModel)
+FNDA:2,System.String Business.Managers.ContactManager::FormatSubject(Business.Models.ContactModel)
+DA:29,2
+DA:30,2
+DA:31,2
+BRDA:31,4,4,2
+FN:33,System.String Business.Managers.ContactManager::FormatBody(Business.Models.ContactModel)
+FNDA:2,System.String Business.Managers.ContactManager::FormatBody(Business.Models.ContactModel)
+DA:34,2
+DA:35,2
+DA:37,2
+DA:38,2
+DA:39,2
+DA:40,2
+DA:42,2
+DA:43,2
+BRDA:43,5,5,2
+LH:182
+LF:194
+BRF:5
+BRH:5
+FNF:73
+FNH:68
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Managers/PhotoGroupManager.cs
+FN:17,System.Void Business.Managers.PhotoGroupManager::.ctor(Business.Abstractions.IPhotoGroupRepository)
+FNDA:11,System.Void Business.Managers.PhotoGroupManager::.ctor(Business.Abstractions.IPhotoGroupRepository)
+DA:18,11
+DA:19,11
+DA:20,11
+DA:22,9
+DA:23,9
+FN:25,System.Int32 Business.Managers.PhotoGroupManager::Create(Business.Models.PhotoGroupCreateModel)
+FNDA:3,System.Int32 Business.Managers.PhotoGroupManager::Create(Business.Models.PhotoGroupCreateModel)
+DA:26,3
+DA:27,3
+DA:29,2
+DA:31,2
+DA:33,2
+DA:34,2
+BRDA:34,6,6,2
+FN:36,System.Void Business.Managers.PhotoGroupManager::Update(Business.Models.PhotoGroupModel)
+FNDA:2,System.Void Business.Managers.PhotoGroupManager::Update(Business.Models.PhotoGroupModel)
+DA:37,2
+DA:38,2
+DA:40,1
+DA:42,1
+DA:43,1
+FN:45,System.Void Business.Managers.PhotoGroupManager::Delete(System.Int32)
+FNDA:1,System.Void Business.Managers.PhotoGroupManager::Delete(System.Int32)
+DA:46,1
+DA:47,1
+DA:48,1
+FN:50,System.Collections.Generic.IEnumerable`1<Business.Models.PhotoGroupModel> Business.Managers.PhotoGroupManager::GetAll()
+FNDA:1,System.Collections.Generic.IEnumerable`1<Business.Models.PhotoGroupModel> Business.Managers.PhotoGroupManager::GetAll()
+DA:51,1
+DA:52,1
+FN:54,Business.Models.PhotoGroupModel Business.Managers.PhotoGroupManager::Get(System.Int32)
+FNDA:2,Business.Models.PhotoGroupModel Business.Managers.PhotoGroupManager::Get(System.Int32)
+DA:55,2
+DA:56,2
+DA:58,2
+DA:59,2
+BRDA:59,7,7,2
+LH:207
+LF:219
+BRF:7
+BRH:7
+FNF:79
+FNH:74
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Managers/PhotoManager.cs
+FN:18,System.Void Business.Managers.PhotoManager::.ctor(Business.Abstractions.IPhotoRepository)
+FNDA:16,System.Void Business.Managers.PhotoManager::.ctor(Business.Abstractions.IPhotoRepository)
+DA:19,16
+DA:20,16
+DA:21,16
+DA:23,14
+DA:24,14
+FN:26,System.Int32 Business.Managers.PhotoManager::Create(Business.Models.PhotoCreateModel)
+FNDA:4,System.Int32 Business.Managers.PhotoManager::Create(Business.Models.PhotoCreateModel)
+DA:27,4
+DA:28,4
+DA:30,3
+DA:31,3
+DA:33,3
+DA:35,3
+DA:36,3
+BRDA:36,8,8,3
+FN:38,System.Void Business.Managers.PhotoManager::UpdateDisplayProperties(Business.Models.PhotoDisplayPropertiesModel)
+FNDA:3,System.Void Business.Managers.PhotoManager::UpdateDisplayProperties(Business.Models.PhotoDisplayPropertiesModel)
+DA:39,3
+DA:40,3
+DA:42,2
+DA:44,2
+DA:45,2
+FN:47,System.Void Business.Managers.PhotoManager::Delete(System.Int32)
+FNDA:1,System.Void Business.Managers.PhotoManager::Delete(System.Int32)
+DA:48,1
+DA:49,1
+DA:50,1
+FN:52,System.Collections.Generic.IEnumerable`1<Business.Models.PhotoDisplayPropertiesModel> Business.Managers.PhotoManager::GetAll()
+FNDA:1,System.Collections.Generic.IEnumerable`1<Business.Models.PhotoDisplayPropertiesModel> Business.Managers.PhotoManager::GetAll()
+DA:53,1
+DA:54,1
+FN:56,System.Collections.Generic.IEnumerable`1<Business.Models.PhotoDisplayPropertiesModel> Business.Managers.PhotoManager::GetByGroupId(System.Int32)
+FNDA:1,System.Collections.Generic.IEnumerable`1<Business.Models.PhotoDisplayPropertiesModel> Business.Managers.PhotoManager::GetByGroupId(System.Int32)
+DA:57,1
+DA:58,1
+FN:61,Business.Models.PhotoDisplayPropertiesModel Business.Managers.PhotoManager::Get(System.Int32)
+FNDA:3,Business.Models.PhotoDisplayPropertiesModel Business.Managers.PhotoManager::Get(System.Int32)
+DA:62,3
+DA:63,3
+DA:65,3
+DA:66,3
+BRDA:66,9,9,3
+FN:68,Business.Models.PhotoDataModel Business.Managers.PhotoManager::GetPhotoBytes(System.Int32)
+FNDA:1,Business.Models.PhotoDataModel Business.Managers.PhotoManager::GetPhotoBytes(System.Int32)
+DA:69,1
+DA:70,1
+DA:72,1
+DA:73,1
+BRDA:73,10,10,1
+LH:239
+LF:251
+BRF:10
+BRH:10
+FNF:87
+FNH:82
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Managers/RegistrationManager.cs
+FN:17,System.Void Business.Managers.RegistrationManager::.ctor(Business.Abstractions.IRegistrationRepository)
+FNDA:10,System.Void Business.Managers.RegistrationManager::.ctor(Business.Abstractions.IRegistrationRepository)
+DA:18,10
+DA:19,10
+DA:20,10
+DA:22,8
+DA:23,8
+FN:25,System.Void Business.Managers.RegistrationManager::Register(Business.Models.RegisterModel)
+FNDA:2,System.Void Business.Managers.RegistrationManager::Register(Business.Models.RegisterModel)
+DA:26,2
+DA:27,2
+DA:29,1
+DA:31,1
+DA:32,1
+FN:34,System.Void Business.Managers.RegistrationManager::AddChild(Business.Models.RegisterAddChildModel)
+FNDA:4,System.Void Business.Managers.RegistrationManager::AddChild(Business.Models.RegisterAddChildModel)
+DA:35,4
+DA:36,4
+DA:38,3
+DA:39,3
+DA:40,3
+DA:42,3
+DA:43,1
+DA:46,1
+DA:49,2
+BRDA:49,11,11,2
+DA:51,2
+DA:52,2
+FN:54,System.Collections.Generic.IEnumerable`1<Business.Models.RegisteredChildModel> Business.Managers.RegistrationManager::GetAllRegisteredChildren()
+FNDA:2,System.Collections.Generic.IEnumerable`1<Business.Models.RegisteredChildModel> Business.Managers.RegistrationManager::GetAllRegisteredChildren()
+DA:55,2
+DA:56,2
+DA:57,8
+DA:58,8
+DA:59,2
+DA:60,20
+DA:61,2
+DA:62,8
+DA:63,8
+BRDA:63,12,12,8
+LH:269
+LF:281
+BRF:12
+BRH:12
+FNF:91
+FNH:86
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Managers/ScheduleManager.cs
+FN:18,System.Void Business.Managers.ScheduleManager::.ctor(Business.Abstractions.IEventRepository)
+FNDA:12,System.Void Business.Managers.ScheduleManager::.ctor(Business.Abstractions.IEventRepository)
+DA:19,12
+DA:20,12
+DA:21,12
+DA:23,10
+DA:24,10
+FN:26,System.Int32 Business.Managers.ScheduleManager::Create(Business.Models.EventCreateModel)
+FNDA:3,System.Int32 Business.Managers.ScheduleManager::Create(Business.Models.EventCreateModel)
+DA:27,3
+DA:28,3
+DA:30,2
+DA:32,2
+DA:34,2
+DA:35,2
+BRDA:35,13,13,2
+FN:37,System.Void Business.Managers.ScheduleManager::Update(Business.Models.EventModel)
+FNDA:2,System.Void Business.Managers.ScheduleManager::Update(Business.Models.EventModel)
+DA:38,2
+DA:39,2
+DA:41,1
+DA:43,1
+DA:44,1
+FN:46,System.Void Business.Managers.ScheduleManager::Delete(System.Int32)
+FNDA:1,System.Void Business.Managers.ScheduleManager::Delete(System.Int32)
+DA:47,1
+DA:48,1
+DA:49,1
+FN:51,System.Collections.Generic.IEnumerable`1<Business.Models.EventModel> Business.Managers.ScheduleManager::GetAll()
+FNDA:1,System.Collections.Generic.IEnumerable`1<Business.Models.EventModel> Business.Managers.ScheduleManager::GetAll()
+DA:52,1
+DA:53,1
+FN:55,System.Collections.Generic.IEnumerable`1<Business.Models.EventModel> Business.Managers.ScheduleManager::GetUpcoming(System.Nullable`1<System.DateTime>)
+FNDA:3,System.Collections.Generic.IEnumerable`1<Business.Models.EventModel> Business.Managers.ScheduleManager::GetUpcoming(System.Nullable`1<System.DateTime>)
+DA:56,3
+DA:57,3
+DA:58,3
+DA:59,3
+DA:61,3
+DA:62,1
+DA:63,7
+DA:66,2
+BRDA:66,14,14,2
+DA:67,2
+DA:69,3
+BRDA:69,15,15,3
+LH:300
+LF:312
+BRF:15
+BRH:15
+FNF:97
+FNH:92
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Entities/Event.cs
+FN:6,System.Int32 Business.Entities.Event::get_Id()
+FNDA:20,System.Int32 Business.Entities.Event::get_Id()
+DA:7,20
+FN:8,System.DateTime Business.Entities.Event::get_Date()
+FNDA:31,System.DateTime Business.Entities.Event::get_Date()
+DA:9,31
+FN:10,System.String Business.Entities.Event::get_Title()
+FNDA:24,System.String Business.Entities.Event::get_Title()
+DA:11,24
+FN:12,System.String Business.Entities.Event::get_Description()
+FNDA:24,System.String Business.Entities.Event::get_Description()
+DA:13,24
+LH:304
+LF:316
+BRF:15
+BRH:15
+FNF:101
+FNH:96
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Entities/PhotoData.cs
+FN:4,System.Int32 Business.Entities.PhotoData::get_Id()
+FNDA:1,System.Int32 Business.Entities.PhotoData::get_Id()
+DA:5,1
+FN:6,System.String Business.Entities.PhotoData::get_MimeType()
+FNDA:9,System.String Business.Entities.PhotoData::get_MimeType()
+DA:7,9
+FN:8,System.Byte[] Business.Entities.PhotoData::get_Data()
+FNDA:10,System.Byte[] Business.Entities.PhotoData::get_Data()
+DA:9,10
+LH:307
+LF:319
+BRF:15
+BRH:15
+FNF:104
+FNH:99
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Entities/PhotoDisplayProperties.cs
+FN:4,System.Int32 Business.Entities.PhotoDisplayProperties::get_Id()
+FNDA:16,System.Int32 Business.Entities.PhotoDisplayProperties::get_Id()
+DA:5,16
+FN:6,System.Int32 Business.Entities.PhotoDisplayProperties::get_PhotoGroupId()
+FNDA:21,System.Int32 Business.Entities.PhotoDisplayProperties::get_PhotoGroupId()
+DA:7,21
+FN:8,Business.Entities.PhotoData Business.Entities.PhotoDisplayProperties::get_PhotoData()
+FNDA:7,Business.Entities.PhotoData Business.Entities.PhotoDisplayProperties::get_PhotoData()
+DA:9,7
+FN:10,System.String Business.Entities.PhotoDisplayProperties::get_Title()
+FNDA:21,System.String Business.Entities.PhotoDisplayProperties::get_Title()
+DA:11,21
+FN:12,System.Int32 Business.Entities.PhotoDisplayProperties::get_SortOrder()
+FNDA:21,System.Int32 Business.Entities.PhotoDisplayProperties::get_SortOrder()
+DA:13,21
+LH:312
+LF:324
+BRF:15
+BRH:15
+FNF:109
+FNH:104
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Entities/PhotoGroup.cs
+FN:6,System.Void Business.Entities.PhotoGroup::.ctor()
+FNDA:9,System.Void Business.Entities.PhotoGroup::.ctor()
+DA:7,9
+DA:8,9
+DA:9,9
+DA:10,9
+FN:11,System.Int32 Business.Entities.PhotoGroup::get_Id()
+FNDA:11,System.Int32 Business.Entities.PhotoGroup::get_Id()
+DA:12,11
+FN:13,System.String Business.Entities.PhotoGroup::get_Name()
+FNDA:15,System.String Business.Entities.PhotoGroup::get_Name()
+DA:14,15
+FN:15,System.Int32 Business.Entities.PhotoGroup::get_SortOrder()
+FNDA:15,System.Int32 Business.Entities.PhotoGroup::get_SortOrder()
+DA:16,15
+FN:17,System.Collections.Generic.IList`1<Business.Entities.PhotoDisplayProperties> Business.Entities.PhotoGroup::get_Photos()
+FNDA:9,System.Collections.Generic.IList`1<Business.Entities.PhotoDisplayProperties> Business.Entities.PhotoGroup::get_Photos()
+DA:18,9
+LH:320
+LF:332
+BRF:15
+BRH:15
+FNF:114
+FNH:109
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Entities/Registration.cs
+FN:7,System.Void Business.Entities.Registration::.ctor()
+FNDA:8,System.Void Business.Entities.Registration::.ctor()
+DA:8,8
+DA:9,8
+DA:10,8
+DA:11,8
+FN:12,System.Int32 Business.Entities.Registration::get_Id()
+FNDA:0,System.Int32 Business.Entities.Registration::get_Id()
+DA:13,0
+FN:14,System.Int32 Business.Entities.Registration::get_SeasonYear()
+FNDA:3,System.Int32 Business.Entities.Registration::get_SeasonYear()
+DA:15,3
+FN:16,Business.Entities.RegistrationParent Business.Entities.Registration::get_Parent()
+FNDA:4,Business.Entities.RegistrationParent Business.Entities.Registration::get_Parent()
+DA:17,4
+FN:18,Business.Entities.RegistrationContactInformation Business.Entities.Registration::get_ContactInformation()
+FNDA:27,Business.Entities.RegistrationContactInformation Business.Entities.Registration::get_ContactInformation()
+DA:19,27
+FN:20,Business.Entities.RegistrationPaymentInformation Business.Entities.Registration::get_PaymentInformation()
+FNDA:0,Business.Entities.RegistrationPaymentInformation Business.Entities.Registration::get_PaymentInformation()
+DA:21,0
+FN:22,System.DateTimeOffset Business.Entities.Registration::get_RegistrationTimestamp()
+FNDA:2,System.DateTimeOffset Business.Entities.Registration::get_RegistrationTimestamp()
+DA:23,2
+FN:24,System.Collections.Generic.IList`1<Business.Entities.RegistrationChild> Business.Entities.Registration::get_Children()
+FNDA:36,System.Collections.Generic.IList`1<Business.Entities.RegistrationChild> Business.Entities.Registration::get_Children()
+DA:25,36
+LH:329
+LF:343
+BRF:15
+BRH:15
+FNF:122
+FNH:117
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Entities/RegistrationChild.cs
+FN:6,System.Int32 Business.Entities.RegistrationChild::get_Id()
+FNDA:0,System.Int32 Business.Entities.RegistrationChild::get_Id()
+DA:7,0
+FN:8,System.String Business.Entities.RegistrationChild::get_FirstName()
+FNDA:21,System.String Business.Entities.RegistrationChild::get_FirstName()
+DA:9,21
+FN:10,System.String Business.Entities.RegistrationChild::get_LastName()
+FNDA:21,System.String Business.Entities.RegistrationChild::get_LastName()
+DA:11,21
+FN:12,System.String Business.Entities.RegistrationChild::get_Gender()
+FNDA:21,System.String Business.Entities.RegistrationChild::get_Gender()
+DA:13,21
+FN:14,System.DateTime Business.Entities.RegistrationChild::get_DateOfBirth()
+FNDA:21,System.DateTime Business.Entities.RegistrationChild::get_DateOfBirth()
+DA:15,21
+FN:16,System.String Business.Entities.RegistrationChild::get_ShirtSize()
+FNDA:21,System.String Business.Entities.RegistrationChild::get_ShirtSize()
+DA:17,21
+LH:334
+LF:349
+BRF:15
+BRH:15
+FNF:128
+FNH:122
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Entities/RegistrationContactInformation.cs
+FN:7,System.Int32 Business.Entities.RegistrationContactInformation::get_Id()
+FNDA:0,System.Int32 Business.Entities.RegistrationContactInformation::get_Id()
+DA:8,0
+FN:9,System.String Business.Entities.RegistrationContactInformation::get_Email()
+FNDA:12,System.String Business.Entities.RegistrationContactInformation::get_Email()
+DA:10,12
+FN:11,System.String Business.Entities.RegistrationContactInformation::get_PhoneNumber()
+FNDA:2,System.String Business.Entities.RegistrationContactInformation::get_PhoneNumber()
+DA:12,2
+FN:13,System.String Business.Entities.RegistrationContactInformation::get_Address()
+FNDA:2,System.String Business.Entities.RegistrationContactInformation::get_Address()
+DA:14,2
+FN:15,System.String Business.Entities.RegistrationContactInformation::get_Address2()
+FNDA:2,System.String Business.Entities.RegistrationContactInformation::get_Address2()
+DA:16,2
+FN:17,System.String Business.Entities.RegistrationContactInformation::get_City()
+FNDA:2,System.String Business.Entities.RegistrationContactInformation::get_City()
+DA:18,2
+FN:19,System.String Business.Entities.RegistrationContactInformation::get_State()
+FNDA:2,System.String Business.Entities.RegistrationContactInformation::get_State()
+DA:20,2
+FN:21,System.String Business.Entities.RegistrationContactInformation::get_Zip()
+FNDA:2,System.String Business.Entities.RegistrationContactInformation::get_Zip()
+DA:22,2
+LH:341
+LF:357
+BRF:15
+BRH:15
+FNF:136
+FNH:129
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Entities/RegistrationParent.cs
+FN:7,System.Int32 Business.Entities.RegistrationParent::get_Id()
+FNDA:0,System.Int32 Business.Entities.RegistrationParent::get_Id()
+DA:8,0
+FN:9,System.String Business.Entities.RegistrationParent::get_FirstName()
+FNDA:2,System.String Business.Entities.RegistrationParent::get_FirstName()
+DA:10,2
+FN:11,System.String Business.Entities.RegistrationParent::get_LastName()
+FNDA:2,System.String Business.Entities.RegistrationParent::get_LastName()
+DA:12,2
+LH:343
+LF:360
+BRF:15
+BRH:15
+FNF:139
+FNH:131
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Entities/RegistrationPaymentInformation.cs
+FN:6,System.Int32 Business.Entities.RegistrationPaymentInformation::get_Id()
+FNDA:0,System.Int32 Business.Entities.RegistrationPaymentInformation::get_Id()
+DA:7,0
+FN:8,System.DateTimeOffset Business.Entities.RegistrationPaymentInformation::get_PaymentTimestamp()
+FNDA:0,System.DateTimeOffset Business.Entities.RegistrationPaymentInformation::get_PaymentTimestamp()
+DA:9,0
+FN:10,System.String Business.Entities.RegistrationPaymentInformation::get_PaymentType()
+FNDA:0,System.String Business.Entities.RegistrationPaymentInformation::get_PaymentType()
+DA:11,0
+FN:12,System.Double Business.Entities.RegistrationPaymentInformation::get_Amount()
+FNDA:0,System.Double Business.Entities.RegistrationPaymentInformation::get_Amount()
+DA:13,0
+LH:343
+LF:364
+BRF:15
+BRH:15
+FNF:143
+FNH:131
+end_of_record
+SF:/home/adam/code/DetroitHarps/api/src/Business/Entities/User.cs
+FN:4,System.Int32 Business.Entities.User::get_Id()
+FNDA:0,System.Int32 Business.Entities.User::get_Id()
+DA:5,0
+FN:6,System.String Business.Entities.User::get_Email()
+FNDA:0,System.String Business.Entities.User::get_Email()
+DA:7,0
+FN:8,System.String Business.Entities.User::get_Password()
+FNDA:0,System.String Business.Entities.User::get_Password()
+DA:9,0
+FN:10,System.Byte[] Business.Entities.User::get_PasswordSalt()
+FNDA:0,System.Byte[] Business.Entities.User::get_PasswordSalt()
+DA:11,0
+LH:343
+LF:368
+BRF:15
+BRH:15
+FNF:147
+FNH:131
+end_of_record

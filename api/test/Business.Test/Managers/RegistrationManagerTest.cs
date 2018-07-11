@@ -3,389 +3,182 @@ namespace Business.Test
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
-    using Business.Interfaces;
+    using System.Linq.Expressions;
+    using Business.Entities;
+    using Business.Abstractions;
+    using Business.Managers;
     using Business.Models;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.DependencyInjection;
     using Moq;
-    using Repository;
-    using Repository.Entities;
-    using Tools;
     using Xunit;
 
-    public class RegistrationManagerTest : ManagerTestBase
+    [Collection("AutoMapper")]
+    public class RegistrationManagerTest
     {
-        private readonly IRegistrationManager _manager;
-
-        public RegistrationManagerTest() : base()
+        private readonly Mock<IRegistrationRepository> _registrationRepositoryMock;
+        
+        public RegistrationManagerTest()
         {
-            _manager = ServiceProvider.GetRequiredService<IRegistrationManager>();
-
-            SeedSeason();
+            _registrationRepositoryMock = new Mock<IRegistrationRepository>();
         }
 
         [Fact]
-        public void CreateSuccessTest()
+        public void NullRepositoryInConstructorThrowsTestTest()
         {
-            var createModel = GetValidModel();
-
-            var response = _manager.Register(createModel);
-
-            var entity = DbContext.Set<RegisteredPerson>()
-                .Include(x => x.Children)
-                .Include(x => x.PaymentDetails)
-                .AsNoTracking()
-                .First(x => x.Season.Year.Equals(DateTime.Now.Year));
-
-            AssertEqual(createModel, entity);
-            Assert.Equal(response, entity.Id);
+            Assert.Throws<ArgumentNullException>(() => new RegistrationManager(null));
         }
 
         [Fact]
-        public void CreateSuccessDifferentPaymentTypeTest()
+        public void RegisterNullModelThrowsTest()
         {
-            var createModel = GetValidModel();
+            var manager = GetManager();
 
-            createModel.RegistrationType = RegistrationType.Paypal;
-
-            var response = _manager.Register(createModel);
-
-            var entity = DbContext.Set<RegisteredPerson>()
-                .Include(x => x.Children)
-                .Include(x => x.PaymentDetails)
-                .AsNoTracking()
-                .First(x => x.Season.Year.Equals(DateTime.Now.Year));
-
-            AssertEqual(createModel, entity);
-            Assert.Equal(response, entity.Id);
+            Assert.Throws<ArgumentNullException>(() => manager.Register(null));  
         }
 
         [Fact]
-        public void CreateSuccessEmailsSentTest()
+        public void RegisterModelPassedToRepositoryTest()
         {
-            var createModel = GetValidModel();
-            var subject1 = string.Empty;
-            var subject2 = string.Empty;
-            var body1 = string.Empty;
-            var body2 = string.Empty;
-            var index = 0;
-            ContactManagerMock
-                .Setup(x => x.Contact(It.IsAny<string>(), It.IsAny<string>()))
-                .Callback<string, string>((x, y) => {
-                    if(index == 0)
-                    {
-                        subject1 = x;
-                        body1 = y;
-                        index ++;
-                    }
-                    else if(index == 1)
-                    {
-                        subject2 = x;
-                        body2 = y;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("Method called too many times");
-                    }
-                });
+            var manager = GetManager();
+            var model = new RegisterModel();
 
-            var response = _manager.Register(createModel);
-            var subject1String = $"New Registration! {createModel.FirstName} {createModel.LastName}";
-            var subject2String = $"Registration comments from {createModel.FirstName} {createModel.LastName}";
+            manager.Register(model);
 
-            var generatedBody1 = GenerateRegistrationEmailBodyForParent(createModel) + GenerateRegistrationEmailBodyForChildren(createModel.Children);
-
-            Assert.Equal(subject1String, subject1);
-            Assert.Equal(generatedBody1, body1);
-            Assert.Equal(subject2String, subject2);
-            Assert.Equal(createModel.Comments, body2);
-            
-            ContactManagerMock.Verify(x => 
-                x.Contact(
-                    It.IsAny<string>(),
-                    It.IsAny<string>()),
-                Times.Exactly(2));
+            _registrationRepositoryMock.Verify(
+                x => x.Create(It.Is<Registration>(y => y != null)),
+                Times.Once);
         }
 
         [Fact]
-        public void CreateSuccessNoCommentEmailSentTest()
+        public void AddChildNullModelThrowsTest()
         {
-            var createModel = GetValidModel();
-            createModel.Comments = string.Empty;
+            var manager = GetManager();
 
-            var response = _manager.Register(createModel);
-
-            ContactManagerMock.Verify(x => 
-                x.Contact(It.IsAny<string>(), It.IsAny<string>()),
-                Times.Once());
+            Assert.Throws<ArgumentNullException>(() => manager.AddChild(null));  
         }
 
         [Fact]
-        public void CreateNullInputThrowsExceptionTest()
+        public void AddChildNoParentThrowsTest()
         {
-            Assert.Throws<ArgumentNullException>(() => _manager.Register((RegistrationCreateModel)null));
+            var manager = GetManager();
+            var model = new RegisterAddChildModel();
+
+            Assert.Throws<InvalidOperationException>(() => manager.AddChild(model));  
         }
 
         [Fact]
-        public void GetAllPersonsTest()
+        public void AddChildPassesCorrectEntityToUpdateTest()
         {
-            var entities = SeedRegistration();
+            var entity = new Registration();
+            _registrationRepositoryMock.Setup(x => x.GetSingleOrDefault(It.IsAny<Expression<Func<Registration, bool>>>()))
+                .Returns(entity);
+            var manager = GetManager();
+            var model = new RegisterAddChildModel();
 
-            var response = _manager.GetAll();
+            manager.AddChild(model);
 
-            AssertEqual(response, entities);
+            _registrationRepositoryMock.Verify(x => x.Update(It.Is<Registration>(y => y.Equals(entity))), Times.Once);
         }
 
         [Fact]
-        public void GetAllChildInformationSuccessTest()
+        public void AddChildPassesAddsToEntityChildListTest()
         {
-            var entities = SeedRegistration();
+            var entity = new Registration();
+            var currentChildren = entity.Children.Count;
+            _registrationRepositoryMock.Setup(x => x.GetSingleOrDefault(It.IsAny<Expression<Func<Registration, bool>>>()))
+                .Returns(entity);
+            var manager = GetManager();
+            var model = new RegisterAddChildModel();
 
-            var response = _manager.GetAllChildren();
+            manager.AddChild(model);
 
-            AssertEqual(response, entities.SelectMany(x => x.Children));
+            _registrationRepositoryMock.Verify(
+                x => x.Update(
+                    It.Is<Registration>(y => y.Children.Count.Equals(currentChildren + 1))),
+                Times.Once);
         }
 
-        private RegistrationCreateModel GetValidModel() =>
-            new RegistrationCreateModel
+        [Fact]
+        public void GetAllChildrenReturnsMappedModelsTest()
+        {
+            var entities = new List<Registration>
             {
-                FirstName = "firstname",
-                LastName = "lastname",
-                EmailAddress = "emailaddress",
-                PhoneNumber = "phonenumber",
-                Address = "address",
-                Address2 = "address2",
-                City = "city",
-                State = "state",
-                Zip = "zip",
-                RegistrationType = RegistrationType.Cash,
-                Comments = "comments",
-                Children = 
+                new Registration
                 {
-                    new ChildInformationCreateModel
+                    Children = new List<RegistrationChild>
                     {
-                        FirstName = "child1-firstname",
-                        LastName = "child1-lastname",
-                        Gender = "male",
-                        DateOfBirth = DateTimeOffset.Now.AddYears(-10),
-                        ShirtSize = "child1-shirtsize",
-                    },
-                    new ChildInformationCreateModel
+                        new RegistrationChild(),
+                        new RegistrationChild()
+                    }
+                },
+                new Registration
+                {
+                    Children = new List<RegistrationChild>
                     {
-                        FirstName = "child2-firstname",
-                        LastName = "child2-lastname",
-                        Gender = "male",
-                        DateOfBirth = DateTimeOffset.Now.AddYears(-10),
-                        ShirtSize = "child2-shirtsize",
+                        new RegistrationChild(),
+                        new RegistrationChild()
                     }
                 }
             };
+            _registrationRepositoryMock.Setup(x => x.GetAll())
+                .Returns(entities);
+            var manager = GetManager();
 
-        private static void AssertEqual(RegistrationCreateModel model, RegisteredPerson entity)
-        {
-            Assert.True(IsEqual(model, entity));
+            var childrenFromManager = manager.GetAllRegisteredChildren();
 
-            Assert.Single(entity.PaymentDetails);
-            var payment = entity.PaymentDetails.First();
-            Assert.Equal(payment.Amount, model.Children.Count > 1 ? 30.0 : 20.0);
-            Assert.Equal(model.RegistrationType.ToString(), payment.PaymentType);
-            Assert.False(payment.VerfiedPayment);
-            Assert.InRange(entity.RegistrationTimestamp, DateTimeOffset.Now.AddMinutes(-1), DateTimeOffset.Now);
+            Assert.Equal(entities.SelectMany(x => x.Children).ToList().Count, childrenFromManager.Count());
 
-            AssertEqual(model.Children, entity.Children);
+            Assert.All(childrenFromManager, x => Assert.NotNull(x));
         }
 
-        private static void AssertEqual(
-            IEnumerable<ChildInformationCreateModel> models,
-            IEnumerable<RegisteredChild> entities)
+        [Fact]
+        public void GetAllChildrenReturnsCorrectEmailAddressesTest()
         {
-            Assert.Equal(models.Count(), entities.Count()); 
-
-            var editableEntityList = entities.ToList();
-            // TODO : ForEach on IList, IEnumerable in tools
-            foreach(var model in models)
+            var entities = new List<Registration>
             {
-                var entity = editableEntityList.FirstOrDefault(x => IsEqual(model, x));
-
-                Assert.NotNull(entity);
-
-                editableEntityList.Remove(entity);
-            }
-        }
-
-        private static void AssertEqual(
-            IEnumerable<ChildInformationReadModel> models,
-            IEnumerable<RegisteredChild> entities)
-        {
-            Assert.Equal(models.Count(), entities.Count()); 
-
-            var editableEntityList = entities.ToList();
-            // TODO : ForEach on IList, IEnumerable in tools
-            foreach(var model in models)
-            {
-                var entity = editableEntityList.FirstOrDefault(x => 
-                    model.ParentId.Equals(x.RegisteredPersonId) && IsEqual(model, x));
-
-                Assert.NotNull(entity);
-
-                editableEntityList.Remove(entity);
-            }
-        }
-
-        private static void AssertEqual(
-            IEnumerable<RegistrationReadModel> models,
-            IEnumerable<RegisteredPerson> entities)
-        {
-            Assert.Equal(models.Count(), entities.Count()); 
-
-            var editableEntityList = entities.ToList();
-            // TODO : ForEach on IList, IEnumerable in tools
-            foreach(var model in models)
-            {
-                var entity = editableEntityList.FirstOrDefault(x => x.Id.Equals(model.Id));
-
-                Assert.NotNull(entity);
-                Assert.True(IsEqual(model, entity));
-                Assert.True(model.HasPaid == entity.PaymentDetails.Any());
-                Assert.Equal(model.RegistrationTimestamp, entity.RegistrationTimestamp);
-
-                editableEntityList.Remove(entity);
-            }
-        }
-
-        private static void AssertResponseCorrect(
-            IList<int> response,
-            IList<RegisteredPerson> entities)
-        {
-            Assert.Equal(response.Count, entities.Count);
-
-            Assert.Equal(response.OrderBy(x => x), entities.Select(x => x.Id).OrderBy(x => x));
-        }
-        
-        private static bool IsEqual(RegistrationModelBase model, RegisteredPerson entity) =>
-            model.FirstName.EqualOrdinal(entity.FirstName) &&
-            model.LastName.EqualOrdinal(entity.LastName) &&
-            model.EmailAddress.EqualOrdinal(entity.Email) &&
-            model.PhoneNumber.EqualOrdinal(entity.PhoneNumber) &&
-            model.Address.EqualOrdinal(entity.Address) &&
-            model.Address2.EqualOrdinal(entity.Address2) &&
-            model.City.EqualOrdinal(entity.City) &&
-            model.State.EqualOrdinal(entity.State) &&
-            model.Zip.EqualOrdinal(entity.Zip);
-
-        private static bool IsEqual(ChildInformationModelBase model, RegisteredChild entity) =>
-            model.FirstName.EqualOrdinal(entity.FirstName) &&
-            model.LastName.EqualOrdinal(entity.LastName) &&
-            model.Gender.EqualOrdinal(entity.Gender) &&
-            model.DateOfBirth.Date.Equals(entity.DateOfBirth.Date) &&
-            model.ShirtSize.EqualOrdinal(entity.ShirtSize);
-
-        private static RegisteredPerson GetValidPerson(int seasonId, int childCount, bool hasPaid){
-            
-            var children = new List<RegisteredChild>();
-            for(int c = 0; c < childCount; c++)
-            {
-                children.Add(GetValidChild());
-            }
-
-            var paymentDetails = new List<PaymentDetails>();
-            if(hasPaid)
-            {
-                paymentDetails.Add(GetValidPaymentDetails());
-            }
-
-            return new RegisteredPerson
-            {
-                SeasonId = seasonId,
-                FirstName = Guid.NewGuid().ToString(),
-                LastName = Guid.NewGuid().ToString(),
-                Email = Guid.NewGuid().ToString(),
-                PhoneNumber = Guid.NewGuid().ToString(),
-                Address = Guid.NewGuid().ToString(),
-                Address2 = Guid.NewGuid().ToString(),
-                City = Guid.NewGuid().ToString(),
-                State = Guid.NewGuid().ToString(),
-                Zip = Guid.NewGuid().ToString(),
-                Children = children,
-                PaymentDetails = paymentDetails,
-                RegistrationTimestamp = DateTimeOffset.Now
+                new Registration
+                {
+                    ContactInformation = new RegistrationContactInformation
+                    {
+                        Email = Guid.NewGuid().ToString()
+                    },
+                    Children = new List<RegistrationChild>
+                    {
+                        new RegistrationChild(),
+                        new RegistrationChild()
+                    }
+                },
+                new Registration
+                {
+                    ContactInformation = new RegistrationContactInformation
+                    {
+                        Email = Guid.NewGuid().ToString()
+                    },
+                    Children = new List<RegistrationChild>
+                    {
+                        new RegistrationChild(),
+                        new RegistrationChild()
+                    }
+                }
             };
+            _registrationRepositoryMock.Setup(x => x.GetAll())
+                .Returns(entities);
+            var manager = GetManager();
+
+            var childrenFromManager = manager.GetAllRegisteredChildren().ToList();
+
+            Assert.Equal(entities[0].ContactInformation.Email, childrenFromManager[0].EmailAddress);
+            Assert.Equal(entities[0].ContactInformation.Email, childrenFromManager[1].EmailAddress);
+            Assert.Equal(entities[1].ContactInformation.Email, childrenFromManager[2].EmailAddress);
+            Assert.Equal(entities[1].ContactInformation.Email, childrenFromManager[3].EmailAddress);
         }
 
-        private static RegisteredChild GetValidChild() =>
-            new RegisteredChild
-            {
-                FirstName = Guid.NewGuid().ToString(),
-                LastName = Guid.NewGuid().ToString(),
-                DateOfBirth = DateTime.Now.AddYears(-10),
-                ShirtSize = Guid.NewGuid().ToString()
-            };
-
-        private static PaymentDetails GetValidPaymentDetails() =>
-            new PaymentDetails
-            {
-                Amount = 20,
-                PaymentTimestamp = DateTimeOffset.Now
-            };
-
-        private static string GenerateRegistrationEmailBodyForParent(RegistrationCreateModel model) =>
-            $"First Name: {model.FirstName}{Environment.NewLine}"+
-            $"Last Name: {model.LastName}{Environment.NewLine}"+
-            $"EmailAddress: {model.EmailAddress}{Environment.NewLine}"+
-            $"PhoneNumber: {model.PhoneNumber}{Environment.NewLine}"+
-            $"Address: {model.Address}{Environment.NewLine}"+
-            $"Address2: {model.Address2}{Environment.NewLine}"+
-            $"City: {model.City}{Environment.NewLine}"+
-            $"State: {model.State}{Environment.NewLine}"+
-            $"Zip: {model.Zip}{Environment.NewLine}{Environment.NewLine}";
-
-        private static string GenerateRegistrationEmailBodyForChildren(IEnumerable<ChildInformationCreateModel> models)
+        [Fact]
+        public void NullRepositoryInConstructorThrowsTest()
         {
-            var returnString = string.Empty;
-            var childNumber = 0;
-            foreach(var child in models)
-            {
-                childNumber ++;
-                var childString = $"First Name: {child.FirstName}{Environment.NewLine}"+
-                $"Last Name: {child.LastName}{Environment.NewLine}"+
-                $"Gender: {child.Gender}{Environment.NewLine}"+
-                $"DateOfBirth: {child.DateOfBirth}{Environment.NewLine}"+
-                $"ShirtSize: {child.ShirtSize}{Environment.NewLine}";
-
-                returnString += $"Child {childNumber}:{Environment.NewLine}";
-                returnString += childString;
-            }
-
-            return returnString;
+            Assert.Throws<ArgumentNullException>(() => new RegistrationManager(null));
         }
 
-        private void SeedSeason()
-        {
-            var season = new Season
-            {
-                Year = DateTime.Now.Year
-            };
-            
-            DbContext.Add(season);
-            DbContext.SaveChanges();
-        }
-
-        private IEnumerable<RegisteredPerson> SeedRegistration()
-        {
-            var seasonId = DbContext.Set<Season>().AsNoTracking().First().Id;
-            var persons = new List<RegisteredPerson>
-            {
-                GetValidPerson(seasonId, 2, true),
-                GetValidPerson(seasonId, 3, false),
-                GetValidPerson(seasonId, 1, false),
-                GetValidPerson(seasonId, 3, true),
-                GetValidPerson(seasonId, 1, true),        
-            };
-
-            DbContext.AddRange(persons);
-            DbContext.SaveChanges();
-            return persons;
-        }
-    }
+        private RegistrationManager GetManager() =>
+            new RegistrationManager(_registrationRepositoryMock.Object);
+    } 
 }
