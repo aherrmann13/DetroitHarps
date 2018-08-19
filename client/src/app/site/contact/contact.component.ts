@@ -40,7 +40,7 @@ export class ContactComponent implements OnInit {
     const model = new ContactModel({
       email: this.email.value,
       name: this.name.value,
-      message: this.name.value
+      message: this.message.value
     });
     this._client.contact(model).subscribe(
       data => this.onComplete(),
