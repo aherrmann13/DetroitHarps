@@ -14,12 +14,12 @@ namespace DetroitHarps.Business.Test
     [Collection("AutoMapper")]
     public class RegistrationManagerTest
     {
-        private readonly Mock<IRegistrationRepository> _registrationRepositoryMock;
+        private readonly Mock<IRegistrationRepository> _repositoryMock;
         private readonly Mock<ILogger<RegistrationManager>> _loggerMock;
 
         public RegistrationManagerTest()
         {
-            _registrationRepositoryMock = new Mock<IRegistrationRepository>();
+            _repositoryMock = new Mock<IRegistrationRepository>();
             _loggerMock = new Mock<ILogger<RegistrationManager>>();
         }
 
@@ -32,7 +32,7 @@ namespace DetroitHarps.Business.Test
         [Fact]
         public void NullLoggerInConstructorThrowsTestTest()
         {
-            Assert.Throws<ArgumentNullException>(() => new RegistrationManager(_registrationRepositoryMock.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new RegistrationManager(_repositoryMock.Object, null));
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace DetroitHarps.Business.Test
 
             manager.Register(model);
 
-            _registrationRepositoryMock.Verify(
+            _repositoryMock.Verify(
                 x => x.Create(It.Is<Registration>(y => y != null)),
                 Times.Once);
         }
@@ -82,7 +82,7 @@ namespace DetroitHarps.Business.Test
                     }
                 }
             };
-            _registrationRepositoryMock.Setup(x => x.GetAll())
+            _repositoryMock.Setup(x => x.GetAll())
                 .Returns(entities);
             var manager = GetManager();
 
@@ -94,6 +94,6 @@ namespace DetroitHarps.Business.Test
         }
 
         private RegistrationManager GetManager() =>
-            new RegistrationManager(_registrationRepositoryMock.Object, _loggerMock.Object);
+            new RegistrationManager(_repositoryMock.Object, _loggerMock.Object);
     }
 }
