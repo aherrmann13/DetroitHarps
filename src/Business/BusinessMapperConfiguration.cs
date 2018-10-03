@@ -10,6 +10,7 @@ namespace DetroitHarps.Business
         {
             cfg.AddProfile<RegistrationProfile>();
             cfg.AddProfile<PhotoProfile>();
+            cfg.AddProfile<PhotoGroupProfile>();
         }
     }
 }

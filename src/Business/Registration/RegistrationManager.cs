@@ -11,15 +11,15 @@ namespace DetroitHarps.Business.Registration
 
     public class RegistrationManager : IRegistrationManager
     {
-        private readonly IRegistrationRepository _registrationRepository;
+        private readonly IRegistrationRepository _repository;
         private readonly ILogger<RegistrationManager> _logger;
 
-        public RegistrationManager(IRegistrationRepository registrationRepository, ILogger<RegistrationManager> logger)
+        public RegistrationManager(IRegistrationRepository repository, ILogger<RegistrationManager> logger)
         {
-            Guard.NotNull(registrationRepository, nameof(registrationRepository));
+            Guard.NotNull(repository, nameof(repository));
             Guard.NotNull(logger, nameof(logger));
 
-            _registrationRepository = registrationRepository;
+            _repository = repository;
             _logger = logger;
         }
 
@@ -30,11 +30,11 @@ namespace DetroitHarps.Business.Registration
 
             var entity = Mapper.Map<Registration>(model);
 
-            _registrationRepository.Create(entity);
+            _repository.Create(entity);
         }
 
         public IEnumerable<RegisteredChildModel> GetAllRegisteredChildren() =>
-            _registrationRepository.GetAll()
+            _repository.GetAll()
                 .SelectMany(Mapper.Map<IEnumerable<RegisteredChildModel>>);
     }
 }

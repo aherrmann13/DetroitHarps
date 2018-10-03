@@ -11,15 +11,15 @@ namespace DetroitHarps.Business.Photo
 
     public class PhotoManager : IPhotoManager
     {
-        private readonly IPhotoRepository _photoRepository;
+        private readonly IPhotoRepository _repository;
         private readonly ILogger<PhotoManager> _logger;
 
-        public PhotoManager(IPhotoRepository photoRepository, ILogger<PhotoManager> logger)
+        public PhotoManager(IPhotoRepository repository, ILogger<PhotoManager> logger)
         {
-            Guard.NotNull(photoRepository, nameof(photoRepository));
+            Guard.NotNull(repository, nameof(repository));
             Guard.NotNull(logger, nameof(logger));
 
-            _photoRepository = photoRepository;
+            _repository = repository;
             _logger = logger;
         }
 
@@ -30,7 +30,7 @@ namespace DetroitHarps.Business.Photo
             _logger.LogInformation($"new photo with display properties: {JsonConvert.SerializeObject(model.DisplayProperties)}");
 
             var entity = Mapper.Map<Photo>(model);
-            var id = _photoRepository.Create(entity);
+            var id = _repository.Create(entity);
             return id;
         }
 
@@ -42,18 +42,18 @@ namespace DetroitHarps.Business.Photo
 
             var entity = Mapper.Map<PhotoDisplayProperties>(model);
 
-            _photoRepository.UpdateDisplayProperties(model.PhotoId, entity);
+            _repository.UpdateDisplayProperties(model.PhotoId, entity);
         }
 
-        public void Delete(int id) => _photoRepository.Delete(id);
+        public void Delete(int id) => _repository.Delete(id);
 
         public IEnumerable<PhotoDisplayPropertiesDetailModel> GetAll() =>
-            _photoRepository.GetAll()
+            _repository.GetAll()
                 .Select(Mapper.Map<PhotoDisplayPropertiesDetailModel>);
 
         public PhotoDataModel GetPhotoBytes(int id)
         {
-            var entity = _photoRepository.GetSingleOrDefault(id);
+            var entity = _repository.GetSingleOrDefault(id);
 
             // TODO: better mapping (entity -> PhotoDataModel)
             return entity == null ? null : Mapper.Map<PhotoDataModel>(entity.Data);
