@@ -14,25 +14,33 @@ namespace DetroitHarps.Business.Test
     [Collection("AutoMapper")]
     public class PhotoManagerTest
     {
-        private readonly Mock<IPhotoRepository> _repositoryMock;
+        private readonly Mock<IPhotoRepository> _photoRepositoryMock;
+        private readonly Mock<IPhotoGroupRepository> _photoGroupRepositoryMock;
         private readonly Mock<ILogger<PhotoManager>> _loggerMock;
 
         public PhotoManagerTest()
         {
-            _repositoryMock = new Mock<IPhotoRepository>();
+            _photoRepositoryMock = new Mock<IPhotoRepository>();
+            _photoGroupRepositoryMock = new Mock<IPhotoGroupRepository>();
             _loggerMock = new Mock<ILogger<PhotoManager>>();
         }
 
         [Fact]
-        public void NullRepositoryInConstructorThrowsTestTest()
+        public void NullPhotoRepositoryInConstructorThrowsTestTest()
         {
-            Assert.Throws<ArgumentNullException>(() => new PhotoManager(null, _loggerMock.Object));
+            Assert.Throws<ArgumentNullException>(() => new PhotoManager(null, _photoGroupRepositoryMock.Object, _loggerMock.Object));
+        }
+
+        [Fact]
+        public void NullPhotoGroupRepositoryInConstructorThrowsTestTest()
+        {
+            Assert.Throws<ArgumentNullException>(() => new PhotoManager(_photoRepositoryMock.Object, null, _loggerMock.Object));
         }
 
         [Fact]
         public void NullloggerInConstructorThrowsTestTest()
         {
-            Assert.Throws<ArgumentNullException>(() => new PhotoManager(_repositoryMock.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new PhotoManager(_photoRepositoryMock.Object, _photoGroupRepositoryMock.Object, null));
         }
 
         [Fact]
@@ -44,21 +52,41 @@ namespace DetroitHarps.Business.Test
         }
 
         [Fact]
+        public void CreatePhotoGroupDoesntExistThrowsTest()
+        {
+            var manager = GetManager();
+            var model = new PhotoModel();
+
+            _photoGroupRepositoryMock
+                .Setup(x => x.Exists(It.IsAny<int>()))
+                .Returns(false);
+
+            Assert.Throws<InvalidOperationException>(() => manager.Create(model));
+        }
+
+        [Fact]
         public void CreateModelPassedToRepositoryTest()
         {
             var manager = GetManager();
             var model = new PhotoModel();
 
+            _photoGroupRepositoryMock
+                .Setup(x => x.Exists(It.IsAny<int>()))
+                .Returns(true);
+
             manager.Create(model);
 
-            _repositoryMock.Verify(x => x.Create(It.Is<Photo>(y => y != null)), Times.Once);
+            _photoRepositoryMock.Verify(x => x.Create(It.Is<Photo>(y => y != null)), Times.Once);
         }
 
         [Fact]
         public void CreateReturnsIdTest()
         {
             var id = 5;
-            _repositoryMock.Setup(x => x.Create(It.IsAny<Photo>())).Returns(id);
+            _photoRepositoryMock.Setup(x => x.Create(It.IsAny<Photo>())).Returns(id);
+            _photoGroupRepositoryMock
+                .Setup(x => x.Exists(It.IsAny<int>()))
+                .Returns(true);
 
             var manager = GetManager();
             var model = new PhotoModel();
@@ -77,14 +105,55 @@ namespace DetroitHarps.Business.Test
         }
 
         [Fact]
+        public void UpdatePhotoDoesntExistThrowsTest()
+        {
+            var manager = GetManager();
+            var model = new PhotoDisplayPropertiesDetailModel();
+
+            _photoRepositoryMock
+                .Setup(x => x.Exists(It.IsAny<int>()))
+                .Returns(false);
+
+            _photoGroupRepositoryMock
+                .Setup(x => x.Exists(It.IsAny<int>()))
+                .Returns(true);
+
+            Assert.Throws<InvalidOperationException>(() => manager.UpdateDisplayProperties(model));
+        }
+
+        [Fact]
+        public void UpdatePhotoGroupDoesntExistThrowsTest()
+        {
+            var manager = GetManager();
+            var model = new PhotoDisplayPropertiesDetailModel();
+
+            _photoRepositoryMock
+                .Setup(x => x.Exists(It.IsAny<int>()))
+                .Returns(true);
+
+            _photoGroupRepositoryMock
+                .Setup(x => x.Exists(It.IsAny<int>()))
+                .Returns(false);
+
+            Assert.Throws<InvalidOperationException>(() => manager.UpdateDisplayProperties(model));
+        }
+
+        [Fact]
         public void UpdateModelPassedToRepositoryTest()
         {
             var manager = GetManager();
             var model = new PhotoDisplayPropertiesDetailModel();
 
+            _photoRepositoryMock
+                .Setup(x => x.Exists(It.IsAny<int>()))
+                .Returns(true);
+            _photoGroupRepositoryMock
+                .Setup(x => x.Exists(It.IsAny<int>()))
+                .Returns(true);
+
             manager.UpdateDisplayProperties(model);
 
-            _repositoryMock.Verify(
+            _photoRepositoryMock.Verify(
                 x => x.UpdateDisplayProperties(It.IsAny<int>(), It.Is<PhotoDisplayProperties>(y => y != null)),
                 Times.Once);
         }
@@ -95,9 +164,17 @@ namespace DetroitHarps.Business.Test
             var manager = GetManager();
             var model = new PhotoDisplayPropertiesDetailModel { PhotoId = 2 };
 
+            _photoRepositoryMock
+                .Setup(x => x.Exists(It.IsAny<int>()))
+                .Returns(true);
+
+            _photoGroupRepositoryMock
+                .Setup(x => x.Exists(It.IsAny<int>()))
+                .Returns(true);
+
             manager.UpdateDisplayProperties(model);
 
-            _repositoryMock.Verify(
+            _photoRepositoryMock.Verify(
                 x => x.UpdateDisplayProperties(It.Is<int>(y => y == model.PhotoId), It.IsAny<PhotoDisplayProperties>()),
                 Times.Once);
         }
@@ -110,7 +187,7 @@ namespace DetroitHarps.Business.Test
 
             manager.Delete(id);
 
-            _repositoryMock.Verify(
+            _photoRepositoryMock.Verify(
                 x => x.Delete(It.Is<int>(y => y.Equals(id))),
                 Times.Once);
         }
@@ -120,7 +197,7 @@ namespace DetroitHarps.Business.Test
         {
             var models = new List<Photo>() { new Photo(), new Photo() };
 
-            _repositoryMock.Setup(x => x.GetAll())
+            _photoRepositoryMock.Setup(x => x.GetAll())
                 .Returns(models);
 
             var manager = GetManager();
@@ -146,7 +223,7 @@ namespace DetroitHarps.Business.Test
         {
             var id = 4;
             var byteArray = Guid.NewGuid().ToByteArray();
-            _repositoryMock.Setup(x => x.GetSingleOrDefault(It.Is<int>(y => y.Equals(id))))
+            _photoRepositoryMock.Setup(x => x.GetSingleOrDefault(It.Is<int>(y => y.Equals(id))))
                 .Returns(new Photo
                 {
                     Data = new PhotoData { Data = byteArray }
@@ -160,6 +237,6 @@ namespace DetroitHarps.Business.Test
         }
 
         private PhotoManager GetManager() =>
-            new PhotoManager(_repositoryMock.Object, _loggerMock.Object);
+            new PhotoManager(_photoRepositoryMock.Object, _photoGroupRepositoryMock.Object, _loggerMock.Object);
     }
 }

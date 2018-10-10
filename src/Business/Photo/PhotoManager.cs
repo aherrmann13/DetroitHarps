@@ -1,5 +1,6 @@
 namespace DetroitHarps.Business.Photo
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using AutoMapper;
@@ -11,15 +12,21 @@ namespace DetroitHarps.Business.Photo
 
     public class PhotoManager : IPhotoManager
     {
-        private readonly IPhotoRepository _repository;
+        private readonly IPhotoRepository _photoRepository;
+        private readonly IPhotoGroupRepository _photoGroupRepository;
         private readonly ILogger<PhotoManager> _logger;
 
-        public PhotoManager(IPhotoRepository repository, ILogger<PhotoManager> logger)
+        public PhotoManager(
+            IPhotoRepository photoRepository,
+            IPhotoGroupRepository photoGroupRepository,
+            ILogger<PhotoManager> logger)
         {
-            Guard.NotNull(repository, nameof(repository));
+            Guard.NotNull(photoRepository, nameof(photoRepository));
+            Guard.NotNull(photoGroupRepository, nameof(photoGroupRepository));
             Guard.NotNull(logger, nameof(logger));
 
-            _repository = repository;
+            _photoRepository = photoRepository;
+            _photoGroupRepository = photoGroupRepository;
             _logger = logger;
         }
 
@@ -29,9 +36,10 @@ namespace DetroitHarps.Business.Photo
 
             _logger.LogInformation($"new photo with display properties: {JsonConvert.SerializeObject(model.DisplayProperties)}");
 
+            ValidatePhotoGroupExists(model.DisplayProperties.PhotoGroupId);
             var entity = Mapper.Map<Photo>(model);
-            var id = _repository.Create(entity);
-            return id;
+
+            return _photoRepository.Create(entity);
         }
 
         public void UpdateDisplayProperties(PhotoDisplayPropertiesDetailModel model)
@@ -40,23 +48,41 @@ namespace DetroitHarps.Business.Photo
 
             _logger.LogInformation($"updating photo with display properties: {JsonConvert.SerializeObject(model)}");
 
+            ValidatePhotoExists(model.PhotoId);
+            ValidatePhotoGroupExists(model.PhotoGroupId);
             var entity = Mapper.Map<PhotoDisplayProperties>(model);
 
-            _repository.UpdateDisplayProperties(model.PhotoId, entity);
+            _photoRepository.UpdateDisplayProperties(model.PhotoId, entity);
         }
 
-        public void Delete(int id) => _repository.Delete(id);
+        public void Delete(int id) => _photoRepository.Delete(id);
 
         public IEnumerable<PhotoDisplayPropertiesDetailModel> GetAll() =>
-            _repository.GetAll()
+            _photoRepository.GetAll()
                 .Select(Mapper.Map<PhotoDisplayPropertiesDetailModel>);
 
         public PhotoDataModel GetPhotoBytes(int id)
         {
-            var entity = _repository.GetSingleOrDefault(id);
+            var entity = _photoRepository.GetSingleOrDefault(id);
 
             // TODO: better mapping (entity -> PhotoDataModel)
             return entity == null ? null : Mapper.Map<PhotoDataModel>(entity.Data);
+        }
+
+        private void ValidatePhotoExists(int id)
+        {
+            if (!_photoRepository.Exists(id))
+            {
+                throw new InvalidOperationException($"Photo with id: {id} does not exist");
+            }
+        }
+
+        private void ValidatePhotoGroupExists(int id)
+        {
+            if (!_photoGroupRepository.Exists(id))
+            {
+                throw new InvalidOperationException($"Photo group with id: {id} does not exist");
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ namespace DetroitHarps.Business
     using AutoMapper;
     using DetroitHarps.Business.Photo;
     using DetroitHarps.Business.Registration;
+    using DetroitHarps.Business.Schedule;
 
     public static class BusinessMapperConfiguration
     {
@@ -11,6 +12,7 @@ namespace DetroitHarps.Business
             cfg.AddProfile<RegistrationProfile>();
             cfg.AddProfile<PhotoProfile>();
             cfg.AddProfile<PhotoGroupProfile>();
+            cfg.AddProfile<EventProfile>();
         }
     }
 }

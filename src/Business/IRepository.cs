@@ -13,6 +13,8 @@ namespace DetroitHarps.Business
 
         void Delete(int id);
 
+        bool Exists(int id);
+
         IList<T> GetAll();
 
         IList<T> GetMany(Expression<Func<T, bool>> filterClause);

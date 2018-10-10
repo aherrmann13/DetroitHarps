@@ -78,10 +78,23 @@ namespace DetroitHarps.Business.Test
         }
 
         [Fact]
+        public void UpdateIdDoesntExistThrowsTest()
+        {
+            var manager = GetManager();
+            var model = new PhotoGroupModel();
+
+            _repositoryMock.Setup(x => x.Exists(It.IsAny<int>())).Returns(false);
+
+            Assert.Throws<InvalidOperationException>(() => manager.Update(model));
+        }
+
+        [Fact]
         public void UpdateModelPassedToRepositoryTest()
         {
             var manager = GetManager();
             var model = new PhotoGroupModel();
+
+            _repositoryMock.Setup(x => x.Exists(It.IsAny<int>())).Returns(true);
 
             manager.Update(model);
 

@@ -1,5 +1,6 @@
 namespace DetroitHarps.Business.Photo
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using AutoMapper;
@@ -7,6 +8,7 @@ namespace DetroitHarps.Business.Photo
     using DetroitHarps.Business.Photo.Entities;
     using DetroitHarps.Business.Photo.Models;
     using Microsoft.Extensions.Logging;
+    using Newtonsoft.Json;
     using Tools;
 
     public class PhotoGroupManager : IPhotoGroupManager
@@ -27,19 +29,21 @@ namespace DetroitHarps.Business.Photo
         {
             Guard.NotNull(model, nameof(model));
 
+            _logger.LogInformation($"new photo group: {JsonConvert.SerializeObject(model)}");
+
             var entity = Mapper.Map<PhotoGroup>(model);
 
-            var id = _repository.Create(entity);
-
-            return id;
+            return _repository.Create(entity);
         }
 
         public void Update(PhotoGroupModel model)
         {
             Guard.NotNull(model, nameof(model));
 
+            _logger.LogInformation($"updating photo group: {JsonConvert.SerializeObject(model)}");
             var entity = Mapper.Map<PhotoGroup>(model);
 
+            ValidatePhotoGroupIdExists(model.Id);
             _repository.Update(entity);
         }
 
@@ -57,6 +61,14 @@ namespace DetroitHarps.Business.Photo
             var entity = _repository.GetSingleOrDefault(id);
 
             return entity == null ? null : Mapper.Map<PhotoGroupModel>(entity);
+        }
+
+        private void ValidatePhotoGroupIdExists(int id)
+        {
+            if (!_repository.Exists(id))
+            {
+                throw new InvalidOperationException($"Photo group with id: {id} does not exist");
+            }
         }
     }
 }
