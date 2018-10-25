@@ -1,6 +1,7 @@
 namespace DetroitHarps.Business
 {
     using AutoMapper;
+    using DetroitHarps.Business.Contact;
     using DetroitHarps.Business.Photo;
     using DetroitHarps.Business.Registration;
     using DetroitHarps.Business.Schedule;
@@ -13,6 +14,7 @@ namespace DetroitHarps.Business
             cfg.AddProfile<PhotoProfile>();
             cfg.AddProfile<PhotoGroupProfile>();
             cfg.AddProfile<EventProfile>();
+            cfg.AddProfile<ContactProfile>();
         }
     }
 }
