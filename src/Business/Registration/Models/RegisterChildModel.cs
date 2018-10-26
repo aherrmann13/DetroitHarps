@@ -8,7 +8,7 @@ namespace DetroitHarps.Business.Registration.Models
 
         public string LastName { get; set; }
 
-        public string Gender { get; set; }
+        public Gender Gender { get; set; }
 
         public DateTimeOffset DateOfBirth { get; set; }
 

@@ -9,6 +9,9 @@ namespace DetroitHarps.Business.Test.Mapping
     using DetroitHarps.Business.Registration.Models;
     using Xunit;
 
+    using EntityGender = DetroitHarps.Business.Registration.Entities.Gender;
+    using ModelGender = DetroitHarps.Business.Registration.Models.Gender;
+
     public class RegistrationProfileTest
     {
         public RegistrationProfileTest()
@@ -44,7 +47,7 @@ namespace DetroitHarps.Business.Test.Mapping
                     {
                         FirstName = Guid.NewGuid().ToString(),
                         LastName = Guid.NewGuid().ToString(),
-                        Gender = Guid.NewGuid().ToString(),
+                        Gender = ModelGender.Female,
                         DateOfBirth = DateTimeOffset.Now,
                         ShirtSize = Guid.NewGuid().ToString()
                     },
@@ -52,7 +55,7 @@ namespace DetroitHarps.Business.Test.Mapping
                     {
                         FirstName = Guid.NewGuid().ToString(),
                         LastName = Guid.NewGuid().ToString(),
-                        Gender = Guid.NewGuid().ToString(),
+                        Gender = ModelGender.Female,
                         DateOfBirth = DateTimeOffset.Now,
                         ShirtSize = Guid.NewGuid().ToString()
                     }
@@ -75,13 +78,13 @@ namespace DetroitHarps.Business.Test.Mapping
 
             Assert.Equal(registerModel.Children[0].FirstName, registration.Children[0].FirstName);
             Assert.Equal(registerModel.Children[0].LastName, registration.Children[0].LastName);
-            Assert.Equal(registerModel.Children[0].Gender, registration.Children[0].Gender);
+            Assert.Equal((int)registerModel.Children[0].Gender, (int)registration.Children[0].Gender);
             Assert.Equal(registerModel.Children[0].DateOfBirth.Date, registration.Children[0].DateOfBirth.Date);
             Assert.Equal(registerModel.Children[0].ShirtSize, registration.Children[0].ShirtSize);
 
             Assert.Equal(registerModel.Children[1].FirstName, registration.Children[1].FirstName);
             Assert.Equal(registerModel.Children[1].LastName, registration.Children[1].LastName);
-            Assert.Equal(registerModel.Children[1].Gender, registration.Children[1].Gender);
+            Assert.Equal((int)registerModel.Children[1].Gender, (int)registration.Children[1].Gender);
             Assert.Equal(registerModel.Children[1].DateOfBirth.Date, registration.Children[1].DateOfBirth.Date);
             Assert.Equal(registerModel.Children[1].ShirtSize, registration.Children[1].ShirtSize);
 
@@ -95,7 +98,7 @@ namespace DetroitHarps.Business.Test.Mapping
             {
                 FirstName = Guid.NewGuid().ToString(),
                 LastName = Guid.NewGuid().ToString(),
-                Gender = Guid.NewGuid().ToString(),
+                Gender = EntityGender.Female,
                 DateOfBirth = DateTime.Now,
                 ShirtSize = Guid.NewGuid().ToString()
             };
@@ -104,7 +107,7 @@ namespace DetroitHarps.Business.Test.Mapping
 
             Assert.Equal(registrationChild.FirstName, registeredChildModel.FirstName);
             Assert.Equal(registrationChild.LastName, registeredChildModel.LastName);
-            Assert.Equal(registrationChild.Gender, registeredChildModel.Gender);
+            Assert.Equal((int)registrationChild.Gender, (int)registeredChildModel.Gender);
             Assert.Equal(registrationChild.DateOfBirth.Date, registeredChildModel.DateOfBirth.Date);
             Assert.Equal(registrationChild.ShirtSize, registeredChildModel.ShirtSize);
             Assert.Null(registeredChildModel.EmailAddress);
@@ -130,7 +133,7 @@ namespace DetroitHarps.Business.Test.Mapping
                     {
                         FirstName = Guid.NewGuid().ToString(),
                         LastName = Guid.NewGuid().ToString(),
-                        Gender = Guid.NewGuid().ToString(),
+                        Gender = EntityGender.Female,
                         DateOfBirth = DateTime.Now,
                         ShirtSize = Guid.NewGuid().ToString()
                     },
@@ -138,7 +141,7 @@ namespace DetroitHarps.Business.Test.Mapping
                     {
                         FirstName = Guid.NewGuid().ToString(),
                         LastName = Guid.NewGuid().ToString(),
-                        Gender = Guid.NewGuid().ToString(),
+                        Gender = EntityGender.Female,
                         DateOfBirth = DateTime.Now,
                         ShirtSize = Guid.NewGuid().ToString()
                     }
@@ -153,7 +156,7 @@ namespace DetroitHarps.Business.Test.Mapping
             {
                 Assert.Equal(x.FirstName, registration.Children[0].FirstName);
                 Assert.Equal(x.LastName, registration.Children[0].LastName);
-                Assert.Equal(x.Gender, registration.Children[0].Gender);
+                Assert.Equal((int)x.Gender, (int)registration.Children[0].Gender);
                 Assert.Equal(x.DateOfBirth.Date, registration.Children[0].DateOfBirth.Date);
                 Assert.Equal(x.ShirtSize, registration.Children[0].ShirtSize);
                 Assert.Equal(x.EmailAddress, registration.ContactInformation.Email);
@@ -164,7 +167,7 @@ namespace DetroitHarps.Business.Test.Mapping
             {
                 Assert.Equal(x.FirstName, registration.Children[1].FirstName);
                 Assert.Equal(x.LastName, registration.Children[1].LastName);
-                Assert.Equal(x.Gender, registration.Children[1].Gender);
+                Assert.Equal((int)x.Gender, (int)registration.Children[1].Gender);
                 Assert.Equal(x.DateOfBirth.Date, registration.Children[1].DateOfBirth.Date);
                 Assert.Equal(x.ShirtSize, registration.Children[1].ShirtSize);
                 Assert.Equal(x.EmailAddress, registration.ContactInformation.Email);

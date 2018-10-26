@@ -47,7 +47,7 @@ namespace DetroitHarps.Business.Contact
         public void MarkAsRead(int id)
         {
             var message = GetMessageOrThrow(id);
-            if(message.IsRead)
+            if (message.IsRead)
             {
                 _logger.LogInformation($"message with id {id} is already marked as read");
             }
@@ -62,7 +62,7 @@ namespace DetroitHarps.Business.Contact
         public void MarkAsUnread(int id)
         {
             var message = GetMessageOrThrow(id);
-            if(message.IsRead)
+            if (message.IsRead)
             {
                 _logger.LogInformation($"marking message with id {id} as unread");
                 message.IsRead = false;
