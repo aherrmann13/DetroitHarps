@@ -1,5 +1,6 @@
 namespace DetroitHarps.DataAccess
 {
+    using System;
     using DetroitHarps.DataAccess.EntityBuilders;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,15 @@ namespace DetroitHarps.DataAccess
         public DetroitHarpsDbContext(DbContextOptions<DetroitHarpsDbContext> options)
             : base(options)
         {
+        }
+
+        public IAuditPropertyManager AuditPropertyManager { get; set; } = new AuditPropertyManager();
+
+        public override int SaveChanges()
+        {
+            AuditPropertyManager.SetTimestamps(this);
+
+            return base.SaveChanges();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

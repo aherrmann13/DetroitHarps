@@ -31,5 +31,15 @@ namespace DetroitHarps.DataAccess.Test.EntityBuilders
             Assert.NotNull(tableName);
             Assert.Equal(nameof(Event), tableName);
         }
+
+        [Fact]
+        public void AuditPropertiesAddedTest()
+        {
+            var insertTimestampColumnName = _dbContext.Model.FindEntityType(typeof(Event))?.FindProperty(Constants.InsertTimestampPropertyName);
+            var updateTimestampColumnName = _dbContext.Model.FindEntityType(typeof(Event))?.FindProperty(Constants.UpdateTimestampPropertyName);
+
+            Assert.NotNull(insertTimestampColumnName);
+            Assert.NotNull(updateTimestampColumnName);
+        }
     }
 }

@@ -1,5 +1,6 @@
 namespace DetroitHarps.DataAccess.EntityBuilders
 {
+    using System;
     using DetroitHarps.Business;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -21,12 +22,25 @@ namespace DetroitHarps.DataAccess.EntityBuilders
         {
             var typeBuilder = _modelBuilder.Entity<T>();
 
-            typeBuilder.HasKey(x => x.Id);
+            AddKey(typeBuilder);
+            AddAuditProperties(typeBuilder);
+
             ConfigureEntity(typeBuilder);
         }
 
         protected virtual void ConfigureEntity(EntityTypeBuilder<T> typeBuilder)
         {
+        }
+
+        private static void AddKey(EntityTypeBuilder<T> typeBuilder)
+        {
+            typeBuilder.HasKey(x => x.Id);
+        }
+
+        private static void AddAuditProperties(EntityTypeBuilder<T> typeBuilder)
+        {
+            typeBuilder.Property<DateTimeOffset>(Constants.InsertTimestampPropertyName);
+            typeBuilder.Property<DateTimeOffset>(Constants.UpdateTimestampPropertyName);
         }
     }
 }

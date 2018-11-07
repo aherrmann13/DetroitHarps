@@ -31,5 +31,15 @@ namespace DetroitHarps.DataAccess.Test.EntityBuilders
             Assert.NotNull(tableName);
             Assert.Equal(nameof(PhotoGroup), tableName);
         }
+
+         [Fact]
+        public void AuditPropertiesAddedTest()
+        {
+            var insertTimestampColumnName = _dbContext.Model.FindEntityType(typeof(PhotoGroup))?.FindProperty(Constants.InsertTimestampPropertyName);
+            var updateTimestampColumnName = _dbContext.Model.FindEntityType(typeof(PhotoGroup))?.FindProperty(Constants.UpdateTimestampPropertyName);
+
+            Assert.NotNull(insertTimestampColumnName);
+            Assert.NotNull(updateTimestampColumnName);
+        }
     }
 }

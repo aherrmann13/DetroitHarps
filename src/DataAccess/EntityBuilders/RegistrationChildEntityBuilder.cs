@@ -19,6 +19,7 @@ namespace DetroitHarps.DataAccess.EntityBuilders
             _modelBuilder = modelBuilder;
         }
 
+        // TODO: should this have audit props?
         public void Build()
         {
             var typeBuilder = _modelBuilder.Entity<RegistrationChild>();
