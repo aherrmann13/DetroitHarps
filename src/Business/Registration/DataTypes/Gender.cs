@@ -1,4 +1,4 @@
-namespace DetroitHarps.Business.Registration.Models
+namespace DetroitHarps.Business.Registration.DataTypes
 {
     public enum Gender
     {

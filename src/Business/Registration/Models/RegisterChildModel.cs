@@ -1,6 +1,7 @@
 namespace DetroitHarps.Business.Registration.Models
 {
     using System;
+    using DetroitHarps.Business.Registration.DataTypes;
 
     public class RegisterChildModel
     {

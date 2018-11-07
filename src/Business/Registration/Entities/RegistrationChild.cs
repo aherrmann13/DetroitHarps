@@ -1,6 +1,7 @@
 namespace DetroitHarps.Business.Registration.Entities
 {
     using System;
+    using DetroitHarps.Business.Registration.DataTypes;
 
     public class RegistrationChild
     {
