@@ -6,6 +6,10 @@
 
 DIR="$(cd "$(dirname "$0")" && pwd)/.."
 
+$DIR/scripts/dotnet-build.sh
+
+dotnet test $DIR/test/Tools.Test/
+
 dotnet test $DIR/test/Business.Test/
 
 dotnet test $DIR/test/DataAccess.Test/
