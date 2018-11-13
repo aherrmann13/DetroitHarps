@@ -33,6 +33,12 @@ namespace DetroitHarps.Business.Registration
             _repository.Create(entity);
         }
 
+        public void Delete(int id) => _repository.Delete(id);
+
+        public IEnumerable<RegisteredParentModel> GetAllRegisteredParents() =>
+            _repository.GetAll()
+                .Select(Mapper.Map<RegisteredParentModel>);
+
         public IEnumerable<RegisteredChildModel> GetAllRegisteredChildren() =>
             _repository.GetAll()
                 .SelectMany(Mapper.Map<IEnumerable<RegisteredChildModel>>);

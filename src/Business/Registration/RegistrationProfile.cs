@@ -43,6 +43,23 @@ namespace DetroitHarps.Business.Registration
 
             CreateMap<Registration, IEnumerable<RegisteredChildModel>>()
                 .ConvertUsing<RegistrationChildConverter>();
+
+            CreateMap<Registration, RegisteredParentModel>()
+                .ForMember(
+                    dest => dest.RegistrationId,
+                    opt => opt.MapFrom(src => src.Id))
+                .ForMember(
+                    dest => dest.FirstName,
+                    opt => opt.MapFrom(src => src.Parent.FirstName))
+                .ForMember(
+                    dest => dest.LastName,
+                    opt => opt.MapFrom(src => src.Parent.LastName))
+                .ForMember(
+                    dest => dest.Email,
+                    opt => opt.MapFrom(src => src.ContactInformation.Email))
+                .ForMember(
+                    dest => dest.ChildCount,
+                    opt => opt.MapFrom(src => src.Children.Count));
         }
 
         private class RegistrationChildConverter : ITypeConverter<Registration, IEnumerable<RegisteredChildModel>>

@@ -57,6 +57,56 @@ namespace DetroitHarps.Business.Test
         }
 
         [Fact]
+        public void DeleteIdPassedToRepositoryTest()
+        {
+            var manager = GetManager();
+            var id = 2;
+
+            manager.Delete(id);
+
+            _repositoryMock.Verify(
+                x => x.Delete(It.Is<int>(y => y.Equals(id))),
+                Times.Once);
+        }
+
+        [Fact]
+        public void GetAllParentsReturnsModelsTest()
+        {
+            var entities = new List<Registration>
+            {
+                new Registration
+                {
+                    Parent = new RegistrationParent(),
+                    ContactInformation = new RegistrationContactInformation(),
+                    Children = new List<RegistrationChild>
+                    {
+                        new RegistrationChild(),
+                        new RegistrationChild()
+                    }
+                },
+                new Registration
+                {
+                    Parent = new RegistrationParent(),
+                    ContactInformation = new RegistrationContactInformation(),
+                    Children = new List<RegistrationChild>
+                    {
+                        new RegistrationChild(),
+                        new RegistrationChild()
+                    }
+                }
+            };
+            _repositoryMock.Setup(x => x.GetAll())
+                .Returns(entities);
+
+            var manager = GetManager();
+
+            var modelsFromManager = manager.GetAllRegisteredParents();
+
+            Assert.Equal(entities.Count, modelsFromManager.Count());
+            Assert.All(modelsFromManager, x => Assert.NotNull(x));
+        }
+
+        [Fact]
         public void GetAllChildrenReturnsMappedModelsTest()
         {
             var entities = new List<Registration>

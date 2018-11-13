@@ -8,6 +8,10 @@ namespace DetroitHarps.Business.Registration
     {
         void Register(RegisterModel model);
 
+        void Delete(int id);
+
+        IEnumerable<RegisteredParentModel> GetAllRegisteredParents();
+
         IEnumerable<RegisteredChildModel> GetAllRegisteredChildren();
     }
 }

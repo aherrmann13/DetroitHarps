@@ -90,6 +90,33 @@ namespace DetroitHarps.Business.Test.Mapping
         }
 
         [Fact]
+        public void RegisteredParentModelMapTest()
+        {
+            var registration = new Registration
+            {
+                Id = 5,
+                Parent = new RegistrationParent
+                {
+                    FirstName = Guid.NewGuid().ToString(),
+                    LastName = Guid.NewGuid().ToString()
+                },
+                ContactInformation = new RegistrationContactInformation
+                {
+                    Email = Guid.NewGuid().ToString()
+                },
+                Children = { new RegistrationChild(), new RegistrationChild() }
+            };
+
+            var registeredParentModel = Mapper.Map<RegisteredParentModel>(registration);
+
+            Assert.Equal(registration.Id, registeredParentModel.RegistrationId);
+            Assert.Equal(registration.Parent.FirstName, registeredParentModel.FirstName);
+            Assert.Equal(registration.Parent.LastName, registeredParentModel.LastName);
+            Assert.Equal(registration.ContactInformation.Email, registeredParentModel.Email);
+            Assert.Equal(registration.Children.Count, registeredParentModel.ChildCount);
+        }
+
+        [Fact]
         public void RegisteredChildModelMapTest()
         {
             var registrationChild = new RegistrationChild
