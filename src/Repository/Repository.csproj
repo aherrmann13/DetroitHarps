@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>DetroitHarps.Repository</AssemblyName>
+    <RootNamespace>DetroitHarps.Repository</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.4" />
+    <PackageReference Include="Stylecop.Analyzers" Version="1.0.2" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../DataAccess/DataAccess.csproj" />
+    <ProjectReference Include="../Tools/Tools.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>../../stylecop.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+</Project>
