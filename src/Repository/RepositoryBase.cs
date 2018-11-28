@@ -24,7 +24,7 @@ namespace DetroitHarps.Repository
 
         protected DetroitHarpsDbContext DbContext { get; }
 
-        protected abstract IQueryable<T> BaseQuery { get; }
+        protected virtual IQueryable<T> BaseQuery => DbContext.Set<T>();
 
         public int Create(T entity)
         {
@@ -37,6 +37,8 @@ namespace DetroitHarps.Repository
         public void Update(T entity)
         {
             Guard.NotNull(entity, nameof(entity));
+
+            // TODO: throw on not exist?
             DbContext.Update(entity);
             DbContext.SaveChanges();
         }
