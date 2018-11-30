@@ -5,5 +5,7 @@ namespace DetroitHarps.Business.Photo
     public interface IPhotoRepository : IRepository<Photo>
     {
         void UpdateDisplayProperties(int id, PhotoDisplayProperties properties);
+
+        bool PhotosExistWithGroupId(int groupId);
     }
 }

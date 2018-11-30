@@ -45,7 +45,11 @@ namespace DetroitHarps.Business.Schedule
             _repository.Update(entity);
         }
 
-        public void Delete(int id) => _repository.Delete(id);
+        public void Delete(int id)
+        {
+            _logger.LogInformation($"deleting event with id {id}");
+            _repository.Delete(id);
+        }
 
         public IEnumerable<EventModel> GetAll() =>
             _repository.GetAll()

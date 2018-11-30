@@ -33,7 +33,11 @@ namespace DetroitHarps.Business.Registration
             _repository.Create(entity);
         }
 
-        public void Delete(int id) => _repository.Delete(id);
+        public void Delete(int id)
+        {
+            _logger.LogInformation($"deleting registration with id {id}");
+            _repository.Delete(id);
+        }
 
         public IEnumerable<RegisteredParentModel> GetAllRegisteredParents() =>
             _repository.GetAll()

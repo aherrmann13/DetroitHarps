@@ -55,7 +55,11 @@ namespace DetroitHarps.Business.Photo
             _photoRepository.UpdateDisplayProperties(model.PhotoId, entity);
         }
 
-        public void Delete(int id) => _photoRepository.Delete(id);
+        public void Delete(int id)
+        {
+            _logger.LogInformation($"deleting photo with id {id}");
+            _photoRepository.Delete(id);
+        }
 
         public IEnumerable<PhotoDisplayPropertiesDetailModel> GetAll() =>
             _photoRepository.GetAll()
