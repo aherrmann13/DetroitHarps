@@ -18,7 +18,7 @@ namespace DetroitHarps.Repository
         }
 
         // TODO: maybe figure out how to unit test?
-        protected override IQueryable<Registration> BaseQuery => 
+        protected override IQueryable<Registration> BaseQuery =>
             DbContext.Set<Registration>()
                 .Include(x => x.Parent)
                 .Include(x => x.ContactInformation)
