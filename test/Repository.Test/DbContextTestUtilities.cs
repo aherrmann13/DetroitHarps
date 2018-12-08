@@ -7,7 +7,7 @@ namespace DetroitHarps.Repository.Test
 
     public static class DbContextTestUtilities
     {
-        public static DbSet<T> GetAsQueryableMockDbSet<T>(this IList<T> sourceList)
+        public static DbSet<T> AsQueryableMockDbSet<T>(this IList<T> sourceList)
             where T : class
         {
             var queryable = sourceList.AsQueryable();

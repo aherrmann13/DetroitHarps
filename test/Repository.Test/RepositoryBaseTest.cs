@@ -68,7 +68,7 @@ namespace DetroitHarps.Repository.Test
         {
             _dbContextMock
                 .Setup(x => x.Set<TestEntity>())
-                .Returns(new List<TestEntity>().GetAsQueryableMockDbSet());
+                .Returns(new List<TestEntity>().AsQueryableMockDbSet());
 
             _repository.Delete(2);
 
@@ -81,7 +81,7 @@ namespace DetroitHarps.Repository.Test
             var entities = new List<TestEntity> { new TestEntity { Id = 2 } };
             _dbContextMock
                 .Setup(x => x.Set<TestEntity>())
-                .Returns(entities.GetAsQueryableMockDbSet());
+                .Returns(entities.AsQueryableMockDbSet());
 
             _repository.Delete(entities[0].Id);
 
@@ -93,7 +93,7 @@ namespace DetroitHarps.Repository.Test
         public void ExistsReturnsValueFromDbContextTest()
         {
             var entities = new List<TestEntity> { new TestEntity { Id = 5 } };
-            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.GetAsQueryableMockDbSet());
+            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.AsQueryableMockDbSet());
 
             var expectedTrueValue = _repository.Exists(entities[0].Id);
             var expectedFalseValue = _repository.Exists(entities[0].Id + 1);
@@ -106,7 +106,7 @@ namespace DetroitHarps.Repository.Test
         public void GetAllReturnsAllTest()
         {
             var entities = new List<TestEntity> { new TestEntity(), new TestEntity() };
-            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.GetAsQueryableMockDbSet());
+            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.AsQueryableMockDbSet());
 
             var entitiesReturned = _repository.GetAll();
 
@@ -123,7 +123,7 @@ namespace DetroitHarps.Repository.Test
         public void GetManyFiltersCorrectlyTest()
         {
             var entities = new List<TestEntity> { new TestEntity { Id = 2 }, new TestEntity { Id = 3 } };
-            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.GetAsQueryableMockDbSet());
+            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.AsQueryableMockDbSet());
 
             var entitiesReturned = _repository.GetMany(x => x.Id == entities[0].Id);
 
@@ -141,7 +141,7 @@ namespace DetroitHarps.Repository.Test
         public void GetSingleOrDefaultThrowsOnMultipleTest()
         {
             var entities = new List<TestEntity> { new TestEntity { Id = 2 }, new TestEntity { Id = 3 } };
-            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.GetAsQueryableMockDbSet());
+            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.AsQueryableMockDbSet());
 
             Assert.Throws<InvalidOperationException>(() => _repository.GetSingleOrDefault(x => true));
         }
@@ -150,7 +150,7 @@ namespace DetroitHarps.Repository.Test
         public void GetSingleOrDefaultFiltersCorrectlyTest()
         {
             var entities = new List<TestEntity> { new TestEntity { Id = 2 }, new TestEntity { Id = 3 } };
-            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.GetAsQueryableMockDbSet());
+            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.AsQueryableMockDbSet());
 
             var entityReturned = _repository.GetSingleOrDefault(x => x.Id == entities[0].Id);
 
@@ -161,7 +161,7 @@ namespace DetroitHarps.Repository.Test
         public void GetSingleOrDefaultReturnsNullOnNoneTest()
         {
             var entities = new List<TestEntity> { new TestEntity { Id = 2 }, new TestEntity { Id = 3 } };
-            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.GetAsQueryableMockDbSet());
+            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.AsQueryableMockDbSet());
 
             var entityReturned = _repository.GetSingleOrDefault(x => false);
 
@@ -173,7 +173,7 @@ namespace DetroitHarps.Repository.Test
         {
             var commonId = 2;
             var entities = new List<TestEntity> { new TestEntity { Id = commonId }, new TestEntity { Id = commonId } };
-            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.GetAsQueryableMockDbSet());
+            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.AsQueryableMockDbSet());
 
             Assert.Throws<InvalidOperationException>(() => _repository.GetSingleOrDefault(x => x.Id == commonId));
         }
@@ -182,7 +182,7 @@ namespace DetroitHarps.Repository.Test
         public void GetSingleOrDefaultByidFiltersCorrectlyTest()
         {
             var entities = new List<TestEntity> { new TestEntity { Id = 2 }, new TestEntity { Id = 3 } };
-            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.GetAsQueryableMockDbSet());
+            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.AsQueryableMockDbSet());
 
             var entityReturned = _repository.GetSingleOrDefault(entities[0].Id);
 
@@ -193,7 +193,7 @@ namespace DetroitHarps.Repository.Test
         public void GetSingleOrDefaultByIdReturnsNullOnNoneTest()
         {
             var entities = new List<TestEntity> { new TestEntity { Id = 2 }, new TestEntity { Id = 3 } };
-            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.GetAsQueryableMockDbSet());
+            _dbContextMock.Setup(x => x.Set<TestEntity>()).Returns(entities.AsQueryableMockDbSet());
 
             var entityReturned = _repository.GetSingleOrDefault(entities.Max(x => x.Id) + 1);
 
