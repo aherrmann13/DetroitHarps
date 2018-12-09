@@ -4,6 +4,7 @@ namespace DetroitHarps.Business.Test
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
+    using DetroitHarps.Business.Exception;
     using DetroitHarps.Business.Registration;
     using DetroitHarps.Business.Registration.Entities;
     using DetroitHarps.Business.Registration.Models;
@@ -40,7 +41,7 @@ namespace DetroitHarps.Business.Test
         {
             var manager = GetManager();
 
-            Assert.Throws<ArgumentNullException>(() => manager.Register(null));
+            Assert.Throws<BusinessException>(() => manager.Register(null));
         }
 
         [Fact]

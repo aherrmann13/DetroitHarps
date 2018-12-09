@@ -105,6 +105,12 @@ namespace DetroitHarps.Repository.Test
             _dbContextMock.Setup(x => x.Set<Photo>())
                 .Returns(new List<Photo> { entity }.AsQueryableMockDbSet());
 
+            _dbContextMock.Setup(x => x.Set<PhotoDisplayProperties>())
+                .Returns(new List<PhotoDisplayProperties>
+                    {
+                        entity.DisplayProperties
+                    }.AsQueryableMockDbSet());
+
             var existingGroupIdResult =
                 _repository.PhotosExistWithGroupId(entity.DisplayProperties.PhotoGroupId);
 

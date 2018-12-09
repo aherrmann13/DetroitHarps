@@ -3,6 +3,7 @@ namespace DetroitHarps.Business.Test
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using DetroitHarps.Business.Exception;
     using DetroitHarps.Business.Photo;
     using DetroitHarps.Business.Photo.Entities;
     using DetroitHarps.Business.Photo.Models;
@@ -48,7 +49,7 @@ namespace DetroitHarps.Business.Test
         {
             var manager = GetManager();
 
-            Assert.Throws<ArgumentNullException>(() => manager.Create(null));
+            Assert.Throws<BusinessException>(() => manager.Create(null));
         }
 
         [Fact]
@@ -61,7 +62,7 @@ namespace DetroitHarps.Business.Test
                 .Setup(x => x.Exists(It.IsAny<int>()))
                 .Returns(false);
 
-            Assert.Throws<InvalidOperationException>(() => manager.Create(model));
+            Assert.Throws<BusinessException>(() => manager.Create(model));
         }
 
         [Fact]
@@ -101,7 +102,7 @@ namespace DetroitHarps.Business.Test
         {
             var manager = GetManager();
 
-            Assert.Throws<ArgumentNullException>(() => manager.UpdateDisplayProperties(null));
+            Assert.Throws<BusinessException>(() => manager.UpdateDisplayProperties(null));
         }
 
         [Fact]
@@ -118,7 +119,7 @@ namespace DetroitHarps.Business.Test
                 .Setup(x => x.Exists(It.IsAny<int>()))
                 .Returns(true);
 
-            Assert.Throws<InvalidOperationException>(() => manager.UpdateDisplayProperties(model));
+            Assert.Throws<BusinessException>(() => manager.UpdateDisplayProperties(model));
         }
 
         [Fact]
@@ -135,7 +136,7 @@ namespace DetroitHarps.Business.Test
                 .Setup(x => x.Exists(It.IsAny<int>()))
                 .Returns(false);
 
-            Assert.Throws<InvalidOperationException>(() => manager.UpdateDisplayProperties(model));
+            Assert.Throws<BusinessException>(() => manager.UpdateDisplayProperties(model));
         }
 
         [Fact]

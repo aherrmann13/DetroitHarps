@@ -4,6 +4,7 @@ namespace DetroitHarps.Business.Test
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
+    using DetroitHarps.Business.Exception;
     using DetroitHarps.Business.Schedule;
     using DetroitHarps.Business.Schedule.Entities;
     using DetroitHarps.Business.Schedule.Models;
@@ -40,7 +41,7 @@ namespace DetroitHarps.Business.Test
         {
             var manager = GetManager();
 
-            Assert.Throws<ArgumentNullException>(() => manager.Create(null));
+            Assert.Throws<BusinessException>(() => manager.Create(null));
         }
 
         [Fact]
@@ -75,7 +76,7 @@ namespace DetroitHarps.Business.Test
         {
             var manager = GetManager();
 
-            Assert.Throws<ArgumentNullException>(() => manager.Update(null));
+            Assert.Throws<BusinessException>(() => manager.Update(null));
         }
 
         [Fact]
@@ -86,7 +87,7 @@ namespace DetroitHarps.Business.Test
 
             _repositoryMock.Setup(x => x.Exists(It.IsAny<int>())).Returns(false);
 
-            Assert.Throws<InvalidOperationException>(() => manager.Update(model));
+            Assert.Throws<BusinessException>(() => manager.Update(model));
         }
 
         [Fact]

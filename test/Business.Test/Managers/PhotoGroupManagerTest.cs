@@ -3,6 +3,7 @@ namespace DetroitHarps.Business.Test
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using DetroitHarps.Business.Exception;
     using DetroitHarps.Business.Photo;
     using DetroitHarps.Business.Photo.Entities;
     using DetroitHarps.Business.Photo.Models;
@@ -50,7 +51,7 @@ namespace DetroitHarps.Business.Test
         {
             var manager = GetManager();
 
-            Assert.Throws<ArgumentNullException>(() => manager.Create(null));
+            Assert.Throws<BusinessException>(() => manager.Create(null));
         }
 
         [Fact]
@@ -85,7 +86,7 @@ namespace DetroitHarps.Business.Test
         {
             var manager = GetManager();
 
-            Assert.Throws<ArgumentNullException>(() => manager.Update(null));
+            Assert.Throws<BusinessException>(() => manager.Update(null));
         }
 
         [Fact]
@@ -96,7 +97,7 @@ namespace DetroitHarps.Business.Test
 
             _photoGroupRepositoryMock.Setup(x => x.Exists(It.IsAny<int>())).Returns(false);
 
-            Assert.Throws<InvalidOperationException>(() => manager.Update(model));
+            Assert.Throws<BusinessException>(() => manager.Update(model));
         }
 
         [Fact]
@@ -134,7 +135,7 @@ namespace DetroitHarps.Business.Test
             var id = 2;
             _photoRepositoryMock.Setup(x => x.PhotosExistWithGroupId(It.IsAny<int>())).Returns(true);
 
-            Assert.Throws<InvalidOperationException>(() => manager.Delete(id));
+            Assert.Throws<BusinessException>(() => manager.Delete(id));
 
             _photoRepositoryMock.Verify(
                 x => x.PhotosExistWithGroupId(It.Is<int>(y => y.Equals(id))),

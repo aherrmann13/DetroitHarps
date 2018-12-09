@@ -5,8 +5,10 @@ namespace DetroitHarps.Business.Contact
     using System.Linq;
     using System.Text;
     using AutoMapper;
+    using DetroitHarps.Business.Constants;
     using DetroitHarps.Business.Contact.Entities;
     using DetroitHarps.Business.Contact.Models;
+    using DetroitHarps.Business.Exception;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
     using Tools;
@@ -33,7 +35,7 @@ namespace DetroitHarps.Business.Contact
 
         public void Contact(MessageModel model)
         {
-            Guard.NotNull(model, nameof(model));
+            Guard.NotNull(model, nameof(model), Constants.NullExceptionGenerator);
 
             _logger.LogInformation($"new message: {JsonConvert.SerializeObject(model)}");
 
@@ -95,6 +97,7 @@ namespace DetroitHarps.Business.Contact
         }
 
         private Message GetMessageOrThrow(int id) =>
-            _repository.GetSingleOrDefault(id) ?? throw new InvalidOperationException($"message with id: {id} does not exist");
+            _repository.GetSingleOrDefault(id) ??
+                throw new BusinessException($"message with id: {id} does not exist");
     }
 }

@@ -3,6 +3,7 @@ namespace DetroitHarps.Business.Registration
     using System.Collections.Generic;
     using System.Linq;
     using AutoMapper;
+    using DetroitHarps.Business.Constants;
     using DetroitHarps.Business.Registration.Entities;
     using DetroitHarps.Business.Registration.Models;
     using Microsoft.Extensions.Logging;
@@ -25,7 +26,7 @@ namespace DetroitHarps.Business.Registration
 
         public void Register(RegisterModel model)
         {
-            Guard.NotNull(model, nameof(model));
+            Guard.NotNull(model, nameof(model), Constants.NullExceptionGenerator);
             _logger.LogInformation($"new registration: {JsonConvert.SerializeObject(model)}");
 
             var entity = Mapper.Map<Registration>(model);

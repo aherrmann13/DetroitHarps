@@ -25,6 +25,33 @@ namespace Tools.Test
             }
         }
 
+        [Fact]
+        public static void GuardNotNullWithExceptionThrowsOnNullTest()
+        {
+            const string paramName = "test";
+            var exception = Assert.Throws<InvalidOperationException>(
+                () => Guard.NotNull(
+                    (object)null,
+                    paramName,
+                    e => new InvalidOperationException(message: e.Message, innerException: e)));
+
+            Assert.Equal(exception.Message, $"Value cannot be null.\nParameter name: {paramName}");
+            Assert.Equal(typeof(ArgumentNullException), exception.InnerException.GetType());
+        }
+
+        [Fact]
+        public static void GuardNotNullWithExceptionDoesNotThrowOnObjectTest()
+        {
+            try
+            {
+                Guard.NotNull(new object(), "test", e => new InvalidOperationException(e.Message, e));
+            }
+            catch (Exception)
+            {
+                Assert.False(true);
+            }
+        }
+
          [Fact]
         public static void GuardNotNullOrWhiteSpaceThrowsOnNullTest()
         {

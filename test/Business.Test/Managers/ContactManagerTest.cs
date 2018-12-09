@@ -6,6 +6,7 @@ namespace DetroitHarps.Business.Test
     using DetroitHarps.Business.Contact;
     using DetroitHarps.Business.Contact.Entities;
     using DetroitHarps.Business.Contact.Models;
+    using DetroitHarps.Business.Exception;
     using Microsoft.Extensions.Logging;
     using Moq;
     using Tools;
@@ -48,7 +49,7 @@ namespace DetroitHarps.Business.Test
         {
             var manager = GetManager();
 
-            Assert.Throws<ArgumentNullException>(() => manager.Contact(null));
+            Assert.Throws<BusinessException>(() => manager.Contact(null));
         }
 
         [Fact]
@@ -92,7 +93,7 @@ namespace DetroitHarps.Business.Test
                                 model.Body;
 
             _emailSenderMock.Verify(
-                x => x.SendToSelf(It.IsAny<string>(), It.Is<string>(y => Compare.EqualOrdinal(y, expectedBody))),
+                x => x.SendToSelf(It.IsAny<string>(), It.Is<string>(y => Tools.Compare.EqualOrdinal(y, expectedBody))),
                 Times.Once);
         }
 
@@ -115,7 +116,7 @@ namespace DetroitHarps.Business.Test
             var manager = GetManager();
             _repositoryMock.Setup(x => x.GetSingleOrDefault(It.IsAny<int>())).Returns((Message)null);
 
-            Assert.Throws<InvalidOperationException>(() => manager.MarkAsRead(1));
+            Assert.Throws<BusinessException>(() => manager.MarkAsRead(1));
         }
 
         [Fact]
@@ -148,7 +149,7 @@ namespace DetroitHarps.Business.Test
             var manager = GetManager();
             _repositoryMock.Setup(x => x.GetSingleOrDefault(It.IsAny<int>())).Returns((Message)null);
 
-            Assert.Throws<InvalidOperationException>(() => manager.MarkAsUnread(1));
+            Assert.Throws<BusinessException>(() => manager.MarkAsUnread(1));
         }
 
         [Fact]

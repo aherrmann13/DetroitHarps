@@ -3,6 +3,7 @@ namespace DetroitHarps.Repository.Test
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using DetroitHarps.Business.Exception;
     using DetroitHarps.DataAccess;
     using Microsoft.EntityFrameworkCore;
     using Moq;

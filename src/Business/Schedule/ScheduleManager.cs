@@ -4,6 +4,8 @@ namespace DetroitHarps.Business.Schedule
     using System.Collections.Generic;
     using System.Linq;
     using AutoMapper;
+    using DetroitHarps.Business.Constants;
+    using DetroitHarps.Business.Exception;
     using DetroitHarps.Business.Schedule.Entities;
     using DetroitHarps.Business.Schedule.Models;
     using Microsoft.Extensions.Logging;
@@ -26,7 +28,7 @@ namespace DetroitHarps.Business.Schedule
 
         public int Create(EventCreateModel model)
         {
-            Guard.NotNull(model, nameof(model));
+            Guard.NotNull(model, nameof(model), Constants.NullExceptionGenerator);
 
             _logger.LogInformation($"new event: {JsonConvert.SerializeObject(model)}");
             var entity = Mapper.Map<Event>(model);
@@ -36,7 +38,7 @@ namespace DetroitHarps.Business.Schedule
 
         public void Update(EventModel model)
         {
-            Guard.NotNull(model, nameof(model));
+            Guard.NotNull(model, nameof(model), Constants.NullExceptionGenerator);
 
             _logger.LogInformation($"updating photo group: {JsonConvert.SerializeObject(model)}");
             var entity = Mapper.Map<Event>(model);
@@ -68,7 +70,7 @@ namespace DetroitHarps.Business.Schedule
         {
             if (!_repository.Exists(id))
             {
-                throw new InvalidOperationException($"Event with id: {id} does not exist");
+                throw new BusinessException($"Event with id: {id} does not exist");
             }
         }
     }

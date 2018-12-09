@@ -4,6 +4,8 @@ namespace DetroitHarps.Business.Photo
     using System.Collections.Generic;
     using System.Linq;
     using AutoMapper;
+    using DetroitHarps.Business.Constants;
+    using DetroitHarps.Business.Exception;
     using DetroitHarps.Business.Photo;
     using DetroitHarps.Business.Photo.Entities;
     using DetroitHarps.Business.Photo.Models;
@@ -33,7 +35,7 @@ namespace DetroitHarps.Business.Photo
 
         public int Create(PhotoGroupCreateModel model)
         {
-            Guard.NotNull(model, nameof(model));
+            Guard.NotNull(model, nameof(model), Constants.NullExceptionGenerator);
 
             _logger.LogInformation($"new photo group: {JsonConvert.SerializeObject(model)}");
 
@@ -44,7 +46,7 @@ namespace DetroitHarps.Business.Photo
 
         public void Update(PhotoGroupModel model)
         {
-            Guard.NotNull(model, nameof(model));
+            Guard.NotNull(model, nameof(model), Constants.NullExceptionGenerator);
 
             _logger.LogInformation($"updating photo group: {JsonConvert.SerializeObject(model)}");
             var entity = Mapper.Map<PhotoGroup>(model);
@@ -58,7 +60,7 @@ namespace DetroitHarps.Business.Photo
             _logger.LogInformation($"deleting photo group with id {id}");
             if (_photoRepository.PhotosExistWithGroupId(id))
             {
-                throw new InvalidOperationException($"Photo group with id: {id} contains photos that must be deleted first");
+                throw new BusinessException($"Photo group with id: {id} contains photos that must be deleted first");
             }
 
             _photoGroupRepository.Delete(id);
@@ -79,7 +81,7 @@ namespace DetroitHarps.Business.Photo
         {
             if (!_photoGroupRepository.Exists(id))
             {
-                throw new InvalidOperationException($"Photo group with id: {id} does not exist");
+                throw new BusinessException($"Photo group with id: {id} does not exist");
             }
         }
     }

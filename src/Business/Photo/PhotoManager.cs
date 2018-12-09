@@ -4,6 +4,8 @@ namespace DetroitHarps.Business.Photo
     using System.Collections.Generic;
     using System.Linq;
     using AutoMapper;
+    using DetroitHarps.Business.Constants;
+    using DetroitHarps.Business.Exception;
     using DetroitHarps.Business.Photo.Entities;
     using DetroitHarps.Business.Photo.Models;
     using Microsoft.Extensions.Logging;
@@ -32,7 +34,7 @@ namespace DetroitHarps.Business.Photo
 
         public int Create(PhotoModel model)
         {
-            Guard.NotNull(model, nameof(model));
+            Guard.NotNull(model, nameof(model), Constants.NullExceptionGenerator);
 
             _logger.LogInformation($"new photo with display properties: {JsonConvert.SerializeObject(model.DisplayProperties)}");
 
@@ -44,7 +46,7 @@ namespace DetroitHarps.Business.Photo
 
         public void UpdateDisplayProperties(PhotoDisplayPropertiesDetailModel model)
         {
-            Guard.NotNull(model, nameof(model));
+            Guard.NotNull(model, nameof(model), Constants.NullExceptionGenerator);
 
             _logger.LogInformation($"updating photo with display properties: {JsonConvert.SerializeObject(model)}");
 
@@ -77,7 +79,7 @@ namespace DetroitHarps.Business.Photo
         {
             if (!_photoRepository.Exists(id))
             {
-                throw new InvalidOperationException($"Photo with id: {id} does not exist");
+                throw new BusinessException($"Photo with id: {id} does not exist");
             }
         }
 
@@ -85,7 +87,7 @@ namespace DetroitHarps.Business.Photo
         {
             if (!_photoGroupRepository.Exists(id))
             {
-                throw new InvalidOperationException($"Photo group with id: {id} does not exist");
+                throw new BusinessException($"Photo group with id: {id} does not exist");
             }
         }
     }
