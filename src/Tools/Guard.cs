@@ -50,7 +50,7 @@ namespace Tools
             {
                 Guard.NotNull(input, parameterName);
             }
-            catch(ArgumentNullException e)
+            catch (ArgumentNullException e)
             {
                 throw exceptionGenerator(e);
             }

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>DetroitHarps.Api</AssemblyName>
+    <RootNamespace>DetroitHarps.Api</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App"/>
+    <PackageReference Include="Stylecop.Analyzers" Version="1.0.2" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Business/Business.csproj" />
+    <ProjectReference Include="../DataAccess/DataAccess.csproj" />
+    <ProjectReference Include="../Repository/Repository.csproj" />
+    <ProjectReference Include="../Tools/Tools.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>../../stylecop.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+</Project>
