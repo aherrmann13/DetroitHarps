@@ -18,6 +18,7 @@
                 app.UseDeveloperExceptionPage();
             }
 
+            app.AddRequestLogging();
             app.AddExceptionHandler();
 
             app.Run(async (context) =>

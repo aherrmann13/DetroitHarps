@@ -12,5 +12,12 @@ namespace Microsoft.AspNetCore.Builder
 
             return builder.UseMiddleware<ExceptionHandlingMiddleware>();
         }
+
+        public static IApplicationBuilder AddRequestLogging(this IApplicationBuilder builder)
+        {
+            Guard.NotNull(builder, nameof(builder));
+
+            return builder.UseMiddleware<RequestLoggingMiddleware>();
+        }
     }
 }
