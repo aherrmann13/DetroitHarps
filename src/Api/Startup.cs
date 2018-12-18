@@ -4,13 +4,10 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
+    using Swashbuckle.AspNetCore.Swagger;
 
     public class Startup
     {
-        public void ConfigureServices(IServiceCollection services)
-        {
-        }
-
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -21,10 +18,29 @@
             app.AddRequestLogging();
             app.AddExceptionHandler();
 
-            app.Run(async (context) =>
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                c.SwaggerEndpoint("/swagger/doc/swagger.json", "Detroit Harps API");
             });
+
+            app.UseStaticFiles();
+
+            app.UseMvc();
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddMvc();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("doc", new Info { Title = "DetroitHarps API", Version = "v1" });
+            });
+
+            services.AddDbContext();
+            services.AddRepositories();
+            services.AddManagers();
         }
     }
 }
