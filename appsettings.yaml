@@ -1,0 +1,3 @@
+## test env connection strings, ok to check in
+ConnectionStrings:
+  Default: "Host=detroitharps-dev.cx2yqn0s5zfm.us-east-2.rds.amazonaws.com;Database=detroitharps_dev;Username=detroitharps;Password=gi4n1t96X3rH"
