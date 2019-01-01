@@ -34,7 +34,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
-        public ActionResult Delete([FromQuery] int id)
+        public ActionResult Delete([FromRoute] int id)
         {
             _scheduleManager.Delete(id);
             return Ok();

@@ -33,7 +33,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
-        public ActionResult Delete([FromQuery] int id)
+        public ActionResult Delete([FromRoute] int id)
         {
             _photoGroupManager.Delete(id);
             return Ok();
@@ -47,7 +47,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpGet("Get/{id}")]
-        public ActionResult<PhotoGroupModel> Get(int id)
+        public ActionResult<PhotoGroupModel> Get([FromRoute] int id)
         {
             var result = _photoGroupManager.Get(id);
             return Ok(result);

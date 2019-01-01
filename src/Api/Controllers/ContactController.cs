@@ -26,14 +26,14 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpPut("MarkAsRead/{id}")]
-        public ActionResult MarkAsRead(int id)
+        public ActionResult MarkAsRead([FromRoute] int id)
         {
             _contactManager.MarkAsRead(id);
             return Ok();
         }
 
         [HttpPut("MarkAsUnread/{id}")]
-        public ActionResult MarkAsUnread(int id)
+        public ActionResult MarkAsUnread([FromRoute] int id)
         {
             _contactManager.MarkAsUnread(id);
             return Ok();
