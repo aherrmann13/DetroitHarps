@@ -1,12 +1,12 @@
 ﻿namespace DetroitHarps.Api
 {
-    using DetroitHarps.Business;
+    using DetroitHarps.Api.Authentication;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc.Authorization;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Swashbuckle.AspNetCore.Swagger;
     using Tools;
 
     public class Startup
@@ -32,6 +32,8 @@
             app.AddRequestLogging();
             app.AddExceptionHandler();
 
+            app.AddAuth0();
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -45,17 +47,27 @@
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-
-            services.AddSwaggerGen(c =>
+            services.AddMvc(config =>
             {
-                c.SwaggerDoc("doc", new Info { Title = "DetroitHarps API", Version = "v1" });
+                // protect by default, AllowAnonymous where necessary
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
             });
+
+            services.AddSwagger();
 
             var connectionString = _config.GetConnectionString(ConnectionStringName);
             services.AddDbContext(connectionString);
             services.AddRepositories();
             services.AddManagers();
+
+            var auth0Settings = _config
+                .GetSection(Auth0Settings.SectionName)
+                .Get<Auth0Settings>();
+            
+            services.AddAuth0(auth0Settings);
 
             services.AddAutoMapper();
         }

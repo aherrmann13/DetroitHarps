@@ -3,6 +3,7 @@ namespace DetroitHarps.Api.Controllers
     using System.Collections.Generic;
     using DetroitHarps.Business.Contact;
     using DetroitHarps.Business.Contact.Models;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Tools;
 

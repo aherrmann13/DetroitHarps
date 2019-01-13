@@ -19,5 +19,12 @@ namespace Microsoft.AspNetCore.Builder
 
             return builder.UseMiddleware<RequestLoggingMiddleware>();
         }
+
+        public static IApplicationBuilder AddAuth0(this IApplicationBuilder builder)
+        {
+            Guard.NotNull(builder, nameof(builder));
+
+            return builder.UseAuthentication();
+        }
     }
 }

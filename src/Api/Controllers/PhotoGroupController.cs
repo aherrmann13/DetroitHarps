@@ -3,6 +3,7 @@ namespace DetroitHarps.Api.Controllers
     using System.Collections.Generic;
     using DetroitHarps.Business.Photo;
     using DetroitHarps.Business.Photo.Models;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Tools;
 
@@ -39,6 +40,7 @@ namespace DetroitHarps.Api.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpGet("GetAll")]
         public ActionResult<IEnumerable<PhotoGroupModel>> GetAll()
         {
@@ -46,6 +48,7 @@ namespace DetroitHarps.Api.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("Get/{id}")]
         public ActionResult<PhotoGroupModel> Get([FromRoute] int id)
         {

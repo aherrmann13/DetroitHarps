@@ -4,6 +4,7 @@ namespace DetroitHarps.Api.Controllers
     using System.Collections.Generic;
     using DetroitHarps.Business.Schedule;
     using DetroitHarps.Business.Schedule.Models;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Tools;
 
@@ -40,6 +41,7 @@ namespace DetroitHarps.Api.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpGet("GetAll")]
         public ActionResult<IEnumerable<EventModel>> GetAll()
         {
@@ -47,6 +49,7 @@ namespace DetroitHarps.Api.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("Get")]
         public ActionResult<IEnumerable<EventModel>> GetUpcoming(
             [FromQuery] DateTime? until = null)

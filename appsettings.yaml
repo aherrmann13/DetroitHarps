@@ -1,3 +1,8 @@
 ## test env connection strings, ok to check in
 ConnectionStrings:
   Default: "Host=detroitharps-dev.cx2yqn0s5zfm.us-east-2.rds.amazonaws.com;Database=detroitharps_dev;Username=detroitharps;Password=gi4n1t96X3rH"
+
+Auth0:
+  Domain: "angband.auth0.com"
+  Authority: "https://angband.auth0.com"
+  ApiIdentifier: "https://dev.api.detroitharps.com"
