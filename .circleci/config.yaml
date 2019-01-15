@@ -1,0 +1,25 @@
+version: 2
+
+general:
+  branches:
+    only:
+      - master
+      - dev
+jobs:
+  build:
+    docker:
+      - image: microsoft/dotnet:sdk
+    steps:
+      - checkout
+      - run:
+          name: testing dotnet version
+          command: dotnet --info
+      - run:
+          name: Restore
+          command: dotnet restore
+      - run:
+          name: Build
+          command: scripts/dotnet-build.sh
+      - run:
+          name: Test
+          command: scripts/dotnet-test.sh
