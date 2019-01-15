@@ -4,6 +4,7 @@ namespace DetroitHarps.Api.Authentication
     using Microsoft.Extensions.DependencyInjection;
     using Swashbuckle.AspNetCore.Swagger;
     using Tools;
+
     public class Auth0Configurator
     {
         private readonly Auth0Settings _settings;

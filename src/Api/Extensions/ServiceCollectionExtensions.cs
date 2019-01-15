@@ -88,16 +88,18 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("doc", new Info { Title = "DetroitHarps API", Version = "v1" });
+                var apiScheme = new ApiKeyScheme
+                {
+                    In = "header",
+                    Description = "Please enter JWT with Bearer into field",
+                    Name = "Authorization",
+                    Type = "apiKey"
+                };
+
                 c.AddSecurityDefinition(
                     "Bearer",
-                    new ApiKeyScheme
-                    {
-                        In = "header",
-                        Description = "Please enter JWT with Bearer into field",
-                        Name = "Authorization",
-                        Type = "apiKey" 
-                    });
-                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> 
+                    apiScheme);
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
                 {
                     { "Bearer", Enumerable.Empty<string>() },
                 });
@@ -114,7 +116,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var auth0 = new Auth0Configurator(settings);
             auth0.Apply(services);
-            
+
             return services;
         }
     }

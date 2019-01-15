@@ -66,7 +66,7 @@
             var auth0Settings = _config
                 .GetSection(Auth0Settings.SectionName)
                 .Get<Auth0Settings>();
-            
+
             services.AddAuth0(auth0Settings);
 
             services.AddAutoMapper();
