@@ -60,10 +60,10 @@ namespace DetroitHarps.Business.Schedule
         public IEnumerable<EventModel> GetUpcoming(DateTime? untilDate = null)
         {
             var entities = _repository.GetMany(
-                x => x.Date >= DateTime.Now.ToUniversalTime().Date)?
+                x => x.StartDate >= DateTime.Now.ToUniversalTime().Date)?
                 .Select(Mapper.Map<EventModel>);
 
-            return untilDate == null ? entities : entities.Where(x => x.Date <= untilDate);
+            return untilDate == null ? entities : entities.Where(x => x.StartDate <= untilDate);
         }
 
         private void ValidateEventExists(int id)

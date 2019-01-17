@@ -4,7 +4,9 @@ namespace DetroitHarps.Business.Schedule.Models
 
     public class EventCreateModel
     {
-        public DateTime Date { get; set; }
+        public DateTime StartDate { get; set; }
+
+        public DateTime? EndDate { get; set; }
 
         public string Title { get; set; }
 

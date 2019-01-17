@@ -140,11 +140,13 @@ namespace DetroitHarps.DataAccess.Migrator.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("Date");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(450);
+
+                    b.Property<DateTime?>("EndDate");
+
+                    b.Property<DateTime>("StartDate");
 
                     b.Property<string>("Title")
                         .IsRequired()

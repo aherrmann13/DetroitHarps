@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DetroitHarps.DataAccess.Migrator.Migrations
 {
     [DbContext(typeof(DetroitHarpsDbContext))]
-    [Migration("20181231183931_init")]
+    [Migration("20190117034309_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -142,11 +142,13 @@ namespace DetroitHarps.DataAccess.Migrator.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("Date");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(450);
+
+                    b.Property<DateTime?>("EndDate");
+
+                    b.Property<DateTime>("StartDate");
 
                     b.Property<string>("Title")
                         .IsRequired()

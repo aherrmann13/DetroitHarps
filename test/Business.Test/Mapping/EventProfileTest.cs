@@ -22,14 +22,16 @@ namespace DetroitHarps.Business.Test.Mapping
         {
             var eventModel = new EventCreateModel
             {
-                Date = DateTime.Now,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
                 Title = Guid.NewGuid().ToString(),
                 Description = Guid.NewGuid().ToString()
             };
 
             var eventEntity = Mapper.Map<Event>(eventModel);
 
-            Assert.Equal(eventModel.Date, eventEntity.Date);
+            Assert.Equal(eventModel.StartDate, eventEntity.StartDate);
+            Assert.Equal(eventModel.EndDate, eventEntity.EndDate);
             Assert.Equal(eventModel.Title, eventEntity.Title);
             Assert.Equal(eventModel.Description, eventEntity.Description);
         }
@@ -40,7 +42,8 @@ namespace DetroitHarps.Business.Test.Mapping
             var eventModel = new EventModel
             {
                 Id = 1,
-                Date = DateTime.Now,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
                 Title = Guid.NewGuid().ToString(),
                 Description = Guid.NewGuid().ToString()
             };
@@ -48,7 +51,8 @@ namespace DetroitHarps.Business.Test.Mapping
             var eventEntity = Mapper.Map<Event>(eventModel);
 
             Assert.Equal(eventModel.Id, eventEntity.Id);
-            Assert.Equal(eventModel.Date, eventEntity.Date);
+            Assert.Equal(eventModel.StartDate, eventEntity.StartDate);
+            Assert.Equal(eventModel.EndDate, eventEntity.EndDate);
             Assert.Equal(eventModel.Title, eventEntity.Title);
             Assert.Equal(eventModel.Description, eventEntity.Description);
         }
@@ -59,7 +63,8 @@ namespace DetroitHarps.Business.Test.Mapping
             var eventEntity = new Event
             {
                 Id = 1,
-                Date = DateTime.Now,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
                 Title = Guid.NewGuid().ToString(),
                 Description = Guid.NewGuid().ToString()
             };
@@ -67,7 +72,8 @@ namespace DetroitHarps.Business.Test.Mapping
             var eventModel = Mapper.Map<EventModel>(eventEntity);
 
             Assert.Equal(eventEntity.Id, eventModel.Id);
-            Assert.Equal(eventEntity.Date, eventModel.Date);
+            Assert.Equal(eventEntity.StartDate, eventModel.StartDate);
+            Assert.Equal(eventEntity.EndDate, eventModel.EndDate);
             Assert.Equal(eventEntity.Title, eventModel.Title);
             Assert.Equal(eventEntity.Description, eventModel.Description);
         }

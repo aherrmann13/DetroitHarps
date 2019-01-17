@@ -176,15 +176,15 @@ namespace DetroitHarps.Business.Test
             {
                 new Event
                 {
-                    Date = date.AddDays(1)
+                    StartDate = date.AddDays(1)
                 },
                 new Event
                 {
-                    Date = date
+                    StartDate = date
                 },
                 new Event
                 {
-                    Date = date.AddDays(-1)
+                    StartDate = date.AddDays(-1)
                 },
             };
             _repositoryMock.Setup(x => x.GetMany(It.IsAny<Expression<Func<Event, bool>>>()))
@@ -202,8 +202,8 @@ namespace DetroitHarps.Business.Test
         {
             // TODO : this feels like a hack
             var func = expr.Compile();
-            Assert.True(func.Invoke(new Event { Date = DateTime.Now.ToUniversalTime().Date }));
-            Assert.False(func.Invoke(new Event { Date = DateTime.Now.ToUniversalTime().Date.AddDays(-1) }));
+            Assert.True(func.Invoke(new Event { StartDate = DateTime.Now.ToUniversalTime().Date }));
+            Assert.False(func.Invoke(new Event { StartDate = DateTime.Now.ToUniversalTime().Date.AddDays(-1) }));
 
             return true;
         }
