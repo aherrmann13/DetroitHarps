@@ -2,6 +2,11 @@ namespace Tools.Csv
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    ///     This class provides methods for formatting
+    ///     a given collection of objects into a
+    ///     string that can be written to a csv file.
+    /// </summary>
     public interface ICsvFormatter
     {
         /// <summary>
