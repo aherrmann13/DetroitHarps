@@ -229,6 +229,28 @@ namespace Tools.Test.Csv
         }
 
         [Fact]
+        public void CorrectlyFormatsStringWithCommaTest()
+        {
+            var stringWithComma = $"test{Delimiter}test";
+            var items = new List<TestObject>
+            {
+                new TestObject { StringField = stringWithComma }
+            };
+
+            var propertyNames = new List<string>
+            {
+                nameof(TestObject.StringField)
+            };
+
+            var csvString = _formatter.Format(items, propertyNames);
+
+            var expectedString =
+                $"{nameof(TestObject.StringField)}{Environment.NewLine}" +
+                $"{CellIndicator}{items[0].StringField}{CellIndicator}{Environment.NewLine}";
+            Assert.Equal(expectedString, csvString);
+        }
+
+        [Fact]
         public void ThrowsOnNonExistantPropertyNameTest()
         {
             var items = new List<TestObject>
@@ -271,11 +293,11 @@ namespace Tools.Test.Csv
             if (data.Contains(CellIndicator))
             {
                 data = data.Replace(CellIndicator, EscapedCellIndicator);
-                data = CellIndicator + data + CellIndicator;
+                data = $"{CellIndicator}{data}{CellIndicator}";
             }
             else if (data.Contains(Delimiter))
             {
-                data = CellIndicator + data + CellIndicator;
+                data = $"{CellIndicator}{data}{CellIndicator}";
             }
 
             return data;

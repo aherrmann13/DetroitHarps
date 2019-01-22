@@ -45,10 +45,11 @@ namespace Tools.Csv
 
         private static string GetRow<T>(T item, IList<PropertyInfo> cache)
         {
-            var values = cache.Select(x =>
-                x.PropertyType.IsSerializable ?
-                    x.GetValue(item) :
-                    SerializeForCsv(x.GetValue(item)));
+            // TODO : clean up
+            var values = cache
+                .Select(x => new { Value = x.GetValue(item), CanSerialize = x.PropertyType.IsSerializable })
+                .Select(x => !x.CanSerialize ? JsonConvert.SerializeObject(x.Value) : x.Value)
+                .Select(x => x != null && x.GetType().Equals(typeof(string)) ? EscapeForCsv((string)x) : x);
             return string.Join(Delimiter, values);
         }
 
@@ -61,24 +62,16 @@ namespace Tools.Csv
             .ToList();
         }
 
-        private static string SerializeForCsv(object obj)
-        {
-            return EscapeForCsv(JsonConvert.SerializeObject(obj));
-        }
-
         private static string EscapeForCsv(string data)
         {
             if (data.Contains(CellIndicator))
             {
                 data = data.Replace(CellIndicator, EscapedCellIndicator);
-
-                // no String.Format becuase not concerned about localization
-                // and concat is faster
-                data = CellIndicator + data + CellIndicator;
+                data = $"{CellIndicator}{data}{CellIndicator}";
             }
             else if (data.Contains(Delimiter))
             {
-                data = CellIndicator + data + CellIndicator;
+                data = $"{CellIndicator}{data}{CellIndicator}";
             }
 
             return data;
