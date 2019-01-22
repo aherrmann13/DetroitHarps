@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Stylecop.Analyzers" Version="1.0.2" PrivateAssets="All"/>
+    <!--TODO: correct version of newtonsoft.json-->
+    <PackageReference Include="newtonsoft.json" Version="11.0.2" />
+    <PackageReference Include="Stylecop.Analyzers" Version="1.0.2" PrivateAssets="All" />
   </ItemGroup>
 
   <PropertyGroup>
