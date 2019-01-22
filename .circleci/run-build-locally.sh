@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-COMMIT_HASH="caab2768ce7b88dd3625fda68303c52cc65e6540"
+COMMIT_HASH=$(git ls-remote git://github.com/aherrmann13/DetroitHarps.git refs/heads/dev | cut -f 1)
 curl --user ${CIRCLE_TOKEN}: \
     --request POST \
     --form revision=$COMMIT_HASH\
