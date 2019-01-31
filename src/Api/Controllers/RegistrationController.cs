@@ -1,21 +1,32 @@
 namespace DetroitHarps.Api.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using DetroitHarps.Business.Registration;
     using DetroitHarps.Business.Registration.Models;
     using Microsoft.AspNetCore.Mvc;
     using Tools;
+    using Tools.Csv;
 
     [Route("[Controller]")]
     public class RegistrationController : Controller
     {
-        private IRegistrationManager _registrationManager;
+        private const string CsvContentType = "text/csv";
+        private const string GetAllParentsCsvName = "parents.csv";
+        private const string GetAllChildrenCsvName = "children.csv";
 
-        public RegistrationController(IRegistrationManager registrationManager)
+        private readonly IRegistrationManager _registrationManager;
+        private readonly ICsvWriter _csvWriter;
+
+        public RegistrationController(
+            IRegistrationManager registrationManager,
+            ICsvWriter csvWriter)
         {
             Guard.NotNull(registrationManager, nameof(registrationManager));
+            Guard.NotNull(csvWriter, nameof(csvWriter));
 
             _registrationManager = registrationManager;
+            _csvWriter = csvWriter;
         }
 
         [HttpPost("Register")]
@@ -44,6 +55,24 @@ namespace DetroitHarps.Api.Controllers
         {
             var result = _registrationManager.GetAllRegisteredChildren();
             return Ok(result);
+        }
+
+        [HttpGet("GetAllParents/Csv")]
+        [Produces(CsvContentType)]
+        public ActionResult GetAllParentsCsv()
+        {
+            var fileBytes = _csvWriter.GetAsCsv(
+                _registrationManager.GetAllRegisteredParents().ToList());
+            return File(fileBytes, CsvContentType, GetAllParentsCsvName);
+        }
+
+        [HttpGet("GetAllChildren/Csv")]
+        [Produces(CsvContentType)]
+        public ActionResult GetAllChildrenCsv()
+        {
+            var fileBytes = _csvWriter.GetAsCsv(
+                _registrationManager.GetAllRegisteredChildren().ToList());
+            return File(fileBytes, CsvContentType, GetAllChildrenCsvName);
         }
     }
 }

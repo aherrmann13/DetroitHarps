@@ -17,6 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
     using Microsoft.EntityFrameworkCore;
     using Swashbuckle.AspNetCore.Swagger;
     using Tools;
+    using Tools.Csv;
 
     // purpose of this class is to make Startup.cs
     // explicit in what is being set up
@@ -116,6 +117,16 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var auth0 = new Auth0Configurator(settings);
             auth0.Apply(services);
+
+            return services;
+        }
+
+        public static IServiceCollection AddCsvWriter(this IServiceCollection services)
+        {
+            Guard.NotNull(services, nameof(services));
+
+            services.AddSingleton<ICsvFormatter, CsvFormatter>();
+            services.AddSingleton<ICsvWriter, CsvWriter>();
 
             return services;
         }

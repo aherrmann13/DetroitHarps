@@ -86,7 +86,13 @@ namespace DetroitHarps.Business.Test.Mapping
             Assert.Equal(registerModel.Children[1].DateOfBirth.Date, registration.Children[1].DateOfBirth.Date);
             Assert.Equal(registerModel.Children[1].ShirtSize, registration.Children[1].ShirtSize);
 
-            Assert.Null(registration.PaymentInformation);
+            Assert.Equal(default(double), registration.PaymentInformation.Amount);
+            Assert.Equal(
+                default(DateTimeOffset),
+                registration.PaymentInformation.PaymentTimestamp);
+            Assert.Equal(
+                default(RegistrationPaymentType),
+                registration.PaymentInformation.PaymentType);
         }
 
         [Fact]

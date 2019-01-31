@@ -62,6 +62,7 @@
             services.AddDbContext(connectionString);
             services.AddRepositories();
             services.AddManagers();
+            services.AddCsvWriter();
 
             var auth0Settings = _config
                 .GetSection(Auth0Settings.SectionName)
