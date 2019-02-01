@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DEPLOY_FOLDER="/detroitharps/publish"
+RUN_FOLDER="/detroitharps/application"
 if [ "${CIRCLE_BRANCH}" == "dev" ]
 then
   IP_ADDRESS="157.230.51.199"
@@ -12,10 +13,8 @@ fi
 
 ssh-keyscan -H $IP_ADDRESS >> ~/.ssh/known_hosts
 
-ssh $SSH_ADDR "if [ -d $DEPLOY_FOLDER ]; then rm -rf $DEPLOY_FOLDER; fi"
-ssh $SSH_ADDR "mkdir -p $DEPLOY_FOLDER"
-scp -r /root/project/publish/* $SSH_ADDR:$DEPLOY_FOLDER/
+ssh $SSH_ADDR
+if [ -d $RUN_FOLDER ]; then rm -rf $RUN_FOLDER; fi
+mkdir -p $RUN_FOLDER
 
 exit
-
-exit 0
