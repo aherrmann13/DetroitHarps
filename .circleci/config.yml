@@ -30,6 +30,6 @@ jobs:
       - run:
           name: Publish Api
           command: dotnet publish src/Api/ -c RELEASE -o /root/project/publish/Api
-        - run:
+      - run:
           name: Deploy
           command: .circleci/scripts/circleci-deploy.sh
