@@ -24,3 +24,12 @@ jobs:
       - run:
           name: Test
           command: scripts/dotnet-test.sh
+      - run:
+          name: Publish DataAccess.Migrator
+          command: dotnet publish src/DataAccess.Migrator/ -c RELEASE -o /root/project/publish/DataAccess.Migrator
+      - run:
+          name: Publish Api
+          command: dotnet publish src/Api/ -c RELEASE -o /root/project/publish/Api
+        - run:
+          name: Deploy
+          command: .circleci/scripts/circleci-deploy.sh
