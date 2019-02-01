@@ -13,8 +13,8 @@ fi
 
 ssh-keyscan -H $IP_ADDRESS >> ~/.ssh/known_hosts
 
-ssh $SSH_ADDR
-if [ -d $RUN_FOLDER ]; then rm -rf $RUN_FOLDER; fi
-mkdir -p $RUN_FOLDER
+ssh $SSH_ADDR "if [ -d $RUN_FOLDER ]; then rm -rf $RUN_FOLDER; fi"
+ssh $SSH_ADDR "mkdir -p $RUN_FOLDER"
+ssh $SSH_ADDR "cp -r $DEPLOY_FOLDER $RUN_FOLDER"
 
 exit
