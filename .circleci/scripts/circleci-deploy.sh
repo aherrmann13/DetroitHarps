@@ -15,6 +15,5 @@ ssh-keyscan -H $IP_ADDRESS >> ~/.ssh/known_hosts
 ssh $SSH_ADDR "if [ -d $DEPLOY_FOLDER ]; then rm -rf $DEPLOY_FOLDER; fi"
 ssh $SSH_ADDR "mkdir -p $DEPLOY_FOLDER"
 scp -r /root/project/publish/* $SSH_ADDR:$DEPLOY_FOLDER/
-ssh $SSH_ADDR $COMMAND
 
 exit 0
