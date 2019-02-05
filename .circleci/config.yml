@@ -63,14 +63,6 @@ jobs:
             mkdir -p ~/.ssh
             ssh-keyscan -H $IP_ADDRESS >> ~/.ssh/known_hosts
       - run:
-          name: temp
-          command: |
-            ls -a
-            ls ~
-            pwd
-            ls ~/detroitharps
-            ls ~/detroitharps/publish
-      - run:
           name: Copy Publish Folder to Server
           command: |
             ssh $SSH_ADDR "if [ -d $DEPLOY_FOLDER ]; then rm -rf $DEPLOY_FOLDER; fi"
