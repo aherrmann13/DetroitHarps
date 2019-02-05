@@ -6,33 +6,104 @@ general:
     only:
       - master
       - dev
+
 jobs:
-  build:
+  checkout:
     docker:
       - image: microsoft/dotnet:sdk
+    working_directory: ~/detroitharps
     steps:
       - checkout
-      - run:
-          name: testing dotnet version
-          command: dotnet --info
-      - run:
-          name: Restore
-          command: dotnet restore
-      - run:
-          name: Build
-          command: scripts/dotnet-build.sh
+      - save_cache:
+          key: checkout-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/detroitharps
+  test:
+    docker:
+      - image: microsoft/dotnet:sdk
+    working_directory: ~/detroitharps
+    steps:
+      - restore_cache:
+          key: checkout-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Test
-          command: scripts/dotnet-test.sh
+          command: ./scripts/dotnet-test.sh
+  publish:
+    docker:
+      - image: microsoft/dotnet:sdk
+    working_directory: ~/detroitharps
+    steps:
+      - restore_cache:
+          key: checkout-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Publish DataAccess.Migrator
-          command: dotnet publish src/DataAccess.Migrator/ -c RELEASE -o /root/project/publish/DataAccess.Migrator
+          command: dotnet publish src/DataAccess.Migrator/ -c RELEASE -o ~/detroitharps/publish/DataAccess.Migrator
       - run:
           name: Publish Api
-          command: dotnet publish src/Api/ -c RELEASE -o /root/project/publish/Api
+          command: dotnet publish src/Api/ -c RELEASE -o ~/detroitharps/publish/Api
+      - save_cache:
+          key: publish-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/detroitharps/publish
+  deploy-dev:
+    docker:
+      - image: microsoft/dotnet:sdk
+        environment:
+          IP_ADDRESS: '157.230.51.199'
+          SSH_ADDR: 'detroitharps@157.230.51.199'
+          DEPLOY_FOLDER: '/detroitharps/publish'
+          RUN_FOLDER: '/detroitharps/application'
+    working_directory: ~/detroitharps
+    steps:
+      - restore_cache:
+          key: publish-{{ .Environment.CIRCLE_SHA1 }}
       - run:
-          name: Deploy
-          command: .circleci/scripts/circleci-deploy.sh
+          name: Copy SSH fingerprint to known hosts
+          command: |
+            mkdir -p ~/.ssh
+            ssh-keyscan -H $IP_ADDRESS >> ~/.ssh/known_hosts
       - run:
-          name: Install
-          command: .circleci/scripts/circleci-install.sh
+          name: temp
+          command: |
+            ls -a
+            ls ~
+            pwd
+            ls ~/detroitharps
+            ls ~/detroitharps/publish
+      - run:
+          name: Copy Publish Folder to Server
+          command: |
+            ssh $SSH_ADDR "if [ -d $DEPLOY_FOLDER ]; then rm -rf $DEPLOY_FOLDER; fi"
+            ssh $SSH_ADDR "mkdir -p $DEPLOY_FOLDER"
+            scp -r ./publish $SSH_ADDR:$DEPLOY_FOLDER
+      - run:
+          name: Copy to Run Folder
+          command: |
+            ssh $SSH_ADDR "if [ -d $RUN_FOLDER ]; then rm -rf $RUN_FOLDER; fi"
+            ssh $SSH_ADDR "mkdir -p $RUN_FOLDER"
+            ssh $SSH_ADDR "cp -r $DEPLOY_FOLDER/* $RUN_FOLDER/"
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - checkout:
+          filters:
+            branches:
+              only:
+                - dev
+                - master
+      - test:
+          requires:
+            - checkout
+      - publish:
+          requires:
+            - checkout
+      - deploy-dev:
+          requires:
+            - publish
+            - test
+          filters:
+            branches:
+              only:
+                - dev
