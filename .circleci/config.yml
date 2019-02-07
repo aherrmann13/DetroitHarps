@@ -82,6 +82,11 @@ jobs:
           command: |
             ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/dev/systemd/detroitharps-api.service /etc/systemd/system/detroitharps-api.service"
             ssh $SSH_ADDR "sudo systemctl restart detroitharps-api.service"
+      - run:
+          name: Install Service
+          command: |
+            ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/dev/nginx/dev.api.detroitharps.com /etc/nginx/sites-enabled/dev.api.detroitharps.com"
+            ssh $SSH_ADDR "sudo systemctl restart nginx"
 
 workflows:
   version: 2
