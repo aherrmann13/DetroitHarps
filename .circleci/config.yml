@@ -43,7 +43,7 @@ jobs:
           command: dotnet publish src/Api/ -c RELEASE -o ~/detroitharps/publish/Api
       - run:
           name: Copy Configuration
-          command: cp ~/detroitharps/configuration ~/detroitharps/publish
+          command: cp -r ~/detroitharps/configuration ~/detroitharps/publish
       - save_cache:
           key: publish-{{ .Environment.CIRCLE_SHA1 }}
           paths:
