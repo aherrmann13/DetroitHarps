@@ -41,6 +41,9 @@ jobs:
       - run:
           name: Publish Api
           command: dotnet publish src/Api/ -c RELEASE -o ~/detroitharps/publish/Api
+      - run:
+          name: Copy Configuration
+          command: cp ~/detroitharps/configuration ~/detroitharps/publish
       - save_cache:
           key: publish-{{ .Environment.CIRCLE_SHA1 }}
           paths:
@@ -74,6 +77,11 @@ jobs:
             ssh $SSH_ADDR "if [ -d $RUN_FOLDER ]; then rm -rf $RUN_FOLDER; fi"
             ssh $SSH_ADDR "mkdir -p $RUN_FOLDER"
             ssh $SSH_ADDR "cp -r $DEPLOY_FOLDER/* $RUN_FOLDER/"
+      - run:
+          name: Install Service
+          command: |
+            ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/dev/systemd/detroitharps-api.service /etc/systemd/system/detroitharps-api.service"
+            ssh $SSH_ADDR "sudo systemctl restart detroitharps-api.service"
 
 workflows:
   version: 2
