@@ -16,5 +16,6 @@ Serilog:
 
 ServiceOptions:
   ServiceName: detroitHarps-api
-  LogFolder: "/detroitharps/logs/api/"
+  LogFolder: "/tmp/detroitharps/api/"
   BindUrl: http://localhost:5000
+  EnableConsole: true
