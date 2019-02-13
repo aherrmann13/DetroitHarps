@@ -1,6 +1,6 @@
 ## test env connection strings, ok to check in
 ConnectionStrings:
-  Default: "Host=157.230.51.199;Database=detroitharps_dev;Username=detroitharps;Password=password"
+  Default: "Host=localhost;Database=detroitharps_dev;Username=detroitharps;Password=password"
 
 Auth0:
   Domain: "angband.auth0.com"
