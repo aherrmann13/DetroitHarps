@@ -5,7 +5,7 @@ URL=$1
 
 RESPONSE=$(curl -s $URL)
 
-if [ $RESPONSE == "HEALTHY" ]
+if [ $RESPONSE == "Healthy" ]
 then
     exit 0
 else
