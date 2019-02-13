@@ -1,6 +1,7 @@
 ﻿namespace DetroitHarps.Api
 {
     using DetroitHarps.Api.Authentication;
+    using DetroitHarps.DataAccess;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -33,6 +34,8 @@
             app.AddExceptionHandler();
 
             app.AddAuth0();
+
+            app.UseHealthChecks("/health");
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -71,6 +74,9 @@
             services.AddAuth0(auth0Settings);
 
             services.AddAutoMapper();
+
+            services.AddHealthChecks()
+                .AddDbContextCheck<DetroitHarpsDbContext>();
         }
     }
 }
