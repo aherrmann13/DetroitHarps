@@ -1,5 +1,5 @@
 <Project>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2'">
     <Content Include="../../appsettings*.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>

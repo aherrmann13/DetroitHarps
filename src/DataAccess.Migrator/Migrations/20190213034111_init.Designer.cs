@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DetroitHarps.DataAccess.Migrator.Migrations
 {
     [DbContext(typeof(DetroitHarpsDbContext))]
-    [Migration("20190117034309_init")]
+    [Migration("20190213034111_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -18,7 +18,7 @@ namespace DetroitHarps.DataAccess.Migrator.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("DetroitHarps.Business.Contact.Entities.Message", b =>
@@ -167,12 +167,14 @@ namespace DetroitHarps.DataAccess.Migrator.Migrations
                 {
                     b.OwnsOne("DetroitHarps.Business.Photo.Entities.PhotoData", "Data", b1 =>
                         {
-                            b1.Property<int?>("PhotoId");
+                            b1.Property<int>("PhotoId");
 
                             b1.Property<byte[]>("Data");
 
                             b1.Property<string>("MimeType")
                                 .HasMaxLength(450);
+
+                            b1.HasKey("PhotoId");
 
                             b1.ToTable("PhotoData");
 
@@ -184,7 +186,7 @@ namespace DetroitHarps.DataAccess.Migrator.Migrations
 
                     b.OwnsOne("DetroitHarps.Business.Photo.Entities.PhotoDisplayProperties", "DisplayProperties", b1 =>
                         {
-                            b1.Property<int?>("PhotoId");
+                            b1.Property<int>("PhotoId");
 
                             b1.Property<int>("PhotoGroupId");
 
@@ -193,6 +195,8 @@ namespace DetroitHarps.DataAccess.Migrator.Migrations
                             b1.Property<string>("Title")
                                 .IsRequired()
                                 .HasMaxLength(100);
+
+                            b1.HasKey("PhotoId");
 
                             b1.HasIndex("PhotoGroupId");
 
@@ -214,7 +218,7 @@ namespace DetroitHarps.DataAccess.Migrator.Migrations
                 {
                     b.OwnsOne("DetroitHarps.Business.Registration.Entities.RegistrationContactInformation", "ContactInformation", b1 =>
                         {
-                            b1.Property<int?>("RegistrationId");
+                            b1.Property<int>("RegistrationId");
 
                             b1.Property<string>("Address")
                                 .IsRequired()
@@ -243,6 +247,8 @@ namespace DetroitHarps.DataAccess.Migrator.Migrations
                                 .IsRequired()
                                 .HasMaxLength(20);
 
+                            b1.HasKey("RegistrationId");
+
                             b1.ToTable("Registration");
 
                             b1.HasOne("DetroitHarps.Business.Registration.Entities.Registration")
@@ -253,7 +259,7 @@ namespace DetroitHarps.DataAccess.Migrator.Migrations
 
                     b.OwnsOne("DetroitHarps.Business.Registration.Entities.RegistrationParent", "Parent", b1 =>
                         {
-                            b1.Property<int?>("RegistrationId");
+                            b1.Property<int>("RegistrationId");
 
                             b1.Property<string>("FirstName")
                                 .IsRequired()
@@ -262,6 +268,8 @@ namespace DetroitHarps.DataAccess.Migrator.Migrations
                             b1.Property<string>("LastName")
                                 .IsRequired()
                                 .HasMaxLength(100);
+
+                            b1.HasKey("RegistrationId");
 
                             b1.ToTable("Registration");
 
@@ -273,13 +281,15 @@ namespace DetroitHarps.DataAccess.Migrator.Migrations
 
                     b.OwnsOne("DetroitHarps.Business.Registration.Entities.RegistrationPaymentInformation", "PaymentInformation", b1 =>
                         {
-                            b1.Property<int?>("RegistrationId");
+                            b1.Property<int>("RegistrationId");
 
                             b1.Property<double>("Amount");
 
                             b1.Property<DateTimeOffset>("PaymentTimestamp");
 
                             b1.Property<int>("PaymentType");
+
+                            b1.HasKey("RegistrationId");
 
                             b1.ToTable("Registration");
 

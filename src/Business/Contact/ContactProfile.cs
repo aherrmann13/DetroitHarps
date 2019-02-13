@@ -18,7 +18,7 @@ namespace DetroitHarps.Business.Contact
                     opt => opt.MapFrom(val => DateTimeOffset.Now))
                 .ForMember(
                     dest => dest.IsRead,
-                    opt => opt.UseValue(false));
+                    opt => opt.MapFrom(x => false));
 
             CreateMap<Message, MessageReadModel>();
         }

@@ -19,13 +19,13 @@ namespace DetroitHarps.Business.Registration
                     opt => opt.Ignore())
                 .ForMember(
                     dest => dest.SeasonYear,
-                    opt => opt.UseValue(DateTime.Now.Year))
+                    opt => opt.MapFrom(x => DateTime.Now.Year))
                 .ForMember(
                     dest => dest.PaymentInformation,
-                    opt => opt.UseValue(EmptyPayment))
+                    opt => opt.MapFrom(x => EmptyPayment))
                 .ForMember(
                     dest => dest.RegistrationTimestamp,
-                    opt => opt.UseValue(DateTimeOffset.Now));
+                    opt => opt.MapFrom(x => DateTimeOffset.Now));
 
             CreateMap<RegisterContactInformationModel, RegistrationContactInformation>();
 

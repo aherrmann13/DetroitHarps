@@ -3,7 +3,7 @@
   <Import Project="../../common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <AssemblyName>DetroitHarps.Api</AssemblyName>
     <RootNamespace>DetroitHarps.Api</RootNamespace>
   </PropertyGroup>
@@ -11,7 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="NetEscapades.Configuration.Yaml" Version="1.6.0" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Serilog.Formatting.Compact" Version="1.0.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.0.1" />
