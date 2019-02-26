@@ -5,6 +5,7 @@ namespace Microsoft.Extensions.DependencyInjection
     using AutoMapper;
     using DetroitHarps.Api.Authentication;
     using DetroitHarps.Api.Middleware;
+    using DetroitHarps.Api.Services;
     using DetroitHarps.Business;
     using DetroitHarps.Business.Contact;
     using DetroitHarps.Business.Photo;
@@ -127,6 +128,18 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton<ICsvFormatter, CsvFormatter>();
             services.AddSingleton<ICsvWriter, CsvWriter>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddEmailSender(
+            this IServiceCollection services,
+            EmailSettings settings)
+        {
+            Guard.NotNull(services, nameof(services));
+
+            services.AddSingleton<EmailSettings>(settings);
+            services.AddTransient<IEmailSender, EmailSender>();
 
             return services;
         }

@@ -1,6 +1,7 @@
 ﻿namespace DetroitHarps.Api
 {
     using DetroitHarps.Api.Authentication;
+    using DetroitHarps.Api.Services;
     using DetroitHarps.DataAccess;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
@@ -77,6 +78,11 @@
 
             services.AddHealthChecks()
                 .AddDbContextCheck<DetroitHarpsDbContext>();
+
+            var emailSettings = _config
+                .GetSection(EmailSettings.SectionName)
+                .Get<EmailSettings>();
+            services.AddEmailSender(emailSettings);
         }
     }
 }
