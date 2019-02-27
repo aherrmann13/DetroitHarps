@@ -18,6 +18,9 @@ ServiceOptions:
   ServiceName: detroitHarps-api
   LogFolder: "/detroitharps/logs/api/"
   BindUrl: http://localhost:5000
+  CorsAllowUrls:
+      - http://localhost:4200
+      - https://dev.detroitharps.com
 
 # test email, dont really care if password is public
 EmailSettings:

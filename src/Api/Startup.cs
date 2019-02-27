@@ -1,5 +1,6 @@
 ﻿namespace DetroitHarps.Api
 {
+    using System.Linq;
     using DetroitHarps.Api.Authentication;
     using DetroitHarps.Api.Services;
     using DetroitHarps.DataAccess;
@@ -15,13 +16,18 @@
     {
         // TODO: better way of managing this
         private const string ConnectionStringName = "Default";
-        private readonly IConfiguration _config;
+        private const string CorsPolicyName = "CorsPolicy";
 
-        public Startup(IConfiguration configuration)
+        private readonly IConfiguration _config;
+        private readonly ServiceOptions _options;
+
+        public Startup(IConfiguration configuration, ServiceOptions options)
         {
             Guard.NotNull(configuration, nameof(configuration));
+            Guard.NotNull(options, nameof(options));
 
             _config = configuration;
+            _options = options;
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -37,6 +43,8 @@
             app.AddAuth0();
 
             app.UseHealthChecks("/health");
+
+            app.UseCors(CorsPolicyName);
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -83,6 +91,15 @@
                 .GetSection(EmailSettings.SectionName)
                 .Get<EmailSettings>();
             services.AddEmailSender(emailSettings);
+
+            services.AddCors(o =>
+                o.AddPolicy(CorsPolicyName, builder =>
+                {
+                    builder.WithOrigins(_options.CorsAllowUrls.ToArray())
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                }));
         }
     }
 }
