@@ -1,0 +1,16 @@
+.single-card-container{
+    mat-card{
+        mat-card-content{
+            min-height: 380px;
+        }
+        
+    }
+}
+.register-success{
+    max-width: 300px;
+    margin: auto;
+}
+
+mat-radio-button{
+    margin-left: 15px;
+}
