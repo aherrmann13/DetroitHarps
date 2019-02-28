@@ -34,62 +34,10 @@ export class Client extends BaseClient {
     }
 
     /**
-     * @userCredentials (optional) 
-     * @return Success
-     */
-    login(userCredentials: UserCredentialsModel): Observable<string> {
-        let url_ = this.baseUrl + "/Authentication";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(userCredentials);
-
-        let options_ : any = {
-            body: content_,
-            method: "post",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
-            return this.http.request(url_, transformedOptions_);
-        }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processLogin(<any>r));
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.transformResult(url_, response_, (r) => this.processLogin(<any>r));
-                } catch (e) {
-                    return <Observable<string>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<string>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processLogin(response: Response): Observable<string> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
-            return Observable.of(result200);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<string>(<any>null);
-    }
-
-    /**
      * @model (optional) 
      * @return Success
      */
-    contact(model: ContactModel): Observable<void> {
+    contact(model: MessageModel): Observable<void> {
         let url_ = this.baseUrl + "/Contact/Contact";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -136,118 +84,15 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
-    getAllPhotoMetadata(): Observable<PhotoMetadataReadModel[]> {
-        let url_ = this.baseUrl + "/Photo/GetMetadata";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            method: "get",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
-            return this.http.request(url_, transformedOptions_);
-        }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGetAllPhotoMetadata(<any>r));
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.transformResult(url_, response_, (r) => this.processGetAllPhotoMetadata(<any>r));
-                } catch (e) {
-                    return <Observable<PhotoMetadataReadModel[]>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<PhotoMetadataReadModel[]>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processGetAllPhotoMetadata(response: Response): Observable<PhotoMetadataReadModel[]> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200 && resultData200.constructor === Array) {
-                result200 = [];
-                for (let item of resultData200)
-                    result200.push(PhotoMetadataReadModel.fromJS(item));
-            }
-            return Observable.of(result200);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<PhotoMetadataReadModel[]>(<any>null);
-    }
-
-    /**
-     * @return Success
-     */
-    getPhotoMetadata(id: number): Observable<PhotoMetadataReadModel> {
-        let url_ = this.baseUrl + "/Photo/GetMetadata/{id}";
+    markAsRead(id: number): Observable<void> {
+        let url_ = this.baseUrl + "/Contact/MarkAsRead/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
-            method: "get",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
-            return this.http.request(url_, transformedOptions_);
-        }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGetPhotoMetadata(<any>r));
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.transformResult(url_, response_, (r) => this.processGetPhotoMetadata(<any>r));
-                } catch (e) {
-                    return <Observable<PhotoMetadataReadModel>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<PhotoMetadataReadModel>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processGetPhotoMetadata(response: Response): Observable<PhotoMetadataReadModel> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? PhotoMetadataReadModel.fromJS(resultData200) : new PhotoMetadataReadModel();
-            return Observable.of(result200);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<PhotoMetadataReadModel>(<any>null);
-    }
-
-    /**
-     * @return Success
-     */
-    photoGetByIdGet(id: number): Observable<void> {
-        let url_ = this.baseUrl + "/Photo/Get/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            method: "get",
+            method: "put",
             headers: new Headers({
                 "Content-Type": "application/json", 
             })
@@ -256,11 +101,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processPhotoGetByIdGet(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processMarkAsRead(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processPhotoGetByIdGet(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processMarkAsRead(<any>r));
                 } catch (e) {
                     return <Observable<void>><any>Observable.throw(e);
                 }
@@ -269,7 +114,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processPhotoGetByIdGet(response: Response): Observable<void> {
+    protected processMarkAsRead(response: Response): Observable<void> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -286,111 +131,55 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
-    getAllPhotoGroups(): Observable<PhotoGroupReadModel[]> {
-        let url_ = this.baseUrl + "/PhotoGroup/Get";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            method: "get",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
-            return this.http.request(url_, transformedOptions_);
-        }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGetAllPhotoGroups(<any>r));
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.transformResult(url_, response_, (r) => this.processGetAllPhotoGroups(<any>r));
-                } catch (e) {
-                    return <Observable<PhotoGroupReadModel[]>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<PhotoGroupReadModel[]>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processGetAllPhotoGroups(response: Response): Observable<PhotoGroupReadModel[]> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200 && resultData200.constructor === Array) {
-                result200 = [];
-                for (let item of resultData200)
-                    result200.push(PhotoGroupReadModel.fromJS(item));
-            }
-            return Observable.of(result200);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<PhotoGroupReadModel[]>(<any>null);
-    }
-
-    /**
-     * @return Success
-     */
-    getPhotoGroup(id: number): Observable<PhotoGroupReadModel> {
-        let url_ = this.baseUrl + "/PhotoGroup/Get/{id}";
+    markAsUnread(id: number): Observable<void> {
+        let url_ = this.baseUrl + "/Contact/MarkAsUnread/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
-            method: "get",
+            method: "put",
             headers: new Headers({
                 "Content-Type": "application/json", 
-                "Accept": "application/json"
             })
         };
 
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGetPhotoGroup(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processMarkAsUnread(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processGetPhotoGroup(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processMarkAsUnread(<any>r));
                 } catch (e) {
-                    return <Observable<PhotoGroupReadModel>><any>Observable.throw(e);
+                    return <Observable<void>><any>Observable.throw(e);
                 }
             } else
-                return <Observable<PhotoGroupReadModel>><any>Observable.throw(response_);
+                return <Observable<void>><any>Observable.throw(response_);
         });
     }
 
-    protected processGetPhotoGroup(response: Response): Observable<PhotoGroupReadModel> {
+    protected processMarkAsUnread(response: Response): Observable<void> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
         if (status === 200) {
             const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? PhotoGroupReadModel.fromJS(resultData200) : new PhotoGroupReadModel();
-            return Observable.of(result200);
+            return Observable.of<void>(<any>null);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Observable.of<PhotoGroupReadModel>(<any>null);
+        return Observable.of<void>(<any>null);
     }
 
     /**
      * @return Success
      */
-    getAllRegistered(): Observable<RegistrationReadModel[]> {
-        let url_ = this.baseUrl + "/Registration/GetAll";
+    getAllAll(): Observable<MessageReadModel[]> {
+        let url_ = this.baseUrl + "/Contact/GetAll";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -404,20 +193,20 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGetAllRegistered(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processGetAllAll(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processGetAllRegistered(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processGetAllAll(<any>r));
                 } catch (e) {
-                    return <Observable<RegistrationReadModel[]>><any>Observable.throw(e);
+                    return <Observable<MessageReadModel[]>><any>Observable.throw(e);
                 }
             } else
-                return <Observable<RegistrationReadModel[]>><any>Observable.throw(response_);
+                return <Observable<MessageReadModel[]>><any>Observable.throw(response_);
         });
     }
 
-    protected processGetAllRegistered(response: Response): Observable<RegistrationReadModel[]> {
+    protected processGetAllAll(response: Response): Observable<MessageReadModel[]> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -428,74 +217,22 @@ export class Client extends BaseClient {
             if (resultData200 && resultData200.constructor === Array) {
                 result200 = [];
                 for (let item of resultData200)
-                    result200.push(RegistrationReadModel.fromJS(item));
+                    result200.push(MessageReadModel.fromJS(item));
             }
             return Observable.of(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Observable.of<RegistrationReadModel[]>(<any>null);
-    }
-
-    /**
-     * @return Success
-     */
-    getAllRegisteredChildren(): Observable<ChildInformationReadModel[]> {
-        let url_ = this.baseUrl + "/Registration/GetAllChildren";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            method: "get",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
-            return this.http.request(url_, transformedOptions_);
-        }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGetAllRegisteredChildren(<any>r));
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.transformResult(url_, response_, (r) => this.processGetAllRegisteredChildren(<any>r));
-                } catch (e) {
-                    return <Observable<ChildInformationReadModel[]>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<ChildInformationReadModel[]>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processGetAllRegisteredChildren(response: Response): Observable<ChildInformationReadModel[]> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200 && resultData200.constructor === Array) {
-                result200 = [];
-                for (let item of resultData200)
-                    result200.push(ChildInformationReadModel.fromJS(item));
-            }
-            return Observable.of(result200);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<ChildInformationReadModel[]>(<any>null);
+        return Observable.of<MessageReadModel[]>(<any>null);
     }
 
     /**
      * @model (optional) 
      * @return Success
      */
-    register(model: RegistrationCreateModel): Observable<number> {
-        let url_ = this.baseUrl + "/Registration/Register";
+    create(model: PhotoModel): Observable<number> {
+        let url_ = this.baseUrl + "/Photo/Create";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(model);
@@ -512,11 +249,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processRegister(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processCreate(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processRegister(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processCreate(<any>r));
                 } catch (e) {
                     return <Observable<number>><any>Observable.throw(e);
                 }
@@ -525,7 +262,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processRegister(response: Response): Observable<number> {
+    protected processCreate(response: Response): Observable<number> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -543,10 +280,105 @@ export class Client extends BaseClient {
     }
 
     /**
+     * @model (optional) 
      * @return Success
      */
-    getAllEvents(): Observable<EventReadModel[]> {
-        let url_ = this.baseUrl + "/Schedule/GetAll";
+    update(model: PhotoDisplayPropertiesDetailModel): Observable<void> {
+        let url_ = this.baseUrl + "/Photo/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_ : any = {
+            body: content_,
+            method: "put",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processUpdate(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processUpdate(<any>r));
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processUpdate(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    delete(id: number): Observable<void> {
+        let url_ = this.baseUrl + "/Photo/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "delete",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processDelete(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processDelete(<any>r));
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processDelete(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getAll(): Observable<PhotoDisplayPropertiesDetailModel[]> {
+        let url_ = this.baseUrl + "/Photo/GetAll";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -560,20 +392,20 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGetAllEvents(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processGetAll(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processGetAllEvents(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processGetAll(<any>r));
                 } catch (e) {
-                    return <Observable<EventReadModel[]>><any>Observable.throw(e);
+                    return <Observable<PhotoDisplayPropertiesDetailModel[]>><any>Observable.throw(e);
                 }
             } else
-                return <Observable<EventReadModel[]>><any>Observable.throw(response_);
+                return <Observable<PhotoDisplayPropertiesDetailModel[]>><any>Observable.throw(response_);
         });
     }
 
-    protected processGetAllEvents(response: Response): Observable<EventReadModel[]> {
+    protected processGetAll(response: Response): Observable<PhotoDisplayPropertiesDetailModel[]> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -584,21 +416,21 @@ export class Client extends BaseClient {
             if (resultData200 && resultData200.constructor === Array) {
                 result200 = [];
                 for (let item of resultData200)
-                    result200.push(EventReadModel.fromJS(item));
+                    result200.push(PhotoDisplayPropertiesDetailModel.fromJS(item));
             }
             return Observable.of(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Observable.of<EventReadModel[]>(<any>null);
+        return Observable.of<PhotoDisplayPropertiesDetailModel[]>(<any>null);
     }
 
     /**
      * @return Success
      */
-    getEvent(id: number): Observable<EventReadModel> {
-        let url_ = this.baseUrl + "/Schedule/Get/{id}";
+    get(id: number): Observable<PhotoDataModel> {
+        let url_ = this.baseUrl + "/Photo/Get/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
@@ -615,20 +447,20 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGetEvent(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processGet(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processGetEvent(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processGet(<any>r));
                 } catch (e) {
-                    return <Observable<EventReadModel>><any>Observable.throw(e);
+                    return <Observable<PhotoDataModel>><any>Observable.throw(e);
                 }
             } else
-                return <Observable<EventReadModel>><any>Observable.throw(response_);
+                return <Observable<PhotoDataModel>><any>Observable.throw(response_);
         });
     }
 
-    protected processGetEvent(response: Response): Observable<EventReadModel> {
+    protected processGet(response: Response): Observable<PhotoDataModel> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -636,21 +468,814 @@ export class Client extends BaseClient {
             const _responseText = response.text();
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? EventReadModel.fromJS(resultData200) : new EventReadModel();
+            result200 = resultData200 ? PhotoDataModel.fromJS(resultData200) : new PhotoDataModel();
             return Observable.of(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Observable.of<EventReadModel>(<any>null);
+        return Observable.of<PhotoDataModel>(<any>null);
+    }
+
+    /**
+     * @model (optional) 
+     * @return Success
+     */
+    create2(model: PhotoGroupCreateModel): Observable<number> {
+        let url_ = this.baseUrl + "/PhotoGroup/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_ : any = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processCreate2(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processCreate2(<any>r));
+                } catch (e) {
+                    return <Observable<number>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<number>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processCreate2(response: Response): Observable<number> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<number>(<any>null);
+    }
+
+    /**
+     * @model (optional) 
+     * @return Success
+     */
+    update2(model: PhotoGroupModel): Observable<void> {
+        let url_ = this.baseUrl + "/PhotoGroup/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_ : any = {
+            body: content_,
+            method: "put",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processUpdate2(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processUpdate2(<any>r));
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processUpdate2(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    delete2(id: number): Observable<void> {
+        let url_ = this.baseUrl + "/PhotoGroup/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "delete",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processDelete2(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processDelete2(<any>r));
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processDelete2(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getAll2(): Observable<PhotoGroupModel[]> {
+        let url_ = this.baseUrl + "/PhotoGroup/GetAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processGetAll2(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processGetAll2(<any>r));
+                } catch (e) {
+                    return <Observable<PhotoGroupModel[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<PhotoGroupModel[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetAll2(response: Response): Observable<PhotoGroupModel[]> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(PhotoGroupModel.fromJS(item));
+            }
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<PhotoGroupModel[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    get2(id: number): Observable<PhotoGroupModel> {
+        let url_ = this.baseUrl + "/PhotoGroup/Get/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processGet2(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processGet2(<any>r));
+                } catch (e) {
+                    return <Observable<PhotoGroupModel>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<PhotoGroupModel>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGet2(response: Response): Observable<PhotoGroupModel> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PhotoGroupModel.fromJS(resultData200) : new PhotoGroupModel();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<PhotoGroupModel>(<any>null);
+    }
+
+    /**
+     * @model (optional) 
+     * @return Success
+     */
+    register(model: RegisterModel): Observable<void> {
+        let url_ = this.baseUrl + "/Registration/Register";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_ : any = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processRegister(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processRegister(<any>r));
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processRegister(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    delete3(id: number): Observable<void> {
+        let url_ = this.baseUrl + "/Registration/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "delete",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processDelete3(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processDelete3(<any>r));
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processDelete3(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllParents(): Observable<RegisteredParentModel[]> {
+        let url_ = this.baseUrl + "/Registration/GetAllParents";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processGetAllParents(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processGetAllParents(<any>r));
+                } catch (e) {
+                    return <Observable<RegisteredParentModel[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<RegisteredParentModel[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetAllParents(response: Response): Observable<RegisteredParentModel[]> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(RegisteredParentModel.fromJS(item));
+            }
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<RegisteredParentModel[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllChildren(): Observable<RegisteredChildModel[]> {
+        let url_ = this.baseUrl + "/Registration/GetAllChildren";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processGetAllChildren(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processGetAllChildren(<any>r));
+                } catch (e) {
+                    return <Observable<RegisteredChildModel[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<RegisteredChildModel[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetAllChildren(response: Response): Observable<RegisteredChildModel[]> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(RegisteredChildModel.fromJS(item));
+            }
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<RegisteredChildModel[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllParentsCsv(): Observable<void> {
+        let url_ = this.baseUrl + "/Registration/GetAllParents/Csv";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processGetAllParentsCsv(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processGetAllParentsCsv(<any>r));
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetAllParentsCsv(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllChildrenCsv(): Observable<void> {
+        let url_ = this.baseUrl + "/Registration/GetAllChildren/Csv";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processGetAllChildrenCsv(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processGetAllChildrenCsv(<any>r));
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetAllChildrenCsv(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @model (optional) 
+     * @return Success
+     */
+    create3(model: EventCreateModel): Observable<number> {
+        let url_ = this.baseUrl + "/Schedule/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_ : any = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processCreate3(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processCreate3(<any>r));
+                } catch (e) {
+                    return <Observable<number>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<number>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processCreate3(response: Response): Observable<number> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<number>(<any>null);
+    }
+
+    /**
+     * @model (optional) 
+     * @return Success
+     */
+    update3(model: EventModel): Observable<void> {
+        let url_ = this.baseUrl + "/Schedule/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_ : any = {
+            body: content_,
+            method: "put",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processUpdate3(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processUpdate3(<any>r));
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processUpdate3(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    delete4(id: number): Observable<void> {
+        let url_ = this.baseUrl + "/Schedule/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "delete",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processDelete4(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processDelete4(<any>r));
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processDelete4(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getAll3(): Observable<EventModel[]> {
+        let url_ = this.baseUrl + "/Schedule/GetAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processGetAll3(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processGetAll3(<any>r));
+                } catch (e) {
+                    return <Observable<EventModel[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<EventModel[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetAll3(response: Response): Observable<EventModel[]> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(EventModel.fromJS(item));
+            }
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<EventModel[]>(<any>null);
+    }
+
+    /**
+     * @until (optional) 
+     * @return Success
+     */
+    getUpcoming(until: Date): Observable<EventModel[]> {
+        let url_ = this.baseUrl + "/Schedule/Get?";
+        if (until !== undefined)
+            url_ += "until=" + encodeURIComponent(until ? "" + until.toJSON() : "") + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processGetUpcoming(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processGetUpcoming(<any>r));
+                } catch (e) {
+                    return <Observable<EventModel[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<EventModel[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetUpcoming(response: Response): Observable<EventModel[]> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(EventModel.fromJS(item));
+            }
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<EventModel[]>(<any>null);
     }
 }
 
-export class UserCredentialsModel implements IUserCredentialsModel {
+export class MessageModel implements IMessageModel {
+    firstName?: string;
+    lastName?: string;
     email?: string;
-    password?: string;
+    body?: string;
 
-    constructor(data?: IUserCredentialsModel) {
+    constructor(data?: IMessageModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -661,82 +1286,47 @@ export class UserCredentialsModel implements IUserCredentialsModel {
 
     init(data?: any) {
         if (data) {
+            this.firstName = data["firstName"];
+            this.lastName = data["lastName"];
             this.email = data["email"];
-            this.password = data["password"];
+            this.body = data["body"];
         }
     }
 
-    static fromJS(data: any): UserCredentialsModel {
+    static fromJS(data: any): MessageModel {
         data = typeof data === 'object' ? data : {};
-        let result = new UserCredentialsModel();
+        let result = new MessageModel();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
         data["email"] = this.email;
-        data["password"] = this.password;
+        data["body"] = this.body;
         return data; 
     }
 }
 
-export interface IUserCredentialsModel {
+export interface IMessageModel {
+    firstName?: string;
+    lastName?: string;
     email?: string;
-    password?: string;
+    body?: string;
 }
 
-export class ContactModel implements IContactModel {
-    name?: string;
-    email?: string;
-    message?: string;
-
-    constructor(data?: IContactModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.name = data["name"];
-            this.email = data["email"];
-            this.message = data["message"];
-        }
-    }
-
-    static fromJS(data: any): ContactModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new ContactModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["email"] = this.email;
-        data["message"] = this.message;
-        return data; 
-    }
-}
-
-export interface IContactModel {
-    name?: string;
-    email?: string;
-    message?: string;
-}
-
-export class PhotoMetadataReadModel implements IPhotoMetadataReadModel {
+export class MessageReadModel implements IMessageReadModel {
     id?: number;
-    title?: string;
-    groupId?: number;
-    sortOrder?: number;
+    timestamp?: Date;
+    isRead?: boolean;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    body?: string;
 
-    constructor(data?: IPhotoMetadataReadModel) {
+    constructor(data?: IMessageReadModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -748,43 +1338,134 @@ export class PhotoMetadataReadModel implements IPhotoMetadataReadModel {
     init(data?: any) {
         if (data) {
             this.id = data["id"];
+            this.timestamp = data["timestamp"] ? new Date(data["timestamp"].toString()) : <any>undefined;
+            this.isRead = data["isRead"];
+            this.firstName = data["firstName"];
+            this.lastName = data["lastName"];
+            this.email = data["email"];
+            this.body = data["body"];
+        }
+    }
+
+    static fromJS(data: any): MessageReadModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new MessageReadModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
+        data["isRead"] = this.isRead;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["body"] = this.body;
+        return data; 
+    }
+}
+
+export interface IMessageReadModel {
+    id?: number;
+    timestamp?: Date;
+    isRead?: boolean;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    body?: string;
+}
+
+export class PhotoModel implements IPhotoModel {
+    displayProperties?: PhotoDisplayPropertiesModel;
+    data?: PhotoDataModel;
+
+    constructor(data?: IPhotoModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.displayProperties = data["displayProperties"] ? PhotoDisplayPropertiesModel.fromJS(data["displayProperties"]) : <any>undefined;
+            this.data = data["data"] ? PhotoDataModel.fromJS(data["data"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PhotoModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new PhotoModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["displayProperties"] = this.displayProperties ? this.displayProperties.toJSON() : <any>undefined;
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IPhotoModel {
+    displayProperties?: PhotoDisplayPropertiesModel;
+    data?: PhotoDataModel;
+}
+
+export class PhotoDisplayPropertiesModel implements IPhotoDisplayPropertiesModel {
+    title?: string;
+    sortOrder?: number;
+    photoGroupId?: number;
+
+    constructor(data?: IPhotoDisplayPropertiesModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
             this.title = data["title"];
-            this.groupId = data["groupId"];
             this.sortOrder = data["sortOrder"];
+            this.photoGroupId = data["photoGroupId"];
         }
     }
 
-    static fromJS(data: any): PhotoMetadataReadModel {
+    static fromJS(data: any): PhotoDisplayPropertiesModel {
         data = typeof data === 'object' ? data : {};
-        let result = new PhotoMetadataReadModel();
+        let result = new PhotoDisplayPropertiesModel();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
         data["title"] = this.title;
-        data["groupId"] = this.groupId;
         data["sortOrder"] = this.sortOrder;
+        data["photoGroupId"] = this.photoGroupId;
         return data; 
     }
 }
 
-export interface IPhotoMetadataReadModel {
-    id?: number;
+export interface IPhotoDisplayPropertiesModel {
     title?: string;
-    groupId?: number;
     sortOrder?: number;
+    photoGroupId?: number;
 }
 
-export class PhotoGroupReadModel implements IPhotoGroupReadModel {
-    id?: number;
-    photoIds?: number[];
-    name?: string;
-    sortOrder?: number;
+export class PhotoDataModel implements IPhotoDataModel {
+    mimeType?: string;
+    data?: string;
 
-    constructor(data?: IPhotoGroupReadModel) {
+    constructor(data?: IPhotoDataModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -795,60 +1476,125 @@ export class PhotoGroupReadModel implements IPhotoGroupReadModel {
 
     init(data?: any) {
         if (data) {
-            this.id = data["id"];
-            if (data["photoIds"] && data["photoIds"].constructor === Array) {
-                this.photoIds = [];
-                for (let item of data["photoIds"])
-                    this.photoIds.push(item);
-            }
-            this.name = data["name"];
-            this.sortOrder = data["sortOrder"];
+            this.mimeType = data["mimeType"];
+            this.data = data["data"];
         }
     }
 
-    static fromJS(data: any): PhotoGroupReadModel {
+    static fromJS(data: any): PhotoDataModel {
         data = typeof data === 'object' ? data : {};
-        let result = new PhotoGroupReadModel();
+        let result = new PhotoDataModel();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        if (this.photoIds && this.photoIds.constructor === Array) {
-            data["photoIds"] = [];
-            for (let item of this.photoIds)
-                data["photoIds"].push(item);
+        data["mimeType"] = this.mimeType;
+        data["data"] = this.data;
+        return data; 
+    }
+}
+
+export interface IPhotoDataModel {
+    mimeType?: string;
+    data?: string;
+}
+
+export class PhotoDisplayPropertiesDetailModel implements IPhotoDisplayPropertiesDetailModel {
+    photoId?: number;
+    title?: string;
+    sortOrder?: number;
+    photoGroupId?: number;
+
+    constructor(data?: IPhotoDisplayPropertiesDetailModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
         }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.photoId = data["photoId"];
+            this.title = data["title"];
+            this.sortOrder = data["sortOrder"];
+            this.photoGroupId = data["photoGroupId"];
+        }
+    }
+
+    static fromJS(data: any): PhotoDisplayPropertiesDetailModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new PhotoDisplayPropertiesDetailModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["photoId"] = this.photoId;
+        data["title"] = this.title;
+        data["sortOrder"] = this.sortOrder;
+        data["photoGroupId"] = this.photoGroupId;
+        return data; 
+    }
+}
+
+export interface IPhotoDisplayPropertiesDetailModel {
+    photoId?: number;
+    title?: string;
+    sortOrder?: number;
+    photoGroupId?: number;
+}
+
+export class PhotoGroupCreateModel implements IPhotoGroupCreateModel {
+    name?: string;
+    sortOrder?: number;
+
+    constructor(data?: IPhotoGroupCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.name = data["name"];
+            this.sortOrder = data["sortOrder"];
+        }
+    }
+
+    static fromJS(data: any): PhotoGroupCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new PhotoGroupCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
         data["sortOrder"] = this.sortOrder;
         return data; 
     }
 }
 
-export interface IPhotoGroupReadModel {
-    id?: number;
-    photoIds?: number[];
+export interface IPhotoGroupCreateModel {
     name?: string;
     sortOrder?: number;
 }
 
-export class RegistrationReadModel implements IRegistrationReadModel {
+export class PhotoGroupModel implements IPhotoGroupModel {
     id?: number;
-    hasPaid?: boolean;
-    registrationTimestamp?: Date;
-    firstName?: string;
-    lastName?: string;
-    emailAddress?: string;
-    phoneNumber?: string;
-    address?: string;
-    address2?: string;
-    city?: string;
-    state?: string;
-    zip?: string;
+    name?: string;
+    sortOrder?: number;
 
-    constructor(data?: IRegistrationReadModel) {
+    constructor(data?: IPhotoGroupModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -860,23 +1606,14 @@ export class RegistrationReadModel implements IRegistrationReadModel {
     init(data?: any) {
         if (data) {
             this.id = data["id"];
-            this.hasPaid = data["hasPaid"];
-            this.registrationTimestamp = data["registrationTimestamp"] ? new Date(data["registrationTimestamp"].toString()) : <any>undefined;
-            this.firstName = data["firstName"];
-            this.lastName = data["lastName"];
-            this.emailAddress = data["emailAddress"];
-            this.phoneNumber = data["phoneNumber"];
-            this.address = data["address"];
-            this.address2 = data["address2"];
-            this.city = data["city"];
-            this.state = data["state"];
-            this.zip = data["zip"];
+            this.name = data["name"];
+            this.sortOrder = data["sortOrder"];
         }
     }
 
-    static fromJS(data: any): RegistrationReadModel {
+    static fromJS(data: any): PhotoGroupModel {
         data = typeof data === 'object' ? data : {};
-        let result = new RegistrationReadModel();
+        let result = new PhotoGroupModel();
         result.init(data);
         return result;
     }
@@ -884,45 +1621,24 @@ export class RegistrationReadModel implements IRegistrationReadModel {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["hasPaid"] = this.hasPaid;
-        data["registrationTimestamp"] = this.registrationTimestamp ? this.registrationTimestamp.toISOString() : <any>undefined;
-        data["firstName"] = this.firstName;
-        data["lastName"] = this.lastName;
-        data["emailAddress"] = this.emailAddress;
-        data["phoneNumber"] = this.phoneNumber;
-        data["address"] = this.address;
-        data["address2"] = this.address2;
-        data["city"] = this.city;
-        data["state"] = this.state;
-        data["zip"] = this.zip;
+        data["name"] = this.name;
+        data["sortOrder"] = this.sortOrder;
         return data; 
     }
 }
 
-export interface IRegistrationReadModel {
+export interface IPhotoGroupModel {
     id?: number;
-    hasPaid?: boolean;
-    registrationTimestamp?: Date;
-    firstName?: string;
-    lastName?: string;
-    emailAddress?: string;
-    phoneNumber?: string;
-    address?: string;
-    address2?: string;
-    city?: string;
-    state?: string;
-    zip?: string;
+    name?: string;
+    sortOrder?: number;
 }
 
-export class ChildInformationReadModel implements IChildInformationReadModel {
-    parentId?: number;
-    firstName?: string;
-    lastName?: string;
-    gender?: string;
-    dateOfBirth?: Date;
-    shirtSize?: string;
+export class RegisterModel implements IRegisterModel {
+    contactInformation?: RegisterContactInformationModel;
+    parent?: RegisterParentModel;
+    children?: RegisterChildModel[];
 
-    constructor(data?: IChildInformationReadModel) {
+    constructor(data?: IRegisterModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -933,109 +1649,82 @@ export class ChildInformationReadModel implements IChildInformationReadModel {
 
     init(data?: any) {
         if (data) {
-            this.parentId = data["parentId"];
-            this.firstName = data["firstName"];
-            this.lastName = data["lastName"];
-            this.gender = data["gender"];
-            this.dateOfBirth = data["dateOfBirth"] ? new Date(data["dateOfBirth"].toString()) : <any>undefined;
-            this.shirtSize = data["shirtSize"];
-        }
-    }
-
-    static fromJS(data: any): ChildInformationReadModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new ChildInformationReadModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["parentId"] = this.parentId;
-        data["firstName"] = this.firstName;
-        data["lastName"] = this.lastName;
-        data["gender"] = this.gender;
-        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
-        data["shirtSize"] = this.shirtSize;
-        return data; 
-    }
-}
-
-export interface IChildInformationReadModel {
-    parentId?: number;
-    firstName?: string;
-    lastName?: string;
-    gender?: string;
-    dateOfBirth?: Date;
-    shirtSize?: string;
-}
-
-export class RegistrationCreateModel implements IRegistrationCreateModel {
-    children?: ChildInformationCreateModel[];
-    stripeToken?: string;
-    comments?: string;
-    registrationType?: RegistrationCreateModelRegistrationType;
-    firstName?: string;
-    lastName?: string;
-    emailAddress?: string;
-    phoneNumber?: string;
-    address?: string;
-    address2?: string;
-    city?: string;
-    state?: string;
-    zip?: string;
-
-    constructor(data?: IRegistrationCreateModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
+            this.contactInformation = data["contactInformation"] ? RegisterContactInformationModel.fromJS(data["contactInformation"]) : <any>undefined;
+            this.parent = data["parent"] ? RegisterParentModel.fromJS(data["parent"]) : <any>undefined;
             if (data["children"] && data["children"].constructor === Array) {
                 this.children = [];
                 for (let item of data["children"])
-                    this.children.push(ChildInformationCreateModel.fromJS(item));
+                    this.children.push(RegisterChildModel.fromJS(item));
             }
-            this.stripeToken = data["stripeToken"];
-            this.comments = data["comments"];
-            this.registrationType = data["registrationType"];
-            this.firstName = data["firstName"];
-            this.lastName = data["lastName"];
-            this.emailAddress = data["emailAddress"];
-            this.phoneNumber = data["phoneNumber"];
-            this.address = data["address"];
-            this.address2 = data["address2"];
-            this.city = data["city"];
-            this.state = data["state"];
-            this.zip = data["zip"];
         }
     }
 
-    static fromJS(data: any): RegistrationCreateModel {
+    static fromJS(data: any): RegisterModel {
         data = typeof data === 'object' ? data : {};
-        let result = new RegistrationCreateModel();
+        let result = new RegisterModel();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["contactInformation"] = this.contactInformation ? this.contactInformation.toJSON() : <any>undefined;
+        data["parent"] = this.parent ? this.parent.toJSON() : <any>undefined;
         if (this.children && this.children.constructor === Array) {
             data["children"] = [];
             for (let item of this.children)
                 data["children"].push(item.toJSON());
         }
-        data["stripeToken"] = this.stripeToken;
-        data["comments"] = this.comments;
-        data["registrationType"] = this.registrationType;
-        data["firstName"] = this.firstName;
-        data["lastName"] = this.lastName;
-        data["emailAddress"] = this.emailAddress;
+        return data; 
+    }
+}
+
+export interface IRegisterModel {
+    contactInformation?: RegisterContactInformationModel;
+    parent?: RegisterParentModel;
+    children?: RegisterChildModel[];
+}
+
+export class RegisterContactInformationModel implements IRegisterContactInformationModel {
+    email?: string;
+    phoneNumber?: string;
+    address?: string;
+    address2?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+
+    constructor(data?: IRegisterContactInformationModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.email = data["email"];
+            this.phoneNumber = data["phoneNumber"];
+            this.address = data["address"];
+            this.address2 = data["address2"];
+            this.city = data["city"];
+            this.state = data["state"];
+            this.zip = data["zip"];
+        }
+    }
+
+    static fromJS(data: any): RegisterContactInformationModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterContactInformationModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
         data["phoneNumber"] = this.phoneNumber;
         data["address"] = this.address;
         data["address2"] = this.address2;
@@ -1046,14 +1735,8 @@ export class RegistrationCreateModel implements IRegistrationCreateModel {
     }
 }
 
-export interface IRegistrationCreateModel {
-    children?: ChildInformationCreateModel[];
-    stripeToken?: string;
-    comments?: string;
-    registrationType?: RegistrationCreateModelRegistrationType;
-    firstName?: string;
-    lastName?: string;
-    emailAddress?: string;
+export interface IRegisterContactInformationModel {
+    email?: string;
     phoneNumber?: string;
     address?: string;
     address2?: string;
@@ -1062,14 +1745,54 @@ export interface IRegistrationCreateModel {
     zip?: string;
 }
 
-export class ChildInformationCreateModel implements IChildInformationCreateModel {
+export class RegisterParentModel implements IRegisterParentModel {
     firstName?: string;
     lastName?: string;
-    gender?: string;
+
+    constructor(data?: IRegisterParentModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.firstName = data["firstName"];
+            this.lastName = data["lastName"];
+        }
+    }
+
+    static fromJS(data: any): RegisterParentModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterParentModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        return data; 
+    }
+}
+
+export interface IRegisterParentModel {
+    firstName?: string;
+    lastName?: string;
+}
+
+export class RegisterChildModel implements IRegisterChildModel {
+    firstName?: string;
+    lastName?: string;
+    gender?: RegisterChildModelGender;
     dateOfBirth?: Date;
     shirtSize?: string;
 
-    constructor(data?: IChildInformationCreateModel) {
+    constructor(data?: IRegisterChildModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1088,9 +1811,9 @@ export class ChildInformationCreateModel implements IChildInformationCreateModel
         }
     }
 
-    static fromJS(data: any): ChildInformationCreateModel {
+    static fromJS(data: any): RegisterChildModel {
         data = typeof data === 'object' ? data : {};
-        let result = new ChildInformationCreateModel();
+        let result = new RegisterChildModel();
         result.init(data);
         return result;
     }
@@ -1106,21 +1829,22 @@ export class ChildInformationCreateModel implements IChildInformationCreateModel
     }
 }
 
-export interface IChildInformationCreateModel {
+export interface IRegisterChildModel {
     firstName?: string;
     lastName?: string;
-    gender?: string;
+    gender?: RegisterChildModelGender;
     dateOfBirth?: Date;
     shirtSize?: string;
 }
 
-export class EventReadModel implements IEventReadModel {
-    id?: number;
-    date?: Date;
-    title?: string;
-    description?: string;
+export class RegisteredParentModel implements IRegisteredParentModel {
+    registrationId?: number;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    childCount?: number;
 
-    constructor(data?: IEventReadModel) {
+    constructor(data?: IRegisteredParentModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1131,41 +1855,212 @@ export class EventReadModel implements IEventReadModel {
 
     init(data?: any) {
         if (data) {
-            this.id = data["id"];
-            this.date = data["date"] ? new Date(data["date"].toString()) : <any>undefined;
-            this.title = data["title"];
-            this.description = data["description"];
+            this.registrationId = data["registrationId"];
+            this.firstName = data["firstName"];
+            this.lastName = data["lastName"];
+            this.email = data["email"];
+            this.childCount = data["childCount"];
         }
     }
 
-    static fromJS(data: any): EventReadModel {
+    static fromJS(data: any): RegisteredParentModel {
         data = typeof data === 'object' ? data : {};
-        let result = new EventReadModel();
+        let result = new RegisteredParentModel();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["registrationId"] = this.registrationId;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["childCount"] = this.childCount;
+        return data; 
+    }
+}
+
+export interface IRegisteredParentModel {
+    registrationId?: number;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    childCount?: number;
+}
+
+export class RegisteredChildModel implements IRegisteredChildModel {
+    parentFirstName?: string;
+    parentLastName?: string;
+    firstName?: string;
+    lastName?: string;
+    gender?: RegisteredChildModelGender;
+    emailAddress?: string;
+    dateOfBirth?: Date;
+    shirtSize?: string;
+
+    constructor(data?: IRegisteredChildModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.parentFirstName = data["parentFirstName"];
+            this.parentLastName = data["parentLastName"];
+            this.firstName = data["firstName"];
+            this.lastName = data["lastName"];
+            this.gender = data["gender"];
+            this.emailAddress = data["emailAddress"];
+            this.dateOfBirth = data["dateOfBirth"] ? new Date(data["dateOfBirth"].toString()) : <any>undefined;
+            this.shirtSize = data["shirtSize"];
+        }
+    }
+
+    static fromJS(data: any): RegisteredChildModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisteredChildModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["parentFirstName"] = this.parentFirstName;
+        data["parentLastName"] = this.parentLastName;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["gender"] = this.gender;
+        data["emailAddress"] = this.emailAddress;
+        data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
+        data["shirtSize"] = this.shirtSize;
+        return data; 
+    }
+}
+
+export interface IRegisteredChildModel {
+    parentFirstName?: string;
+    parentLastName?: string;
+    firstName?: string;
+    lastName?: string;
+    gender?: RegisteredChildModelGender;
+    emailAddress?: string;
+    dateOfBirth?: Date;
+    shirtSize?: string;
+}
+
+export class EventCreateModel implements IEventCreateModel {
+    startDate?: Date;
+    endDate?: Date;
+    title?: string;
+    description?: string;
+
+    constructor(data?: IEventCreateModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.startDate = data["startDate"] ? new Date(data["startDate"].toString()) : <any>undefined;
+            this.endDate = data["endDate"] ? new Date(data["endDate"].toString()) : <any>undefined;
+            this.title = data["title"];
+            this.description = data["description"];
+        }
+    }
+
+    static fromJS(data: any): EventCreateModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new EventCreateModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
         data["title"] = this.title;
         data["description"] = this.description;
         return data; 
     }
 }
 
-export interface IEventReadModel {
-    id?: number;
-    date?: Date;
+export interface IEventCreateModel {
+    startDate?: Date;
+    endDate?: Date;
     title?: string;
     description?: string;
 }
 
-export enum RegistrationCreateModelRegistrationType {
-    Cash = <any>"Cash", 
-    Paypal = <any>"Paypal", 
-    Other = <any>"Other", 
+export class EventModel implements IEventModel {
+    id?: number;
+    startDate?: Date;
+    endDate?: Date;
+    title?: string;
+    description?: string;
+
+    constructor(data?: IEventModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.startDate = data["startDate"] ? new Date(data["startDate"].toString()) : <any>undefined;
+            this.endDate = data["endDate"] ? new Date(data["endDate"].toString()) : <any>undefined;
+            this.title = data["title"];
+            this.description = data["description"];
+        }
+    }
+
+    static fromJS(data: any): EventModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new EventModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        data["title"] = this.title;
+        data["description"] = this.description;
+        return data; 
+    }
+}
+
+export interface IEventModel {
+    id?: number;
+    startDate?: Date;
+    endDate?: Date;
+    title?: string;
+    description?: string;
+}
+
+export enum RegisterChildModelGender {
+    Male = <any>"male", 
+    Female = <any>"female", 
+}
+
+export enum RegisteredChildModelGender {
+    Male = <any>"male", 
+    Female = <any>"female", 
 }
 
 export class SwaggerException extends Error {

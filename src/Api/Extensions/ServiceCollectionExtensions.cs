@@ -90,6 +90,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("doc", new Info { Title = "DetroitHarps API", Version = "v1" });
+                c.DescribeAllEnumsAsStrings();
+                c.DescribeStringEnumsInCamelCase();
                 var apiScheme = new ApiKeyScheme
                 {
                     In = "header",
