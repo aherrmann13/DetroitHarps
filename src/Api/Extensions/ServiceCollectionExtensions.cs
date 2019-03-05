@@ -6,6 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection
     using DetroitHarps.Api.Authentication;
     using DetroitHarps.Api.Middleware;
     using DetroitHarps.Api.Services;
+    using DetroitHarps.Api.Swagger;
     using DetroitHarps.Business;
     using DetroitHarps.Business.Contact;
     using DetroitHarps.Business.Photo;
@@ -107,6 +108,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     { "Bearer", Enumerable.Empty<string>() },
                 });
+                c.EnableAnnotations();
+                c.SchemaFilter<AssignPropertyRequiredFilter>();
             });
 
             return services;

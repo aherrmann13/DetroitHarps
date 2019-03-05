@@ -5,6 +5,7 @@ namespace DetroitHarps.Api.Controllers
     using DetroitHarps.Business.Photo.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Swashbuckle.AspNetCore.Annotations;
     using Tools;
 
     [Route("[Controller]")]
@@ -20,6 +21,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpPost("Create")]
+        [SwaggerOperation(OperationId = "CreatePhotoGroup")]
         public ActionResult<int> Create([FromBody] PhotoGroupCreateModel model)
         {
             var result = _photoGroupManager.Create(model);
@@ -27,6 +29,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpPut("Update")]
+        [SwaggerOperation(OperationId = "UpdatePhotoGroup")]
         public ActionResult Update([FromBody] PhotoGroupModel model)
         {
             _photoGroupManager.Update(model);
@@ -34,6 +37,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
+        [SwaggerOperation(OperationId = "DeletePhotoGroup")]
         public ActionResult Delete([FromRoute] int id)
         {
             _photoGroupManager.Delete(id);
@@ -42,6 +46,7 @@ namespace DetroitHarps.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("GetAll")]
+        [SwaggerOperation(OperationId = "GetAllPhotoGroups")]
         public ActionResult<IEnumerable<PhotoGroupModel>> GetAll()
         {
             var result = _photoGroupManager.GetAll();
@@ -50,6 +55,7 @@ namespace DetroitHarps.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("Get/{id}")]
+        [SwaggerOperation(OperationId = "GetPhotoGroup")]
         public ActionResult<PhotoGroupModel> Get([FromRoute] int id)
         {
             var result = _photoGroupManager.Get(id);

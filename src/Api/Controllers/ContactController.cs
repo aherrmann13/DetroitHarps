@@ -5,6 +5,7 @@ namespace DetroitHarps.Api.Controllers
     using DetroitHarps.Business.Contact.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Swashbuckle.AspNetCore.Annotations;
     using Tools;
 
     [Route("[Controller]")]
@@ -20,6 +21,8 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpPost("Contact")]
+        [SwaggerOperation(OperationId = "Contact")]
+        [AllowAnonymous]
         public ActionResult Contact([FromBody] MessageModel model)
         {
             _contactManager.Contact(model);
@@ -27,6 +30,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpPut("MarkAsRead/{id}")]
+        [SwaggerOperation(OperationId = "MarkAsRead")]
         public ActionResult MarkAsRead([FromRoute] int id)
         {
             _contactManager.MarkAsRead(id);
@@ -34,6 +38,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpPut("MarkAsUnread/{id}")]
+        [SwaggerOperation(OperationId = "MarkAsUnread")]
         public ActionResult MarkAsUnread([FromRoute] int id)
         {
             _contactManager.MarkAsUnread(id);
@@ -41,6 +46,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpGet("GetAll")]
+        [SwaggerOperation(OperationId = "GetAllMessages")]
         public ActionResult<IEnumerable<MessageReadModel>> GetAll()
         {
             var result = _contactManager.GetAll();

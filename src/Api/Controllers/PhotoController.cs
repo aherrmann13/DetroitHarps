@@ -5,6 +5,7 @@ namespace DetroitHarps.Api.Controllers
     using DetroitHarps.Business.Photo.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Swashbuckle.AspNetCore.Annotations;
     using Tools;
 
     [Route("[Controller]")]
@@ -20,6 +21,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpPost("Create")]
+        [SwaggerOperation(OperationId = "CreatePhoto")]
         public ActionResult<int> Create([FromBody] PhotoModel model)
         {
             var result = _photoManager.Create(model);
@@ -27,6 +29,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpPut("Update")]
+        [SwaggerOperation(OperationId = "UpdatePhoto")]
         public ActionResult Update([FromBody] PhotoDisplayPropertiesDetailModel model)
         {
             _photoManager.UpdateDisplayProperties(model);
@@ -34,6 +37,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
+        [SwaggerOperation(OperationId = "DeletePhoto")]
         public ActionResult Delete([FromRoute] int id)
         {
             _photoManager.Delete(id);
@@ -42,6 +46,7 @@ namespace DetroitHarps.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("GetAll")]
+        [SwaggerOperation(OperationId = "GetAllPhotos")]
         public ActionResult<IEnumerable<PhotoDisplayPropertiesDetailModel>> GetAll()
         {
             var result = _photoManager.GetAll();
@@ -50,6 +55,7 @@ namespace DetroitHarps.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("Get/{id}")]
+        [SwaggerOperation(OperationId = "GetPhoto")]
         public ActionResult<PhotoDataModel> Get([FromRoute] int id)
         {
             var result = _photoManager.GetPhotoBytes(id);

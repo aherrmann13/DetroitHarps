@@ -178,7 +178,7 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
-    getAllAll(): Observable<MessageReadModel[]> {
+    getAllMessages(): Observable<MessageReadModel[]> {
         let url_ = this.baseUrl + "/Contact/GetAll";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -193,11 +193,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGetAllAll(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processGetAllMessages(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processGetAllAll(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processGetAllMessages(<any>r));
                 } catch (e) {
                     return <Observable<MessageReadModel[]>><any>Observable.throw(e);
                 }
@@ -206,7 +206,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processGetAllAll(response: Response): Observable<MessageReadModel[]> {
+    protected processGetAllMessages(response: Response): Observable<MessageReadModel[]> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -231,7 +231,7 @@ export class Client extends BaseClient {
      * @model (optional) 
      * @return Success
      */
-    create(model: PhotoModel): Observable<number> {
+    createPhoto(model: PhotoModel): Observable<number> {
         let url_ = this.baseUrl + "/Photo/Create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -249,11 +249,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processCreate(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processCreatePhoto(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processCreate(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processCreatePhoto(<any>r));
                 } catch (e) {
                     return <Observable<number>><any>Observable.throw(e);
                 }
@@ -262,7 +262,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processCreate(response: Response): Observable<number> {
+    protected processCreatePhoto(response: Response): Observable<number> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -283,7 +283,7 @@ export class Client extends BaseClient {
      * @model (optional) 
      * @return Success
      */
-    update(model: PhotoDisplayPropertiesDetailModel): Observable<void> {
+    updatePhoto(model: PhotoDisplayPropertiesDetailModel): Observable<void> {
         let url_ = this.baseUrl + "/Photo/Update";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -300,11 +300,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processUpdate(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processUpdatePhoto(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processUpdate(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processUpdatePhoto(<any>r));
                 } catch (e) {
                     return <Observable<void>><any>Observable.throw(e);
                 }
@@ -313,7 +313,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processUpdate(response: Response): Observable<void> {
+    protected processUpdatePhoto(response: Response): Observable<void> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -330,7 +330,7 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
-    delete(id: number): Observable<void> {
+    deletePhoto(id: number): Observable<void> {
         let url_ = this.baseUrl + "/Photo/Delete/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -347,11 +347,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processDelete(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processDeletePhoto(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processDelete(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processDeletePhoto(<any>r));
                 } catch (e) {
                     return <Observable<void>><any>Observable.throw(e);
                 }
@@ -360,7 +360,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processDelete(response: Response): Observable<void> {
+    protected processDeletePhoto(response: Response): Observable<void> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -377,7 +377,7 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
-    getAll(): Observable<PhotoDisplayPropertiesDetailModel[]> {
+    getAllPhotos(): Observable<PhotoDisplayPropertiesDetailModel[]> {
         let url_ = this.baseUrl + "/Photo/GetAll";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -392,11 +392,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGetAll(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processGetAllPhotos(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processGetAll(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processGetAllPhotos(<any>r));
                 } catch (e) {
                     return <Observable<PhotoDisplayPropertiesDetailModel[]>><any>Observable.throw(e);
                 }
@@ -405,7 +405,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processGetAll(response: Response): Observable<PhotoDisplayPropertiesDetailModel[]> {
+    protected processGetAllPhotos(response: Response): Observable<PhotoDisplayPropertiesDetailModel[]> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -429,7 +429,7 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
-    get(id: number): Observable<PhotoDataModel> {
+    getPhoto(id: number): Observable<PhotoDataModel> {
         let url_ = this.baseUrl + "/Photo/Get/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -447,11 +447,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGet(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processGetPhoto(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processGet(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processGetPhoto(<any>r));
                 } catch (e) {
                     return <Observable<PhotoDataModel>><any>Observable.throw(e);
                 }
@@ -460,7 +460,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processGet(response: Response): Observable<PhotoDataModel> {
+    protected processGetPhoto(response: Response): Observable<PhotoDataModel> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -481,7 +481,7 @@ export class Client extends BaseClient {
      * @model (optional) 
      * @return Success
      */
-    create2(model: PhotoGroupCreateModel): Observable<number> {
+    createPhotoGroup(model: PhotoGroupCreateModel): Observable<number> {
         let url_ = this.baseUrl + "/PhotoGroup/Create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -499,11 +499,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processCreate2(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processCreatePhotoGroup(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processCreate2(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processCreatePhotoGroup(<any>r));
                 } catch (e) {
                     return <Observable<number>><any>Observable.throw(e);
                 }
@@ -512,7 +512,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processCreate2(response: Response): Observable<number> {
+    protected processCreatePhotoGroup(response: Response): Observable<number> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -533,7 +533,7 @@ export class Client extends BaseClient {
      * @model (optional) 
      * @return Success
      */
-    update2(model: PhotoGroupModel): Observable<void> {
+    updatePhotoGroup(model: PhotoGroupModel): Observable<void> {
         let url_ = this.baseUrl + "/PhotoGroup/Update";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -550,11 +550,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processUpdate2(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processUpdatePhotoGroup(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processUpdate2(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processUpdatePhotoGroup(<any>r));
                 } catch (e) {
                     return <Observable<void>><any>Observable.throw(e);
                 }
@@ -563,7 +563,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processUpdate2(response: Response): Observable<void> {
+    protected processUpdatePhotoGroup(response: Response): Observable<void> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -580,7 +580,7 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
-    delete2(id: number): Observable<void> {
+    deletePhotoGroup(id: number): Observable<void> {
         let url_ = this.baseUrl + "/PhotoGroup/Delete/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -597,11 +597,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processDelete2(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processDeletePhotoGroup(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processDelete2(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processDeletePhotoGroup(<any>r));
                 } catch (e) {
                     return <Observable<void>><any>Observable.throw(e);
                 }
@@ -610,7 +610,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processDelete2(response: Response): Observable<void> {
+    protected processDeletePhotoGroup(response: Response): Observable<void> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -627,7 +627,7 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
-    getAll2(): Observable<PhotoGroupModel[]> {
+    getAllPhotoGroups(): Observable<PhotoGroupModel[]> {
         let url_ = this.baseUrl + "/PhotoGroup/GetAll";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -642,11 +642,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGetAll2(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processGetAllPhotoGroups(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processGetAll2(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processGetAllPhotoGroups(<any>r));
                 } catch (e) {
                     return <Observable<PhotoGroupModel[]>><any>Observable.throw(e);
                 }
@@ -655,7 +655,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processGetAll2(response: Response): Observable<PhotoGroupModel[]> {
+    protected processGetAllPhotoGroups(response: Response): Observable<PhotoGroupModel[]> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -679,7 +679,7 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
-    get2(id: number): Observable<PhotoGroupModel> {
+    getPhotoGroup(id: number): Observable<PhotoGroupModel> {
         let url_ = this.baseUrl + "/PhotoGroup/Get/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -697,11 +697,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGet2(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processGetPhotoGroup(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processGet2(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processGetPhotoGroup(<any>r));
                 } catch (e) {
                     return <Observable<PhotoGroupModel>><any>Observable.throw(e);
                 }
@@ -710,7 +710,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processGet2(response: Response): Observable<PhotoGroupModel> {
+    protected processGetPhotoGroup(response: Response): Observable<PhotoGroupModel> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -778,7 +778,7 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
-    delete3(id: number): Observable<void> {
+    deleteRegistration(id: number): Observable<void> {
         let url_ = this.baseUrl + "/Registration/Delete/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -795,11 +795,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processDelete3(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processDeleteRegistration(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processDelete3(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processDeleteRegistration(<any>r));
                 } catch (e) {
                     return <Observable<void>><any>Observable.throw(e);
                 }
@@ -808,7 +808,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processDelete3(response: Response): Observable<void> {
+    protected processDeleteRegistration(response: Response): Observable<void> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -1018,7 +1018,7 @@ export class Client extends BaseClient {
      * @model (optional) 
      * @return Success
      */
-    create3(model: EventCreateModel): Observable<number> {
+    createEvent(model: EventCreateModel): Observable<number> {
         let url_ = this.baseUrl + "/Schedule/Create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1036,11 +1036,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processCreate3(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processCreateEvent(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processCreate3(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processCreateEvent(<any>r));
                 } catch (e) {
                     return <Observable<number>><any>Observable.throw(e);
                 }
@@ -1049,7 +1049,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processCreate3(response: Response): Observable<number> {
+    protected processCreateEvent(response: Response): Observable<number> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -1070,7 +1070,7 @@ export class Client extends BaseClient {
      * @model (optional) 
      * @return Success
      */
-    update3(model: EventModel): Observable<void> {
+    updateEvent(model: EventModel): Observable<void> {
         let url_ = this.baseUrl + "/Schedule/Update";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1087,11 +1087,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processUpdate3(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processUpdateEvent(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processUpdate3(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processUpdateEvent(<any>r));
                 } catch (e) {
                     return <Observable<void>><any>Observable.throw(e);
                 }
@@ -1100,7 +1100,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processUpdate3(response: Response): Observable<void> {
+    protected processUpdateEvent(response: Response): Observable<void> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -1117,7 +1117,7 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
-    delete4(id: number): Observable<void> {
+    deleteEvent(id: number): Observable<void> {
         let url_ = this.baseUrl + "/Schedule/Delete/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1134,11 +1134,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processDelete4(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processDeleteEvent(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processDelete4(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processDeleteEvent(<any>r));
                 } catch (e) {
                     return <Observable<void>><any>Observable.throw(e);
                 }
@@ -1147,7 +1147,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processDelete4(response: Response): Observable<void> {
+    protected processDeleteEvent(response: Response): Observable<void> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -1164,7 +1164,7 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
-    getAll3(): Observable<EventModel[]> {
+    getAllEvents(): Observable<EventModel[]> {
         let url_ = this.baseUrl + "/Schedule/GetAll";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1179,11 +1179,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGetAll3(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processGetAllEvents(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processGetAll3(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processGetAllEvents(<any>r));
                 } catch (e) {
                     return <Observable<EventModel[]>><any>Observable.throw(e);
                 }
@@ -1192,7 +1192,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processGetAll3(response: Response): Observable<EventModel[]> {
+    protected processGetAllEvents(response: Response): Observable<EventModel[]> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -1217,7 +1217,7 @@ export class Client extends BaseClient {
      * @until (optional) 
      * @return Success
      */
-    getUpcoming(until: Date): Observable<EventModel[]> {
+    getEvents(until: Date): Observable<EventModel[]> {
         let url_ = this.baseUrl + "/Schedule/Get?";
         if (until !== undefined)
             url_ += "until=" + encodeURIComponent(until ? "" + until.toJSON() : "") + "&"; 
@@ -1234,11 +1234,11 @@ export class Client extends BaseClient {
         return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
             return this.http.request(url_, transformedOptions_);
         }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGetUpcoming(<any>r));
+            return this.transformResult(url_, response_, (r) => this.processGetEvents(<any>r));
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.transformResult(url_, response_, (r) => this.processGetUpcoming(<any>r));
+                    return this.transformResult(url_, response_, (r) => this.processGetEvents(<any>r));
                 } catch (e) {
                     return <Observable<EventModel[]>><any>Observable.throw(e);
                 }
@@ -1247,7 +1247,7 @@ export class Client extends BaseClient {
         });
     }
 
-    protected processGetUpcoming(response: Response): Observable<EventModel[]> {
+    protected processGetEvents(response: Response): Observable<EventModel[]> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -1318,9 +1318,9 @@ export interface IMessageModel {
 }
 
 export class MessageReadModel implements IMessageReadModel {
-    id?: number;
-    timestamp?: Date;
-    isRead?: boolean;
+    id: number;
+    timestamp: Date;
+    isRead: boolean;
     firstName?: string;
     lastName?: string;
     email?: string;
@@ -1368,9 +1368,9 @@ export class MessageReadModel implements IMessageReadModel {
 }
 
 export interface IMessageReadModel {
-    id?: number;
-    timestamp?: Date;
-    isRead?: boolean;
+    id: number;
+    timestamp: Date;
+    isRead: boolean;
     firstName?: string;
     lastName?: string;
     email?: string;
@@ -1419,8 +1419,8 @@ export interface IPhotoModel {
 
 export class PhotoDisplayPropertiesModel implements IPhotoDisplayPropertiesModel {
     title?: string;
-    sortOrder?: number;
-    photoGroupId?: number;
+    sortOrder: number;
+    photoGroupId: number;
 
     constructor(data?: IPhotoDisplayPropertiesModel) {
         if (data) {
@@ -1457,8 +1457,8 @@ export class PhotoDisplayPropertiesModel implements IPhotoDisplayPropertiesModel
 
 export interface IPhotoDisplayPropertiesModel {
     title?: string;
-    sortOrder?: number;
-    photoGroupId?: number;
+    sortOrder: number;
+    photoGroupId: number;
 }
 
 export class PhotoDataModel implements IPhotoDataModel {
@@ -1502,10 +1502,10 @@ export interface IPhotoDataModel {
 }
 
 export class PhotoDisplayPropertiesDetailModel implements IPhotoDisplayPropertiesDetailModel {
-    photoId?: number;
+    photoId: number;
     title?: string;
-    sortOrder?: number;
-    photoGroupId?: number;
+    sortOrder: number;
+    photoGroupId: number;
 
     constructor(data?: IPhotoDisplayPropertiesDetailModel) {
         if (data) {
@@ -1543,15 +1543,15 @@ export class PhotoDisplayPropertiesDetailModel implements IPhotoDisplayPropertie
 }
 
 export interface IPhotoDisplayPropertiesDetailModel {
-    photoId?: number;
+    photoId: number;
     title?: string;
-    sortOrder?: number;
-    photoGroupId?: number;
+    sortOrder: number;
+    photoGroupId: number;
 }
 
 export class PhotoGroupCreateModel implements IPhotoGroupCreateModel {
     name?: string;
-    sortOrder?: number;
+    sortOrder: number;
 
     constructor(data?: IPhotoGroupCreateModel) {
         if (data) {
@@ -1586,13 +1586,13 @@ export class PhotoGroupCreateModel implements IPhotoGroupCreateModel {
 
 export interface IPhotoGroupCreateModel {
     name?: string;
-    sortOrder?: number;
+    sortOrder: number;
 }
 
 export class PhotoGroupModel implements IPhotoGroupModel {
-    id?: number;
+    id: number;
     name?: string;
-    sortOrder?: number;
+    sortOrder: number;
 
     constructor(data?: IPhotoGroupModel) {
         if (data) {
@@ -1628,9 +1628,9 @@ export class PhotoGroupModel implements IPhotoGroupModel {
 }
 
 export interface IPhotoGroupModel {
-    id?: number;
+    id: number;
     name?: string;
-    sortOrder?: number;
+    sortOrder: number;
 }
 
 export class RegisterModel implements IRegisterModel {
@@ -1788,8 +1788,8 @@ export interface IRegisterParentModel {
 export class RegisterChildModel implements IRegisterChildModel {
     firstName?: string;
     lastName?: string;
-    gender?: RegisterChildModelGender;
-    dateOfBirth?: Date;
+    gender: RegisterChildModelGender;
+    dateOfBirth: Date;
     shirtSize?: string;
 
     constructor(data?: IRegisterChildModel) {
@@ -1832,17 +1832,17 @@ export class RegisterChildModel implements IRegisterChildModel {
 export interface IRegisterChildModel {
     firstName?: string;
     lastName?: string;
-    gender?: RegisterChildModelGender;
-    dateOfBirth?: Date;
+    gender: RegisterChildModelGender;
+    dateOfBirth: Date;
     shirtSize?: string;
 }
 
 export class RegisteredParentModel implements IRegisteredParentModel {
-    registrationId?: number;
+    registrationId: number;
     firstName?: string;
     lastName?: string;
     email?: string;
-    childCount?: number;
+    childCount: number;
 
     constructor(data?: IRegisteredParentModel) {
         if (data) {
@@ -1882,11 +1882,11 @@ export class RegisteredParentModel implements IRegisteredParentModel {
 }
 
 export interface IRegisteredParentModel {
-    registrationId?: number;
+    registrationId: number;
     firstName?: string;
     lastName?: string;
     email?: string;
-    childCount?: number;
+    childCount: number;
 }
 
 export class RegisteredChildModel implements IRegisteredChildModel {
@@ -1894,9 +1894,9 @@ export class RegisteredChildModel implements IRegisteredChildModel {
     parentLastName?: string;
     firstName?: string;
     lastName?: string;
-    gender?: RegisteredChildModelGender;
+    gender: RegisteredChildModelGender;
     emailAddress?: string;
-    dateOfBirth?: Date;
+    dateOfBirth: Date;
     shirtSize?: string;
 
     constructor(data?: IRegisteredChildModel) {
@@ -1947,14 +1947,14 @@ export interface IRegisteredChildModel {
     parentLastName?: string;
     firstName?: string;
     lastName?: string;
-    gender?: RegisteredChildModelGender;
+    gender: RegisteredChildModelGender;
     emailAddress?: string;
-    dateOfBirth?: Date;
+    dateOfBirth: Date;
     shirtSize?: string;
 }
 
 export class EventCreateModel implements IEventCreateModel {
-    startDate?: Date;
+    startDate: Date;
     endDate?: Date;
     title?: string;
     description?: string;
@@ -1995,15 +1995,15 @@ export class EventCreateModel implements IEventCreateModel {
 }
 
 export interface IEventCreateModel {
-    startDate?: Date;
+    startDate: Date;
     endDate?: Date;
     title?: string;
     description?: string;
 }
 
 export class EventModel implements IEventModel {
-    id?: number;
-    startDate?: Date;
+    id: number;
+    startDate: Date;
     endDate?: Date;
     title?: string;
     description?: string;
@@ -2046,8 +2046,8 @@ export class EventModel implements IEventModel {
 }
 
 export interface IEventModel {
-    id?: number;
-    startDate?: Date;
+    id: number;
+    startDate: Date;
     endDate?: Date;
     title?: string;
     description?: string;

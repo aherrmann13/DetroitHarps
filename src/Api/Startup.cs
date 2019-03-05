@@ -50,6 +50,7 @@
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/doc/swagger.json", "Detroit Harps API");
+                c.DisplayOperationId();
             });
 
             app.UseStaticFiles();

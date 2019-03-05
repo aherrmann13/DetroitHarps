@@ -5,6 +5,7 @@ namespace DetroitHarps.Api.Controllers
     using DetroitHarps.Business.Registration;
     using DetroitHarps.Business.Registration.Models;
     using Microsoft.AspNetCore.Mvc;
+    using Swashbuckle.AspNetCore.Annotations;
     using Tools;
     using Tools.Csv;
 
@@ -30,6 +31,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpPost("Register")]
+        [SwaggerOperation(OperationId = "Register")]
         public ActionResult Register([FromBody] RegisterModel model)
         {
             _registrationManager.Register(model);
@@ -37,6 +39,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
+        [SwaggerOperation(OperationId = "DeleteRegistration")]
         public ActionResult Delete([FromRoute] int id)
         {
             _registrationManager.Delete(id);
@@ -44,6 +47,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpGet("GetAllParents")]
+        [SwaggerOperation(OperationId = "GetAllParents")]
         public ActionResult<IEnumerable<RegisteredParentModel>> GetAllParents()
         {
             var result = _registrationManager.GetAllRegisteredParents();
@@ -51,6 +55,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpGet("GetAllChildren")]
+        [SwaggerOperation(OperationId = "GetAllChildren")]
         public ActionResult<IEnumerable<RegisteredChildModel>> GetAllChildren()
         {
             var result = _registrationManager.GetAllRegisteredChildren();
@@ -58,6 +63,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpGet("GetAllParents/Csv")]
+        [SwaggerOperation(OperationId = "GetAllParentsCsv")]
         [Produces(CsvContentType)]
         public ActionResult GetAllParentsCsv()
         {
@@ -67,6 +73,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpGet("GetAllChildren/Csv")]
+        [SwaggerOperation(OperationId = "GetAllChildrenCsv")]
         [Produces(CsvContentType)]
         public ActionResult GetAllChildrenCsv()
         {

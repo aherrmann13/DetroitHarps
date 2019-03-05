@@ -6,6 +6,8 @@ namespace DetroitHarps.Api.Controllers
     using DetroitHarps.Business.Schedule.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Swashbuckle.AspNetCore;
+    using Swashbuckle.AspNetCore.Annotations;
     using Tools;
 
     [Route("[Controller]")]
@@ -21,6 +23,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpPost("Create")]
+        [SwaggerOperation(OperationId = "CreateEvent")]
         public ActionResult<int> Create([FromBody] EventCreateModel model)
         {
             var result = _scheduleManager.Create(model);
@@ -28,6 +31,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpPut("Update")]
+        [SwaggerOperation(OperationId = "UpdateEvent")]
         public ActionResult Update([FromBody] EventModel model)
         {
             _scheduleManager.Update(model);
@@ -35,6 +39,7 @@ namespace DetroitHarps.Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
+        [SwaggerOperation(OperationId = "DeleteEvent")]
         public ActionResult Delete([FromRoute] int id)
         {
             _scheduleManager.Delete(id);
@@ -43,6 +48,7 @@ namespace DetroitHarps.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("GetAll")]
+        [SwaggerOperation(OperationId = "GetAllEvents")]
         public ActionResult<IEnumerable<EventModel>> GetAll()
         {
             var result = _scheduleManager.GetAll();
@@ -51,6 +57,7 @@ namespace DetroitHarps.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("Get")]
+        [SwaggerOperation(OperationId = "GetEvents")]
         public ActionResult<IEnumerable<EventModel>> GetUpcoming(
             [FromQuery] DateTime? until = null)
         {
