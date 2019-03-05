@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Client, EventReadModel } from '../../shared/client/api.client';
+import { Client, EventModel } from '../../shared/client/api.client';
 
 @Component({
   selector: 'dh-schedule',
@@ -9,20 +9,20 @@ import { Client, EventReadModel } from '../../shared/client/api.client';
 })
 export class ScheduleComponent implements OnInit {
 
-  events: EventReadModel[];
+  events: EventModel[];
 
   constructor(private _client: Client) { }
 
   ngOnInit() {
     this._client.getAllEvents().subscribe(
-      data => this.orderDates(data),
+      data => this.events = this.orderDates(data),
       error => console.error(error)
     );
   }
 
-  private orderDates(events: EventReadModel[]): void {
-    this.events = events.sort((a: EventReadModel, b: EventReadModel) => {
-      return a.date.getTime() - b.date.getTime();
+  private orderDates(events: Array<EventModel>): Array<EventModel> {
+    return events.sort((a: EventModel, b: EventModel) => {
+      return a.startDate.getTime() - b.startDate.getTime();
     });
   }
 }
