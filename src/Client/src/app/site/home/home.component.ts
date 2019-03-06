@@ -7,9 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  announcements: string[];
   title = 'Detroit Harps';
-  registrationText = 'Register Summer 2018';
+  registrationText = 'Register Summer 2019';
 
   constructor() { }
 
