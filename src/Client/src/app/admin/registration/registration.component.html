@@ -1,12 +1,12 @@
 <mat-table mat-table [dataSource]='info'>
     <ng-container matColumnDef='parentName'>
         <mat-header-cell *matHeaderCellDef> Parent </mat-header-cell>
-        <mat-cell *matCellDef='let child'> {{child.parentName}} </mat-cell>
+        <mat-cell *matCellDef='let child'> {{child.parentFirstName}}&nbsp;{{child.parentLastName}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef='childName'>
         <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-        <mat-cell *matCellDef='let child'> {{child.childName}} </mat-cell>
+        <mat-cell *matCellDef='let child'> {{child.firstName}}&nbsp;{{child.lastName}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef='emailAddress'>
