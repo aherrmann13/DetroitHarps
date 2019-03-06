@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
-import { Client, ContactModel } from '../../shared/client/api.client';
+import { Client, MessageModel } from '../../shared/client/api.client';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,7 +12,8 @@ import { Router } from '@angular/router';
 export class ContactComponent implements OnInit {
 
   // TODO this should be one form
-  name = new FormControl('', [Validators.required]);
+  firstName = new FormControl('', [Validators.required]);
+  lastName = new FormControl('', [Validators.required]);
   email = new FormControl('', [Validators.required, Validators.email]);
   message = new FormControl('', [Validators.required]);
 
@@ -29,7 +30,8 @@ export class ContactComponent implements OnInit {
   }
 
   isValidForm() {
-    return !this.name.invalid &&
+    return !this.firstName.invalid &&
+      !this.lastName.invalid &&
       !this.email.invalid &&
       !this.message.invalid &&
       this.enableForm;
@@ -37,13 +39,14 @@ export class ContactComponent implements OnInit {
 
   send(): void {
     this.enableForm = false;
-    const model = new ContactModel({
+    const model = new MessageModel({
       email: this.email.value,
-      name: this.name.value,
-      message: this.message.value
+      firstName: this.firstName.value,
+      lastName: this.lastName.value,
+      body: this.message.value
     });
     this._client.contact(model).subscribe(
-      data => this.onComplete(),
+      _ => this.onComplete(),
       error => console.log(error)
     );
   }
