@@ -20,6 +20,14 @@ import { PhotosComponent } from './photos/photos.component';
 import { AboutComponent } from './about/about.component';
 import { RegisterComponent } from './register/register.component';
 import { SupportComponent } from './support/support.component';
+import { ParentInformationComponent } from './register/forms/parent-information.component';
+import { AddressInformationComponent } from './register/forms/address-information.component';
+import { ChildrenInformationComponent } from './register/forms/chidren-information.component';
+import { PaymentInformationComponent } from './register/forms/payment-information.component';
+import { CommentsComponent } from './register/forms/comments.component';
+import { FinalStepComponent } from './register/forms/final-step.component';
+
+import { RegisterService } from './register/register.service'
 
 @NgModule({
   declarations: [
@@ -31,7 +39,13 @@ import { SupportComponent } from './support/support.component';
     SinglePhotoComponent,
     AboutComponent,
     RegisterComponent,
-    SupportComponent
+    SupportComponent,
+    ParentInformationComponent,
+    AddressInformationComponent,
+    ChildrenInformationComponent,
+    PaymentInformationComponent,
+    CommentsComponent,
+    FinalStepComponent
   ],
   imports: [
     CommonModule,
@@ -43,6 +57,7 @@ import { SupportComponent } from './support/support.component';
     ClientModule
   ],
   providers: [
+    RegisterService,
     MatIconRegistry
   ]
 })

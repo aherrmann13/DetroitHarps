@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://api.dev.detroitharps.com'
+  apiUrl: 'http://localhost:5000'
 };
