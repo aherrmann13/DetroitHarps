@@ -4,6 +4,7 @@ namespace DetroitHarps.Api.Controllers
     using System.Linq;
     using DetroitHarps.Business.Registration;
     using DetroitHarps.Business.Registration.Models;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using Tools;
@@ -32,6 +33,7 @@ namespace DetroitHarps.Api.Controllers
 
         [HttpPost("Register")]
         [SwaggerOperation(OperationId = "Register")]
+        [AllowAnonymous]
         public ActionResult Register([FromBody] RegisterModel model)
         {
             _registrationManager.Register(model);
