@@ -110,6 +110,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
                 c.EnableAnnotations();
                 c.SchemaFilter<AssignPropertyRequiredFilter>();
+                c.OperationFilter<FormFileSwaggerFilter>();
             });
 
             return services;
