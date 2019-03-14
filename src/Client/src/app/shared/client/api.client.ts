@@ -228,20 +228,30 @@ export class Client extends BaseClient {
     }
 
     /**
-     * @model (optional) 
+     * @displayProperties_Title (optional) 
+     * @displayProperties_SortOrder (optional) 
+     * @displayProperties_PhotoGroupId (optional) 
+     * @fileFormData (optional) 
      * @return Success
      */
-    createPhoto(model: PhotoModel): Observable<number> {
+    createPhoto(displayProperties_Title: string, displayProperties_SortOrder: number, displayProperties_PhotoGroupId: number, fileFormData: FileParameter): Observable<number> {
         let url_ = this.baseUrl + "/Photo/Create";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(model);
+        const content_ = new FormData();
+        if (displayProperties_Title !== null && displayProperties_Title !== undefined)
+            content_.append("DisplayProperties.Title", displayProperties_Title.toString());
+        if (displayProperties_SortOrder !== null && displayProperties_SortOrder !== undefined)
+            content_.append("DisplayProperties.SortOrder", displayProperties_SortOrder.toString());
+        if (displayProperties_PhotoGroupId !== null && displayProperties_PhotoGroupId !== undefined)
+            content_.append("DisplayProperties.PhotoGroupId", displayProperties_PhotoGroupId.toString());
+        if (fileFormData !== null && fileFormData !== undefined)
+            content_.append("File", fileFormData.data, fileFormData.fileName ? fileFormData.fileName : "File");
 
         let options_ : any = {
             body: content_,
             method: "post",
             headers: new Headers({
-                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
@@ -424,57 +434,6 @@ export class Client extends BaseClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Observable.of<PhotoDisplayPropertiesDetailModel[]>(<any>null);
-    }
-
-    /**
-     * @return Success
-     */
-    getPhoto(id: number): Observable<PhotoDataModel> {
-        let url_ = this.baseUrl + "/Photo/Get/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            method: "get",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
-            return this.http.request(url_, transformedOptions_);
-        }).flatMap((response_: any) => {
-            return this.transformResult(url_, response_, (r) => this.processGetPhoto(<any>r));
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.transformResult(url_, response_, (r) => this.processGetPhoto(<any>r));
-                } catch (e) {
-                    return <Observable<PhotoDataModel>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<PhotoDataModel>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processGetPhoto(response: Response): Observable<PhotoDataModel> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? PhotoDataModel.fromJS(resultData200) : new PhotoDataModel();
-            return Observable.of(result200);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<PhotoDataModel>(<any>null);
     }
 
     /**
@@ -1377,130 +1336,6 @@ export interface IMessageReadModel {
     body?: string;
 }
 
-export class PhotoModel implements IPhotoModel {
-    displayProperties?: PhotoDisplayPropertiesModel;
-    data?: PhotoDataModel;
-
-    constructor(data?: IPhotoModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.displayProperties = data["displayProperties"] ? PhotoDisplayPropertiesModel.fromJS(data["displayProperties"]) : <any>undefined;
-            this.data = data["data"] ? PhotoDataModel.fromJS(data["data"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): PhotoModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new PhotoModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["displayProperties"] = this.displayProperties ? this.displayProperties.toJSON() : <any>undefined;
-        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-export interface IPhotoModel {
-    displayProperties?: PhotoDisplayPropertiesModel;
-    data?: PhotoDataModel;
-}
-
-export class PhotoDisplayPropertiesModel implements IPhotoDisplayPropertiesModel {
-    title?: string;
-    sortOrder: number;
-    photoGroupId: number;
-
-    constructor(data?: IPhotoDisplayPropertiesModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.title = data["title"];
-            this.sortOrder = data["sortOrder"];
-            this.photoGroupId = data["photoGroupId"];
-        }
-    }
-
-    static fromJS(data: any): PhotoDisplayPropertiesModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new PhotoDisplayPropertiesModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["title"] = this.title;
-        data["sortOrder"] = this.sortOrder;
-        data["photoGroupId"] = this.photoGroupId;
-        return data; 
-    }
-}
-
-export interface IPhotoDisplayPropertiesModel {
-    title?: string;
-    sortOrder: number;
-    photoGroupId: number;
-}
-
-export class PhotoDataModel implements IPhotoDataModel {
-    mimeType?: string;
-    data?: string;
-
-    constructor(data?: IPhotoDataModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.mimeType = data["mimeType"];
-            this.data = data["data"];
-        }
-    }
-
-    static fromJS(data: any): PhotoDataModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new PhotoDataModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["mimeType"] = this.mimeType;
-        data["data"] = this.data;
-        return data; 
-    }
-}
-
-export interface IPhotoDataModel {
-    mimeType?: string;
-    data?: string;
-}
-
 export class PhotoDisplayPropertiesDetailModel implements IPhotoDisplayPropertiesDetailModel {
     photoId: number;
     title?: string;
@@ -2061,6 +1896,11 @@ export enum RegisterChildModelGender {
 export enum RegisteredChildModelGender {
     Male = <any>"male", 
     Female = <any>"female", 
+}
+
+export interface FileParameter {
+    data: any;
+    fileName: string;
 }
 
 export class SwaggerException extends Error {
