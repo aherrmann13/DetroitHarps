@@ -1,8 +1,8 @@
 import { Component, OnInit, HostListener, Inject, Optional, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-
-import { Client, PhotoGroupReadModel, API_BASE_URL } from '../../shared/client/api.client';
+import { API_BASE_URL } from '../../shared/client/api.client';
+import { PhotoService, PhotoGroup } from './photos.service';
 
 @Component({
   selector: 'dh-single-photo',
@@ -13,21 +13,20 @@ export class SinglePhotoComponent implements OnInit, OnDestroy {
   currentPhotoId: number;
   private id: number;
   private groupId: number;
-  private photoGroups: PhotoGroupReadModel[];
+  private photoGroups: PhotoGroup[];
   private sub: any;
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _client: Client,
+    private _photoService: PhotoService,
     @Optional() @Inject(API_BASE_URL) private _baseUrl?: string) { }
 
   ngOnInit() {
-    this._client.getAllPhotoGroups().subscribe(
+    this._photoService.getAll().subscribe(
       data => this.processPhotoGroupsReturned(data),
       error => console.error(error)
     );
-
   }
 
   ngOnDestroy() {
@@ -55,19 +54,22 @@ export class SinglePhotoComponent implements OnInit, OnDestroy {
   }
 
   private getCurrentPhotoGroupPhotos(): number[] {
-    return this.photoGroups.find(x => x.id === this.groupId).photoIds;
+    return this.photoGroups
+      .find(x => x.group.id === this.groupId)
+      .photos
+      .map(x => x.photoId);
   }
 
-  private processPhotoGroupsReturned(groups: PhotoGroupReadModel[]): void {
+  private processPhotoGroupsReturned(groups: PhotoGroup[]): void {
     this.photoGroups = groups;
     this.sub = this._route.params.subscribe(params => {
       this.groupId = +params['groupId'];
       this.id = +params['id'];
       this.currentPhotoId = this.photoGroups
-        .find(x => x.id === this.groupId).photoIds
-        .find(x => x === this.id);
+        .find(x => x.group.id === this.groupId)
+        .photos
+        .find(x => x.photoId === this.id)
+        .photoId;
    });
-
-
   }
 }

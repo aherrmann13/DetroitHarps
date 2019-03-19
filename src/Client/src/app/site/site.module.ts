@@ -28,6 +28,7 @@ import { CommentsComponent } from './register/forms/comments.component';
 import { FinalStepComponent } from './register/forms/final-step.component';
 
 import { RegisterService } from './register/register.service'
+import { PhotoService } from './photos/photos.service';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { RegisterService } from './register/register.service'
   ],
   providers: [
     RegisterService,
+    PhotoService,
     MatIconRegistry
   ]
 })
