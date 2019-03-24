@@ -2,8 +2,13 @@ server {
     root /detroitharps/application/Client/;
     index index.html index.htm;
     server_name dev.detroitharps.com;
+    
+    if ($host = www.dev.detroitharps.com) {
+        return 301 https://dev.detroitharps.com$request_uri;
+    }
+
     location / {
-        try_files $uri $uri/ =404;
+        try_files $uri $uri/ /index.html;
     }
 
     listen 443 ssl; # managed by Certbot
