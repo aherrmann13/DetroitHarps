@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatStepper } from '@angular/material';
+import { MatStepper, MatSnackBar } from '@angular/material';
 
 import { Client, MessageModel } from '../../shared/client/api.client';
 import { ParentInformationComponent } from './forms/parent-information.component';
@@ -8,6 +8,7 @@ import { ChildrenInformationComponent } from './forms/chidren-information.compon
 import { CommentsComponent } from './forms/comments.component';
 import { PaymentInformationComponent } from './forms/payment-information.component';
 import { RegisterService } from './register.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -46,7 +47,13 @@ export class RegisterComponent {
   isRegistering = false;
   isSendingComment = false;
 
-  constructor(private _client: Client, private _registerService: RegisterService) { }
+  constructor(
+    private _router: Router,
+    private _snackBar: MatSnackBar,
+    private _client: Client,
+    private _registerService: RegisterService) {
+      this.registrationError = this.registrationError.bind(this);
+    }
 
   addChild(): void {
     this.childrenInformation.addChild();
@@ -74,7 +81,7 @@ export class RegisterComponent {
       this.isSendingComment = true;
       this._client.contact(message).subscribe(
         () => this.isSendingComment = false,
-        error => console.error(error)
+        this.registrationError
       );
     }
 
@@ -85,7 +92,7 @@ export class RegisterComponent {
       this.paymentInformation.data
     ).subscribe(
       () => this.isRegistering = false,
-      error => console.error(error)
+      this.registrationError
     );
   }
 
@@ -96,5 +103,14 @@ export class RegisterComponent {
       email: this.parentInformation.data.emailAddress,
       body: this.comments.data
     });  
+  }
+
+  private registrationError(err: any)  {
+    this._snackBar.open(
+      "error during registration, please try again",
+      "Dismiss",
+      { duration: 10000 });
+    console.error(err);
+    this._router.navigate(['/']);
   }
 }

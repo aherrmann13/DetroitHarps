@@ -8,7 +8,7 @@
                 <span>Summer 2019 Program, Sunday Evenings at Flodin Park, Canton, MI, $20/child or $30/family</span>
             </mat-card-subtitle>
         </mat-card-header>
-        <mat-card-content>
+        <mat-card-content class="registration-content">
             <mat-horizontal-stepper [linear]='true' #stepper (selectionChange)='step(stepper)'>
                 <mat-step [stepControl]='parentInformationFormGroup'>
                     <ng-template matStepLabel>Contact Information</ng-template>
@@ -37,7 +37,6 @@
             </mat-horizontal-stepper>
         </mat-card-content>
         <mat-card-actions>
-            <button mat-raised-button color='primary' *ngIf='formIndex === 2' (click)='addChild()'>Add Child</button>
             <span class='spacer'></span>
             <button mat-raised-button color='primary' *ngIf='formIndex !== 0 && formIndex != 5' (click)='goBack(stepper)'>Previous</button>
             <button mat-raised-button color='primary' *ngIf='formIndex !== 4 && formIndex != 5' (click)='goForward(stepper)'>Next</button>

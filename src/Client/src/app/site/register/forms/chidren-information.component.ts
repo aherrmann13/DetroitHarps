@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { MatSelectChange } from "@angular/material";
 
 export interface ChildrenInformationComponentData {
     childFirstName: string,
@@ -17,7 +18,17 @@ export enum ChildGender {
 @Component({
     selector: 'dh-register-children-information',
     template: `
-    <form *ngFor='let formGroup of formGroups' [formGroup]='formGroup'>
+    <mat-form-field>
+    <mat-label>Number of Children</mat-label>
+    <mat-select (selectionChange)="numberOfChildrenChanged($event)" [value]="1">
+        <mat-option *ngFor="let number of numberOfChildrenSelector" [value]="number">
+            {{number}}
+        </mat-option>
+    </mat-select>
+    </mat-form-field>
+    <form class="child-registration-form" *ngFor='let formGroup of formGroups; index as i' [formGroup]='formGroup'>
+        <span class="child-index">Child {{i + 1}} </span>
+        <br />
         <mat-form-field>
             <input matInput placeholder='Child First name' formControlName='childFirstName'>
         </mat-form-field>
@@ -32,10 +43,12 @@ export enum ChildGender {
             <mat-datepicker #birthDatePicker></mat-datepicker>
         </mat-form-field>
         <br />
+        <br />
         <mat-radio-group formControlName='childGender'>
-            <mat-radio-button value='male'>Male </mat-radio-button>
-            <mat-radio-button value='female'>Female </mat-radio-button>
+            <mat-radio-button class="child-registration-gender-selector" value='male'>Male </mat-radio-button>
+            <mat-radio-button class="child-registration-gender-selector" value='female'>Female </mat-radio-button>
         </mat-radio-group>
+        <br />
         <br />
         <mat-form-field>
             <mat-select placeholder='Shirt Size' formControlName='childShirtSize'>
@@ -51,7 +64,15 @@ export class ChildrenInformationComponent {
     
     formGroups: Array<FormGroup>;
     firstForm: FormGroup;
-    shirtSizes: string[] = ['YXS', 'YS', 'YM', 'YL', 'YXL', 'AS', 'AM'];
+    shirtSizes: Array<string> = ['YXS', 'YS', 'YM', 'YL', 'YXL', 'AS', 'AM'];
+    numberOfChildrenSelector: Array<number> = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+    private childFormProperties = {
+        childFirstName: ['', Validators.required],
+        childLastName: ['', Validators.required],
+        childDob: ['', Validators.required],
+        childGender: ['', Validators.required],
+        childShirtSize: ['', Validators.required]
+      }
 
     get data(): Array<ChildrenInformationComponentData> {
         // TODO: is this instant access every time it is called?
@@ -68,24 +89,34 @@ export class ChildrenInformationComponent {
         // TODO: can this be moved out of ctor?
         // based on this https://stackblitz.com/edit/angular-material-stepper-with-component-steps
         // and based on https://stackoverflow.com/questions/48498966/angular-material-stepper-component-for-each-step?rq=1
-        this.firstForm = _formBuilder.group({
-            childFirstName: ['', Validators.required],
-            childLastName: ['', Validators.required],
-            childDob: ['', Validators.required],
-            childGender: ['', Validators.required],
-            childShirtSize: ['', Validators.required]
-          })
+        this.firstForm = _formBuilder.group(this.childFormProperties)
         this.formGroups = [ this.firstForm ];
+    }
+
+    numberOfChildrenChanged(change: MatSelectChange): void {
+        const currentNumberOfChildren = this.formGroups.length;
+        const newNumberOfChildren: number = change.value;
+        const difference = newNumberOfChildren - currentNumberOfChildren;
+
+        if(difference < 0) {
+            const childrenToRemove = difference * -1;
+            for(let i = 0; i < childrenToRemove; i++) {
+                this.removeChild();
+            }
+        } else {
+            const childrenToAdd = difference;
+            for(let i = 0; i < childrenToAdd; i++) {
+                this.addChild();
+            }
+        }
     }
 
     addChild(): void {
         this.formGroups.push(
-          this._formBuilder.group({
-          childFirstName: [''],
-          childLastName: [''],
-          childDob: [''],
-          childGender: [''],
-          childShirtSize: ['']
-        }));
-      }
+          this._formBuilder.group(this.childFormProperties));
+    }
+
+    removeChild(): void {
+        this.formGroups.pop();
+    }
 }

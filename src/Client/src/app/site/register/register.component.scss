@@ -11,6 +11,14 @@
     margin: auto;
 }
 
-mat-radio-button{
-    margin-left: 15px;
+.child-registration-form {
+    padding-top: 20px;
+    padding-bottom: 10px;
+    .child-registration-gender-selector {
+        margin-left: 15px;
+    }
+
+    .child-index {
+        font-weight: bold;
+    }
 }

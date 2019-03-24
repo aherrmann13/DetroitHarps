@@ -1,5 +1,7 @@
-import { Component } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { Component, OnInit } from "@angular/core";
+import { FormGroup, FormBuilder, Validators, AbstractControl } from "@angular/forms";
+import { Observable } from "rxjs";
+import { map, startWith } from "rxjs/operators";
 
 export interface AddressInformationComponentData {
     address: string,
@@ -14,33 +16,33 @@ export interface AddressInformationComponentData {
     template: `
     <form [formGroup]='formGroup'>                    
         <mat-form-field>
-            <input matInput placeholder='Street Address' formControlName='address' required>
+            <input matInput placeholder='Street Address' formControlName='address' required autocomplete="address-line1">
         </mat-form-field>
         <br />
         <mat-form-field>
-            <input matInput placeholder='Street Address 2' formControlName='address2'>
+            <input matInput placeholder='Street Address 2' formControlName='address2'  autocomplete="address-line2">
         </mat-form-field>
         <br />
         <mat-form-field>
-            <input matInput placeholder='City' formControlName='city' required>
+            <input matInput placeholder='City' formControlName='city' required  autocomplete="address-level2">
         </mat-form-field>
         <br />
         <mat-form-field>
-            <mat-select placeholder='State' formControlName='state' required>
-                <mat-option *ngFor='let state of states' value='{{state}}'>
-                    {{state}}
+            <input matInput placeholder='State' formControlName='state' required [matAutocomplete]="auto" autocomplete="address-level1">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                <mat-option *ngFor="let state of filteredStates | async" [value]="state">
+                    {{ state }}
                 </mat-option>
-            </mat-select>
+            </mat-autocomplete>
         </mat-form-field>
         <br />
         <mat-form-field>
-            <input matInput placeholder='Zip' formControlName='zip' required>
+            <input matInput placeholder='Zip' formControlName='zip' required autocomplete="postal-code">
         </mat-form-field>
     </form>`,
     styleUrls: [ '../register.component.scss' ]
 })
-export class AddressInformationComponent {
-    
+export class AddressInformationComponent implements OnInit {
     formGroup: FormGroup;
     states: string[] = [
         'AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
@@ -49,6 +51,23 @@ export class AddressInformationComponent {
         'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
         'SD', 'TN', 'TX', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY'
       ];
+    filteredStates: Observable<string[]>;
+
+    constructor(formBuilder: FormBuilder) {
+        this.filter = this.filter.bind(this);
+        this.valueIsState = this.valueIsState.bind(this);
+
+        // TODO: can this be moved out of ctor?
+        // based on this https://stackblitz.com/edit/angular-material-stepper-with-component-steps
+        // and based on https://stackoverflow.com/questions/48498966/angular-material-stepper-component-for-each-step?rq=1
+        this.formGroup = formBuilder.group({
+            address: ['', Validators.required],
+            address2: [''],
+            city: ['', Validators.required],
+            state: ['', [Validators.required, this.valueIsState]],
+            zip: ['', Validators.required]
+          });
+    }
 
     get data(): AddressInformationComponentData {
         // TODO: is this instant access every time it is called?
@@ -61,16 +80,23 @@ export class AddressInformationComponent {
         }
     }
 
-    constructor(formBuilder: FormBuilder) {
-        // TODO: can this be moved out of ctor?
-        // based on this https://stackblitz.com/edit/angular-material-stepper-with-component-steps
-        // and based on https://stackoverflow.com/questions/48498966/angular-material-stepper-component-for-each-step?rq=1
-        this.formGroup = formBuilder.group({
-            address: ['', Validators.required],
-            address2: [''],
-            city: ['', Validators.required],
-            state: ['', Validators.required],
-            zip: ['', Validators.required]
-          });
+    ngOnInit() {
+        this.filteredStates = this.formGroup.controls.state.valueChanges
+          .pipe(
+            startWith(''),
+            map(value => this.filter(value))
+        );
+    }
+    
+    private filter(value: string): string[] {
+        const filterValue = value.toLowerCase();
+    
+        return this.states.filter(state => state.toLowerCase().indexOf(filterValue) === 0);
+    }
+
+    private valueIsState(control: AbstractControl) {
+        return this.states.indexOf(control.value) === -1 ?
+            {'forbiddenValue': true} :
+            null;
     }
 }

@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 
 import {
+    MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
     MatDatepickerModule,
     MatFormFieldModule,
     MatIconModule,
-    MatIconRegistry,
     MatInputModule,
     MatListModule,
     MatNativeDateModule,
@@ -14,12 +14,14 @@ import {
     MatRadioModule,
     MatSelectModule,
     MatSidenavModule,
+    MatSnackBarModule,
     MatStepperModule,
     MatTableModule,
     MatToolbarModule } from '@angular/material';
 
 @NgModule({
     imports: [
+        MatAutocompleteModule,
         MatButtonModule,
         MatCardModule,
         MatDatepickerModule,
@@ -32,11 +34,13 @@ import {
         MatRadioModule,
         MatSelectModule,
         MatSidenavModule,
+        MatSnackBarModule,
         MatStepperModule,
         MatTableModule,
         MatToolbarModule
     ],
     exports: [
+        MatAutocompleteModule,
         MatButtonModule,
         MatCardModule,
         MatDatepickerModule,
@@ -49,6 +53,7 @@ import {
         MatRadioModule,
         MatSelectModule,
         MatSidenavModule,
+        MatSnackBarModule,
         MatStepperModule,
         MatTableModule,
         MatToolbarModule
