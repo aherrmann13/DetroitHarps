@@ -43,6 +43,23 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "development": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
             }
           }
         },
@@ -54,6 +71,9 @@
           "configurations": {
             "production": {
               "browserTarget": "detroit-harps:build:production"
+            },
+            "development": {
+              "browserTarget": "detroit-harps:build:development"
             }
           }
         },

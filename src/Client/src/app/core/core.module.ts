@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 
 import { AuthService } from './services/auth.service';
 import { AuthGuardService } from './services/auth-guard.service';
-import { JwtHelperService } from '@auth0/angular-jwt';
 
 @NgModule({
   imports: [
@@ -19,8 +18,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   ],
   providers: [
     AuthService,
-    AuthGuardService,
-    JwtHelperService
+    AuthGuardService
   ]
 })
 export class CoreModule { }

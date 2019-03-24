@@ -18,8 +18,7 @@ export class PhotoService {
     constructor(private _client: Client) { }
     
     // leaving payment param for now to maintain compatability when support is added
-    getAll(
-    ): Observable<Array<PhotoGroup>> {
+    getAll(): Observable<Array<PhotoGroup>> {
         const photoGroupObservable = this._client.getAllPhotoGroups();
         const photoObservable = this._client.getAllPhotos();
         

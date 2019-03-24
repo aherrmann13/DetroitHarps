@@ -10,10 +10,12 @@ import { AdminRoutingModule } from './admin-routing.module';
 
 import { AdminComponent } from './admin.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { CallbackComponent } from './callback/callback.component';
 
 @NgModule({
   declarations: [
     RegistrationComponent,
+    CallbackComponent,
     AdminComponent
   ],
   imports: [

@@ -2,8 +2,6 @@ import { Response, RequestOptionsArgs } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/empty';
 
-import { Router } from '@angular/router';
-
 /* tslint:disable:deprecation */
 export class BaseClient {
 

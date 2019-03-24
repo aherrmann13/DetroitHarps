@@ -1,5 +1,9 @@
 <dh-toolbar [title]='title' (menuClick)='sidenav.toggle()'>
+    <button mat-button class='toolbar-icon' (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+    </button>
 </dh-toolbar>
+
 <dh-drawer [items]='drawerItems'>
     <router-outlet></router-outlet>
 </dh-drawer>
