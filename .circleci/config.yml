@@ -11,43 +11,71 @@ jobs:
   checkout:
     docker:
       - image: microsoft/dotnet:sdk
-    working_directory: ~/detroitharps
     steps:
-      - checkout
+      - run:
+          name: create common dir
+          command: mkdir /tmp/detroitharps
+      - run:
+          name: set dir permissions to all
+          command: chmod 777 /tmp/detroitharps
+      - checkout:
+          path: /tmp/detroitharps
       - save_cache:
           key: checkout-{{ .Environment.CIRCLE_SHA1 }}
           paths:
-            - ~/detroitharps
+            - /tmp/detroitharps
+
   test:
     docker:
       - image: microsoft/dotnet:sdk
-    working_directory: ~/detroitharps
     steps:
       - restore_cache:
           key: checkout-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Test
-          command: ./scripts/dotnet-test.sh
-  publish:
+          command: /tmp/detroitharps/scripts/dotnet-test.sh
+
+  publish-api:
     docker:
       - image: microsoft/dotnet:sdk
-    working_directory: ~/detroitharps
     steps:
       - restore_cache:
           key: checkout-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Publish DataAccess.Migrator
-          command: dotnet publish src/DataAccess.Migrator/ -c RELEASE -o ~/detroitharps/publish/DataAccess.Migrator
+          command: dotnet publish /tmp/detroitharps/src/DataAccess.Migrator/ -c RELEASE -o /tmp/detroitharps/publish/DataAccess.Migrator
       - run:
           name: Publish Api
-          command: dotnet publish src/Api/ -c RELEASE -o ~/detroitharps/publish/Api
+          command: dotnet publish /tmp/detroitharps/src/Api/ -c RELEASE -o /tmp/detroitharps/publish/Api
       - run:
           name: Copy Configuration
-          command: cp -r ~/detroitharps/configuration ~/detroitharps/publish
+          command: cp -r /tmp/detroitharps/configuration /tmp/detroitharps/publish
       - save_cache:
-          key: publish-{{ .Environment.CIRCLE_SHA1 }}
+          key: publish-api-{{ .Environment.CIRCLE_SHA1 }}
           paths:
-            - ~/detroitharps/publish
+            - /tmp/detroitharps/publish
+
+  publish-client:
+    docker:
+      - image: circleci/node:9.9.0
+    steps:
+      - restore_cache:
+          key: checkout-{{ .Environment.CIRCLE_SHA1 }}
+      - run:
+          name: Npm Install
+          command: |
+            cd /tmp/detroitharps/src/Client/
+            npm install
+      - run:
+          name: Build Client
+          command: |
+            cd /tmp/detroitharps/src/Client/
+            npm run build-dev -- --output-path /tmp/detroitharps/publish/Client
+      - save_cache:
+          key: publish-client-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - /tmp/detroitharps/publish
+
   deploy-dev:
     docker:
       - image: microsoft/dotnet:sdk
@@ -56,10 +84,11 @@ jobs:
           SSH_ADDR: 'detroitharps@157.230.51.199'
           DEPLOY_FOLDER: '/detroitharps/publish'
           RUN_FOLDER: '/detroitharps/application'
-    working_directory: ~/detroitharps
     steps:
       - restore_cache:
-          key: publish-{{ .Environment.CIRCLE_SHA1 }}
+          key: publish-api-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          key: publish-client-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Copy SSH fingerprint to known hosts
           command: |
@@ -70,7 +99,7 @@ jobs:
           command: |
             ssh $SSH_ADDR "if [ -d $DEPLOY_FOLDER ]; then rm -rf $DEPLOY_FOLDER; fi"
             ssh $SSH_ADDR "mkdir -p $DEPLOY_FOLDER"
-            scp -r ./publish/* $SSH_ADDR:$DEPLOY_FOLDER
+            scp -r /tmp/detroitharps/publish/* $SSH_ADDR:$DEPLOY_FOLDER
       - run:
           name: Copy to Run Folder
           command: |
@@ -91,17 +120,17 @@ jobs:
           command: |
             ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/dev/nginx/dev.api.detroitharps.com /etc/nginx/sites-enabled/dev.api.detroitharps.com"
             ssh $SSH_ADDR "sudo systemctl restart nginx"
+
   health-check:
     # TODO: machine not dotnet sdk
     docker:
       - image: microsoft/dotnet:sdk
-    working_directory: ~/detroitharps
     steps:
       - restore_cache:
           key: checkout-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Health Check
-          command: "~/detroitharps/scripts/health-check.sh https://dev.api.detroitharps.com/health"
+          command: "/tmp/detroitharps/scripts/health-check.sh https://dev.api.detroitharps.com/health"
              
 
 workflows:
@@ -117,12 +146,16 @@ workflows:
       - test:
           requires:
             - checkout
-      - publish:
+      - publish-api:
+          requires:
+            - checkout
+      - publish-client:
           requires:
             - checkout
       - deploy-dev:
           requires:
-            - publish
+            - publish-api
+            - publish-client
             - test
           filters:
             branches:
