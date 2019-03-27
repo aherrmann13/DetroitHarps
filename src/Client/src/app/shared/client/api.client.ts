@@ -888,14 +888,16 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
-    getAllParentsCsv(): Observable<void> {
+    getAllParentsCsv(): Observable<FileResponse> {
         let url_ = this.baseUrl + "/Registration/GetAllParents/Csv";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
             method: "get",
+            responseType: ResponseContentType.Blob,
             headers: new Headers({
                 "Content-Type": "application/json", 
+                "Accept": "text/csv"
             })
         };
 
@@ -908,38 +910,43 @@ export class Client extends BaseClient {
                 try {
                     return this.transformResult(url_, response_, (r) => this.processGetAllParentsCsv(<any>r));
                 } catch (e) {
-                    return <Observable<void>><any>Observable.throw(e);
+                    return <Observable<FileResponse>><any>Observable.throw(e);
                 }
             } else
-                return <Observable<void>><any>Observable.throw(response_);
+                return <Observable<FileResponse>><any>Observable.throw(response_);
         });
     }
 
-    protected processGetAllParentsCsv(response: Response): Observable<void> {
+    protected processGetAllParentsCsv(response: Response): Observable<FileResponse> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            return Observable.of<void>(<any>null);
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return Observable.of({ fileName: fileName, data: <any>response.blob(), status: status, headers: _headers });
         } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
+            return blobToText(response.blob()).flatMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
         }
-        return Observable.of<void>(<any>null);
+        return Observable.of<FileResponse>(<any>null);
     }
 
     /**
      * @return Success
      */
-    getAllChildrenCsv(): Observable<void> {
+    getAllChildrenCsv(): Observable<FileResponse> {
         let url_ = this.baseUrl + "/Registration/GetAllChildren/Csv";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
             method: "get",
+            responseType: ResponseContentType.Blob,
             headers: new Headers({
                 "Content-Type": "application/json", 
+                "Accept": "text/csv"
             })
         };
 
@@ -952,25 +959,28 @@ export class Client extends BaseClient {
                 try {
                     return this.transformResult(url_, response_, (r) => this.processGetAllChildrenCsv(<any>r));
                 } catch (e) {
-                    return <Observable<void>><any>Observable.throw(e);
+                    return <Observable<FileResponse>><any>Observable.throw(e);
                 }
             } else
-                return <Observable<void>><any>Observable.throw(response_);
+                return <Observable<FileResponse>><any>Observable.throw(response_);
         });
     }
 
-    protected processGetAllChildrenCsv(response: Response): Observable<void> {
+    protected processGetAllChildrenCsv(response: Response): Observable<FileResponse> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            return Observable.of<void>(<any>null);
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return Observable.of({ fileName: fileName, data: <any>response.blob(), status: status, headers: _headers });
         } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
+            return blobToText(response.blob()).flatMap(_responseText => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
         }
-        return Observable.of<void>(<any>null);
+        return Observable.of<FileResponse>(<any>null);
     }
 
     /**
@@ -1901,6 +1911,13 @@ export enum RegisteredChildModelGender {
 export interface FileParameter {
     data: any;
     fileName: string;
+}
+
+export interface FileResponse {
+    data: Blob;
+    status: number;
+    fileName?: string;
+    headers?: { [name: string]: any };
 }
 
 export class SwaggerException extends Error {

@@ -2,16 +2,18 @@ import { Component, OnInit } from '@angular/core';
 
 import {
   RegisteredChildModel,
-  Client
+  Client,
+  FileResponse
 } from '../../shared/client/api.client';
 
+import { saveAs } from "file-saver";
 import 'rxjs/add/observable/forkJoin';
 
 
+
 @Component({
-  selector: 'dh-registration',
-  templateUrl: './registration.component.html',
-  styleUrls: [ ]
+  selector: 'dh-admin-registration',
+  templateUrl: './registration.component.html'
 })
 
 export class RegistrationComponent implements OnInit {
@@ -23,13 +25,26 @@ export class RegistrationComponent implements OnInit {
     'emailAddress',
     'dateOfBirth',
     'shirtSize'];
+  
+  items = [{
+    icon: "file_download",
+    onClick: () => this._client
+      .getAllChildrenCsv()
+      .subscribe(this.downloadFile)
+  }];
 
-  constructor(private _client: Client) { }
+  constructor(private _client: Client) { 
+    this.downloadFile = this.downloadFile.bind(this);
+  }
 
   ngOnInit() {
     this._client.getAllChildren().subscribe(
       data => this.info = data,
       error => console.error(error)
     );
+  }
+
+  downloadFile(data: FileResponse) {
+    saveAs(data.data, "registration.csv");
   }
 }
