@@ -111,6 +111,32 @@ namespace DetroitHarps.Business.Test
         }
 
         [Fact]
+        public void ContactHandlesEmailSenderExceptionTest()
+        {
+            var manager = GetManager();
+            var model = new MessageModel();
+            var ex = new Exception();
+            _emailSenderMock
+                .Setup(x => x.SendToSelf(It.IsAny<string>(), It.IsAny<string>()))
+                .Throws(ex);
+
+            manager.Contact(model);
+
+            _loggerMock.Verify(
+                x => x.Log<object>(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<object>(y => 
+                        Compare.EqualOrdinal(y.ToString(), "error sending email")),
+                    It.Is<Exception>(y => y.Equals(ex)),
+                    It.IsAny<Func<object, Exception, string>>()),
+                Times.Once());
+            _repositoryMock.Verify(
+                x => x.Create(It.Is<Message>(y => y != null)),
+                Times.Once);
+        }
+
+        [Fact]
         public void MarkAsReadThrowsWhenNonExistantTest()
         {
             var manager = GetManager();

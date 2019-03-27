@@ -42,7 +42,15 @@ namespace DetroitHarps.Business.Contact
             var subject = FormatSubject(model);
             var body = FormatBody(model);
 
-            _emailSender.SendToSelf(subject, body);
+            try
+            {
+                _emailSender.SendToSelf(subject, body);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "error sending email");
+            }
+            
             _repository.Create(Mapper.Map<Message>(model));
         }
 
