@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-callback',
+  selector: 'dh-admin-callback',
   template: `
     <div class="loading">
       <img src="assets/icons/loading.svg" alt="loading">

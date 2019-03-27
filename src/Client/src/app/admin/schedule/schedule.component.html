@@ -1,0 +1,33 @@
+<dh-admin-toolbar [items]="items"></dh-admin-toolbar>
+<mat-table mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+        <mat-cell *matCellDef="let event"> {{event.title}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="startDate">
+        <mat-header-cell *matHeaderCellDef> Start Date </mat-header-cell>
+        <mat-cell *matCellDef="let event"> {{event.startDate | date:'short'}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="endDate">
+        <mat-header-cell *matHeaderCellDef> End Date </mat-header-cell>
+        <mat-cell *matCellDef="let event"> {{event.endDate | date:'short'}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let event">
+            <button mat-button class='toolbar-icon' (click)="openUpdateDialog(event)">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-button class='toolbar-icon' (click)="openDeleteDialog(event.id)">
+                <mat-icon>delete_outline</mat-icon>
+            </button>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+    <mat-row *matRowDef="let user; columns: columnsToDisplay"></mat-row>
+</mat-table>

@@ -6,7 +6,8 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'dh-admin',
-  templateUrl: './admin.component.html'
+  templateUrl: './admin.component.html',
+  styleUrls: [ './admin.component.scss']
 })
 export class AdminComponent implements OnInit {
 
@@ -14,7 +15,8 @@ export class AdminComponent implements OnInit {
     title = 'Detroit Harps Admin';
     drawerItems: DrawerItemModel[] = [
       { text: 'Home', icon: 'home', path: '' },
-      { text: 'Registration', icon: 'assignment', path: 'registration' }
+      { text: 'Registration', icon: 'assignment', path: 'registration' },
+      { text: 'Schedule', icon: 'event', path: 'schedule' }
     ];
 
     constructor(private _router: Router, private _authService: AuthService) {

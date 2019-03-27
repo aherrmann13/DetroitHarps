@@ -1,0 +1,67 @@
+<form [formGroup]='formGroup'>
+  <h1 mat-dialog-title>{{header}}</h1>
+  <div mat-dialog-content class='schedule-modal'>
+
+    <mat-progress-bar *ngIf='loading' mode='indeterminate'></mat-progress-bar>
+
+    <mat-form-field class='full-width-input'>
+      <input matInput formControlName='title' placeholder='Title'>
+    </mat-form-field>
+
+    <mat-form-field class='half-width-input-left'>
+      <input 
+        matInput
+        [matDatepicker]='startDatePicker'
+        formControlName='startDate'
+        placeholder='Start Date'>
+      <mat-datepicker-toggle matSuffix [for]='startDatePicker'></mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class='half-width-input-right'>
+      <input
+        matInput
+        [matDatepicker]='endDatePicker'
+        formControlName='endDate'
+        placeholder='End Date'>
+      <mat-datepicker-toggle matSuffix [for]='endDatePicker'></mat-datepicker-toggle>
+      <mat-datepicker #endDatePicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class='half-width-input-left'>
+      <input matInput formControlName='startTime' placeholder='Start Time'>
+      <mat-error *ngIf='formGroup.controls.startTime.invalid'>
+        {{getErrorMessage(formGroup.controls.startTime)}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class='half-width-input-right'>
+      <input matInput formControlName='endTime' placeholder='End Time'>
+      <mat-error *ngIf='formGroup.controls.endTime.invalid'>
+        {{getErrorMessage(formGroup.controls.endTime)}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class='full-width-input'>
+        <textarea matInput formControlName='description' placeholder='Description'></textarea>
+    </mat-form-field>
+
+  </div>
+</form>
+<div mat-dialog-actions>
+  <button
+    mat-button
+    [disabled] = 'loading'
+    (click)='onCancelClick()'
+    color='warn'>
+    Cancel
+  </button>
+  <button
+    mat-button
+    [disabled]='formGroup.invalid || loading'
+    (click)='onAcceptClick()'
+    mat-raised-button
+    color='primary'>
+    Ok
+  </button>
+</div>

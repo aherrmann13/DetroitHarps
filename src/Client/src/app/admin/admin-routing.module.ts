@@ -4,16 +4,15 @@ import { AuthGuardService as AuthGuard } from '../core/services/auth-guard.servi
 import { AdminComponent } from './admin.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { CallbackComponent } from './callback/callback.component';
+import { ScheduleComponent } from './schedule/schedule.component';
 
 const routes: Routes = [
   { 
     path: '', 
     component: AdminComponent,
     children: [
-      { 
-        path: 'registration', 
-        component: RegistrationComponent
-      },
+      { path: 'registration', component: RegistrationComponent },
+      { path: 'schedule', component: ScheduleComponent },
       { path: 'callback',  component: CallbackComponent }
     ],
     canActivate: [ AuthGuard ]

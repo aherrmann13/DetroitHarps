@@ -10,13 +10,21 @@ import { AdminRoutingModule } from './admin-routing.module';
 
 import { AdminComponent } from './admin.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { ScheduleComponent } from './schedule/schedule.component';
+import { ScheduleModalDialogComponent } from './schedule/schedule-modal.component';
 import { CallbackComponent } from './callback/callback.component';
+import { AdminToolbarComponent } from './admin-toolbar/admin-toolbar.component';
+import { DeletePromptDialogComponent } from './delete-prompt/delete-prompt.component';
 
 @NgModule({
   declarations: [
     RegistrationComponent,
     CallbackComponent,
-    AdminComponent
+    ScheduleComponent,
+    ScheduleModalDialogComponent,
+    DeletePromptDialogComponent,
+    AdminComponent,
+    AdminToolbarComponent
   ],
   imports: [
     CommonModule,
@@ -26,6 +34,10 @@ import { CallbackComponent } from './callback/callback.component';
     AdminRoutingModule,
     LayoutModule,
     ClientModule
+  ],
+  entryComponents: [
+    ScheduleModalDialogComponent,
+    DeletePromptDialogComponent
   ]
 })
 export class AdminModule { }
