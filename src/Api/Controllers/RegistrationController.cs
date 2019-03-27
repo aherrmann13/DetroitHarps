@@ -66,8 +66,8 @@ namespace DetroitHarps.Api.Controllers
 
         [HttpGet("GetAllParents/Csv")]
         [SwaggerOperation(OperationId = "GetAllParentsCsv")]
-        [Produces(CsvContentType)]
-        public ActionResult GetAllParentsCsv()
+        [Produces(CsvContentType, Type = typeof(FileResult))]
+        public FileResult GetAllParentsCsv()
         {
             var fileBytes = _csvWriter.GetAsCsv(
                 _registrationManager.GetAllRegisteredParents().ToList());
@@ -76,8 +76,8 @@ namespace DetroitHarps.Api.Controllers
 
         [HttpGet("GetAllChildren/Csv")]
         [SwaggerOperation(OperationId = "GetAllChildrenCsv")]
-        [Produces(CsvContentType)]
-        public ActionResult GetAllChildrenCsv()
+        [Produces(CsvContentType, Type = typeof(FileResult))]
+        public FileResult GetAllChildrenCsv()
         {
             var fileBytes = _csvWriter.GetAsCsv(
                 _registrationManager.GetAllRegisteredChildren().ToList());

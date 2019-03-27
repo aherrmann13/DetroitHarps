@@ -16,6 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
     using DetroitHarps.Repository;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Swashbuckle.AspNetCore.Swagger;
     using Tools;
@@ -111,6 +112,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 c.EnableAnnotations();
                 c.SchemaFilter<AssignPropertyRequiredFilter>();
                 c.OperationFilter<FormFileSwaggerFilter>();
+                c.MapType<FileResult>(() => new Schema
+                    {
+                        Type = "file"
+                    });
             });
 
             return services;
