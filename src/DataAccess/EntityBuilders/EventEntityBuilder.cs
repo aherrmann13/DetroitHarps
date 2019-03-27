@@ -21,13 +21,11 @@ namespace DetroitHarps.DataAccess.EntityBuilders
             typeBuilder.Property(x => x.StartDate)
                 .HasConversion(
                     v => v.ToUniversalTime(),
-                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
-                );
+                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
             typeBuilder.Property(x => x.EndDate)
                 .HasConversion(
                     v => v == null ? v : v.Value.ToUniversalTime(),
-                    v => v == null ? v : DateTime.SpecifyKind(v.Value, DateTimeKind.Utc)
-                );
+                    v => v == null ? v : DateTime.SpecifyKind(v.Value, DateTimeKind.Utc));
         }
     }
 }
