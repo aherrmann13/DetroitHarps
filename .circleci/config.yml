@@ -67,10 +67,13 @@ jobs:
             cd /tmp/detroitharps/src/Client/
             npm install
       - run:
+        ## this step needs to be cleaner
           name: Build Client
           command: |
             cd /tmp/detroitharps/src/Client/
-            npm run build-dev -- --output-path /tmp/detroitharps/publish/Client
+            echo $CIRCLE_BRANCH
+            if [ "$CIRCLE_BRANCH" = "master" ]; then npm run build -- --output-path /tmp/detroitharps/publish/Client; fi
+            if [ "$CIRCLE_BRANCH" = "dev" ]; then npm run build-dev -- --output-path /tmp/detroitharps/publish/Client; fi
       - save_cache:
           key: publish-client-{{ .Environment.CIRCLE_SHA1 }}
           paths:
