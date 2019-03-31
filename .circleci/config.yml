@@ -131,7 +131,66 @@ jobs:
           name: Start Nginx
           command: ssh $SSH_ADDR "sudo systemctl start nginx"
 
-  health-check:
+  deploy-prod:
+    docker:
+      - image: microsoft/dotnet:sdk
+        environment:
+          IP_ADDRESS: '134.209.77.76'
+          SSH_ADDR: 'detroitharps@134.209.77.76'
+          DEPLOY_FOLDER: '/detroitharps/publish'
+          RUN_FOLDER: '/detroitharps/application'
+    steps:
+      - restore_cache:
+          key: publish-api-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          key: publish-client-{{ .Environment.CIRCLE_SHA1 }}
+      - run:
+          name: Copy SSH fingerprint to known hosts
+          command: |
+            mkdir -p ~/.ssh
+            ssh-keyscan -H $IP_ADDRESS >> ~/.ssh/known_hosts
+      - run:
+          name: Copy Publish Folder to Server
+          command: |
+            ssh $SSH_ADDR "if [ -d $DEPLOY_FOLDER ]; then rm -rf $DEPLOY_FOLDER; fi"
+            ssh $SSH_ADDR "mkdir -p $DEPLOY_FOLDER"
+            scp -r /tmp/detroitharps/publish/* $SSH_ADDR:$DEPLOY_FOLDER
+      - run:
+          name: Copy to Run Folder
+          command: |
+            ssh $SSH_ADDR "if [ -d $RUN_FOLDER ]; then rm -rf $RUN_FOLDER; fi"
+            ssh $SSH_ADDR "mkdir -p $RUN_FOLDER"
+            ssh $SSH_ADDR "cp -r $DEPLOY_FOLDER/* $RUN_FOLDER/"
+      - run:
+          name: Move appsettings.yaml over
+          command: |
+            ssh $SSH_ADDR "rm $RUN_FOLDER/Api/appsettings.yaml"
+            ssh $SSH_ADDR "rm $RUN_FOLDER/DataAccess.Migrator/appsettings.yaml"
+            ssh $SSH_ADDR "cp ~/appsettings.yaml $RUN_FOLDER/Api/"
+            ssh $SSH_ADDR "cp ~/appsettings.yaml $RUN_FOLDER/DataAccess.Migrator/"
+      - run:
+          name: Migrate Database
+          command: |
+            ssh $SSH_ADDR "dotnet $DEPLOY_FOLDER/DataAccess.Migrator/DetroitHarps.DataAccess.Migrator.dll Migrate"
+      - run:
+          name: Install Service
+          command: |
+            ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/dev/systemd/detroitharps-api.service /etc/systemd/system/detroitharps-api.service"
+            ssh $SSH_ADDR "sudo systemctl restart detroitharps-api.service"
+      - run:
+          name: Stop Nginx
+          command: ssh $SSH_ADDR "sudo systemctl stop nginx"
+      - run:
+          name: Update Api Nginx Config
+          command: ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/dev/nginx/dev.api.detroitharps.com /etc/nginx/sites-enabled/dev.api.detroitharps.com"
+      - run:
+          name: Update Client Nginx Config
+          command: ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/dev/nginx/dev.detroitharps.com /etc/nginx/sites-enabled/dev.detroitharps.com"
+      - run:
+          name: Start Nginx
+          command: ssh $SSH_ADDR "sudo systemctl start nginx"
+
+  health-check-dev:
     # TODO: machine not dotnet sdk
     docker:
       - image: microsoft/dotnet:sdk
@@ -142,7 +201,17 @@ jobs:
           name: Health Check
           command: "/tmp/detroitharps/scripts/health-check.sh https://dev.api.detroitharps.com/health"
              
-
+  health-check-prod:
+    # TODO: machine not dotnet sdk
+    docker:
+      - image: microsoft/dotnet:sdk
+    steps:
+      - restore_cache:
+          key: checkout-{{ .Environment.CIRCLE_SHA1 }}
+      - run:
+          name: Health Check
+          command: "/tmp/detroitharps/scripts/health-check.sh 134.209.77.76/health"
+  
 workflows:
   version: 2
   build-and-deploy:
@@ -171,6 +240,18 @@ workflows:
             branches:
               only:
                 - dev
-      - health-check:
+      - deploy-prod:
+          requires:
+            - publish-api
+            - publish-client
+            - test
+          filters:
+            branches:
+              only:
+                - master
+      - health-check-dev:
           requires:
               - deploy-dev
+      - health-check-prod:
+          requires:
+              - deploy-prod
