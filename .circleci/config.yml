@@ -175,17 +175,17 @@ jobs:
       - run:
           name: Install Service
           command: |
-            ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/dev/systemd/detroitharps-api.service /etc/systemd/system/detroitharps-api.service"
+            ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/prod/systemd/detroitharps-api.service /etc/systemd/system/detroitharps-api.service"
             ssh $SSH_ADDR "sudo systemctl restart detroitharps-api.service"
       - run:
           name: Stop Nginx
           command: ssh $SSH_ADDR "sudo systemctl stop nginx"
       - run:
           name: Update Api Nginx Config
-          command: ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/dev/nginx/dev.api.detroitharps.com /etc/nginx/sites-enabled/dev.api.detroitharps.com"
+          command: ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/prod/nginx/api.detroitharps.com /etc/nginx/sites-enabled/dev.api.detroitharps.com"
       - run:
           name: Update Client Nginx Config
-          command: ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/dev/nginx/dev.detroitharps.com /etc/nginx/sites-enabled/dev.detroitharps.com"
+          command: ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/prod/nginx/detroitharps.com /etc/nginx/sites-enabled/dev.detroitharps.com"
       - run:
           name: Start Nginx
           command: ssh $SSH_ADDR "sudo systemctl start nginx"

@@ -1,0 +1,15 @@
+[Unit]
+Description=Detroit Harps Api
+
+[Service]
+WorkingDirectory=/detroitharps/application/Api/
+ExecStart=/usr/bin/dotnet /detroitharps/application/Api/DetroitHarps.Api.dll
+Restart=always
+RestartSec=10  # Restart service after 10 seconds if dotnet service crashes
+SyslogIdentifier=detroitharps-api
+User=detroitharps
+Environment=ASPNETCORE_ENVIRONMENT=Development
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target
