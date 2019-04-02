@@ -182,10 +182,10 @@ jobs:
           command: ssh $SSH_ADDR "sudo systemctl stop nginx"
       - run:
           name: Update Api Nginx Config
-          command: ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/prod/nginx/api.detroitharps.com /etc/nginx/sites-enabled/dev.api.detroitharps.com"
+          command: ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/prod/nginx/api.detroitharps.com /etc/nginx/sites-enabled/api.detroitharps.com"
       - run:
           name: Update Client Nginx Config
-          command: ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/prod/nginx/detroitharps.com /etc/nginx/sites-enabled/dev.detroitharps.com"
+          command: ssh $SSH_ADDR "sudo ln -sf $DEPLOY_FOLDER/configuration/prod/nginx/detroitharps.com /etc/nginx/sites-enabled/detroitharps.com"
       - run:
           name: Start Nginx
           command: ssh $SSH_ADDR "sudo systemctl start nginx"
