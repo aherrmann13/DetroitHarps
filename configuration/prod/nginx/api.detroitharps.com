@@ -22,7 +22,7 @@ server {
 
 
     listen        80;
-    server_name   api.detroitharps.com 134.209.77.76;
+    server_name   api.detroitharps.com;
     return 404; # managed by Certbot
 
 
