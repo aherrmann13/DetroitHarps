@@ -210,7 +210,7 @@ jobs:
           key: checkout-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Health Check
-          command: "/tmp/detroitharps/scripts/health-check.sh 134.209.77.76/health"
+          command: "/tmp/detroitharps/scripts/health-check.sh https://api.detroitharps.com/health"
   
 workflows:
   version: 2
