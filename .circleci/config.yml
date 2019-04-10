@@ -21,7 +21,7 @@ jobs:
       - checkout:
           path: /tmp/detroitharps
       - save_cache:
-          key: checkout-{{ .Environment.CIRCLE_SHA1 }}
+          key: checkout-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - /tmp/detroitharps
 
@@ -30,7 +30,7 @@ jobs:
       - image: microsoft/dotnet:sdk
     steps:
       - restore_cache:
-          key: checkout-{{ .Environment.CIRCLE_SHA1 }}
+          key: checkout-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Test
           command: /tmp/detroitharps/scripts/dotnet-test.sh
@@ -40,7 +40,7 @@ jobs:
       - image: microsoft/dotnet:sdk
     steps:
       - restore_cache:
-          key: checkout-{{ .Environment.CIRCLE_SHA1 }}
+          key: checkout-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Publish DataAccess.Migrator
           command: dotnet publish /tmp/detroitharps/src/DataAccess.Migrator/ -c RELEASE -o /tmp/detroitharps/publish/DataAccess.Migrator
@@ -51,7 +51,7 @@ jobs:
           name: Copy Configuration
           command: cp -r /tmp/detroitharps/configuration /tmp/detroitharps/publish
       - save_cache:
-          key: publish-api-{{ .Environment.CIRCLE_SHA1 }}
+          key: publish-api-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - /tmp/detroitharps/publish
 
@@ -60,7 +60,7 @@ jobs:
       - image: circleci/node:9.9.0
     steps:
       - restore_cache:
-          key: checkout-{{ .Environment.CIRCLE_SHA1 }}
+          key: checkout-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Npm Install
           command: |
@@ -75,7 +75,7 @@ jobs:
             if [ "$CIRCLE_BRANCH" = "master" ]; then npm run build -- --output-path /tmp/detroitharps/publish/Client; fi
             if [ "$CIRCLE_BRANCH" = "dev" ]; then npm run build-dev -- --output-path /tmp/detroitharps/publish/Client; fi
       - save_cache:
-          key: publish-client-{{ .Environment.CIRCLE_SHA1 }}
+          key: publish-client-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - /tmp/detroitharps/publish
 
@@ -89,9 +89,9 @@ jobs:
           RUN_FOLDER: '/detroitharps/application'
     steps:
       - restore_cache:
-          key: publish-api-{{ .Environment.CIRCLE_SHA1 }}
+          key: publish-api-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
-          key: publish-client-{{ .Environment.CIRCLE_SHA1 }}
+          key: publish-client-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Copy SSH fingerprint to known hosts
           command: |
@@ -141,9 +141,9 @@ jobs:
           RUN_FOLDER: '/detroitharps/application'
     steps:
       - restore_cache:
-          key: publish-api-{{ .Environment.CIRCLE_SHA1 }}
+          key: publish-api-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
-          key: publish-client-{{ .Environment.CIRCLE_SHA1 }}
+          key: publish-client-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Copy SSH fingerprint to known hosts
           command: |
@@ -196,7 +196,7 @@ jobs:
       - image: microsoft/dotnet:sdk
     steps:
       - restore_cache:
-          key: checkout-{{ .Environment.CIRCLE_SHA1 }}
+          key: checkout-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Health Check
           command: "/tmp/detroitharps/scripts/health-check.sh https://dev.api.detroitharps.com/health"
@@ -207,7 +207,7 @@ jobs:
       - image: microsoft/dotnet:sdk
     steps:
       - restore_cache:
-          key: checkout-{{ .Environment.CIRCLE_SHA1 }}
+          key: checkout-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Health Check
           command: "/tmp/detroitharps/scripts/health-check.sh https://api.detroitharps.com/health"
