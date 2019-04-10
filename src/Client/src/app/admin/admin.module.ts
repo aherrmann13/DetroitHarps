@@ -15,6 +15,8 @@ import { ScheduleModalDialogComponent } from './schedule/schedule-modal.componen
 import { CallbackComponent } from './callback/callback.component';
 import { AdminToolbarComponent } from './admin-toolbar/admin-toolbar.component';
 import { DeletePromptDialogComponent } from './delete-prompt/delete-prompt.component';
+import { ContactComponent } from './contact/contact.component';
+import { MessageModalComponent } from './contact/message-modal.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { DeletePromptDialogComponent } from './delete-prompt/delete-prompt.compo
     ScheduleModalDialogComponent,
     DeletePromptDialogComponent,
     AdminComponent,
-    AdminToolbarComponent
+    AdminToolbarComponent,
+    ContactComponent,
+    MessageModalComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +41,8 @@ import { DeletePromptDialogComponent } from './delete-prompt/delete-prompt.compo
   ],
   entryComponents: [
     ScheduleModalDialogComponent,
-    DeletePromptDialogComponent
+    DeletePromptDialogComponent,
+    MessageModalComponent
   ]
 })
 export class AdminModule { }

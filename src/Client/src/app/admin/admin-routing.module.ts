@@ -5,6 +5,7 @@ import { AdminComponent } from './admin.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { CallbackComponent } from './callback/callback.component';
 import { ScheduleComponent } from './schedule/schedule.component';
+import { ContactComponent } from './contact/contact.component';
 
 const routes: Routes = [
   { 
@@ -13,7 +14,8 @@ const routes: Routes = [
     children: [
       { path: 'registration', component: RegistrationComponent },
       { path: 'schedule', component: ScheduleComponent },
-      { path: 'callback',  component: CallbackComponent }
+      { path: 'callback',  component: CallbackComponent },
+      { path: 'contact',  component: ContactComponent },
     ],
     canActivate: [ AuthGuard ]
   }

@@ -16,7 +16,8 @@ export class AdminComponent implements OnInit {
     drawerItems: DrawerItemModel[] = [
       { text: 'Home', icon: 'home', path: '' },
       { text: 'Registration', icon: 'assignment', path: 'registration' },
-      { text: 'Schedule', icon: 'event', path: 'schedule' }
+      { text: 'Schedule', icon: 'event', path: 'schedule' },
+      { text: 'Contact', icon: 'chat', path: 'contact' }
     ];
 
     constructor(private _router: Router, private _authService: AuthService) {
