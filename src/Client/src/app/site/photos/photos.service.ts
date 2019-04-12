@@ -32,7 +32,7 @@ export class PhotoService {
       ) : Array<PhotoGroup> {
         return groups.map(x => <PhotoGroup> {
           group: x,
-          photos: photos.filter(y => y.photoGroupId === x.id)
-        })
+          photos: photos.filter(y => y.photoGroupId === x.id).sort(x => x.sortOrder)
+        }).sort(x => x.group.sortOrder)
       }
 }
