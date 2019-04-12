@@ -26,3 +26,4 @@ ServiceOptions:
 EmailSettings:
     Email: "detroitharps.test@gmail.com"
     Password: "testemail"
+    RecievingEmail: "detroitharps@gmail.com"

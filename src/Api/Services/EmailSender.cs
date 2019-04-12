@@ -41,7 +41,8 @@ namespace DetroitHarps.Api.Services
 
         private MimeMessage CreateMessage(string subject, string body)
         {
-            var address = new MailboxAddress(_settings.Email);
+            var fromAddress = new MailboxAddress(_settings.Email);
+            var toAddress = new MailboxAddress(_settings.RecievingEmail);
             var message = new MimeMessage
             {
                 Subject = subject,
@@ -50,8 +51,8 @@ namespace DetroitHarps.Api.Services
                     Text = body
                 }
             };
-            message.From.Add(address);
-            message.To.Add(address);
+            message.From.Add(fromAddress);
+            message.To.Add(toAddress);
 
             return message;
         }
