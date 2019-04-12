@@ -1,0 +1,40 @@
+<mat-form-field>
+    <mat-label>Number of Children</mat-label>
+    <mat-select (selectionChange)="numberOfChildrenChanged($event)" [value]="1">
+        <mat-option *ngFor="let number of numberOfChildrenSelector" [value]="number">
+            {{number}}
+        </mat-option>
+    </mat-select>
+    </mat-form-field>
+    <form class="child-registration-form" *ngFor='let formGroup of formGroups; index as i' [formGroup]='formGroup'>
+        <span class="child-index">Child {{i + 1}} </span>
+        <br />
+        <mat-form-field>
+            <input matInput placeholder='Child First name' formControlName='childFirstName'>
+        </mat-form-field>
+        <br />
+        <mat-form-field>
+            <input matInput placeholder='Child Last name' formControlName='childLastName'>
+        </mat-form-field>
+        <br />
+        <mat-form-field>
+            <input matInput [matDatepicker]='birthDatePicker' placeholder='Child Birth Date' formControlName='childDob'>
+            <mat-datepicker-toggle matSuffix [for]='birthDatePicker'></mat-datepicker-toggle>
+            <mat-datepicker #birthDatePicker></mat-datepicker>
+        </mat-form-field>
+        <br />
+        <br />
+        <mat-radio-group formControlName='childGender'>
+            <mat-radio-button class="child-registration-gender-selector" value='male'>Male </mat-radio-button>
+            <mat-radio-button class="child-registration-gender-selector" value='female'>Female </mat-radio-button>
+        </mat-radio-group>
+        <br />
+        <br />
+        <mat-form-field>
+            <mat-select placeholder='Shirt Size' formControlName='childShirtSize'>
+                <mat-option *ngFor='let shirtSize of shirtSizes' value='{{shirtSize}}'>
+                    {{shirtSize}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>

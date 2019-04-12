@@ -20,12 +20,12 @@ import { PhotosComponent } from './photos/photos.component';
 import { AboutComponent } from './about/about.component';
 import { RegisterComponent } from './register/register.component';
 import { SupportComponent } from './support/support.component';
-import { ParentInformationComponent } from './register/forms/parent-information.component';
-import { AddressInformationComponent } from './register/forms/address-information.component';
-import { ChildrenInformationComponent } from './register/forms/chidren-information.component';
-import { PaymentInformationComponent } from './register/forms/payment-information.component';
-import { CommentsComponent } from './register/forms/comments.component';
-import { FinalStepComponent } from './register/forms/final-step.component';
+import { ParentInformationComponent } from './register/forms/parent-information/parent-information.component';
+import { AddressInformationComponent } from './register/forms/address-information/address-information.component';
+import { ChildrenInformationComponent } from './register/forms/children-information/children-information.component';
+import { PaymentInformationComponent } from './register/forms/payment-information/payment-information.component';
+import { CommentsComponent } from './register/forms/comments/comments.component';
+import { FinalStepComponent } from './register/forms/final-step/final-step.component';
 
 import { RegisterService } from './register/register.service'
 import { PhotoService } from './photos/photos.service';

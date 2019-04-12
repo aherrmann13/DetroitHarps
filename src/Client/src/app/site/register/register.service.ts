@@ -1,8 +1,8 @@
 import { Client, RegisterModel, RegisterParentModel, RegisterContactInformationModel, RegisterChildModel, RegisterChildModelGender } from "../../shared/client/api.client";
-import { ParentInformationComponentData } from "./forms/parent-information.component";
-import { AddressInformationComponentData } from "./forms/address-information.component";
-import { ChildrenInformationComponentData, ChildGender } from "./forms/chidren-information.component";
-import { PaymentInformationComponentData } from "./forms/payment-information.component";
+import { ParentInformationComponentData } from "./forms/parent-information/parent-information.component";
+import { AddressInformationComponentData } from "./forms/address-information/address-information.component";
+import { ChildrenInformationComponentData, ChildGender } from "./forms/children-information/children-information.component";
+import { PaymentInformationComponentData } from "./forms/payment-information/payment-information.component";
 import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 

@@ -10,25 +10,8 @@ export interface ParentInformationComponentData {
 
 @Component({
     selector: 'dh-register-parent-information',
-    template: `
-        <form [formGroup]='formGroup'>
-            <mat-form-field>
-                <input matInput placeholder='Parent first name' formControlName='parentFirstName' required>
-            </mat-form-field>
-            <br />
-            <mat-form-field>
-                <input matInput placeholder='Parent last name' formControlName='parentLastName' required>
-            </mat-form-field>
-            <br />
-            <mat-form-field>
-                <input matInput placeholder='Phone Number' formControlName='phoneNumber' required>
-            </mat-form-field>
-            <br />
-            <mat-form-field>
-                <input matInput placeholder='Email' formControlName='emailAddress' required>
-            </mat-form-field>
-        </form>`,
-    styleUrls: [ '../register.component.scss' ]
+    templateUrl: 'parent-information.component.html',
+    styleUrls: [ '../../register.component.scss' ]
 })
 export class ParentInformationComponent {
     

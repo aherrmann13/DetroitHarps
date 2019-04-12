@@ -3,15 +3,8 @@ import { FormGroup, FormBuilder } from "@angular/forms";
 
 @Component({
     selector: 'dh-register-comments',
-    template: `
-    <form [formGroup]='formGroup'>                       
-        <div class='form-container'>
-            <mat-form-field>
-                <textarea matInput placeholder='Comments/Special Requests' formControlName='comments'></textarea>
-            </mat-form-field>
-        </div>
-    </form>`,
-    styleUrls: [ '../register.component.scss' ]
+    templateUrl: './comments.component.html',
+    styleUrls: [ '../../register.component.scss' ]
 })
 export class CommentsComponent {
     

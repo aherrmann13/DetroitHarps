@@ -13,34 +13,8 @@ export interface AddressInformationComponentData {
 
 @Component({
     selector: 'dh-register-address-information',
-    template: `
-    <form [formGroup]='formGroup'>                    
-        <mat-form-field>
-            <input matInput placeholder='Street Address' formControlName='address' required autocomplete="address-line1">
-        </mat-form-field>
-        <br />
-        <mat-form-field>
-            <input matInput placeholder='Street Address 2' formControlName='address2'  autocomplete="address-line2">
-        </mat-form-field>
-        <br />
-        <mat-form-field>
-            <input matInput placeholder='City' formControlName='city' required  autocomplete="address-level2">
-        </mat-form-field>
-        <br />
-        <mat-form-field>
-            <input matInput placeholder='State' formControlName='state' required [matAutocomplete]="auto" autocomplete="address-level1">
-            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                <mat-option *ngFor="let state of filteredStates | async" [value]="state">
-                    {{ state }}
-                </mat-option>
-            </mat-autocomplete>
-        </mat-form-field>
-        <br />
-        <mat-form-field>
-            <input matInput placeholder='Zip' formControlName='zip' required autocomplete="postal-code">
-        </mat-form-field>
-    </form>`,
-    styleUrls: [ '../register.component.scss' ]
+    templateUrl: './address-information.component.html',
+    styleUrls: [ '../../register.component.scss' ]
 })
 export class AddressInformationComponent implements OnInit {
     formGroup: FormGroup;
