@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { MatTableDataSource, MatDialog } from "@angular/material";
 import { Client, MessageReadModel } from "../../shared/client/api.client";
 import { MessageModalComponent } from "./message-modal.component";
+import { descendingDateSorter } from "../../shared/utilities/date-functions";
 
 @Component({
     selector: 'dh-admin-contact',
@@ -40,9 +41,9 @@ export class ContactComponent implements OnInit {
     }
 
     private refreshDataSource(): void{
-        this.dataSource.data = this._messages.sort((x, y) => {
-            return y.timestamp.getTime() - x.timestamp.getTime()
-        });
+        this.dataSource.data = this._messages.sort(
+            descendingDateSorter(x => x.timestamp)
+        );
     }
 
     private markAsRead(message: MessageReadModel): void {

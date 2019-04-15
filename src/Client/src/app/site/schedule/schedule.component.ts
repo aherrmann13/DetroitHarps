@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Client, EventModel } from '../../shared/client/api.client';
+import { descendingDateSorter, ascendingDateSorter } from '../../shared/utilities/date-functions';
 
 @Component({
   selector: 'dh-schedule',
@@ -21,8 +22,6 @@ export class ScheduleComponent implements OnInit {
   }
 
   private orderDates(events: Array<EventModel>): Array<EventModel> {
-    return events.sort((a: EventModel, b: EventModel) => {
-      return a.startDate.getTime() - b.startDate.getTime();
-    });
+    return events.sort(ascendingDateSorter(x => x.startDate));
   }
 }
