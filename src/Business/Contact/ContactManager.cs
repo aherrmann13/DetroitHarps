@@ -5,10 +5,10 @@ namespace DetroitHarps.Business.Contact
     using System.Linq;
     using System.Text;
     using AutoMapper;
-    using DetroitHarps.Business.Constants;
+    using DetroitHarps.Business.Common.Constants;
+    using DetroitHarps.Business.Common.Exceptions;
     using DetroitHarps.Business.Contact.Entities;
     using DetroitHarps.Business.Contact.Models;
-    using DetroitHarps.Business.Exception;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
     using Tools;
@@ -46,11 +46,11 @@ namespace DetroitHarps.Business.Contact
             {
                 _emailSender.SendToSelf(subject, body);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "error sending email");
             }
-            
+
             _repository.Create(Mapper.Map<Message>(model));
         }
 

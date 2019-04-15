@@ -1,4 +1,4 @@
-namespace DetroitHarps.Business.Exception
+namespace DetroitHarps.Business.Common.Exceptions
 {
     using System;
 

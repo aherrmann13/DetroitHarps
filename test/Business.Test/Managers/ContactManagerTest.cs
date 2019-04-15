@@ -3,10 +3,10 @@ namespace DetroitHarps.Business.Test
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using DetroitHarps.Business.Common.Exceptions;
     using DetroitHarps.Business.Contact;
     using DetroitHarps.Business.Contact.Entities;
     using DetroitHarps.Business.Contact.Models;
-    using DetroitHarps.Business.Exception;
     using Microsoft.Extensions.Logging;
     using Moq;
     using Tools;
@@ -126,7 +126,7 @@ namespace DetroitHarps.Business.Test
                 x => x.Log<object>(
                     LogLevel.Error,
                     It.IsAny<EventId>(),
-                    It.Is<object>(y => 
+                    It.Is<object>(y =>
                         Compare.EqualOrdinal(y.ToString(), "error sending email")),
                     It.Is<Exception>(y => y.Equals(ex)),
                     It.IsAny<Func<object, Exception, string>>()),

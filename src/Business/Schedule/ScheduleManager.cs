@@ -4,8 +4,8 @@ namespace DetroitHarps.Business.Schedule
     using System.Collections.Generic;
     using System.Linq;
     using AutoMapper;
-    using DetroitHarps.Business.Constants;
-    using DetroitHarps.Business.Exception;
+    using DetroitHarps.Business.Common.Constants;
+    using DetroitHarps.Business.Common.Exceptions;
     using DetroitHarps.Business.Schedule.Entities;
     using DetroitHarps.Business.Schedule.Models;
     using Microsoft.Extensions.Logging;

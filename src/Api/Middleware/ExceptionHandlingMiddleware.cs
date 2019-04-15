@@ -3,7 +3,7 @@ namespace DetroitHarps.Api.Middleware
     using System;
     using System.Net;
     using System.Threading.Tasks;
-    using DetroitHarps.Business.Exception;
+    using DetroitHarps.Business.Common.Exceptions;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Logging;
     using Tools;

@@ -1,7 +1,7 @@
-namespace DetroitHarps.Business.Constants
+namespace DetroitHarps.Business.Common.Constants
 {
     using System;
-    using DetroitHarps.Business.Exception;
+    using DetroitHarps.Business.Common.Exceptions;
 
     public static class Constants
     {

@@ -4,7 +4,7 @@ namespace DetroitHarps.Api.Test.Middleware
     using System.IO;
     using System.Net;
     using DetroitHarps.Api.Middleware;
-    using DetroitHarps.Business.Exception;
+    using DetroitHarps.Business.Common.Exceptions;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Logging;
     using Moq;

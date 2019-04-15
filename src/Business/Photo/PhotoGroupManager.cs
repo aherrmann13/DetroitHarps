@@ -4,8 +4,8 @@ namespace DetroitHarps.Business.Photo
     using System.Collections.Generic;
     using System.Linq;
     using AutoMapper;
-    using DetroitHarps.Business.Constants;
-    using DetroitHarps.Business.Exception;
+    using DetroitHarps.Business.Common.Constants;
+    using DetroitHarps.Business.Common.Exceptions;
     using DetroitHarps.Business.Photo;
     using DetroitHarps.Business.Photo.Entities;
     using DetroitHarps.Business.Photo.Models;

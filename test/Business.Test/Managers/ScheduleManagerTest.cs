@@ -4,7 +4,7 @@ namespace DetroitHarps.Business.Test
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
-    using DetroitHarps.Business.Exception;
+    using DetroitHarps.Business.Common.Exceptions;
     using DetroitHarps.Business.Schedule;
     using DetroitHarps.Business.Schedule.Entities;
     using DetroitHarps.Business.Schedule.Models;

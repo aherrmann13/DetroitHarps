@@ -3,7 +3,7 @@ namespace DetroitHarps.Business.Test
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using DetroitHarps.Business.Exception;
+    using DetroitHarps.Business.Common.Exceptions;
     using DetroitHarps.Business.Photo;
     using DetroitHarps.Business.Photo.Entities;
     using DetroitHarps.Business.Photo.Models;

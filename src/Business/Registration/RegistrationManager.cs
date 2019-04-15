@@ -3,7 +3,7 @@ namespace DetroitHarps.Business.Registration
     using System.Collections.Generic;
     using System.Linq;
     using AutoMapper;
-    using DetroitHarps.Business.Constants;
+    using DetroitHarps.Business.Common.Constants;
     using DetroitHarps.Business.Registration.Entities;
     using DetroitHarps.Business.Registration.Models;
     using Microsoft.Extensions.Logging;
