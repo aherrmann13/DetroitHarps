@@ -5,13 +5,13 @@ export enum SortType {
 
 export function ascendingDateSorter<T>(dateAccessor: (x: T) => Date) {
     return (a: T, b: T) => {
-        return sortAsc(dateAccessor.call(a), dateAccessor.call(b))
+        return sortAsc(dateAccessor(a), dateAccessor(b))
     }
 }
 
 export function descendingDateSorter<T>(dateAccessor: (x: T) => Date) {
     return (a: T, b: T) => {
-        return sortDesc(dateAccessor.call(a), dateAccessor.call(b))
+        return sortDesc(dateAccessor(a), dateAccessor(b))
     }
 }
 
