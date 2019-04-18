@@ -29,6 +29,7 @@ import { FinalStepComponent } from './register/forms/final-step/final-step.compo
 
 import { RegisterService } from './register/register.service'
 import { PhotoService } from './photos/photos.service';
+import { LoggerModule } from '../core/logger/logger.module';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { PhotoService } from './photos/photos.service';
     ReactiveFormsModule,
     SiteRoutingModule,
     LayoutModule,
-    ClientModule
+    ClientModule,
+    LoggerModule
   ],
   providers: [
     RegisterService,
