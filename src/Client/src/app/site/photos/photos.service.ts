@@ -2,7 +2,7 @@ import {
     Client,
     PhotoGroupModel,
     PhotoDisplayPropertiesDetailModel
-} from "../../shared/client/api.client";
+} from "../../core/client/api.client";
 import { Observable, forkJoin } from "rxjs";
 import { Injectable } from "@angular/core";
 

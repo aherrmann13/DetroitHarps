@@ -6,7 +6,6 @@ import { MatIconRegistry } from '@angular/material/icon';
 
 import { MaterialModule } from '../shared/material.module';
 import { LayoutModule } from '../shared/layout/layout.module';
-import { ClientModule } from '../shared/client/client.module';
 
 import { SiteRoutingModule } from './site-routing.module';
 
@@ -56,7 +55,6 @@ import { LoggerModule } from '../core/logger/logger.module';
     ReactiveFormsModule,
     SiteRoutingModule,
     LayoutModule,
-    ClientModule,
     LoggerModule
   ],
   providers: [

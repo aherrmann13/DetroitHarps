@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, Optional } from '@angular/core';
 
-import { Client, PhotoGroupModel, API_BASE_URL, PhotoDisplayPropertiesDetailModel } from '../../shared/client/api.client';
+import { Client, PhotoGroupModel, API_BASE_URL, PhotoDisplayPropertiesDetailModel } from '../../core/client/api.client';
 import { forkJoin } from 'rxjs';
 import { PhotoService } from './photos.service';
 

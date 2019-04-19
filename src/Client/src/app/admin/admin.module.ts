@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialModule } from '../shared/material.module';
 import { LayoutModule } from '../shared/layout/layout.module';
-import { ClientModule } from '../shared/client/client.module';
+import { ClientModule } from '../core/client/client.module';
 
 import { AdminRoutingModule } from './admin-routing.module';
 
@@ -36,8 +36,7 @@ import { MessageModalComponent } from './contact/message-modal.component';
     MaterialModule,
     ReactiveFormsModule,
     AdminRoutingModule,
-    LayoutModule,
-    ClientModule
+    LayoutModule
   ],
   entryComponents: [
     ScheduleModalDialogComponent,

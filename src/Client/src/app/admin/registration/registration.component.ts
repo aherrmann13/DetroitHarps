@@ -4,7 +4,7 @@ import {
   RegisteredChildModel,
   Client,
   FileResponse
-} from '../../shared/client/api.client';
+} from '../../core/client/api.client';
 
 import { saveAs } from "file-saver";
 import 'rxjs/add/observable/forkJoin';

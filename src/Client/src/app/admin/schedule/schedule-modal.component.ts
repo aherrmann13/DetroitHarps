@@ -6,7 +6,7 @@ import {
   FORM_MATCH_ERROR 
 } from "../../shared/validators/form-match.directive";
 import { Observable } from "rxjs";
-import { EventModel } from "../../shared/client/api.client";
+import { EventModel } from "../../core/client/api.client";
 
 export interface ScheduleModalDialogInput {
   onClick: (EventModel) => Observable<EventModel>;

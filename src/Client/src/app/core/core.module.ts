@@ -9,18 +9,21 @@ import { AuthService } from './services/auth.service';
 import { AuthGuardService } from './services/auth-guard.service';
 import { GlobalErrorHandler } from './handlers/error-handler';
 import { MaterialModule } from '../shared/material.module';
+import { ClientModule } from './client/client.module';
 
 @NgModule({
   imports: [
     CommonModule,
     CoreRoutingModule,
     MaterialModule,
-    LoggerModule
+    LoggerModule,
+    ClientModule
   ],  
   declarations: [],
   exports: [
     LoggerModule,
-    RouterModule
+    RouterModule,
+    ClientModule
   ],
   providers: [
     AuthService,

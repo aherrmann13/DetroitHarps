@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, Inject, Optional, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { API_BASE_URL } from '../../shared/client/api.client';
+import { API_BASE_URL } from '../../core/client/api.client';
 import { PhotoService, PhotoGroup } from './photos.service';
 
 @Component({

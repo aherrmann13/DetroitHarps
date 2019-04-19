@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
-import { Client, MessageModel } from '../../shared/client/api.client';
+import { Client, MessageModel } from '../../core/client/api.client';
 import { Router } from '@angular/router';
 
 @Component({
@@ -46,8 +46,7 @@ export class ContactComponent implements OnInit {
       body: this.message.value
     });
     this._client.contact(model).subscribe(
-      _ => this.onComplete(),
-      error => console.log(error)
+      _ => this.onComplete()
     );
   }
 

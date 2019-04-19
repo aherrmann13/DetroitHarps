@@ -1,6 +1,6 @@
 import { Inject, Component } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { MessageReadModel } from "../../shared/client/api.client";
+import { MessageReadModel } from "../../core/client/api.client";
 
 @Component({
     selector: 'dh-admin-message-modal',

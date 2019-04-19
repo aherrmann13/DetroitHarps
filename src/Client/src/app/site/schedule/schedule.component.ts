@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Client, EventModel } from '../../shared/client/api.client';
+import { Client, EventModel } from '../../core/client/api.client';
 import { descendingDateSorter, ascendingDateSorter } from '../../shared/utilities/date-functions';
 
 @Component({

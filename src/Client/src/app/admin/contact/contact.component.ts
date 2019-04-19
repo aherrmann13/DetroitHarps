@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { MatTableDataSource, MatDialog } from "@angular/material";
-import { Client, MessageReadModel } from "../../shared/client/api.client";
+import { Client, MessageReadModel } from "../../core/client/api.client";
 import { MessageModalComponent } from "./message-modal.component";
 import { descendingDateSorter } from "../../shared/utilities/date-functions";
 

@@ -4,7 +4,7 @@ import {
   Client,
   EventModel,
   EventCreateModel
-} from '../../shared/client/api.client';
+} from '../../core/client/api.client';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { ScheduleModalDialogComponent } from './schedule-modal.component';import { Observable } from 'rxjs';
 import { DeletePromptDialogComponent } from '../delete-prompt/delete-prompt.component';

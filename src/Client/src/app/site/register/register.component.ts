@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatStepper, MatSnackBar } from '@angular/material';
 
-import { Client, MessageModel } from '../../shared/client/api.client';
+import { Client, MessageModel } from '../../core/client/api.client';
 import { ParentInformationComponent } from './forms/parent-information/parent-information.component';
 import { AddressInformationComponent } from './forms/address-information/address-information.component';
 import { ChildrenInformationComponent } from './forms/children-information/children-information.component';
