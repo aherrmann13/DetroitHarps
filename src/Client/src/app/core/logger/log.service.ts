@@ -21,8 +21,13 @@ export class LogService {
         return this.log(LogLevel.Info, msg)
     }
     logError(msg: any){
-        return this.log(LogLevel.Error, msg)
+        if(msg instanceof Error){
+            return this.log(LogLevel.Error, (<Error>msg).stack)
+        } else {
+            return this.log(LogLevel.Error, msg)
+        }
     }
+
     log(level: LogLevel, msg: any) {
         if(this.shouldLog(level)) {
             for (var publisher of this._publisherService.publishers){
