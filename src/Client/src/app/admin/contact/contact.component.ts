@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { MatTableDataSource, MatDialog } from "@angular/material";
 import { Client, MessageReadModel } from "../../core/client/api.client";
 import { MessageModalComponent } from "./message-modal.component";
-import { descendingDateSorter } from "../../shared/utilities/date-functions";
+import { descendingDateSorter } from "../../core/utilities/date-functions";
 
 @Component({
     selector: 'dh-admin-contact',

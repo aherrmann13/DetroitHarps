@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from "@angular/fo
 import {
   formMatchValidator,
   FORM_MATCH_ERROR 
-} from "../../shared/validators/form-match.directive";
+} from "../../core/validators/form-match.directive";
 import { Observable } from "rxjs";
 import { EventModel } from "../../core/client/api.client";
 

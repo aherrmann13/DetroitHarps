@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Client, EventModel } from '../../core/client/api.client';
-import { descendingDateSorter, ascendingDateSorter } from '../../shared/utilities/date-functions';
+import { descendingDateSorter, ascendingDateSorter } from '../../core/utilities/date-functions';
 
 @Component({
   selector: 'dh-schedule',
