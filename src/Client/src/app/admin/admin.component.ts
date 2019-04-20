@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
-import { DrawerItemModel } from '../shared/layout/drawer/drawer.item.model';
-import { DrawerComponent } from '../shared/layout/drawer/drawer.component';
+import { DrawerItemModel } from '../core/layout/drawer/drawer.item.model';
+import { DrawerComponent } from '../core/layout/drawer/drawer.component';
 import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
 

@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconRegistry } from '@angular/material/icon';
 
 import { MaterialModule } from '../core/material.module';
-import { LayoutModule } from '../shared/layout/layout.module';
+import { LayoutModule } from '../core/layout/layout.module';
 
 import { SiteRoutingModule } from './site-routing.module';
 

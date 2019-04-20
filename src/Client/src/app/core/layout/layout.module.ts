@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MaterialModule } from '../../core/material.module';
+import { MaterialModule } from '../material.module';
 import { DrawerComponent } from './drawer/drawer.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 

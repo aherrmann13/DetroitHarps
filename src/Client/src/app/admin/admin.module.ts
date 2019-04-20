@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialModule } from '../core/material.module';
-import { LayoutModule } from '../shared/layout/layout.module';
+import { LayoutModule } from '../core/layout/layout.module';
 import { ClientModule } from '../core/client/client.module';
 
 import { AdminRoutingModule } from './admin-routing.module';

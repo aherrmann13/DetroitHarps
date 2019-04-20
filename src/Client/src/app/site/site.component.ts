@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry} from '@angular/material/icon';
-import { DrawerItemModel } from '../shared/layout/drawer/drawer.item.model';
-import { DrawerComponent } from '../shared/layout/drawer/drawer.component';
+import { DrawerItemModel } from '../core/layout/drawer/drawer.item.model';
+import { DrawerComponent } from '../core/layout/drawer/drawer.component';
 
 
 @Component({
