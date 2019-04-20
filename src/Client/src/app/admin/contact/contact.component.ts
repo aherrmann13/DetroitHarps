@@ -24,8 +24,7 @@ export class ContactComponent implements OnInit {
                 data => {
                     this._messages = data;
                     this.refreshDataSource();
-                },
-                err => console.log(err)
+                }
             )
     }
 
@@ -54,7 +53,7 @@ export class ContactComponent implements OnInit {
                     () => null,
                     err => {
                         this.updateTableMessageAsUnread(message)
-                        console.log(err)
+                        throw err;
                     }
                 )
         }

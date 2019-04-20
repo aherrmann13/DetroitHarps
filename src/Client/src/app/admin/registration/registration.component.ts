@@ -39,8 +39,7 @@ export class RegistrationComponent implements OnInit {
 
   ngOnInit() {
     this._client.getAllChildren().subscribe(
-      data => this.info = data,
-      error => console.error(error)
+      data => this.info = data
     );
   }
 

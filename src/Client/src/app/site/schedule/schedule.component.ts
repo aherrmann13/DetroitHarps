@@ -16,8 +16,7 @@ export class ScheduleComponent implements OnInit {
 
   ngOnInit() {
     this._client.getAllEvents().subscribe(
-      data => this.events = this.orderDates(data),
-      error => console.error(error)
+      data => this.events = this.orderDates(data)
     );
   }
 

@@ -1,7 +1,6 @@
 import { Component, OnInit, Inject, Optional } from '@angular/core';
 
 import { Client, PhotoGroupModel, API_BASE_URL, PhotoDisplayPropertiesDetailModel } from '../../core/client/api.client';
-import { forkJoin } from 'rxjs';
 import { PhotoService } from './photos.service';
 
 interface PhotoGroup
@@ -27,8 +26,7 @@ export class PhotosComponent implements OnInit {
   ngOnInit() {
     this._photoService.getAll()
     .subscribe(
-      data => this.photoGroups = data,
-      error => console.log(error),
+      data => this.photoGroups = data
     )
   }
 

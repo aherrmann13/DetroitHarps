@@ -24,8 +24,7 @@ export class SinglePhotoComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._photoService.getAll().subscribe(
-      data => this.processPhotoGroupsReturned(data),
-      error => console.error(error)
+      data => this.processPhotoGroupsReturned(data)
     );
   }
 

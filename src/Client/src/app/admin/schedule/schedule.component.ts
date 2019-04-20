@@ -67,8 +67,7 @@ export class ScheduleComponent implements OnInit {
       data => {
         this._events = data,
         this.refreshDataSource()
-      },
-      error => console.error(error)
+      }
     );
   }
 
