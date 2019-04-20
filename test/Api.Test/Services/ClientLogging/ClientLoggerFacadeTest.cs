@@ -21,13 +21,13 @@ namespace DetroitHarps.Api.Services.ClientLogging.Test
         {
             var error = new ClientErrorModel
             {
-                Timestamp = new DateTime(2019, 4, 20, 12, 52, 35, DateTimeKind.Local),
+                Timestamp = new DateTime(2019, 4, 20, 12, 52, 35, DateTimeKind.Utc),
                 SessionId = "session",
                 Message = "message"
             };
             _loggerFacade.LogError(error);
 
-            var expectedMessage = "[2019-04-20T12:52:35.0000000-04:00] [session] message";
+            var expectedMessage = "[2019-04-20T12:52:35.0000000Z] [session] message";
 
             _loggerMock.Verify(
                 x => x.Log<object>(
