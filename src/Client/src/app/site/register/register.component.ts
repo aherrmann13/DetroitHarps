@@ -44,6 +44,10 @@ export class RegisterComponent {
     return this.paymentInformation ? this.paymentInformation.formGroup : null;
   }
 
+  get paymentType(): string {
+    return this.paymentInformation && this.paymentInformation.data ? this.paymentInformation.data.type : null;
+  }
+
   formIndex = 0;
   isRegistering = false;
   isSendingComment = false;

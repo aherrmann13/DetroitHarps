@@ -32,7 +32,7 @@
                 </mat-step>
                 <mat-step>
                     <ng-template matStepLabel>Done</ng-template>
-                    <dh-register-final-step [loading]='isRegistering || isSendingComment' [paymentType]='paymentInformation.data'></dh-register-final-step>
+                    <dh-register-final-step [loading]='isRegistering || isSendingComment' [paymentType]='paymentType'></dh-register-final-step>
                 </mat-step>
             </mat-horizontal-stepper>
         </mat-card-content>
