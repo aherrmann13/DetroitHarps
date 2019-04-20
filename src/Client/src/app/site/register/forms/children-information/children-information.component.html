@@ -6,7 +6,7 @@
         </mat-option>
     </mat-select>
     </mat-form-field>
-    <form class="child-registration-form" *ngFor='let formGroup of formGroups; index as i' [formGroup]='formGroup'>
+    <form class="child-registration-form" *ngFor='let formGroup of formArray.controls; index as i' [formGroup]='formGroup'>
         <span class="child-index">Child {{i + 1}} </span>
         <br />
         <mat-form-field>
@@ -18,7 +18,7 @@
         </mat-form-field>
         <br />
         <mat-form-field>
-            <input matInput [matDatepicker]='birthDatePicker' placeholder='Child Birth Date' formControlName='childDob'>
+            <input matInput [matDatepicker]='birthDatePicker' [max]='maxDate' placeholder='Child Birth Date' formControlName='childDob'>
             <mat-datepicker-toggle matSuffix [for]='birthDatePicker'></mat-datepicker-toggle>
             <mat-datepicker #birthDatePicker></mat-datepicker>
         </mat-form-field>

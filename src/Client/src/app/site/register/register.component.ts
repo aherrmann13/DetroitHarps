@@ -9,6 +9,7 @@ import { CommentsComponent } from './forms/comments/comments.component';
 import { PaymentInformationComponent } from './forms/payment-information/payment-information.component';
 import { RegisterService } from './register.service';
 import { Router } from '@angular/router';
+import { configuration } from '../../configuration';
 
 
 @Component({
@@ -23,29 +24,30 @@ export class RegisterComponent {
   @ViewChild(CommentsComponent) comments: CommentsComponent;
   @ViewChild(PaymentInformationComponent) paymentInformation: PaymentInformationComponent;
 
-  get parentInformationFormGroup() {
+  get parentInformationControl() {
     return this.parentInformation ? this.parentInformation.formGroup : null;
   }
 
-  get addressInformationFormGroup() {
+  get addressInformationControl() {
     return this.addressInformation ? this.addressInformation.formGroup : null;
   }
 
-  get childrenInformationFormGroup() {
-    return this.childrenInformation ? this.childrenInformation.firstForm : null;
+  get childrenInformationControl() {
+    return this.childrenInformation ? this.childrenInformation.formArray : null;
   }
 
-  get commentsFormGroup() {
+  get commentsControl() {
     return this.comments ? this.comments.formGroup : null;
   }
 
-  get paymentInformationFormGroup() {
+  get paymentInformationControl() {
     return this.paymentInformation ? this.paymentInformation.formGroup : null;
   }
 
   formIndex = 0;
   isRegistering = false;
   isSendingComment = false;
+  year = configuration.year;
 
   constructor(
     private _router: Router,

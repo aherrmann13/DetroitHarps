@@ -4,29 +4,29 @@
             <mat-card-title>
                 <span class='mat-title'>Register</span>
             </mat-card-title>
-            <mat-card-subtitle>
-                <span>Summer 2019 Program, Sunday Evenings at Flodin Park, Canton, MI, $20/child or $30/family</span>
+            <mat-card-subtitle class='registration-card-subtitle'>
+                <span>Summer {{year}} Program, Sunday Evenings at Flodin Park, Canton, MI, $20/child or $30/family</span>
             </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content class="registration-content">
             <mat-horizontal-stepper [linear]='true' #stepper (selectionChange)='step(stepper)'>
-                <mat-step [stepControl]='parentInformationFormGroup'>
+                <mat-step [stepControl]='parentInformationControl'>
                     <ng-template matStepLabel>Contact Information</ng-template>
                     <dh-register-parent-information></dh-register-parent-information>
                 </mat-step>
-                <mat-step [stepControl]='addressInformationFormGroup'>
+                <mat-step [stepControl]='addressInformationControl'>
                     <ng-template matStepLabel>Address</ng-template>
                     <dh-register-address-information></dh-register-address-information>
                 </mat-step>
-                <mat-step [stepControl]='childrenInformationFormGroup'>
+                <mat-step [stepControl]='childrenInformationControl'>
                     <ng-template matStepLabel>Child Information</ng-template>
                     <dh-register-children-information></dh-register-children-information>
                 </mat-step>
-                <mat-step [stepControl]='commentsFormGroup'>
+                <mat-step [stepControl]='commentsControl'>
                     <ng-template matStepLabel>Comments</ng-template>
                     <dh-register-comments></dh-register-comments>
                 </mat-step>
-                <mat-step [stepControl]='paymentInformationFormGroup'>
+                <mat-step [stepControl]='paymentInformationControl'>
                     <ng-template matStepLabel>Payment Type</ng-template>
                     <dh-register-payment-information></dh-register-payment-information>
                 </mat-step>
@@ -44,4 +44,4 @@
             <button mat-raised-button color='primary' *ngIf='formIndex === 5' [routerLink]="['/schedule']">Season Schedule</button>
         </mat-card-actions>
     </mat-card>
-</div>
+</div> 

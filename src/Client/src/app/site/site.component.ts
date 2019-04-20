@@ -1,6 +1,5 @@
 import { Component, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
-import { MatSidenav } from '@angular/material/sidenav';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry} from '@angular/material/icon';
 import { DrawerItemModel } from '../core/layout/drawer/drawer.item.model';
@@ -19,7 +18,8 @@ export class SiteComponent {
   twitterUrl = 'https://twitter.com/DetroitHarps';
   instagramUrl = 'https://www.instagram.com/detroitharps/';
   shopUrl = 'https://www.oneills.com/shop-by-team/gaa/usa/detroit-harps-gaa.html';
-  router = this._router;
+  youtubeUrl = 'https://www.youtube.com/channel/UCkbd2IjrNAD94FB06Zh4cPA';
+  router: Router;
 
   drawerItems: DrawerItemModel[] = [
       { text: 'Home', icon: 'home', path: '/' },
@@ -32,24 +32,28 @@ export class SiteComponent {
 
 
   constructor(
-      private _matIconRegistry: MatIconRegistry,
-        private _sanitizer: DomSanitizer,
-        private _router: Router) {
-        _matIconRegistry
-            .addSvgIcon('facebook',
-            _sanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebook.svg'));
-        _matIconRegistry
-            .addSvgIcon('twitter',
-            _sanitizer.bypassSecurityTrustResourceUrl('assets/icons/twitter.svg'));
-        _matIconRegistry
-            .addSvgIcon('instagram',
-            _sanitizer.bypassSecurityTrustResourceUrl('assets/icons/instagram.svg'));
-        _matIconRegistry
-            .addSvgIcon('shop',
-            _sanitizer.bypassSecurityTrustResourceUrl('assets/icons/shop.svg'));
-        _matIconRegistry
-            .addSvgIcon('logo',
-            _sanitizer.bypassSecurityTrustResourceUrl('assets/icons/detroitharpslogo.svg'));
+    matIconRegistry: MatIconRegistry,
+    sanitizer: DomSanitizer,
+    router: Router) {
+      this.router = router;
+      matIconRegistry
+        .addSvgIcon('facebook',
+        sanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebook.svg'));
+      matIconRegistry
+        .addSvgIcon('twitter',
+        sanitizer.bypassSecurityTrustResourceUrl('assets/icons/twitter.svg'));
+      matIconRegistry
+        .addSvgIcon('instagram',
+        sanitizer.bypassSecurityTrustResourceUrl('assets/icons/instagram.svg'));
+      matIconRegistry
+        .addSvgIcon('shop',
+        sanitizer.bypassSecurityTrustResourceUrl('assets/icons/shop.svg'));
+      matIconRegistry
+        .addSvgIcon('youtube',
+        sanitizer.bypassSecurityTrustResourceUrl('assets/icons/youtube.svg'));
+      matIconRegistry
+        .addSvgIcon('logo',
+        sanitizer.bypassSecurityTrustResourceUrl('assets/icons/detroitharpslogo.svg'));
   }
 
   close() {

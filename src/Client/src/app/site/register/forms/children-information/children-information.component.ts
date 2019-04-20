@@ -1,6 +1,8 @@
 import { Component } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { FormBuilder, Validators, FormArray } from "@angular/forms";
 import { MatSelectChange } from "@angular/material";
+
+import { configuration } from "../../../../configuration";
 
 export interface ChildrenInformationComponentData {
     childFirstName: string,
@@ -22,9 +24,8 @@ export enum ChildGender {
 })
 export class ChildrenInformationComponent {
     
-    formGroups: Array<FormGroup>;
-    firstForm: FormGroup;
-    shirtSizes: Array<string> = ['YXS', 'YS', 'YM', 'YL', 'YXL', 'AS', 'AM'];
+    formArray: FormArray;
+    shirtSizes = configuration.shirtSizes;
     numberOfChildrenSelector: Array<number> = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
     private childFormProperties = {
         childFirstName: ['', Validators.required],
@@ -34,9 +35,13 @@ export class ChildrenInformationComponent {
         childShirtSize: ['', Validators.required]
       }
 
+    get maxDate(): Date {
+        return new Date();
+    }
+
     get data(): Array<ChildrenInformationComponentData> {
         // TODO: is this instant access every time it is called?
-        return this.formGroups.map(x => <ChildrenInformationComponentData>{
+        return this.formArray.controls.map(x => <ChildrenInformationComponentData>{
             childFirstName: x.value.childFirstName,
             childLastName: x.value.childLastName,
             childDob: x.value.childDob,
@@ -49,12 +54,11 @@ export class ChildrenInformationComponent {
         // TODO: can this be moved out of ctor?
         // based on this https://stackblitz.com/edit/angular-material-stepper-with-component-steps
         // and based on https://stackoverflow.com/questions/48498966/angular-material-stepper-component-for-each-step?rq=1
-        this.firstForm = _formBuilder.group(this.childFormProperties)
-        this.formGroups = [ this.firstForm ];
+        this.formArray = new FormArray([ _formBuilder.group(this.childFormProperties) ]);
     }
 
     numberOfChildrenChanged(change: MatSelectChange): void {
-        const currentNumberOfChildren = this.formGroups.length;
+        const currentNumberOfChildren = this.formArray.length;
         const newNumberOfChildren: number = change.value;
         const difference = newNumberOfChildren - currentNumberOfChildren;
 
@@ -72,11 +76,11 @@ export class ChildrenInformationComponent {
     }
 
     addChild(): void {
-        this.formGroups.push(
+        this.formArray.push(
           this._formBuilder.group(this.childFormProperties));
     }
 
     removeChild(): void {
-        this.formGroups.pop();
+        this.formArray.removeAt(this.formArray.length - 1);
     }
 }

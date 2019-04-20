@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { configuration } from "../../../../configuration";
 
 @Component({
     selector: 'dh-register-final-step',
@@ -9,4 +9,6 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 export class FinalStepComponent {
     @Input() loading: boolean = false;
     @Input() paymentType: string;
+
+    year = configuration.year;
 }

@@ -29,6 +29,7 @@ import { FinalStepComponent } from './register/forms/final-step/final-step.compo
 import { RegisterService } from './register/register.service'
 import { PhotoService } from './photos/photos.service';
 import { LoggerModule } from '../core/logger/logger.module';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { LoggerModule } from '../core/logger/logger.module';
     ChildrenInformationComponent,
     PaymentInformationComponent,
     CommentsComponent,
-    FinalStepComponent
+    FinalStepComponent,
+    FooterComponent
   ],
   imports: [
     CommonModule,
