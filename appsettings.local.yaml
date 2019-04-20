@@ -1,7 +1,3 @@
-## test env connection strings, ok to check in
-ConnectionStrings:
-  Default: "Host=157.230.51.199;Database=detroitharps_dev;Username=detroitharps;Password=password"
-
 Serilog:
   MinimumLevel:
     Default: Information
@@ -12,5 +8,6 @@ Serilog:
 ServiceOptions:
   ServiceName: detroitHarps-api
   LogFolder: "/tmp/detroitharps/api/"
+  ClientLogFolder: "/tmp/detroitharps/client/"
   BindUrl: http://localhost:5000
   EnableConsole: true

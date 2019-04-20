@@ -10,6 +10,8 @@ namespace DetroitHarps.Api
 
         public string LogFolder { get; set; }
 
+        public string ClientLogFolder { get; set; }
+
         public string BindUrl { get; set; }
 
         public bool EnableConsole { get; set; }

@@ -5,7 +5,8 @@ namespace Microsoft.Extensions.DependencyInjection
     using AutoMapper;
     using DetroitHarps.Api.Authentication;
     using DetroitHarps.Api.Middleware;
-    using DetroitHarps.Api.Services;
+    using DetroitHarps.Api.Services.ClientLogging;
+    using DetroitHarps.Api.Services.Email;
     using DetroitHarps.Api.Swagger;
     using DetroitHarps.Business;
     using DetroitHarps.Business.Contact;
@@ -151,6 +152,15 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton<EmailSettings>(settings);
             services.AddTransient<IEmailSender, EmailSender>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddClientLogger(this IServiceCollection services)
+        {
+            Guard.NotNull(services, nameof(services));
+
+            services.AddTransient<ClientLoggerFacade>();
 
             return services;
         }

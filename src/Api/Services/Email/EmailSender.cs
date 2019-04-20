@@ -1,4 +1,4 @@
-namespace DetroitHarps.Api.Services
+namespace DetroitHarps.Api.Services.Email
 {
     using System;
     using DetroitHarps.Business.Contact;

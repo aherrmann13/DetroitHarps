@@ -2,7 +2,7 @@
 {
     using System.Linq;
     using DetroitHarps.Api.Authentication;
-    using DetroitHarps.Api.Services;
+    using DetroitHarps.Api.Services.Email;
     using DetroitHarps.DataAccess;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
@@ -84,6 +84,8 @@
             services.AddAuth0(auth0Settings);
 
             services.AddAutoMapper();
+
+            services.AddClientLogger();
 
             services.AddHealthChecks()
                 .AddDbContextCheck<DetroitHarpsDbContext>();
