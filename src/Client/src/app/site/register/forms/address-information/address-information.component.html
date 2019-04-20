@@ -12,7 +12,7 @@
     </mat-form-field>
     <br />
     <mat-form-field>
-        <input matInput placeholder='State' formControlName='state' required [matAutocomplete]="auto" autocomplete="address-level1">
+        <input matInput placeholder='State' formControlName='state' required [matAutocomplete]="auto" autocomplete="address-level1" (change)="fixStateAutoFill($event)">
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
             <mat-option *ngFor="let state of filteredStates | async" [value]="state">
                 {{ state }}

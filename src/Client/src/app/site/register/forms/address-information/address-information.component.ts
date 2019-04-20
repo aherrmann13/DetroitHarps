@@ -73,4 +73,9 @@ export class AddressInformationComponent implements OnInit {
             {'forbiddenValue': true} :
             null;
     }
+
+    // https://github.com/angular/material2/issues/3414
+    fixStateAutoFill(state: Event) {
+        this.formGroup.controls.state.setValue((state.target as HTMLInputElement).value);
+    }
 }
