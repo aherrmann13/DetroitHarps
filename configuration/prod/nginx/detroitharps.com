@@ -1,7 +1,7 @@
 server {
     root /detroitharps/application/Client/;
     index index.html index.htm;
-    server_name detroitharps.com;
+    server_name www.detroitharps.com detroitharps.com;
 
     if ($host = www.detroitharps.com) {		
         return 301 https://detroitharps.com$request_uri;		
@@ -17,17 +17,18 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 
-
 }
 server {
     if ($host = detroitharps.com) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
+    if ($host = www.detroitharps.com) {
+        return 301 https://$host$request_uri;
+    }
+
 
     listen 80 default_server;
-    server_name detroitharps.com;
+    server_name www.detroitharps.com detroitharps.com;
     return 404; # managed by Certbot
-
-
 }
