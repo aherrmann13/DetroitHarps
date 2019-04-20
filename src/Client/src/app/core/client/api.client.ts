@@ -37,6 +37,54 @@ export class Client extends BaseClient {
      * @model (optional) 
      * @return Success
      */
+    clientError(model: ClientErrorModel): Observable<void> {
+        let url_ = this.baseUrl + "/ClientLogging/Error";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(model);
+
+        let options_ : any = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processClientError(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processClientError(<any>r));
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processClientError(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @model (optional) 
+     * @return Success
+     */
     contact(model: MessageModel): Observable<void> {
         let url_ = this.baseUrl + "/Contact/Contact";
         url_ = url_.replace(/[?&]$/, "");
@@ -1236,6 +1284,50 @@ export class Client extends BaseClient {
         }
         return Observable.of<EventModel[]>(<any>null);
     }
+}
+
+export class ClientErrorModel implements IClientErrorModel {
+    timestamp: Date;
+    sessionId?: string;
+    message?: string;
+
+    constructor(data?: IClientErrorModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.timestamp = data["timestamp"] ? new Date(data["timestamp"].toString()) : <any>undefined;
+            this.sessionId = data["sessionId"];
+            this.message = data["message"];
+        }
+    }
+
+    static fromJS(data: any): ClientErrorModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ClientErrorModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
+        data["sessionId"] = this.sessionId;
+        data["message"] = this.message;
+        return data; 
+    }
+}
+
+export interface IClientErrorModel {
+    timestamp: Date;
+    sessionId?: string;
+    message?: string;
 }
 
 export class MessageModel implements IMessageModel {

@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "generate": "nswag swagger2tsclient /runtime:NetCore20 /input:http://localhost:5000/swagger/doc/swagger.json /output:./src/app/shared/client/api.client.ts /Template:Angular /ClientBaseClass:BaseClient /ExtensionCode:\"import { BaseClient } from './api.client.base'\" /BaseUrlTokenName:\"API_BASE_URL\" /UseTransformOptionsMethod:true /UseTransformResultMethod:true /InjectionTokenType:InjectionToken"
+    "generate": "nswag swagger2tsclient /runtime:NetCore20 /input:http://localhost:5000/swagger/doc/swagger.json /output:./src/app/core/client/api.client.ts /Template:Angular /ClientBaseClass:BaseClient /ExtensionCode:\"import { BaseClient } from './api.client.base'\" /BaseUrlTokenName:\"API_BASE_URL\" /UseTransformOptionsMethod:true /UseTransformResultMethod:true /InjectionTokenType:InjectionToken"
   },
   "private": true,
   "dependencies": {
