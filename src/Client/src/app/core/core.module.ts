@@ -8,7 +8,7 @@ import { LoggerModule } from './logger/logger.module'
 import { AuthService } from './services/auth.service';
 import { AuthGuardService } from './services/auth-guard.service';
 import { GlobalErrorHandler } from './handlers/error-handler';
-import { MaterialModule } from '../shared/material.module';
+import { MaterialModule } from './material.module';
 import { ClientModule } from './client/client.module';
 
 @NgModule({
