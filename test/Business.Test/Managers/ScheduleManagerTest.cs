@@ -138,19 +138,19 @@ namespace DetroitHarps.Business.Test
         }
 
         [Fact]
-        public void CurrentDatePassedIntoFilterExpressionTest()
+        public void GetUpcomingCurrentDatePassedIntoFilterExpressionTest()
         {
             var manager = GetManager();
 
             manager.GetUpcoming();
 
             _repositoryMock.Verify(
-                x => x.GetMany(It.Is<Expression<Func<Event, bool>>>(y => VerifyExpression(y))),
+                x => x.GetMany(It.Is<Expression<Func<Event, bool>>>(y => VerifyGetManyExpression(y))),
                 Times.Once);
         }
 
         [Fact]
-        public void GetUpcomingDoesNotFilterOnNullEndDateTest()
+        public void GetUpcomingDoesNotFilterOnNullCutoffTest()
         {
             var models = new List<Event>()
             {
@@ -169,7 +169,7 @@ namespace DetroitHarps.Business.Test
         }
 
         [Fact]
-        public void GetUpcomingFiltersOnEndDateTest()
+        public void GetUpcomingFiltersOnCutoffTest()
         {
             var date = DateTime.Now;
             var models = new List<Event>()
@@ -198,12 +198,36 @@ namespace DetroitHarps.Business.Test
             Assert.All(modelsFromManager, x => Assert.NotNull(x));
         }
 
-        private bool VerifyExpression(Expression<Func<Event, bool>> expr)
+        [Fact]
+        public void GetUpcomingRegistrationEventsFiltersOnCurrentDateAndRegistrationFlagTest()
+        {
+            var manager = GetManager();
+
+            manager.GetUpcomingRegistrationEvents();
+
+            _repositoryMock.Verify(
+                x => x.GetMany(It.Is<Expression<Func<Event, bool>>>(y => VerifyGetRegistrationExpression(y))),
+                Times.Once);
+        }
+
+        private bool VerifyGetManyExpression(Expression<Func<Event, bool>> expr)
         {
             // TODO : this feels like a hack
             var func = expr.Compile();
             Assert.True(func.Invoke(new Event { StartDate = DateTime.Now.ToUniversalTime().Date }));
             Assert.False(func.Invoke(new Event { StartDate = DateTime.Now.ToUniversalTime().Date.AddDays(-1) }));
+
+            return true;
+        }
+
+        private bool VerifyGetRegistrationExpression(Expression<Func<Event, bool>> expr)
+        {
+            // TODO : this feels like a hack
+            var func = expr.Compile();
+            Assert.True(func.Invoke(new Event { StartDate = DateTime.Now.ToUniversalTime().Date, CanRegister = true }));
+            Assert.False(func.Invoke(new Event { StartDate = DateTime.Now.ToUniversalTime().Date, CanRegister = false }));
+            Assert.False(func.Invoke(new Event { StartDate = DateTime.Now.ToUniversalTime().Date.AddDays(-1), CanRegister = true }));
+            Assert.False(func.Invoke(new Event { StartDate = DateTime.Now.ToUniversalTime().Date.AddDays(-1), CanRegister = false }));
 
             return true;
         }

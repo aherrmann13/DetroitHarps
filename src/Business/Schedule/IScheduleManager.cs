@@ -15,5 +15,7 @@ namespace DetroitHarps.Business.Schedule
         IEnumerable<EventModel> GetAll();
 
         IEnumerable<EventModel> GetUpcoming(DateTime? untilDate = null);
+
+        IEnumerable<EventModel> GetUpcomingRegistrationEvents();
     }
 }

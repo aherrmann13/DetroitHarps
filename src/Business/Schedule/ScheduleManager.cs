@@ -66,6 +66,13 @@ namespace DetroitHarps.Business.Schedule
             return untilDate == null ? entities : entities.Where(x => x.StartDate <= untilDate);
         }
 
+        public IEnumerable<EventModel> GetUpcomingRegistrationEvents()
+        {
+            return _repository.GetMany(
+                x => x.StartDate >= DateTime.Now.ToUniversalTime().Date && x.CanRegister)?
+                .Select(Mapper.Map<EventModel>);
+        }
+
         private void ValidateEventExists(int id)
         {
             if (!_repository.Exists(id))

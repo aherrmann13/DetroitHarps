@@ -25,7 +25,8 @@ namespace DetroitHarps.Business.Test.Mapping
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now,
                 Title = Guid.NewGuid().ToString(),
-                Description = Guid.NewGuid().ToString()
+                Description = Guid.NewGuid().ToString(),
+                CanRegister = true
             };
 
             var eventEntity = Mapper.Map<Event>(eventModel);
@@ -34,6 +35,7 @@ namespace DetroitHarps.Business.Test.Mapping
             Assert.Equal(eventModel.EndDate, eventEntity.EndDate);
             Assert.Equal(eventModel.Title, eventEntity.Title);
             Assert.Equal(eventModel.Description, eventEntity.Description);
+            Assert.Equal(eventModel.CanRegister, eventEntity.CanRegister);
         }
 
         [Fact]
@@ -45,7 +47,8 @@ namespace DetroitHarps.Business.Test.Mapping
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now,
                 Title = Guid.NewGuid().ToString(),
-                Description = Guid.NewGuid().ToString()
+                Description = Guid.NewGuid().ToString(),
+                CanRegister = true
             };
 
             var eventEntity = Mapper.Map<Event>(eventModel);
@@ -55,6 +58,7 @@ namespace DetroitHarps.Business.Test.Mapping
             Assert.Equal(eventModel.EndDate, eventEntity.EndDate);
             Assert.Equal(eventModel.Title, eventEntity.Title);
             Assert.Equal(eventModel.Description, eventEntity.Description);
+            Assert.Equal(eventModel.CanRegister, eventEntity.CanRegister);
         }
 
         [Fact]
@@ -66,7 +70,8 @@ namespace DetroitHarps.Business.Test.Mapping
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now,
                 Title = Guid.NewGuid().ToString(),
-                Description = Guid.NewGuid().ToString()
+                Description = Guid.NewGuid().ToString(),
+                CanRegister = true
             };
 
             var eventModel = Mapper.Map<EventModel>(eventEntity);
@@ -76,6 +81,7 @@ namespace DetroitHarps.Business.Test.Mapping
             Assert.Equal(eventEntity.EndDate, eventModel.EndDate);
             Assert.Equal(eventEntity.Title, eventModel.Title);
             Assert.Equal(eventEntity.Description, eventModel.Description);
+            Assert.Equal(eventEntity.CanRegister, eventModel.CanRegister);
         }
     }
 }

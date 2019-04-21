@@ -64,5 +64,14 @@ namespace DetroitHarps.Api.Controllers
             var result = _scheduleManager.GetUpcoming(until);
             return Ok(result);
         }
+
+        [AllowAnonymous]
+        [HttpGet("GetRegistration")]
+        [SwaggerOperation(OperationId = "GetRegistrationEvents")]
+        public ActionResult<IEnumerable<EventModel>> GetUpcomingRegistrationEvents()
+        {
+            var result = _scheduleManager.GetUpcomingRegistrationEvents();
+            return Ok(result);
+        }
     }
 }

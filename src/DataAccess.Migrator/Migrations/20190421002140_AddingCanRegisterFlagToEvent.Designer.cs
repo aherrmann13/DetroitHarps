@@ -3,15 +3,17 @@ using System;
 using DetroitHarps.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DetroitHarps.DataAccess.Migrator.Migrations
 {
     [DbContext(typeof(DetroitHarpsDbContext))]
-    partial class DetroitHarpsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190421002140_AddingCanRegisterFlagToEvent")]
+    partial class AddingCanRegisterFlagToEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
