@@ -1,0 +1,14 @@
+.footer-desktop {
+    @media (max-width: 800px) {
+        display: none
+    }
+    display: flex;
+    padding: 5px
+}
+.footer-mobile {
+    @media (min-width: 799px) {
+        display: none
+    }
+    display: flex;
+    padding: 5px
+}
