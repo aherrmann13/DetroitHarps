@@ -1,4 +1,4 @@
-namespace DetroitHarps.Business.Test
+namespace DetroitHarps.Business.Test.Schedule
 {
     using System;
     using System.Collections.Generic;

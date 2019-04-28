@@ -1,7 +1,8 @@
-namespace DetroitHarps.Business.Contact.Test
+namespace DetroitHarps.Business.Test.Contact
 {
     using System;
     using AutoMapper;
+    using DetroitHarps.Business.Contact;
     using DetroitHarps.Business.Contact.Entities;
     using DetroitHarps.Business.Contact.Models;
     using Xunit;

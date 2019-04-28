@@ -1,4 +1,4 @@
-namespace DetroitHarps.Business.Test
+namespace DetroitHarps.Business.Test.Photo
 {
     using System;
     using System.Collections.Generic;
