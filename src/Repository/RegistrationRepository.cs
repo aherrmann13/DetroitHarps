@@ -23,6 +23,7 @@ namespace DetroitHarps.Repository
                 .Include(x => x.Parent)
                 .Include(x => x.ContactInformation)
                 .Include(x => x.PaymentInformation)
-                .Include(x => x.Children);
+                .Include(x => x.Children)
+                    .ThenInclude(x => x.Events);
     }
 }
