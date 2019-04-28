@@ -41,6 +41,15 @@
         {{getErrorMessage(formGroup.controls.endTime)}}
       </mat-error>
     </mat-form-field>
+    
+    <mat-checkbox
+      [(ngModel)]='canRegisterChecked'
+      [ngModelOptions]='{standalone: true}'
+      color='primary'>
+      Require registration for this event
+    </mat-checkbox>
+    <br/>
+    <br/>
 
     <mat-form-field class='full-width-input'>
         <textarea matInput formControlName='description' placeholder='Description'></textarea>

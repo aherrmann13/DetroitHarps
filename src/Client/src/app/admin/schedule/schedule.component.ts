@@ -18,7 +18,7 @@ import { DeletePromptDialogComponent } from '../delete-prompt/delete-prompt.comp
 export class ScheduleComponent implements OnInit {
   private _events: Array<EventModel>;
 
-  columnsToDisplay = ['title', 'startDate', 'endDate', 'edit' ];
+  columnsToDisplay = ['title', 'startDate', 'endDate', 'canRegister', 'edit' ];
   dataSource = new MatTableDataSource<EventModel>();
 
   items = [{

@@ -28,6 +28,7 @@ export class ScheduleModalDialogComponent implements OnInit {
   loading = false;
   header: string;
   formGroup: FormGroup;
+  canRegisterChecked = false;
 
   constructor(
     private _dialogRef: MatDialogRef<ScheduleModalDialogComponent>,
@@ -62,6 +63,8 @@ export class ScheduleModalDialogComponent implements OnInit {
       endTime: [ endTime, formMatchValidator(this._timeRegex)],
       description: [description]
     });
+
+    this.canRegisterChecked = this._event ? this._event.canRegister : false;
   }
 
   onAcceptClick(): void {
@@ -111,7 +114,8 @@ export class ScheduleModalDialogComponent implements OnInit {
       endDate: this.getDate(
         this.formGroup.controls.endDate.value,
         this.formGroup.controls.endTime.value),
-      description: this.formGroup.controls.description.value
+      description: this.formGroup.controls.description.value,
+      canRegister: this.canRegisterChecked
     });
   }
 

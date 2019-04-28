@@ -1284,6 +1284,58 @@ export class Client extends BaseClient {
         }
         return Observable.of<EventModel[]>(<any>null);
     }
+
+    /**
+     * @return Success
+     */
+    getRegistrationEvents(): Observable<EventModel[]> {
+        let url_ = this.baseUrl + "/Schedule/GetRegistration";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processGetRegistrationEvents(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processGetRegistrationEvents(<any>r));
+                } catch (e) {
+                    return <Observable<EventModel[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<EventModel[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetRegistrationEvents(response: Response): Observable<EventModel[]> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(EventModel.fromJS(item));
+            }
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<EventModel[]>(<any>null);
+    }
 }
 
 export class ClientErrorModel implements IClientErrorModel {
@@ -1728,6 +1780,7 @@ export class RegisterChildModel implements IRegisterChildModel {
     gender: RegisterChildModelGender;
     dateOfBirth: Date;
     shirtSize?: string;
+    events?: RegisterChildEventModel[];
 
     constructor(data?: IRegisterChildModel) {
         if (data) {
@@ -1745,6 +1798,11 @@ export class RegisterChildModel implements IRegisterChildModel {
             this.gender = data["gender"];
             this.dateOfBirth = data["dateOfBirth"] ? new Date(data["dateOfBirth"].toString()) : <any>undefined;
             this.shirtSize = data["shirtSize"];
+            if (data["events"] && data["events"].constructor === Array) {
+                this.events = [];
+                for (let item of data["events"])
+                    this.events.push(RegisterChildEventModel.fromJS(item));
+            }
         }
     }
 
@@ -1762,6 +1820,11 @@ export class RegisterChildModel implements IRegisterChildModel {
         data["gender"] = this.gender;
         data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
         data["shirtSize"] = this.shirtSize;
+        if (this.events && this.events.constructor === Array) {
+            data["events"] = [];
+            for (let item of this.events)
+                data["events"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -1772,6 +1835,47 @@ export interface IRegisterChildModel {
     gender: RegisterChildModelGender;
     dateOfBirth: Date;
     shirtSize?: string;
+    events?: RegisterChildEventModel[];
+}
+
+export class RegisterChildEventModel implements IRegisterChildEventModel {
+    answer: RegisterChildEventModelAnswer;
+    eventId: number;
+
+    constructor(data?: IRegisterChildEventModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.answer = data["answer"];
+            this.eventId = data["eventId"];
+        }
+    }
+
+    static fromJS(data: any): RegisterChildEventModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterChildEventModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["answer"] = this.answer;
+        data["eventId"] = this.eventId;
+        return data; 
+    }
+}
+
+export interface IRegisterChildEventModel {
+    answer: RegisterChildEventModelAnswer;
+    eventId: number;
 }
 
 export class RegisteredParentModel implements IRegisteredParentModel {
@@ -1835,6 +1939,7 @@ export class RegisteredChildModel implements IRegisteredChildModel {
     emailAddress?: string;
     dateOfBirth: Date;
     shirtSize?: string;
+    events?: RegisteredChildEventModel[];
 
     constructor(data?: IRegisteredChildModel) {
         if (data) {
@@ -1855,6 +1960,11 @@ export class RegisteredChildModel implements IRegisteredChildModel {
             this.emailAddress = data["emailAddress"];
             this.dateOfBirth = data["dateOfBirth"] ? new Date(data["dateOfBirth"].toString()) : <any>undefined;
             this.shirtSize = data["shirtSize"];
+            if (data["events"] && data["events"].constructor === Array) {
+                this.events = [];
+                for (let item of data["events"])
+                    this.events.push(RegisteredChildEventModel.fromJS(item));
+            }
         }
     }
 
@@ -1875,6 +1985,11 @@ export class RegisteredChildModel implements IRegisteredChildModel {
         data["emailAddress"] = this.emailAddress;
         data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
         data["shirtSize"] = this.shirtSize;
+        if (this.events && this.events.constructor === Array) {
+            data["events"] = [];
+            for (let item of this.events)
+                data["events"].push(item.toJSON());
+        }
         return data; 
     }
 }
@@ -1888,6 +2003,47 @@ export interface IRegisteredChildModel {
     emailAddress?: string;
     dateOfBirth: Date;
     shirtSize?: string;
+    events?: RegisteredChildEventModel[];
+}
+
+export class RegisteredChildEventModel implements IRegisteredChildEventModel {
+    answer: RegisteredChildEventModelAnswer;
+    eventId: number;
+
+    constructor(data?: IRegisteredChildEventModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.answer = data["answer"];
+            this.eventId = data["eventId"];
+        }
+    }
+
+    static fromJS(data: any): RegisteredChildEventModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisteredChildEventModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["answer"] = this.answer;
+        data["eventId"] = this.eventId;
+        return data; 
+    }
+}
+
+export interface IRegisteredChildEventModel {
+    answer: RegisteredChildEventModelAnswer;
+    eventId: number;
 }
 
 export class EventCreateModel implements IEventCreateModel {
@@ -1895,6 +2051,7 @@ export class EventCreateModel implements IEventCreateModel {
     endDate?: Date;
     title?: string;
     description?: string;
+    canRegister: boolean;
 
     constructor(data?: IEventCreateModel) {
         if (data) {
@@ -1911,6 +2068,7 @@ export class EventCreateModel implements IEventCreateModel {
             this.endDate = data["endDate"] ? new Date(data["endDate"].toString()) : <any>undefined;
             this.title = data["title"];
             this.description = data["description"];
+            this.canRegister = data["canRegister"];
         }
     }
 
@@ -1927,6 +2085,7 @@ export class EventCreateModel implements IEventCreateModel {
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
         data["title"] = this.title;
         data["description"] = this.description;
+        data["canRegister"] = this.canRegister;
         return data; 
     }
 }
@@ -1936,6 +2095,7 @@ export interface IEventCreateModel {
     endDate?: Date;
     title?: string;
     description?: string;
+    canRegister: boolean;
 }
 
 export class EventModel implements IEventModel {
@@ -1944,6 +2104,7 @@ export class EventModel implements IEventModel {
     endDate?: Date;
     title?: string;
     description?: string;
+    canRegister: boolean;
 
     constructor(data?: IEventModel) {
         if (data) {
@@ -1961,6 +2122,7 @@ export class EventModel implements IEventModel {
             this.endDate = data["endDate"] ? new Date(data["endDate"].toString()) : <any>undefined;
             this.title = data["title"];
             this.description = data["description"];
+            this.canRegister = data["canRegister"];
         }
     }
 
@@ -1978,6 +2140,7 @@ export class EventModel implements IEventModel {
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
         data["title"] = this.title;
         data["description"] = this.description;
+        data["canRegister"] = this.canRegister;
         return data; 
     }
 }
@@ -1988,6 +2151,7 @@ export interface IEventModel {
     endDate?: Date;
     title?: string;
     description?: string;
+    canRegister: boolean;
 }
 
 export enum RegisterChildModelGender {
@@ -1995,9 +2159,21 @@ export enum RegisterChildModelGender {
     Female = <any>"female", 
 }
 
+export enum RegisterChildEventModelAnswer {
+    No = <any>"no", 
+    Yes = <any>"yes", 
+    Maybe = <any>"maybe", 
+}
+
 export enum RegisteredChildModelGender {
     Male = <any>"male", 
     Female = <any>"female", 
+}
+
+export enum RegisteredChildEventModelAnswer {
+    No = <any>"no", 
+    Yes = <any>"yes", 
+    Maybe = <any>"maybe", 
 }
 
 export interface FileParameter {

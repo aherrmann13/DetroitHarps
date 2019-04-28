@@ -16,6 +16,13 @@
         <mat-cell *matCellDef="let event"> {{event.endDate | date:'short'}} </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="canRegister">
+        <mat-header-cell *matHeaderCellDef> Require Registration </mat-header-cell>
+        <mat-cell *matCellDef="let event">
+            <mat-icon *ngIf="event.canRegister">done</mat-icon>
+        </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="edit">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
         <mat-cell *matCellDef="let event">
