@@ -28,7 +28,7 @@ namespace DetroitHarps.DataAccess.Test
 
             var types = _dbContext.Model.GetEntityTypes();
 
-            Assert.Equal(11, types.Count());
+            Assert.Equal(13, types.Count());
         }
 
         [Fact]

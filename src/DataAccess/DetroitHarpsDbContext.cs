@@ -45,6 +45,7 @@ namespace DetroitHarps.DataAccess
                 .AddTransient<IEntityBuilder, PhotoEntityBuilder>()
                 .AddTransient<IEntityBuilder, PhotoGroupEntityBuilder>()
                 .AddTransient<IEntityBuilder, RegistrationChildEntityBuilder>()
+                .AddTransient<IEntityBuilder, RegistrationChildEventEntityBuilder>()
                 .AddTransient<IEntityBuilder, RegistrationEntityBuilder>();
     }
 }

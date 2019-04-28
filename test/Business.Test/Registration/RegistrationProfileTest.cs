@@ -8,6 +8,7 @@ namespace DetroitHarps.Business.Test.Registration
     using DetroitHarps.Business.Registration.DataTypes;
     using DetroitHarps.Business.Registration.Entities;
     using DetroitHarps.Business.Registration.Models;
+    using DetroitHarps.Business.Schedule.Entities;
     using Xunit;
 
     public class RegistrationProfileTest
@@ -47,7 +48,15 @@ namespace DetroitHarps.Business.Test.Registration
                         LastName = Guid.NewGuid().ToString(),
                         Gender = Gender.Female,
                         DateOfBirth = DateTimeOffset.Now,
-                        ShirtSize = Guid.NewGuid().ToString()
+                        ShirtSize = Guid.NewGuid().ToString(),
+                        Events = new List<RegisterChildEventModel>
+                        {
+                            new RegisterChildEventModel
+                            {
+                                Answer = Answer.Yes,
+                                EventId = 2
+                            }
+                        }
                     },
                     new RegisterChildModel
                     {
@@ -55,7 +64,20 @@ namespace DetroitHarps.Business.Test.Registration
                         LastName = Guid.NewGuid().ToString(),
                         Gender = Gender.Female,
                         DateOfBirth = DateTimeOffset.Now,
-                        ShirtSize = Guid.NewGuid().ToString()
+                        ShirtSize = Guid.NewGuid().ToString(),
+                        Events = new List<RegisterChildEventModel>
+                        {
+                            new RegisterChildEventModel
+                            {
+                                Answer = Answer.No,
+                                EventId = 2
+                            },
+                            new RegisterChildEventModel
+                            {
+                                Answer = Answer.Maybe,
+                                EventId = 2
+                            }
+                        }
                     }
                 }
             };
@@ -79,12 +101,23 @@ namespace DetroitHarps.Business.Test.Registration
             Assert.Equal(registerModel.Children[0].Gender, registration.Children[0].Gender);
             Assert.Equal(registerModel.Children[0].DateOfBirth.Date, registration.Children[0].DateOfBirth.Date);
             Assert.Equal(registerModel.Children[0].ShirtSize, registration.Children[0].ShirtSize);
+            Assert.Equal(registerModel.Children[0].Events.Count, registration.Children[0].Events.Count);
+            Assert.Equal(registerModel.Children[0].Events[0].Answer, registration.Children[0].Events[0].Answer);
+            Assert.Equal(registerModel.Children[0].Events[0].EventId, registration.Children[0].Events[0].EventId);
+            Assert.Null(registration.Children[0].Events[0].EventSnapshot);
 
             Assert.Equal(registerModel.Children[1].FirstName, registration.Children[1].FirstName);
             Assert.Equal(registerModel.Children[1].LastName, registration.Children[1].LastName);
             Assert.Equal(registerModel.Children[1].Gender, registration.Children[1].Gender);
             Assert.Equal(registerModel.Children[1].DateOfBirth.Date, registration.Children[1].DateOfBirth.Date);
             Assert.Equal(registerModel.Children[1].ShirtSize, registration.Children[1].ShirtSize);
+            Assert.Equal(registerModel.Children[1].Events.Count, registration.Children[1].Events.Count);
+            Assert.Equal(registerModel.Children[1].Events[0].Answer, registration.Children[1].Events[0].Answer);
+            Assert.Equal(registerModel.Children[1].Events[0].EventId, registration.Children[1].Events[0].EventId);
+            Assert.Null(registration.Children[1].Events[0].EventSnapshot);
+            Assert.Equal(registerModel.Children[1].Events[1].Answer, registration.Children[1].Events[1].Answer);
+            Assert.Equal(registerModel.Children[1].Events[1].EventId, registration.Children[1].Events[1].EventId);
+            Assert.Null(registration.Children[1].Events[1].EventSnapshot);
 
             Assert.Equal(default(double), registration.PaymentInformation.Amount);
             Assert.Equal(
@@ -131,7 +164,22 @@ namespace DetroitHarps.Business.Test.Registration
                 LastName = Guid.NewGuid().ToString(),
                 Gender = Gender.Female,
                 DateOfBirth = DateTime.Now,
-                ShirtSize = Guid.NewGuid().ToString()
+                ShirtSize = Guid.NewGuid().ToString(),
+                Events = new List<RegistrationChildEvent>
+                {
+                    new RegistrationChildEvent
+                    {
+                        Answer = Answer.Yes,
+                        EventId = 1,
+                        EventSnapshot = new RegistrationChildEventSnapshot()
+                    },
+                    new RegistrationChildEvent
+                    {
+                        Answer = Answer.No,
+                        EventId = 2,
+                        EventSnapshot = new RegistrationChildEventSnapshot()
+                    }
+                }
             };
 
             var registeredChildModel = Mapper.Map<RegisteredChildModel>(registrationChild);
@@ -142,6 +190,11 @@ namespace DetroitHarps.Business.Test.Registration
             Assert.Equal(registrationChild.DateOfBirth.Date, registeredChildModel.DateOfBirth.Date);
             Assert.Equal(registrationChild.ShirtSize, registeredChildModel.ShirtSize);
             Assert.Null(registeredChildModel.EmailAddress);
+            Assert.Equal(registrationChild.Events.Count, registeredChildModel.Events.Count);
+            Assert.Equal(registrationChild.Events[0].Answer, registeredChildModel.Events[0].Answer);
+            Assert.Equal(registrationChild.Events[0].EventId, registeredChildModel.Events[0].EventId);
+            Assert.Equal(registrationChild.Events[1].Answer, registeredChildModel.Events[1].Answer);
+            Assert.Equal(registrationChild.Events[1].EventId, registeredChildModel.Events[1].EventId);
         }
 
         [Fact]
@@ -166,7 +219,7 @@ namespace DetroitHarps.Business.Test.Registration
                         LastName = Guid.NewGuid().ToString(),
                         Gender = Gender.Female,
                         DateOfBirth = DateTime.Now,
-                        ShirtSize = Guid.NewGuid().ToString()
+                        ShirtSize = Guid.NewGuid().ToString(),
                     },
                     new RegistrationChild
                     {
@@ -205,6 +258,28 @@ namespace DetroitHarps.Business.Test.Registration
                 Assert.Equal(x.ParentFirstName, registration.Parent.FirstName);
                 Assert.Equal(x.ParentLastName, registration.Parent.LastName);
             });
+        }
+
+        [Fact]
+        public void EventToEventSnapshotMapTest()
+        {
+            var eventEntity = new Event
+            {
+                Id = 1,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
+                Title = Guid.NewGuid().ToString(),
+                Description = Guid.NewGuid().ToString(),
+                CanRegister = true
+            };
+
+            var eventSnapshotEntity = Mapper.Map<RegistrationChildEventSnapshot>(eventEntity);
+
+            Assert.Equal(eventEntity.StartDate, eventSnapshotEntity.StartDate);
+            Assert.Equal(eventEntity.EndDate, eventSnapshotEntity.EndDate);
+            Assert.Equal(eventEntity.Title, eventSnapshotEntity.Title);
+            Assert.Equal(eventEntity.Description, eventSnapshotEntity.Description);
+            Assert.Equal(eventEntity.CanRegister, eventSnapshotEntity.CanRegister);
         }
     }
 }

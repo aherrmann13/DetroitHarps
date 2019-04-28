@@ -13,13 +13,19 @@ namespace DetroitHarps.Business.Registration
     public class RegistrationManager : IRegistrationManager
     {
         private readonly IRegistrationRepository _repository;
+        private readonly IEventSnapshotProvider _eventSnapshotProvider;
         private readonly ILogger<RegistrationManager> _logger;
 
-        public RegistrationManager(IRegistrationRepository repository, ILogger<RegistrationManager> logger)
+        public RegistrationManager(
+            IRegistrationRepository repository,
+            IEventSnapshotProvider eventSnapshotProvider,
+            ILogger<RegistrationManager> logger)
         {
             Guard.NotNull(repository, nameof(repository));
+            Guard.NotNull(eventSnapshotProvider, nameof(eventSnapshotProvider));
             Guard.NotNull(logger, nameof(logger));
 
+            _eventSnapshotProvider = eventSnapshotProvider;
             _repository = repository;
             _logger = logger;
         }
@@ -30,6 +36,11 @@ namespace DetroitHarps.Business.Registration
             _logger.LogInformation($"new registration: {JsonConvert.SerializeObject(model)}");
 
             var entity = Mapper.Map<Registration>(model);
+            entity.Children
+                .SelectMany(x => x.Events)
+                .ToList()
+                .ForEach(x =>
+                    x.EventSnapshot = _eventSnapshotProvider.GetSnapshot(x.EventId));
 
             _repository.Create(entity);
         }

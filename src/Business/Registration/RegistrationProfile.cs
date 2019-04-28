@@ -5,6 +5,7 @@ namespace DetroitHarps.Business.Registration
     using AutoMapper;
     using DetroitHarps.Business.Registration.Entities;
     using DetroitHarps.Business.Registration.Models;
+    using DetroitHarps.Business.Schedule.Entities;
 
     public class RegistrationProfile : Profile
     {
@@ -63,6 +64,15 @@ namespace DetroitHarps.Business.Registration
                 .ForMember(
                     dest => dest.ChildCount,
                     opt => opt.MapFrom(src => src.Children.Count));
+
+            CreateMap<RegisterChildEventModel, RegistrationChildEvent>()
+                .ForMember(
+                    dest => dest.EventSnapshot,
+                    opt => opt.Ignore());
+
+            CreateMap<RegistrationChildEvent, RegisteredChildEventModel>();
+
+            CreateMap<Event, RegistrationChildEventSnapshot>();
         }
 
         private class RegistrationChildConverter : ITypeConverter<Registration, IEnumerable<RegisteredChildModel>>

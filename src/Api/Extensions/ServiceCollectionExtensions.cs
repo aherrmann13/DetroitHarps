@@ -56,6 +56,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IRegistrationManager, RegistrationManager>();
             services.AddScoped<IScheduleManager, ScheduleManager>();
 
+            services.AddScoped<IEventSnapshotProvider, EventSnapshotProvider>();
+
             return services;
         }
 

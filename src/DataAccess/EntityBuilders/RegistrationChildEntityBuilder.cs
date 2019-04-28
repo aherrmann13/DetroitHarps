@@ -34,6 +34,8 @@ namespace DetroitHarps.DataAccess.EntityBuilders
             typeBuilder.Property(x => x.DateOfBirth).HasColumnType("date");
 
             typeBuilder.Property(x => x.ShirtSize).HasMaxLength(Limits.ShirtSizeLength);
+
+            typeBuilder.HasMany(x => x.Events);
         }
     }
 }
