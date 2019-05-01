@@ -38,6 +38,10 @@ export class RegisterComponent implements OnInit {
     private _router: Router,
     private _snackBar: MatSnackBar,
     private _client: Client) {}
+
+  get paymentType(): string {
+    return this.paymentInformation && this.paymentInformation.data ? this.paymentInformation.data.type : null;
+  }
   
   ngOnInit(): void {
     this._client.getRegistrationEvents()
