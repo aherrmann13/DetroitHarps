@@ -1,15 +1,15 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatStepper, MatSnackBar } from '@angular/material';
 
-import { Client, MessageModel } from '../../core/client/api.client';
+import { Client, MessageModel, EventModel, RegisterModel } from '../../core/client/api.client';
 import { ParentInformationComponent } from './forms/parent-information/parent-information.component';
 import { AddressInformationComponent } from './forms/address-information/address-information.component';
 import { ChildrenInformationComponent } from './forms/children-information/children-information.component';
+import { configuration } from '../../configuration';
+import { EventRegistrationComponent } from './forms/children-information/event-registration.component';
 import { CommentsComponent } from './forms/comments/comments.component';
 import { PaymentInformationComponent } from './forms/payment-information/payment-information.component';
-import { RegisterService } from './register.service';
 import { Router } from '@angular/router';
-import { configuration } from '../../configuration';
 
 
 @Component({
@@ -17,52 +17,38 @@ import { configuration } from '../../configuration';
   templateUrl: './register.component.html',
   styleUrls: [ './register.component.scss' ]
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   @ViewChild(ParentInformationComponent) parentInformation: ParentInformationComponent;
   @ViewChild(AddressInformationComponent) addressInformation: AddressInformationComponent;
   @ViewChild(ChildrenInformationComponent) childrenInformation: ChildrenInformationComponent;
+  @ViewChild(EventRegistrationComponent) eventRegistration: EventRegistrationComponent;
   @ViewChild(CommentsComponent) comments: CommentsComponent;
   @ViewChild(PaymentInformationComponent) paymentInformation: PaymentInformationComponent;
-
-  get parentInformationControl() {
-    return this.parentInformation ? this.parentInformation.formGroup : null;
-  }
-
-  get addressInformationControl() {
-    return this.addressInformation ? this.addressInformation.formGroup : null;
-  }
-
-  get childrenInformationControl() {
-    return this.childrenInformation ? this.childrenInformation.formArray : null;
-  }
-
-  get commentsControl() {
-    return this.comments ? this.comments.formGroup : null;
-  }
-
-  get paymentInformationControl() {
-    return this.paymentInformation ? this.paymentInformation.formGroup : null;
-  }
-
-  get paymentType(): string {
-    return this.paymentInformation && this.paymentInformation.data ? this.paymentInformation.data.type : null;
-  }
-
+  
   formIndex = 0;
+  
   isRegistering = false;
   isSendingComment = false;
   year = configuration.year;
 
+  events: Array<EventModel>;
+  registerModel: RegisterModel = new RegisterModel({});
+
   constructor(
     private _router: Router,
     private _snackBar: MatSnackBar,
-    private _client: Client,
-    private _registerService: RegisterService) {
-      this.registrationError = this.registrationError.bind(this);
-    }
+    private _client: Client) {}
+  
+  ngOnInit(): void {
+    this._client.getRegistrationEvents()
+      .subscribe(
+        data => this.eventRegistration.events = data
+      )
+  }
 
-  addChild(): void {
-    this.childrenInformation.addChild();
+  childCountChanged(change: number): void {
+    this.childrenInformation.childCount = change;
+    this.eventRegistration.childCount = change;
   }
 
   goBack(stepper: MatStepper): void {
@@ -90,23 +76,18 @@ export class RegisterComponent {
         this.registrationError
       );
     }
-
-    this._registerService.register(
-      this.parentInformation.data,
-      this.addressInformation.data,
-      this.childrenInformation.data,
-      this.paymentInformation.data
-    ).subscribe(
+    this._client.register(this.registerModel)
+      .subscribe(
       () => this.isRegistering = false,
-      this.registrationError
-    );
+      err => this.registrationError(err)
+      )
   }
-
+  
   private getMessage(): MessageModel {
     return new MessageModel({
-      firstName: this.parentInformation.data.parentFirstName,
-      lastName: this.parentInformation.data.parentLastName,
-      email: this.parentInformation.data.emailAddress,
+      firstName: this.registerModel.parent.firstName,
+      lastName: this.registerModel.parent.lastName,
+      email: this.registerModel.contactInformation.email,
       body: this.comments.data
     });  
   }

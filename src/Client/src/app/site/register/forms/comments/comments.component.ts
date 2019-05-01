@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { FormGroup, FormBuilder } from "@angular/forms";
+import { FormGroup, FormBuilder, AbstractControl } from "@angular/forms";
 
 @Component({
     selector: 'dh-register-comments',
@@ -13,6 +13,10 @@ export class CommentsComponent {
     get data(): string {
         return this.formGroup.value.comments
     }
+
+    get control(): AbstractControl {
+        return this.formGroup ? this.formGroup : null;
+    };
 
     constructor(formBuilder: FormBuilder) {
         // TODO: can this be moved out of ctor?

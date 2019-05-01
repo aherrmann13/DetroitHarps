@@ -26,10 +26,11 @@ import { PaymentInformationComponent } from './register/forms/payment-informatio
 import { CommentsComponent } from './register/forms/comments/comments.component';
 import { FinalStepComponent } from './register/forms/final-step/final-step.component';
 
-import { RegisterService } from './register/register.service'
 import { PhotoService } from './photos/photos.service';
 import { LoggerModule } from '../core/logger/logger.module';
 import { FooterComponent } from './footer/footer.component';
+import { EventRegistrationComponent } from './register/forms/children-information/event-registration.component';
+import { ChildCountSelectorComponent } from './register/forms/children-information/child-count-selector.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,9 @@ import { FooterComponent } from './footer/footer.component';
     ParentInformationComponent,
     AddressInformationComponent,
     ChildrenInformationComponent,
+    ChildCountSelectorComponent,
     PaymentInformationComponent,
+    EventRegistrationComponent,
     CommentsComponent,
     FinalStepComponent,
     FooterComponent
@@ -60,7 +63,6 @@ import { FooterComponent } from './footer/footer.component';
     LoggerModule
   ],
   providers: [
-    RegisterService,
     PhotoService,
     MatIconRegistry
   ]

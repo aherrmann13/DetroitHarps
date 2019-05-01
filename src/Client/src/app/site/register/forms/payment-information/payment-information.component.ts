@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, AbstractControl } from "@angular/forms";
 
 export interface PaymentInformationComponentData {
     type: string
@@ -17,6 +17,10 @@ export class PaymentInformationComponent {
     get data(): PaymentInformationComponentData {
         return { type: this.formGroup.value.paymentType }
     }
+
+    get control(): AbstractControl {
+        return this.formGroup ? this.formGroup : null;
+    };
 
     constructor(formBuilder: FormBuilder) {
         // TODO: can this be moved out of ctor?

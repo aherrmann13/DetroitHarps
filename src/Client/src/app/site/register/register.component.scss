@@ -26,3 +26,15 @@
         font-weight: bold;
     }
 }
+
+.registration-event-form {
+    .registration-event-title {
+        font-weight: 500;
+    }
+    .registration-event-radio-buttons {
+        .registration-event-answer-selector {
+            padding: 10px 10px 15px 0px;
+        }
+    }
+    padding-bottom: 30px;
+}

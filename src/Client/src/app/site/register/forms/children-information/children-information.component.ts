@@ -1,86 +1,78 @@
 import { Component } from "@angular/core";
-import { FormBuilder, Validators, FormArray } from "@angular/forms";
-import { MatSelectChange } from "@angular/material";
+import { FormBuilder, Validators, FormArray, AbstractControl } from "@angular/forms";
 
 import { configuration } from "../../../../configuration";
-
-export interface ChildrenInformationComponentData {
-    childFirstName: string,
-    childLastName: string,
-    childDob: Date,
-    childGender: ChildGender,
-    childShirtSize: string
-}
-
-export enum ChildGender {
-    Male = 0,
-    Female = 1
-}
+import { RegisterChildModel, RegisterChildModelGender } from "../../../../core/client/api.client";
+import { FormBase } from "../../form.base";
 
 @Component({
     selector: 'dh-register-children-information',
     templateUrl: './children-information.component.html',
     styleUrls: [ '../../register.component.scss' ]
 })
-export class ChildrenInformationComponent {
-    
-    formArray: FormArray;
+export class ChildrenInformationComponent extends FormBase {
     shirtSizes = configuration.shirtSizes;
-    numberOfChildrenSelector: Array<number> = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
-    private childFormProperties = {
-        childFirstName: ['', Validators.required],
-        childLastName: ['', Validators.required],
-        childDob: ['', Validators.required],
-        childGender: ['', Validators.required],
-        childShirtSize: ['', Validators.required]
-      }
+
+    male = RegisterChildModelGender.Male;
+    female = RegisterChildModelGender.Male;
+
+    formArray: FormArray;
+
+    constructor(formBuilder: FormBuilder) {
+        super(formBuilder)
+    }
 
     get maxDate(): Date {
         return new Date();
     }
 
-    get data(): Array<ChildrenInformationComponentData> {
-        // TODO: is this instant access every time it is called?
-        return this.formArray.controls.map(x => <ChildrenInformationComponentData>{
-            childFirstName: x.value.childFirstName,
-            childLastName: x.value.childLastName,
-            childDob: x.value.childDob,
-            childGender: x.value.childGender === 'male' ? ChildGender.Male : ChildGender.Female,
-            childShirtSize: x.value.childShirtSize
-        });
+    get control(): AbstractControl {
+        return this.formArray ? this.formArray : null;
     }
 
-    constructor(private _formBuilder: FormBuilder) {
-        // TODO: can this be moved out of ctor?
-        // based on this https://stackblitz.com/edit/angular-material-stepper-with-component-steps
-        // and based on https://stackoverflow.com/questions/48498966/angular-material-stepper-component-for-each-step?rq=1
-        this.formArray = new FormArray([ _formBuilder.group(this.childFormProperties) ]);
-    }
-
-    numberOfChildrenChanged(change: MatSelectChange): void {
-        const currentNumberOfChildren = this.formArray.length;
-        const newNumberOfChildren: number = change.value;
-        const difference = newNumberOfChildren - currentNumberOfChildren;
+    set childCount(count: number) {
+        const difference = count - this.formArray.controls.length;
 
         if(difference < 0) {
-            const childrenToRemove = difference * -1;
-            for(let i = 0; i < childrenToRemove; i++) {
-                this.removeChild();
+            for(let i = 0; i < difference * -1; i++) {
+                this.formArray.removeAt(this.formArray.length - 1);
             }
         } else {
-            const childrenToAdd = difference;
-            for(let i = 0; i < childrenToAdd; i++) {
-                this.addChild();
+            for(let i = 0; i < difference; i++) {
+                this.formArray.push(this.FormBuilder.group(this.formGroupProperties));
             }
         }
     }
 
-    addChild(): void {
-        this.formArray.push(
-          this._formBuilder.group(this.childFormProperties));
+    protected get formGroupProperties(): any{
+        return  {
+            childFirstName: ['', Validators.required],
+            childLastName: ['', Validators.required],
+            childDob: ['', Validators.required],
+            childGender: ['', Validators.required],
+            childShirtSize: ['', Validators.required]
+        };
     }
 
-    removeChild(): void {
-        this.formArray.removeAt(this.formArray.length - 1);
+    protected buildControl(): void {
+        this.formArray = new FormArray([])
+    }
+
+    protected updateModel(): void {
+        this.registration.children = this.formArray
+            .controls
+            .map((x, i) => {
+                const existingData = this.registration && this.registration.children ?
+                    this.registration.children[i] :
+                    null;
+                return new RegisterChildModel({
+                    ...existingData,
+                    firstName: x.value.childFirstName,
+                    lastName: x.value.childLastName,
+                    dateOfBirth: x.value.childDob,
+                    gender: x.value.childGender,
+                    shirtSize: x.value.childShirtSize
+                })
+            });
     }
 }

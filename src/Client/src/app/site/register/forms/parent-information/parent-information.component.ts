@@ -1,41 +1,48 @@
 import { Component } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { FormGroup, AbstractControl, Validators, FormBuilder } from "@angular/forms";
 
-export interface ParentInformationComponentData {
-    parentFirstName: string,
-    parentLastName: string,
-    phoneNumber: string,
-    emailAddress: string
-}
+import { FormBase } from "../../form.base";
+import { 
+    RegisterParentModel,
+    RegisterContactInformationModel
+} from "../../../../core/client/api.client";
 
 @Component({
     selector: 'dh-register-parent-information',
     templateUrl: 'parent-information.component.html',
     styleUrls: [ '../../register.component.scss' ]
 })
-export class ParentInformationComponent {
-    
+export class ParentInformationComponent extends FormBase {
     formGroup: FormGroup;
 
-    get data(): ParentInformationComponentData {
-        // TODO: is this instant access every time it is called?
-        return {
-            parentFirstName: this.formGroup.value.parentFirstName,
-            parentLastName: this.formGroup.value.parentLastName,
-            phoneNumber: this.formGroup.value.phoneNumber,
-            emailAddress: this.formGroup.value.emailAddress,
-        }
+    constructor(formBuilder: FormBuilder) {
+        super(formBuilder)
     }
 
-    constructor(formBuilder: FormBuilder) {
-        // TODO: can this be moved out of ctor?
-        // based on this https://stackblitz.com/edit/angular-material-stepper-with-component-steps
-        // and based on https://stackoverflow.com/questions/48498966/angular-material-stepper-component-for-each-step?rq=1
-        this.formGroup = formBuilder.group({
+    get control(): AbstractControl {
+        return this.formGroup ? this.formGroup : null;
+    };
+
+    protected buildControl(): void {
+        this.formGroup = this.FormBuilder.group({
             parentFirstName: ['', Validators.required],
             parentLastName: ['', Validators.required],
             phoneNumber: ['', Validators.required],
             emailAddress: ['', Validators.email]
-          });
+        })
+    }
+
+    protected updateModel(): void {
+        this.registration.parent = new RegisterParentModel({
+            firstName: this.formGroup.value.parentFirstName,
+            lastName: this.formGroup.value.parentLastName
+        });
+        this.registration.contactInformation = new RegisterContactInformationModel(
+            {
+                ...this.registration.contactInformation,
+                email: this.formGroup.value.emailAddress,
+                phoneNumber: this.formGroup.value.phoneNumber
+            }
+        )
     }
 }
