@@ -57,5 +57,33 @@ namespace Tools.Test.Csv
             _csvFormatterMock.Verify(x =>
                 x.Format(It.Is<ICollection<string>>(y => y.Equals(collection))));
         }
+
+        [Fact]
+        public void PassesPivotToCsvFormatterWhenUsedTest()
+        {
+            var csv = GuidString;
+            var collection = new List<string>();
+            var pivot = new ListPivot<string, string>(
+                "test",
+                x => new List<string>(),
+                x => x,
+                x => x);
+
+            // using string for the generic type
+            _csvFormatterMock
+                .Setup(x =>
+                    x.Format(
+                        It.IsAny<ICollection<string>>(),
+                    It.IsAny<ListPivot<string, string>>()))
+                .Returns(csv);
+
+            var returned = _csvWriter.GetAsCsv(collection, pivot);
+
+            Assert.Equal(Encoding.UTF8.GetBytes(csv), returned);
+            _csvFormatterMock.Verify(x =>
+                x.Format(
+                    It.Is<ICollection<string>>(y => y.Equals(collection)),
+                    It.Is<ListPivot<string, string>>(y => y.Equals(pivot))));
+        }
     }
 }

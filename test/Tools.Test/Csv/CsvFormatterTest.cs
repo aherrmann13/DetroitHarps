@@ -251,6 +251,79 @@ namespace Tools.Test.Csv
         }
 
         [Fact]
+        public void CorrectlyFormatsWithListPivotAndPropertyListTest()
+        {
+            var items = new List<TestObjectWithList>
+            {
+                new TestObjectWithList
+                {
+                    StringField = "stringField",
+                    IntField = 1,
+                    ListField = new List<TestObject>
+                    {
+                        new TestObject
+                        {
+                            StringField = "testheader",
+                            IntField = 1
+                        }
+                    }
+                }
+            };
+
+            var pivot = new ListPivot<TestObjectWithList, TestObject>(
+                "test",
+                x => x.ListField,
+                x => x.StringField,
+                x => x.IntField.ToString());
+
+            var propertyNames = new List<string>
+            {
+                nameof(TestObject.StringField)
+            };
+
+            var csvString = _formatter.Format(items, propertyNames, pivot);
+
+            var expectedString =
+                $"{nameof(TestObject.StringField)},{items[0].ListField[0].StringField}{Environment.NewLine}" +
+                $"{items[0].StringField},{items[0].ListField[0].IntField}{Environment.NewLine}";
+            Assert.Equal(expectedString, csvString);
+        }
+
+        [Fact]
+        public void CorrectlyFormatsWithListPivotTest()
+        {
+            var items = new List<TestObjectWithList>
+            {
+                new TestObjectWithList
+                {
+                    StringField = "stringField",
+                    IntField = 1,
+                    ListField = new List<TestObject>
+                    {
+                        new TestObject
+                        {
+                            StringField = "testheader",
+                            IntField = 1
+                        }
+                    }
+                }
+            };
+
+            var pivot = new ListPivot<TestObjectWithList, TestObject>(
+                nameof(TestObjectWithList.ListField),
+                x => x.ListField,
+                x => x.StringField,
+                x => x.IntField.ToString());
+
+            var csvString = _formatter.Format(items, pivot);
+
+            var expectedString =
+                $"{nameof(TestObject.StringField)},{nameof(TestObject.IntField)},{items[0].ListField[0].StringField}{Environment.NewLine}" +
+                $"{items[0].StringField},{items[0].IntField},{items[0].ListField[0].IntField}{Environment.NewLine}";
+            Assert.Equal(expectedString, csvString);
+        }
+
+        [Fact]
         public void ThrowsOnNonExistantPropertyNameTest()
         {
             var items = new List<TestObject>
@@ -272,7 +345,7 @@ namespace Tools.Test.Csv
             Assert.Equal(expectedMessage, exception.Message);
         }
 
-                [Fact]
+        [Fact]
         public void ThrowsOnNullItemListTest()
         {
             Assert.Throws<ArgumentNullException>(() =>
