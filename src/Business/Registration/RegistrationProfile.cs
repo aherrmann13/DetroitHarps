@@ -72,6 +72,8 @@ namespace DetroitHarps.Business.Registration
 
             CreateMap<RegistrationChildEvent, RegisteredChildEventModel>();
 
+            CreateMap<RegistrationChildEventSnapshot, RegisteredChildEventSnapshotModel>();
+
             CreateMap<Event, RegistrationChildEventSnapshot>();
         }
 

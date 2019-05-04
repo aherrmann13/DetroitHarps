@@ -24,6 +24,7 @@ namespace DetroitHarps.Repository
                 .Include(x => x.ContactInformation)
                 .Include(x => x.PaymentInformation)
                 .Include(x => x.Children)
-                    .ThenInclude(x => x.Events);
+                    .ThenInclude(x => x.Events)
+                        .ThenInclude(x => x.EventSnapshot);
     }
 }

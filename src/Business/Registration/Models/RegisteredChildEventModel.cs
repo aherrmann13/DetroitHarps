@@ -7,5 +7,7 @@ namespace DetroitHarps.Business.Registration.Models
         public Answer Answer { get; set; }
 
         public int EventId { get; set; }
+
+        public RegisteredChildEventSnapshotModel EventSnapshot { get; set; }
     }
 }

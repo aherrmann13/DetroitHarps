@@ -21,7 +21,7 @@ namespace DetroitHarps.Business.Test.Registration
         }
 
         [Fact]
-        public void RegistrationMapTest()
+        public void RegisterModelToRegistrationMapTest()
         {
             var registerModel = new RegisterModel
             {
@@ -129,7 +129,7 @@ namespace DetroitHarps.Business.Test.Registration
         }
 
         [Fact]
-        public void RegisteredParentModelMapTest()
+        public void RegistrationParentToRegisteredParentModelMapTest()
         {
             var registration = new Registration
             {
@@ -156,7 +156,7 @@ namespace DetroitHarps.Business.Test.Registration
         }
 
         [Fact]
-        public void RegisteredChildModelMapTest()
+        public void RegistrationChildToRegisteredChildModelMapTest()
         {
             var registrationChild = new RegistrationChild
             {
@@ -171,13 +171,27 @@ namespace DetroitHarps.Business.Test.Registration
                     {
                         Answer = Answer.Yes,
                         EventId = 1,
-                        EventSnapshot = new RegistrationChildEventSnapshot()
+                        EventSnapshot = new RegistrationChildEventSnapshot
+                        {
+                            StartDate = DateTime.Now,
+                            EndDate = DateTime.Now,
+                            Title = Guid.NewGuid().ToString(),
+                            Description = Guid.NewGuid().ToString(),
+                            CanRegister = true
+                        }
                     },
                     new RegistrationChildEvent
                     {
                         Answer = Answer.No,
                         EventId = 2,
-                        EventSnapshot = new RegistrationChildEventSnapshot()
+                        EventSnapshot = new RegistrationChildEventSnapshot
+                        {
+                            StartDate = DateTime.Now,
+                            EndDate = DateTime.Now,
+                            Title = Guid.NewGuid().ToString(),
+                            Description = Guid.NewGuid().ToString(),
+                            CanRegister = true
+                        }
                     }
                 }
             };
@@ -193,12 +207,36 @@ namespace DetroitHarps.Business.Test.Registration
             Assert.Equal(registrationChild.Events.Count, registeredChildModel.Events.Count);
             Assert.Equal(registrationChild.Events[0].Answer, registeredChildModel.Events[0].Answer);
             Assert.Equal(registrationChild.Events[0].EventId, registeredChildModel.Events[0].EventId);
+            Assert.Equal(
+                registrationChild.Events[0].EventSnapshot.StartDate,
+                registeredChildModel.Events[0].EventSnapshot.StartDate);
+            Assert.Equal(
+                registrationChild.Events[0].EventSnapshot.EndDate,
+                registeredChildModel.Events[0].EventSnapshot.EndDate);
+            Assert.Equal(
+                registrationChild.Events[0].EventSnapshot.Title,
+                registeredChildModel.Events[0].EventSnapshot.Title);
+            Assert.Equal(
+                registrationChild.Events[0].EventSnapshot.Description,
+                registeredChildModel.Events[0].EventSnapshot.Description);
             Assert.Equal(registrationChild.Events[1].Answer, registeredChildModel.Events[1].Answer);
             Assert.Equal(registrationChild.Events[1].EventId, registeredChildModel.Events[1].EventId);
+            Assert.Equal(
+                registrationChild.Events[1].EventSnapshot.StartDate,
+                registeredChildModel.Events[1].EventSnapshot.StartDate);
+            Assert.Equal(
+                registrationChild.Events[1].EventSnapshot.EndDate,
+                registeredChildModel.Events[1].EventSnapshot.EndDate);
+            Assert.Equal(
+                registrationChild.Events[1].EventSnapshot.Title,
+                registeredChildModel.Events[1].EventSnapshot.Title);
+            Assert.Equal(
+                registrationChild.Events[1].EventSnapshot.Description,
+                registeredChildModel.Events[1].EventSnapshot.Description);
         }
 
         [Fact]
-        public void RegisteredChildModelListMapTest()
+        public void RegistrationChildListToRegisteredChildModelListMapTest()
         {
             var registration = new Registration
             {
