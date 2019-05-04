@@ -33,7 +33,7 @@
                 </mat-step>
                 <mat-step [stepControl]='paymentInformation.control'>
                     <ng-template matStepLabel>Payment Type</ng-template>
-                    <dh-register-payment-information></dh-register-payment-information>
+                    <dh-register-payment-information [registration]='registerModel'></dh-register-payment-information>
                 </mat-step>
                 <mat-step>
                     <ng-template matStepLabel>Done</ng-template>
@@ -49,4 +49,7 @@
             <button mat-raised-button color='primary' *ngIf='formIndex === 6' [routerLink]="['/schedule']">Season Schedule</button>
         </mat-card-actions>
     </mat-card>
-</div> 
+</div>
+<div *ngIf='isDev'>
+    {{ registerModel | json }}
+</div>

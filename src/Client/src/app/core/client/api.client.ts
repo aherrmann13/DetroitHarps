@@ -1625,6 +1625,7 @@ export interface IPhotoGroupModel {
 export class RegisterModel implements IRegisterModel {
     contactInformation?: RegisterContactInformationModel;
     parent?: RegisterParentModel;
+    payment?: RegisterPaymentModel;
     children?: RegisterChildModel[];
 
     constructor(data?: IRegisterModel) {
@@ -1640,6 +1641,7 @@ export class RegisterModel implements IRegisterModel {
         if (data) {
             this.contactInformation = data["contactInformation"] ? RegisterContactInformationModel.fromJS(data["contactInformation"]) : <any>undefined;
             this.parent = data["parent"] ? RegisterParentModel.fromJS(data["parent"]) : <any>undefined;
+            this.payment = data["payment"] ? RegisterPaymentModel.fromJS(data["payment"]) : <any>undefined;
             if (data["children"] && data["children"].constructor === Array) {
                 this.children = [];
                 for (let item of data["children"])
@@ -1659,6 +1661,7 @@ export class RegisterModel implements IRegisterModel {
         data = typeof data === 'object' ? data : {};
         data["contactInformation"] = this.contactInformation ? this.contactInformation.toJSON() : <any>undefined;
         data["parent"] = this.parent ? this.parent.toJSON() : <any>undefined;
+        data["payment"] = this.payment ? this.payment.toJSON() : <any>undefined;
         if (this.children && this.children.constructor === Array) {
             data["children"] = [];
             for (let item of this.children)
@@ -1671,6 +1674,7 @@ export class RegisterModel implements IRegisterModel {
 export interface IRegisterModel {
     contactInformation?: RegisterContactInformationModel;
     parent?: RegisterParentModel;
+    payment?: RegisterPaymentModel;
     children?: RegisterChildModel[];
 }
 
@@ -1772,6 +1776,42 @@ export class RegisterParentModel implements IRegisterParentModel {
 export interface IRegisterParentModel {
     firstName?: string;
     lastName?: string;
+}
+
+export class RegisterPaymentModel implements IRegisterPaymentModel {
+    paymentType: RegisterPaymentModelPaymentType;
+
+    constructor(data?: IRegisterPaymentModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.paymentType = data["paymentType"];
+        }
+    }
+
+    static fromJS(data: any): RegisterPaymentModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterPaymentModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["paymentType"] = this.paymentType;
+        return data; 
+    }
+}
+
+export interface IRegisterPaymentModel {
+    paymentType: RegisterPaymentModelPaymentType;
 }
 
 export class RegisterChildModel implements IRegisterChildModel {
@@ -2152,6 +2192,13 @@ export interface IEventModel {
     title?: string;
     description?: string;
     canRegister: boolean;
+}
+
+export enum RegisterPaymentModelPaymentType {
+    None = <any>"none", 
+    Paypal = <any>"paypal", 
+    Cash = <any>"cash", 
+    AlreadyPaid = <any>"alreadyPaid", 
 }
 
 export enum RegisterChildModelGender {

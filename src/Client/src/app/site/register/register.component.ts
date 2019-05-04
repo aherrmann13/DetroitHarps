@@ -10,6 +10,7 @@ import { EventRegistrationComponent } from './forms/children-information/event-r
 import { CommentsComponent } from './forms/comments/comments.component';
 import { PaymentInformationComponent } from './forms/payment-information/payment-information.component';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
@@ -26,7 +27,7 @@ export class RegisterComponent implements OnInit {
   @ViewChild(PaymentInformationComponent) paymentInformation: PaymentInformationComponent;
   
   formIndex = 0;
-  
+  isDev = !environment.production;
   isRegistering = false;
   isSendingComment = false;
   year = configuration.year;
@@ -40,7 +41,8 @@ export class RegisterComponent implements OnInit {
     private _client: Client) {}
 
   get paymentType(): string {
-    return this.paymentInformation && this.paymentInformation.data ? this.paymentInformation.data.type : null;
+    return this.registerModel && this.registerModel.payment ? 
+      this.registerModel.payment.paymentType.toString() : null;
   }
   
   ngOnInit(): void {

@@ -1,13 +1,13 @@
 <form [formGroup]='formGroup'>                 
     <mat-radio-group formControlName='paymentType'>
         <br />
-        <mat-radio-button value='cash'>Cash/Check</mat-radio-button>
+        <mat-radio-button [value]='cash'>Cash/Check</mat-radio-button>
         <br />
         <br />
-        <mat-radio-button value='paypal'>Paypal</mat-radio-button>
+        <mat-radio-button [value]='paypal'>Paypal</mat-radio-button>
         <br />
         <br />
-        <mat-radio-button value='other'>Already paid - adding child</mat-radio-button>
+        <mat-radio-button [value]='other'>Already paid - adding child</mat-radio-button>
         <br />
         <br />
     </mat-radio-group>
