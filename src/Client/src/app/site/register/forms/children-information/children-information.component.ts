@@ -14,7 +14,7 @@ export class ChildrenInformationComponent extends FormBase {
     shirtSizes = configuration.shirtSizes;
 
     male = RegisterChildModelGender.Male;
-    female = RegisterChildModelGender.Male;
+    female = RegisterChildModelGender.Female;
 
     formArray: FormArray;
 
