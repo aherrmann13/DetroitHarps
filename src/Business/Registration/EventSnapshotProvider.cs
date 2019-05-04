@@ -21,7 +21,7 @@ namespace DetroitHarps.Business.Registration
         public RegistrationChildEventSnapshot GetSnapshot(int eventId)
         {
             var entity = _repository.GetSingleOrDefault(eventId);
-            if(entity == null)
+            if (entity == null)
             {
                 throw new BusinessException($"Event with id {eventId} doesn't exist");
             }

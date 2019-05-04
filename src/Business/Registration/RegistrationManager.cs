@@ -12,6 +12,9 @@ namespace DetroitHarps.Business.Registration
 
     public class RegistrationManager : IRegistrationManager
     {
+        private const double SingleChildAmountDue = 20;
+        private const double MultipleChildAmountDue = 30;
+
         private readonly IRegistrationRepository _repository;
         private readonly IEventSnapshotProvider _eventSnapshotProvider;
         private readonly ILogger<RegistrationManager> _logger;
@@ -42,6 +45,8 @@ namespace DetroitHarps.Business.Registration
                 .ForEach(x =>
                     x.EventSnapshot = _eventSnapshotProvider.GetSnapshot(x.EventId));
 
+            SetPaymentAmount(entity);
+
             _repository.Create(entity);
         }
 
@@ -58,5 +63,13 @@ namespace DetroitHarps.Business.Registration
         public IEnumerable<RegisteredChildModel> GetAllRegisteredChildren() =>
             _repository.GetAll()
                 .SelectMany(Mapper.Map<IEnumerable<RegisteredChildModel>>);
+
+        private static void SetPaymentAmount(Registration entity)
+        {
+            entity.PaymentInformation.Amount =
+                entity.Children.Count == 1 ?
+                    SingleChildAmountDue :
+                    MultipleChildAmountDue;
+        }
     }
 }

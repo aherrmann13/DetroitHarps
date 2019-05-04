@@ -78,6 +78,45 @@ namespace DetroitHarps.Business.Test.Registration
         }
 
         [Fact]
+        public void RegisterationEntityHasCorrectPaymentAmountSingleChildTest()
+        {
+            var manager = GetManager();
+            var model = new RegisterModel
+            {
+                Children = new List<RegisterChildModel>
+                {
+                    new RegisterChildModel()
+                }
+            };
+
+            manager.Register(model);
+
+            _repositoryMock.Verify(
+                x => x.Create(It.Is<Registration>(y => y.PaymentInformation.Amount == 20)),
+                Times.Once);
+        }
+
+        [Fact]
+        public void RegisterationEntityHasCorrectPaymentAmountMultipleChildrenTest()
+        {
+            var manager = GetManager();
+            var model = new RegisterModel
+            {
+                Children = new List<RegisterChildModel>
+                {
+                    new RegisterChildModel(),
+                    new RegisterChildModel()
+                }
+            };
+
+            manager.Register(model);
+
+            _repositoryMock.Verify(
+                x => x.Create(It.Is<Registration>(y => y.PaymentInformation.Amount == 30)),
+                Times.Once);
+        }
+
+        [Fact]
         public void RegistrationCallsEventSnapshotProviderPerChildEventTest()
         {
             _eventSnapshotProvider

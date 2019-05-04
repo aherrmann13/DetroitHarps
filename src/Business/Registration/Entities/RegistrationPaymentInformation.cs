@@ -1,12 +1,10 @@
 namespace DetroitHarps.Business.Registration.Entities
 {
-    using System;
+    using DetroitHarps.Business.Registration.DataTypes;
 
     public class RegistrationPaymentInformation
     {
-        public DateTimeOffset PaymentTimestamp { get; set; }
-
-        public RegistrationPaymentType PaymentType { get; set; }
+        public PaymentType PaymentType { get; set; }
 
         public double Amount { get; set; }
     }

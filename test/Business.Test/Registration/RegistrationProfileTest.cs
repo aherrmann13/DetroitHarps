@@ -35,6 +35,10 @@ namespace DetroitHarps.Business.Test.Registration
                     State = Guid.NewGuid().ToString(),
                     Zip = Guid.NewGuid().ToString()
                 },
+                Payment = new RegisterPaymentModel
+                {
+                    PaymentType = PaymentType.Cash
+                },
                 Parent = new RegisterParentModel
                 {
                     FirstName = Guid.NewGuid().ToString(),
@@ -121,10 +125,7 @@ namespace DetroitHarps.Business.Test.Registration
 
             Assert.Equal(default(double), registration.PaymentInformation.Amount);
             Assert.Equal(
-                default(DateTimeOffset),
-                registration.PaymentInformation.PaymentTimestamp);
-            Assert.Equal(
-                default(RegistrationPaymentType),
+                registerModel.Payment.PaymentType,
                 registration.PaymentInformation.PaymentType);
         }
 

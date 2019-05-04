@@ -9,9 +9,6 @@ namespace DetroitHarps.Business.Registration
 
     public class RegistrationProfile : Profile
     {
-        private static readonly RegistrationPaymentInformation EmptyPayment =
-            new RegistrationPaymentInformation();
-
         public RegistrationProfile()
         {
             CreateMap<RegisterModel,  Registration>()
@@ -23,10 +20,15 @@ namespace DetroitHarps.Business.Registration
                     opt => opt.MapFrom(x => DateTime.Now.Year))
                 .ForMember(
                     dest => dest.PaymentInformation,
-                    opt => opt.MapFrom(x => EmptyPayment))
+                    opt => opt.MapFrom(x => x.Payment))
                 .ForMember(
                     dest => dest.RegistrationTimestamp,
                     opt => opt.MapFrom(x => DateTimeOffset.Now));
+
+            CreateMap<RegisterPaymentModel, RegistrationPaymentInformation>()
+                .ForMember(
+                    dest => dest.Amount,
+                    opt => opt.Ignore());
 
             CreateMap<RegisterContactInformationModel, RegistrationContactInformation>();
 

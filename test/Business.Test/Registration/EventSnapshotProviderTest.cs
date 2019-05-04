@@ -12,7 +12,7 @@ namespace DetroitHarps.Business.Test.Registration
     {
         private readonly Mock<IEventRepository> _repositoryMock;
         private readonly EventSnapshotProvider _eventSnapshotProvider;
-        
+
         public EventSnapshotProviderTest()
         {
             _repositoryMock = new Mock<IEventRepository>();
