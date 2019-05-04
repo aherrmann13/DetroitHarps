@@ -10,6 +10,7 @@
     using Microsoft.AspNetCore.Mvc.Authorization;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Newtonsoft.Json.Converters;
     using Tools;
 
     public class Startup
@@ -60,13 +61,21 @@
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(config =>
+            services
+            .AddMvc(config =>
             {
                 // protect by default, AllowAnonymous where necessary
                 var policy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
                     .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
+            })
+            .AddJsonOptions(options =>
+            {
+                options
+                    .SerializerSettings
+                    .Converters
+                    .Add(new StringEnumConverter());
             });
 
             services.AddSwagger();
