@@ -11,6 +11,8 @@ import { CommentsComponent } from './forms/comments/comments.component';
 import { PaymentInformationComponent } from './forms/payment-information/payment-information.component';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { ChildCountSelectorComponent } from './forms/children-information/child-count-selector.component';
+import { AbstractControl, FormArray } from '@angular/forms';
 
 
 @Component({
@@ -22,6 +24,7 @@ export class RegisterComponent implements OnInit {
   @ViewChild(ParentInformationComponent) parentInformation: ParentInformationComponent;
   @ViewChild(AddressInformationComponent) addressInformation: AddressInformationComponent;
   @ViewChild(ChildrenInformationComponent) childrenInformation: ChildrenInformationComponent;
+  @ViewChild(ChildCountSelectorComponent) childCount: ChildCountSelectorComponent;
   @ViewChild(EventRegistrationComponent) eventRegistration: EventRegistrationComponent;
   @ViewChild(CommentsComponent) comments: CommentsComponent;
   @ViewChild(PaymentInformationComponent) paymentInformation: PaymentInformationComponent;
@@ -39,6 +42,10 @@ export class RegisterComponent implements OnInit {
     private _router: Router,
     private _snackBar: MatSnackBar,
     private _client: Client) {}
+
+  get childrenInformationControl(): AbstractControl {
+    return new FormArray([this.childrenInformation.control, this.childCount.childCount]);
+  }
 
   get paymentType(): string {
     return this.registerModel && this.registerModel.payment ? 
