@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import {
   RegisteredChildModel,
   Client,
-  FileResponse
+  FileResponse,
+  EventModel
 } from '../../core/client/api.client';
 
 import { saveAs } from "file-saver";
@@ -18,6 +19,7 @@ import 'rxjs/add/observable/forkJoin';
 
 export class RegistrationComponent implements OnInit {
   info: RegisteredChildModel[];
+  events: EventModel[];
   columnsToDisplay: string[] = [
     'parentName',
     'childName',
@@ -38,12 +40,23 @@ export class RegistrationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._client.getAllChildren().subscribe(
-      data => this.info = data
-    );
+    this._client.getAllChildren().subscribe(data => this.info = data);
+    this._client.getRegistrationEvents().subscribe(
+      data =>
+      {
+        this.events = data;
+        this.events.forEach(x => 
+          this.columnsToDisplay.push(x.id.toString())
+        )
+      })
   }
 
   downloadFile(data: FileResponse) {
     saveAs(data.data, "registration.csv");
+  }
+
+  getEventAnswer(child: RegisteredChildModel, event: EventModel): string {
+    var regEvent = child.events.find(x => x.eventId === event.id);
+    return regEvent ? regEvent.answer.toString() : 'No Answer';
   }
 }

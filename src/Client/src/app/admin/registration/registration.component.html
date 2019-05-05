@@ -30,6 +30,11 @@
         <mat-cell *matCellDef='let child'> {{child.shirtSize}} </mat-cell>
     </ng-container>
 
+    <ng-container *ngFor='let event of events' [matColumnDef]="event.id.toString()">
+        <mat-header-cell *matHeaderCellDef> {{event.title}} </mat-header-cell>
+        <mat-cell *matCellDef='let child'> {{getEventAnswer(child, event)}} </mat-cell>
+    </ng-container>
+
     <mat-header-row *matHeaderRowDef='columnsToDisplay'></mat-header-row>
     <mat-row *matRowDef='let child; columns: columnsToDisplay;'></mat-row>
 </mat-table>

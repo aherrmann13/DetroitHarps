@@ -937,7 +937,7 @@ export class Client extends BaseClient {
      * @return Success
      */
     getAllParentsCsv(): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/Registration/GetAllParents/Csv";
+        let url_ = this.baseUrl + "/RegistrationCsv/GetAllParents";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -986,7 +986,7 @@ export class Client extends BaseClient {
      * @return Success
      */
     getAllChildrenCsv(): Observable<FileResponse> {
-        let url_ = this.baseUrl + "/Registration/GetAllChildren/Csv";
+        let url_ = this.baseUrl + "/RegistrationCsv/GetAllChildren";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
