@@ -16,19 +16,19 @@ namespace DetroitHarps.Business.Registration
         private const double MultipleChildAmountDue = 30;
 
         private readonly IRegistrationRepository _repository;
-        private readonly IEventSnapshotProvider _eventSnapshotProvider;
+        private readonly IEventAccessor _eventAccessor;
         private readonly ILogger<RegistrationManager> _logger;
 
         public RegistrationManager(
             IRegistrationRepository repository,
-            IEventSnapshotProvider eventSnapshotProvider,
+            IEventAccessor eventAccessor,
             ILogger<RegistrationManager> logger)
         {
             Guard.NotNull(repository, nameof(repository));
-            Guard.NotNull(eventSnapshotProvider, nameof(eventSnapshotProvider));
+            Guard.NotNull(eventAccessor, nameof(eventAccessor));
             Guard.NotNull(logger, nameof(logger));
 
-            _eventSnapshotProvider = eventSnapshotProvider;
+            _eventAccessor = eventAccessor;
             _repository = repository;
             _logger = logger;
         }
@@ -43,7 +43,7 @@ namespace DetroitHarps.Business.Registration
                 .SelectMany(x => x.Events)
                 .ToList()
                 .ForEach(x =>
-                    x.EventSnapshot = _eventSnapshotProvider.GetSnapshot(x.EventId));
+                    x.EventSnapshot = _eventAccessor.GetSnapshot(x.EventId));
 
             SetPaymentAmount(entity);
 

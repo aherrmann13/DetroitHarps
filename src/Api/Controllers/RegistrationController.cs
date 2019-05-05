@@ -13,22 +13,13 @@ namespace DetroitHarps.Api.Controllers
     [Route("[Controller]")]
     public class RegistrationController : Controller
     {
-        private const string CsvContentType = "text/csv";
-        private const string GetAllParentsCsvName = "parents.csv";
-        private const string GetAllChildrenCsvName = "children.csv";
-
         private readonly IRegistrationManager _registrationManager;
-        private readonly ICsvWriter _csvWriter;
 
-        public RegistrationController(
-            IRegistrationManager registrationManager,
-            ICsvWriter csvWriter)
+        public RegistrationController(IRegistrationManager registrationManager)
         {
             Guard.NotNull(registrationManager, nameof(registrationManager));
-            Guard.NotNull(csvWriter, nameof(csvWriter));
 
             _registrationManager = registrationManager;
-            _csvWriter = csvWriter;
         }
 
         [HttpPost("Register")]
@@ -62,26 +53,6 @@ namespace DetroitHarps.Api.Controllers
         {
             var result = _registrationManager.GetAllRegisteredChildren();
             return Ok(result);
-        }
-
-        [HttpGet("GetAllParents/Csv")]
-        [SwaggerOperation(OperationId = "GetAllParentsCsv")]
-        [Produces(CsvContentType, Type = typeof(FileResult))]
-        public FileResult GetAllParentsCsv()
-        {
-            var fileBytes = _csvWriter.GetAsCsv(
-                _registrationManager.GetAllRegisteredParents().ToList());
-            return File(fileBytes, CsvContentType, GetAllParentsCsvName);
-        }
-
-        [HttpGet("GetAllChildren/Csv")]
-        [SwaggerOperation(OperationId = "GetAllChildrenCsv")]
-        [Produces(CsvContentType, Type = typeof(FileResult))]
-        public FileResult GetAllChildrenCsv()
-        {
-            var fileBytes = _csvWriter.GetAsCsv(
-                _registrationManager.GetAllRegisteredChildren().ToList());
-            return File(fileBytes, CsvContentType, GetAllChildrenCsvName);
         }
     }
 }

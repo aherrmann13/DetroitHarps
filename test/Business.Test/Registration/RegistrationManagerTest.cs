@@ -16,13 +16,13 @@ namespace DetroitHarps.Business.Test.Registration
     public class RegistrationManagerTest
     {
         private readonly Mock<IRegistrationRepository> _repositoryMock;
-        private readonly Mock<IEventSnapshotProvider> _eventSnapshotProvider;
+        private readonly Mock<IEventAccessor> _eventAccessor;
         private readonly Mock<ILogger<RegistrationManager>> _loggerMock;
 
         public RegistrationManagerTest()
         {
             _repositoryMock = new Mock<IRegistrationRepository>();
-            _eventSnapshotProvider = new Mock<IEventSnapshotProvider>();
+            _eventAccessor = new Mock<IEventAccessor>();
             _loggerMock = new Mock<ILogger<RegistrationManager>>();
         }
 
@@ -32,7 +32,7 @@ namespace DetroitHarps.Business.Test.Registration
             Assert.Throws<ArgumentNullException>(() =>
                 new RegistrationManager(
                     null,
-                    _eventSnapshotProvider.Object,
+                    _eventAccessor.Object,
                     _loggerMock.Object));
         }
 
@@ -52,7 +52,7 @@ namespace DetroitHarps.Business.Test.Registration
             Assert.Throws<ArgumentNullException>(() =>
                 new RegistrationManager(
                     _repositoryMock.Object,
-                    _eventSnapshotProvider.Object,
+                    _eventAccessor.Object,
                     null));
         }
 
@@ -117,9 +117,9 @@ namespace DetroitHarps.Business.Test.Registration
         }
 
         [Fact]
-        public void RegistrationCallsEventSnapshotProviderPerChildEventTest()
+        public void RegistrationCallsEventAccessorPerChildEventTest()
         {
-            _eventSnapshotProvider
+            _eventAccessor
                 .Setup(x => x.GetSnapshot(It.IsAny<int>()))
                 .Returns(new RegistrationChildEventSnapshot());
             var manager = GetManager();
@@ -147,13 +147,13 @@ namespace DetroitHarps.Business.Test.Registration
             };
 
             manager.Register(model);
-            _eventSnapshotProvider.Verify(
+            _eventAccessor.Verify(
                 x => x.GetSnapshot(It.Is<int>(y => y == 0)),
                 Times.Once);
-            _eventSnapshotProvider.Verify(
+            _eventAccessor.Verify(
                 x => x.GetSnapshot(It.Is<int>(y => y == 1)),
                 Times.Once);
-            _eventSnapshotProvider.Verify(
+            _eventAccessor.Verify(
                 x => x.GetSnapshot(It.Is<int>(y => y == 2)),
                 Times.Once);
         }
@@ -161,7 +161,7 @@ namespace DetroitHarps.Business.Test.Registration
         [Fact]
         public void RegistrationHasEventSnapshotOnRegisterTest()
         {
-            _eventSnapshotProvider
+            _eventAccessor
                 .Setup(x => x.GetSnapshot(It.IsAny<int>()))
                 .Returns(new RegistrationChildEventSnapshot());
             var manager = GetManager();
@@ -302,7 +302,7 @@ namespace DetroitHarps.Business.Test.Registration
         private RegistrationManager GetManager() =>
             new RegistrationManager(
                 _repositoryMock.Object,
-                _eventSnapshotProvider.Object,
+                _eventAccessor.Object,
                 _loggerMock.Object);
     }
 }

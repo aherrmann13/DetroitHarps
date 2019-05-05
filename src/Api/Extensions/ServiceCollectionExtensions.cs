@@ -54,9 +54,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IPhotoManager, PhotoManager>();
             services.AddScoped<IPhotoGroupManager, PhotoGroupManager>();
             services.AddScoped<IRegistrationManager, RegistrationManager>();
+            services.AddScoped<IRegistrationCsvManager, RegistrationCsvManager>();
             services.AddScoped<IScheduleManager, ScheduleManager>();
 
-            services.AddScoped<IEventSnapshotProvider, EventSnapshotProvider>();
+            services.AddScoped<IEventAccessor, EventAccessor>();
 
             return services;
         }
