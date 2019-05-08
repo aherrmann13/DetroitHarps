@@ -31,6 +31,7 @@ import { LoggerModule } from '../core/logger/logger.module';
 import { FooterComponent } from './footer/footer.component';
 import { EventRegistrationComponent } from './register/forms/children-information/event-registration.component';
 import { ChildCountSelectorComponent } from './register/forms/children-information/child-count-selector.component';
+import { PaypalFooterComponent } from './footer/paypal-footer.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { ChildCountSelectorComponent } from './register/forms/children-informati
     EventRegistrationComponent,
     CommentsComponent,
     FinalStepComponent,
+    PaypalFooterComponent,
     FooterComponent
   ],
   imports: [

@@ -1,0 +1,17 @@
+.paypal-form-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-bottom: 30px;
+
+    .paypal-form {
+        display: flex;
+        .hidden-input {
+            display: none;
+        }
+        button {
+            width: 100%;
+            text-align: left;
+        }
+    }
+}

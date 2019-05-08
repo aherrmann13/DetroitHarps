@@ -36,3 +36,12 @@
 .home-content{
     padding: 30px calc(20%) 0px calc(20%);
 }
+
+.home-footer {
+    padding: 50px calc(20%) 0px calc(20%);
+    
+    .home-footer-contents {
+        border-top: 1px solid;
+        border-top-color: rgba(0, 0, 0, 0.42);
+    }
+}
