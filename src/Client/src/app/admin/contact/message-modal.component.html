@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Message from {{data.firstName}} {{data.lastName}}</h1>
 <div mat-dialog-content class="schedule-modal">
-  <p>From: {{data.email}}</p>
+  <p>From: <a href="mailto:{{data.email}}" target="_blank">{{data.email}}</a></p>
   <p>{{data.body}}</p>
 </div>
 <div mat-dialog-actions>
