@@ -8,6 +8,7 @@ import {
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { ScheduleModalDialogComponent } from './schedule-modal.component';import { Observable } from 'rxjs';
 import { DeletePromptDialogComponent } from '../delete-prompt/delete-prompt.component';
+import { ascendingDateSorter } from '../../core/utilities/date-functions';
 3
 
 @Component({
@@ -72,7 +73,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   private refreshDataSource(){
-    this.dataSource.data = this._events;
+    this.dataSource.data = this._events.sort(ascendingDateSorter(x => x.startDate));
   }
 
   private openDialog(event: EventModel, action: (EventModel) => Observable<EventModel>): void {

@@ -69,11 +69,16 @@ export class ScheduleModalDialogComponent implements OnInit {
 
   onAcceptClick(): void {
     this.loading = true;
-    this.formGroup.disable();
-    this._data.onClick(this.mapEvent())
+    if(this.formGroup.dirty){
+      this.formGroup.disable();
+      this._data.onClick(this.mapEvent())
       .subscribe(
         data => this.handleSuccess(data),
         err => this.handleError(err))
+    } else {
+      this.onCancelClick();
+    }
+    
   }
 
   handleSuccess(data: EventModel): void{
@@ -101,6 +106,12 @@ export class ScheduleModalDialogComponent implements OnInit {
   getErrorMessage(control: AbstractControl): string {
     if(control.hasError(FORM_MATCH_ERROR)){
       return "format time hh:mm am/pm";
+    }
+  }
+
+  onRadioClick() {
+    if(this.formGroup.pristine){
+      this.formGroup.markAsDirty();
     }
   }
 

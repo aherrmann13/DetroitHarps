@@ -45,6 +45,7 @@
     <mat-checkbox
       [(ngModel)]='canRegisterChecked'
       [ngModelOptions]='{standalone: true}'
+      (click)='onRadioClick()'
       color='primary'>
       Require registration for this event
     </mat-checkbox>
