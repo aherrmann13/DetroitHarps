@@ -32,7 +32,7 @@ export class AdminComponent implements OnInit {
     }
 
     ngOnInit() {
-      if (localStorage.getItem('isLoggedIn') === 'true') {
+      if (this._authService.isAuthenticated()) {
         this._authService.renewTokens();
       }
     }

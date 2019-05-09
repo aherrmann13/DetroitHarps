@@ -6,7 +6,6 @@ import { environment } from '../../../environments/environment';
 @Injectable()
 export class AuthService {
 
-  private _idToken: string;
   private _accessToken: string;
   private _expiresAt: number;
 
@@ -17,17 +16,13 @@ export class AuthService {
   });
 
   constructor() {
-    this._idToken = '';
     this._accessToken = '';
     this._expiresAt = 0;
+    this.getValuesFromLocalStorage();
   }
 
   get accessToken(): string {
     return this._accessToken;
-  }
-
-  get idToken(): string {
-    return this._idToken;
   }
 
   public login(): void {
@@ -64,11 +59,9 @@ export class AuthService {
   public logout(): void {
     // Remove tokens and expiry time
     this._accessToken = '';
-    this._idToken = '';
     this._expiresAt = 0;
-    // Remove isLoggedIn flag from localStorage
-    localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('token');
+    localStorage.removeItem('expiresAt');
   }
 
   public isAuthenticated(): boolean {
@@ -78,13 +71,20 @@ export class AuthService {
   }
 
   private localLogin(authResult): void {
-    // Set isLoggedIn flag in localStorage
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('token', authResult.accessToken);
     // Set the time that the access token will expire at
     const expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
     this._accessToken = authResult.accessToken;
-    this._idToken = authResult.idToken;
     this._expiresAt = expiresAt;
+
+    localStorage.setItem('token', authResult.accessToken);
+    localStorage.setItem('expiresAt', expiresAt.toString());
+  }
+
+  private getValuesFromLocalStorage(): void {
+    const accessToken = localStorage.getItem('token');
+    const expiresAt = localStorage.getItem('expiresAt');
+
+    this._accessToken = accessToken ? accessToken : this._accessToken;
+    this._expiresAt = expiresAt && !isNaN(+expiresAt) ? parseInt(expiresAt) : this._expiresAt;
   }
 }
