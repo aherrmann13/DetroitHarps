@@ -6,6 +6,8 @@ namespace DetroitHarps.Business.Registration.Models
 
     public class RegisteredChildModel
     {
+        public int RegistrationId { get; set; }
+
         public string ParentFirstName { get; set; }
 
         public string ParentLastName { get; set; }

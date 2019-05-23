@@ -46,23 +46,47 @@ namespace DetroitHarps.Business.Registration
                     x.EventSnapshot = _eventAccessor.GetSnapshot(x.EventId));
 
             SetPaymentAmount(entity);
-
             _repository.Create(entity);
         }
 
         public void Delete(int id)
         {
-            _logger.LogInformation($"deleting registration with id {id}");
-            _repository.Delete(id);
+            _logger.LogInformation($"disabling registration with id {id}");
+            var entity = _repository.GetSingleOrDefault(id);
+            if (entity != null)
+            {
+                entity.IsDisabled = true;
+                _repository.Update(entity);
+            }
+        }
+
+        public void DeleteChild(int id, string firstName, string lastName)
+        {
+            _logger.LogInformation($"disabling {firstName} {lastName} in registration with id {id}");
+            var entity = _repository.GetSingleOrDefault(id);
+            var child = GetChild(entity, firstName, lastName);
+            if (child != null)
+            {
+                child.IsDisabled = true;
+                _repository.Update(entity);
+            }
         }
 
         public IEnumerable<RegisteredParentModel> GetAllRegisteredParents() =>
-            _repository.GetAll()
+            _repository.GetMany(x => !x.IsDisabled)
                 .Select(Mapper.Map<RegisteredParentModel>);
 
         public IEnumerable<RegisteredChildModel> GetAllRegisteredChildren() =>
-            _repository.GetAll()
+            _repository.GetMany(x => !x.IsDisabled)
                 .SelectMany(Mapper.Map<IEnumerable<RegisteredChildModel>>);
+
+        private RegistrationChild GetChild(
+            Registration registration,
+            string firstName,
+            string lastName) =>
+            registration?.Children?.FirstOrDefault(x =>
+                Compare.EqualOrdinal(x.FirstName, firstName) &&
+                Compare.EqualOrdinal(x.LastName, lastName));
 
         private static void SetPaymentAmount(Registration entity)
         {

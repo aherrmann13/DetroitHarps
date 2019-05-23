@@ -6,27 +6,15 @@ namespace DetroitHarps.DataAccess.EntityBuilders
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using Tools;
 
-    public class RegistrationChildEntityBuilder : IEntityBuilder
+    public class RegistrationChildEntityBuilder : EntityBuilderBase<RegistrationChild>
     {
-        private const string IdColumnName = nameof(IHasId.Id);
-
-        private readonly ModelBuilder _modelBuilder;
-
         public RegistrationChildEntityBuilder(ModelBuilder modelBuilder)
+            :base(modelBuilder)
         {
-            Guard.NotNull(modelBuilder, nameof(modelBuilder));
-
-            _modelBuilder = modelBuilder;
         }
-
-        // TODO: should this have audit props?
-        public void Build()
+        
+        protected override void ConfigureEntity(EntityTypeBuilder<RegistrationChild> typeBuilder)
         {
-            var typeBuilder = _modelBuilder.Entity<RegistrationChild>();
-
-            typeBuilder.Property<int>(IdColumnName);
-            typeBuilder.HasKey(IdColumnName);
-
             typeBuilder.Property(x => x.FirstName).HasMaxLength(Limits.NameLength).IsRequired(true);
             typeBuilder.Property(x => x.LastName).HasMaxLength(Limits.NameLength).IsRequired(true);
 

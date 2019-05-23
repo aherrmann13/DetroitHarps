@@ -832,6 +832,59 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
+    deleteRegisteredChild(id: number, firstName: string, lastName: string): Observable<void> {
+        let url_ = this.baseUrl + "/Registration/DeleteChild/{id}/{firstName}/{lastName}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        if (firstName === undefined || firstName === null)
+            throw new Error("The parameter 'firstName' must be defined.");
+        url_ = url_.replace("{firstName}", encodeURIComponent("" + firstName)); 
+        if (lastName === undefined || lastName === null)
+            throw new Error("The parameter 'lastName' must be defined.");
+        url_ = url_.replace("{lastName}", encodeURIComponent("" + lastName)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "delete",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return Observable.fromPromise(this.transformOptions(options_)).flatMap(transformedOptions_ => {
+            return this.http.request(url_, transformedOptions_);
+        }).flatMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processDeleteRegisteredChild(<any>r));
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processDeleteRegisteredChild(<any>r));
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processDeleteRegisteredChild(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
     getAllParents(): Observable<RegisteredParentModel[]> {
         let url_ = this.baseUrl + "/Registration/GetAllParents";
         url_ = url_.replace(/[?&]$/, "");
@@ -1971,6 +2024,7 @@ export interface IRegisteredParentModel {
 }
 
 export class RegisteredChildModel implements IRegisteredChildModel {
+    registrationId: number;
     parentFirstName?: string;
     parentLastName?: string;
     firstName?: string;
@@ -1992,6 +2046,7 @@ export class RegisteredChildModel implements IRegisteredChildModel {
 
     init(data?: any) {
         if (data) {
+            this.registrationId = data["registrationId"];
             this.parentFirstName = data["parentFirstName"];
             this.parentLastName = data["parentLastName"];
             this.firstName = data["firstName"];
@@ -2017,6 +2072,7 @@ export class RegisteredChildModel implements IRegisteredChildModel {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["registrationId"] = this.registrationId;
         data["parentFirstName"] = this.parentFirstName;
         data["parentLastName"] = this.parentLastName;
         data["firstName"] = this.firstName;
@@ -2035,6 +2091,7 @@ export class RegisteredChildModel implements IRegisteredChildModel {
 }
 
 export interface IRegisteredChildModel {
+    registrationId: number;
     parentFirstName?: string;
     parentLastName?: string;
     firstName?: string;

@@ -2,6 +2,7 @@ namespace DetroitHarps.Business.Registration
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using AutoMapper;
     using DetroitHarps.Business.Registration.Entities;
     using DetroitHarps.Business.Registration.Models;
@@ -19,6 +20,9 @@ namespace DetroitHarps.Business.Registration
                     dest => dest.SeasonYear,
                     opt => opt.MapFrom(x => DateTime.Now.Year))
                 .ForMember(
+                    dest => dest.IsDisabled,
+                    opt => opt.Ignore())
+                .ForMember(
                     dest => dest.PaymentInformation,
                     opt => opt.MapFrom(x => x.Payment))
                 .ForMember(
@@ -34,16 +38,25 @@ namespace DetroitHarps.Business.Registration
 
             CreateMap<RegisterParentModel, RegistrationParent>();
 
-            CreateMap<RegisterChildModel, RegistrationChild>();
+            CreateMap<RegisterChildModel, RegistrationChild>()
+                .ForMember(
+                    dest => dest.Id,
+                    opt => opt.Ignore())
+                .ForMember(
+                    dest => dest.IsDisabled,
+                    opt => opt.Ignore());
 
             CreateMap<RegistrationChild, RegisteredChildModel>()
                 .ForMember(
+                    dest => dest.RegistrationId,
+                    opt => opt.Ignore())
+                .ForMember(
                     dest => dest.ParentFirstName,
                     opt => opt.Ignore())
-                    .ForMember(
+                .ForMember(
                     dest => dest.ParentLastName,
                     opt => opt.Ignore())
-                    .ForMember(
+                .ForMember(
                     dest => dest.EmailAddress,
                     opt => opt.Ignore());
 
@@ -69,6 +82,9 @@ namespace DetroitHarps.Business.Registration
 
             CreateMap<RegisterChildEventModel, RegistrationChildEvent>()
                 .ForMember(
+                    dest => dest.Id,
+                    opt => opt.Ignore())
+                .ForMember(
                     dest => dest.EventSnapshot,
                     opt => opt.Ignore());
 
@@ -84,12 +100,14 @@ namespace DetroitHarps.Business.Registration
                 IEnumerable<RegisteredChildModel> destination,
                 ResolutionContext context)
             {
-                foreach (var child in source.Children)
+                // TODO: dont like this filtering here when it is done outside automapper on parent
+                foreach (var child in source.Children.Where(x => !x.IsDisabled))
                 {
                     var childModel = Mapper.Map<RegisteredChildModel>(child);
                     childModel.EmailAddress = source.ContactInformation.Email;
                     childModel.ParentFirstName = source.Parent.FirstName;
                     childModel.ParentLastName = source.Parent.LastName;
+                    childModel.RegistrationId = source.Id;
 
                     yield return childModel;
                 }

@@ -213,7 +213,7 @@ namespace DetroitHarps.Business.Test.Registration
         }
 
         [Fact]
-        public void DeleteIdPassedToRepositoryTest()
+        public void DeleteDoesNothingOnNonExistantIdTest()
         {
             var manager = GetManager();
             var id = 2;
@@ -221,7 +221,119 @@ namespace DetroitHarps.Business.Test.Registration
             manager.Delete(id);
 
             _repositoryMock.Verify(
-                x => x.Delete(It.Is<int>(y => y.Equals(id))),
+                x => x.GetSingleOrDefault(It.Is<int>(y => y.Equals(id))),
+                Times.Once);
+            _repositoryMock.Verify(
+                x => x.Update(It.IsAny<Registration>()),
+                Times.Never);
+        }
+
+        [Fact]
+        public void DeleteSetsDisabledFlagAndUpdatesTest()
+        {
+            var registration = new Registration { IsDisabled = false };
+            _repositoryMock
+                .Setup(x => x.GetSingleOrDefault(It.IsAny<int>()))
+                .Returns(registration);
+
+            var manager = GetManager();
+            var id = 2;
+
+            manager.Delete(id);
+
+            _repositoryMock.Verify(
+                x => x.GetSingleOrDefault(It.Is<int>(y => y.Equals(id))),
+                Times.Once);
+            _repositoryMock.Verify(
+                x => x.Update(It.Is<Registration>(y => y.Equals(registration) && y.IsDisabled)),
+                Times.Once);
+        }
+
+        [Fact]
+        public void DeleteChildDoesNothingOnNonExistantIdTest()
+        {
+            var manager = GetManager();
+            var id = 2;
+
+            manager.DeleteChild(id, string.Empty, string.Empty);
+
+            _repositoryMock.Verify(
+                x => x.GetSingleOrDefault(It.Is<int>(y => y.Equals(id))),
+                Times.Once);
+            _repositoryMock.Verify(
+                x => x.Update(It.IsAny<Registration>()),
+                Times.Never);
+        }
+
+        [Fact]
+        public void DeleteChildDoesNothingOnNonExistantChildTest()
+        {
+            var registration = new Registration
+            {
+                IsDisabled = false,
+                Children = new List<RegistrationChild>
+                {
+                    new RegistrationChild
+                    {
+                        FirstName = Guid.NewGuid().ToString(),
+                        LastName = Guid.NewGuid().ToString(),
+                        IsDisabled = false
+                    }
+                }
+            };
+            _repositoryMock
+                .Setup(x => x.GetSingleOrDefault(It.IsAny<int>()))
+                .Returns(registration);
+            var manager = GetManager();
+            var id = 2;
+
+            manager.DeleteChild(id, Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+
+            _repositoryMock.Verify(
+                x => x.GetSingleOrDefault(It.Is<int>(y => y.Equals(id))),
+                Times.Once);
+            _repositoryMock.Verify(
+                x => x.Update(It.IsAny<Registration>()),
+                Times.Never);
+        }
+
+        [Fact]
+        public void DeleteChildSetsDisabledFlagAndUpdatesTest()
+        {
+            var firstName = Guid.NewGuid().ToString();
+            var lastName = Guid.NewGuid().ToString();
+            var registration = new Registration
+            {
+                IsDisabled = false,
+                Children = new List<RegistrationChild>
+                {
+                    new RegistrationChild
+                    {
+                        FirstName = firstName,
+                        LastName = lastName,
+                        IsDisabled = false
+                    }
+                }
+            };
+
+            _repositoryMock
+                .Setup(x => x.GetSingleOrDefault(It.IsAny<int>()))
+                .Returns(registration);
+            var manager = GetManager();
+            var id = 2;
+
+            manager.DeleteChild(id, firstName, lastName);
+
+            _repositoryMock.Verify(
+                x => x.GetSingleOrDefault(It.Is<int>(y => y.Equals(id))),
+                Times.Once);
+            _repositoryMock.Verify(
+                x => x.Update(
+                    It.Is<Registration>(y =>
+                        y.Equals(registration) &&
+                        y.Children[0].Equals(registration.Children[0]) &&
+                        y.Children.Count == registration.Children.Count &&
+                        y.Children[0].IsDisabled)),
                 Times.Once);
         }
 
@@ -251,13 +363,17 @@ namespace DetroitHarps.Business.Test.Registration
                     }
                 }
             };
-            _repositoryMock.Setup(x => x.GetAll())
+            _repositoryMock
+                .Setup(x => x.GetMany(It.IsAny<Expression<Func<Registration, bool>>>()))
                 .Returns(entities);
 
             var manager = GetManager();
 
             var modelsFromManager = manager.GetAllRegisteredParents();
 
+            _repositoryMock.Verify(
+                x => x.GetMany(It.Is<Expression<Func<Registration, bool>>>(y => ValidateFiltersIsDisabled(y))),
+                Times.Once());
             Assert.Equal(entities.Count, modelsFromManager.Count());
             Assert.All(modelsFromManager, x => Assert.NotNull(x));
         }
@@ -288,15 +404,26 @@ namespace DetroitHarps.Business.Test.Registration
                     }
                 }
             };
-            _repositoryMock.Setup(x => x.GetAll())
+            _repositoryMock.Setup(x => x.GetMany(It.IsAny<Expression<Func<Registration, bool>>>()))
                 .Returns(entities);
             var manager = GetManager();
 
             var childrenFromManager = manager.GetAllRegisteredChildren();
 
-            Assert.Equal(entities.SelectMany(x => x.Children).ToList().Count, childrenFromManager.Count());
+            _repositoryMock.Verify(
+                x => x.GetMany(It.Is<Expression<Func<Registration, bool>>>(y => ValidateFiltersIsDisabled(y))),
+                Times.Once());
 
+            Assert.Equal(entities.SelectMany(x => x.Children).ToList().Count, childrenFromManager.Count());
             Assert.All(childrenFromManager, x => Assert.NotNull(x));
+        }
+
+        private bool ValidateFiltersIsDisabled(Expression<Func<Registration, bool>> expr)
+        {
+            var shouldBeFalse = expr.Compile()(new Registration { IsDisabled = true });
+            var shouldBeTrue = expr.Compile()(new Registration { IsDisabled = false });
+
+            return shouldBeTrue && !shouldBeFalse;
         }
 
         private RegistrationManager GetManager() =>

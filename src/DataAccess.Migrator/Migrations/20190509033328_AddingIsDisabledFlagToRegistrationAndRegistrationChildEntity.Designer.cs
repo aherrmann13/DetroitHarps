@@ -3,15 +3,17 @@ using System;
 using DetroitHarps.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DetroitHarps.DataAccess.Migrator.Migrations
 {
     [DbContext(typeof(DetroitHarpsDbContext))]
-    partial class DetroitHarpsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190509033328_AddingIsDisabledFlagToRegistrationAndRegistrationChildEntity")]
+    partial class AddingIsDisabledFlagToRegistrationAndRegistrationChildEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,10 +134,6 @@ namespace DetroitHarps.DataAccess.Migrator.Migrations
                     b.Property<string>("ShirtSize")
                         .HasMaxLength(20);
 
-                    b.Property<DateTimeOffset>("insert_timestamp");
-
-                    b.Property<DateTimeOffset>("update_timestamp");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RegistrationId");
@@ -153,10 +151,6 @@ namespace DetroitHarps.DataAccess.Migrator.Migrations
                     b.Property<int>("EventId");
 
                     b.Property<int?>("RegistrationChildId");
-
-                    b.Property<DateTimeOffset>("insert_timestamp");
-
-                    b.Property<DateTimeOffset>("update_timestamp");
 
                     b.HasKey("Id");
 

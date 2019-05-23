@@ -39,6 +39,17 @@ namespace DetroitHarps.Api.Controllers
             return Ok();
         }
 
+        [HttpDelete("DeleteChild/{id}/{firstName}/{lastName}")]
+        [SwaggerOperation(OperationId = "DeleteRegisteredChild")]
+        public ActionResult Delete(
+            [FromRoute] int id,
+            [FromRoute] string firstName,
+            [FromRoute] string lastName)
+        {
+            _registrationManager.DeleteChild(id, firstName, lastName);
+            return Ok();
+        }
+
         [HttpGet("GetAllParents")]
         [SwaggerOperation(OperationId = "GetAllParents")]
         public ActionResult<IEnumerable<RegisteredParentModel>> GetAllParents()

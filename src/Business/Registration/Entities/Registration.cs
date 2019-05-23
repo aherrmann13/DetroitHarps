@@ -3,7 +3,7 @@ namespace DetroitHarps.Business.Registration.Entities
     using System;
     using System.Collections.Generic;
 
-    public class Registration : IHasId
+    public class Registration : IHasId, IHasDisable
     {
         public int Id { get; set; }
 
@@ -18,5 +18,7 @@ namespace DetroitHarps.Business.Registration.Entities
         public DateTimeOffset RegistrationTimestamp { get; set; }
 
         public IList<RegistrationChild> Children { get; set; } = new List<RegistrationChild>();
+
+        public bool IsDisabled { get; set; }
     }
 }

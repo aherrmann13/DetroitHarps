@@ -9,6 +9,9 @@ import {
 
 import { saveAs } from "file-saver";
 import 'rxjs/add/observable/forkJoin';
+import { MatDialog, MatTableDataSource } from '@angular/material';
+import { DeletePromptDialogComponent } from '../delete-prompt/delete-prompt.component';
+import { Observable } from 'rxjs';
 
 
 
@@ -18,7 +21,7 @@ import 'rxjs/add/observable/forkJoin';
 })
 
 export class RegistrationComponent implements OnInit {
-  info: RegisteredChildModel[];
+  dataSource = new MatTableDataSource<RegisteredChildModel>();
   events: EventModel[];
   columnsToDisplay: string[] = [
     'parentName',
@@ -26,7 +29,8 @@ export class RegistrationComponent implements OnInit {
     'gender',
     'emailAddress',
     'dateOfBirth',
-    'shirtSize'];
+    'shirtSize',
+    'edit'];
   
   items = [{
     icon: "file_download",
@@ -35,19 +39,28 @@ export class RegistrationComponent implements OnInit {
       .subscribe(this.downloadFile)
   }];
 
-  constructor(private _client: Client) { 
+  private _info: Array<RegisteredChildModel>;
+
+  constructor(
+    private _client: Client,
+    private _dialog: MatDialog) { 
     this.downloadFile = this.downloadFile.bind(this);
+    this.addToColumnsToDisplay = this.addToColumnsToDisplay.bind(this);
   }
 
   ngOnInit() {
-    this._client.getAllChildren().subscribe(data => this.info = data);
+    this._client.getAllChildren().subscribe(
+      data => {
+        this._info = data,
+        this.refreshDataSource();
+      });
     this._client.getRegistrationEvents().subscribe(
       data =>
       {
         this.events = data;
-        this.events.forEach(x => 
-          this.columnsToDisplay.push(x.id.toString())
-        )
+        this.events
+          .map(x => x.id.toString())
+          .forEach(this.addToColumnsToDisplay);
       })
   }
 
@@ -58,5 +71,41 @@ export class RegistrationComponent implements OnInit {
   getEventAnswer(child: RegisteredChildModel, event: EventModel): string {
     var regEvent = child.events.find(x => x.eventId === event.id);
     return regEvent ? regEvent.answer.toString() : 'No Answer';
+  }
+
+  openDeleteDialog(child: RegisteredChildModel): void {
+    const { registrationId, firstName, lastName }  = child;
+    const dialogRef = this._dialog.open(
+      DeletePromptDialogComponent,
+      {
+        disableClose: true,
+        data: {
+          onClick: () => this.deleteRegistration(registrationId, firstName, lastName),
+          data: {
+            itemName: "Registered Child"
+          }
+        }
+      });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result && result.yes){
+        const index = this._info.indexOf(child)
+        this._info.splice(index, 1);
+        this.refreshDataSource();
+      }
+    });
+  }
+
+  private refreshDataSource(){
+    this.dataSource.data = this._info;
+  }
+
+  private addToColumnsToDisplay(column: string): void {
+    const insertAt = this.columnsToDisplay.length - 2;
+    this.columnsToDisplay.splice(insertAt, 0, column)
+  }
+
+  private deleteRegistration(id: number, firstName: string, lastName: string): Observable<void> {
+    return this._client.deleteRegisteredChild(id, firstName, lastName);
   }
 }

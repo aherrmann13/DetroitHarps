@@ -91,6 +91,7 @@ namespace DetroitHarps.Business.Test.Registration
             Assert.Equal(DateTimeOffset.Now.Year, registration.SeasonYear);
             Assert.Equal(registerModel.Parent.FirstName, registration.Parent.FirstName);
             Assert.Equal(registerModel.Parent.LastName, registration.Parent.LastName);
+            Assert.False(registration.IsDisabled);
 
             Assert.Equal(registerModel.ContactInformation.Email, registration.ContactInformation.Email);
             Assert.Equal(registerModel.ContactInformation.PhoneNumber, registration.ContactInformation.PhoneNumber);
@@ -108,6 +109,9 @@ namespace DetroitHarps.Business.Test.Registration
             Assert.Equal(registerModel.Children[0].Events.Count, registration.Children[0].Events.Count);
             Assert.Equal(registerModel.Children[0].Events[0].Answer, registration.Children[0].Events[0].Answer);
             Assert.Equal(registerModel.Children[0].Events[0].EventId, registration.Children[0].Events[0].EventId);
+            Assert.Equal(default(int), registration.Children[0].Events[0].Id);
+            Assert.Equal(default(int), registration.Children[0].Id);
+            Assert.False(registration.Children[0].IsDisabled);
             Assert.Null(registration.Children[0].Events[0].EventSnapshot);
 
             Assert.Equal(registerModel.Children[1].FirstName, registration.Children[1].FirstName);
@@ -118,9 +122,13 @@ namespace DetroitHarps.Business.Test.Registration
             Assert.Equal(registerModel.Children[1].Events.Count, registration.Children[1].Events.Count);
             Assert.Equal(registerModel.Children[1].Events[0].Answer, registration.Children[1].Events[0].Answer);
             Assert.Equal(registerModel.Children[1].Events[0].EventId, registration.Children[1].Events[0].EventId);
+            Assert.Equal(default(int), registration.Children[1].Events[0].Id);
             Assert.Null(registration.Children[1].Events[0].EventSnapshot);
             Assert.Equal(registerModel.Children[1].Events[1].Answer, registration.Children[1].Events[1].Answer);
             Assert.Equal(registerModel.Children[1].Events[1].EventId, registration.Children[1].Events[1].EventId);
+            Assert.Equal(default(int), registration.Children[1].Events[1].Id);
+            Assert.Equal(default(int), registration.Children[1].Id);
+            Assert.False(registration.Children[1].IsDisabled);
             Assert.Null(registration.Children[1].Events[1].EventSnapshot);
 
             Assert.Equal(default(double), registration.PaymentInformation.Amount);
@@ -191,6 +199,9 @@ namespace DetroitHarps.Business.Test.Registration
             Assert.Equal(registrationChild.DateOfBirth.Date, registeredChildModel.DateOfBirth.Date);
             Assert.Equal(registrationChild.ShirtSize, registeredChildModel.ShirtSize);
             Assert.Null(registeredChildModel.EmailAddress);
+            Assert.Null(registeredChildModel.ParentFirstName);
+            Assert.Null(registeredChildModel.ParentLastName);
+            Assert.Equal(default(int), registeredChildModel.RegistrationId);
             Assert.Equal(registrationChild.Events.Count, registeredChildModel.Events.Count);
             Assert.Equal(registrationChild.Events[0].Answer, registeredChildModel.Events[0].Answer);
             Assert.Equal(registrationChild.Events[0].EventId, registeredChildModel.Events[0].EventId);
@@ -203,6 +214,7 @@ namespace DetroitHarps.Business.Test.Registration
         {
             var registration = new Registration
             {
+                Id = 2,
                 Parent = new RegistrationParent
                 {
                     FirstName = Guid.NewGuid().ToString(),
@@ -236,29 +248,87 @@ namespace DetroitHarps.Business.Test.Registration
             var registeredChildren = Mapper.Map<IEnumerable<RegisteredChildModel>>(registration);
 
             Assert.Collection(
-            registeredChildren,
-            x =>
+                registeredChildren,
+                x =>
+                {
+                    Assert.Equal(registration.Id, x.RegistrationId);
+                    Assert.Equal(registration.Children[0].FirstName, x.FirstName);
+                    Assert.Equal(registration.Children[0].LastName, x.LastName);
+                    Assert.Equal(registration.Children[0].Gender, x.Gender);
+                    Assert.Equal(registration.Children[0].DateOfBirth.Date, x.DateOfBirth.Date);
+                    Assert.Equal(registration.Children[0].ShirtSize, x.ShirtSize);
+                    Assert.Equal(registration.ContactInformation.Email, x.EmailAddress);
+                    Assert.Equal(registration.Parent.FirstName, x.ParentFirstName);
+                    Assert.Equal(registration.Parent.LastName, x.ParentLastName);
+                },
+                x =>
+                {
+                    Assert.Equal(registration.Id, x.RegistrationId);
+                    Assert.Equal(registration.Children[1].FirstName, x.FirstName);
+                    Assert.Equal(registration.Children[1].LastName, x.LastName);
+                    Assert.Equal(registration.Children[1].Gender, x.Gender);
+                    Assert.Equal(registration.Children[1].DateOfBirth.Date, x.DateOfBirth.Date);
+                    Assert.Equal(registration.Children[1].ShirtSize, x.ShirtSize);
+                    Assert.Equal(registration.ContactInformation.Email, x.EmailAddress);
+                    Assert.Equal(registration.Parent.FirstName, x.ParentFirstName);
+                    Assert.Equal(registration.Parent.LastName, x.ParentLastName);
+                });
+        }
+
+        [Fact]
+        public void RegisteredChildModelListMapFiltersOutDisabledTest()
+        {
+            var registration = new Registration
             {
-                Assert.Equal(x.FirstName, registration.Children[0].FirstName);
-                Assert.Equal(x.LastName, registration.Children[0].LastName);
-                Assert.Equal(x.Gender, registration.Children[0].Gender);
-                Assert.Equal(x.DateOfBirth.Date, registration.Children[0].DateOfBirth.Date);
-                Assert.Equal(x.ShirtSize, registration.Children[0].ShirtSize);
-                Assert.Equal(x.EmailAddress, registration.ContactInformation.Email);
-                Assert.Equal(x.ParentFirstName, registration.Parent.FirstName);
-                Assert.Equal(x.ParentLastName, registration.Parent.LastName);
-            },
-            x =>
-            {
-                Assert.Equal(x.FirstName, registration.Children[1].FirstName);
-                Assert.Equal(x.LastName, registration.Children[1].LastName);
-                Assert.Equal(x.Gender, registration.Children[1].Gender);
-                Assert.Equal(x.DateOfBirth.Date, registration.Children[1].DateOfBirth.Date);
-                Assert.Equal(x.ShirtSize, registration.Children[1].ShirtSize);
-                Assert.Equal(x.EmailAddress, registration.ContactInformation.Email);
-                Assert.Equal(x.ParentFirstName, registration.Parent.FirstName);
-                Assert.Equal(x.ParentLastName, registration.Parent.LastName);
-            });
+                Id = 4,
+                Parent = new RegistrationParent
+                {
+                    FirstName = Guid.NewGuid().ToString(),
+                    LastName = Guid.NewGuid().ToString()
+                },
+                ContactInformation = new RegistrationContactInformation
+                {
+                    Email = Guid.NewGuid().ToString()
+                },
+                Children = new List<RegistrationChild>
+                {
+                    new RegistrationChild
+                    {
+                        FirstName = Guid.NewGuid().ToString(),
+                        LastName = Guid.NewGuid().ToString(),
+                        Gender = Gender.Female,
+                        DateOfBirth = DateTime.Now,
+                        ShirtSize = Guid.NewGuid().ToString(),
+                        IsDisabled = true
+                    },
+                    new RegistrationChild
+                    {
+                        FirstName = Guid.NewGuid().ToString(),
+                        LastName = Guid.NewGuid().ToString(),
+                        Gender = Gender.Female,
+                        DateOfBirth = DateTime.Now,
+                        ShirtSize = Guid.NewGuid().ToString(),
+                        IsDisabled = false
+                    }
+                }
+            };
+
+            var registeredChildren = Mapper.Map<IEnumerable<RegisteredChildModel>>(registration);
+
+            Assert.Collection(
+                registeredChildren,
+                x =>
+                {
+                    Assert.Equal(registration.Id, x.RegistrationId);
+                    Assert.Equal(registration.Children[1].FirstName, x.FirstName);
+                    Assert.Equal(registration.Children[1].LastName, x.LastName);
+                    Assert.Equal(registration.Children[1].Gender, x.Gender);
+                    Assert.Equal(registration.Children[1].DateOfBirth.Date, x.DateOfBirth.Date);
+                    Assert.Equal(registration.Children[1].ShirtSize, x.ShirtSize);
+                    Assert.Equal(registration.ContactInformation.Email, x.EmailAddress);
+                    Assert.Equal(registration.Parent.FirstName, x.ParentFirstName);
+                    Assert.Equal(registration.Parent.LastName, x.ParentLastName);
+                });
         }
 
         [Fact]
