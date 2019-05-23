@@ -9,9 +9,8 @@ namespace DetroitHarps.DataAccess.EntityBuilders
     public class RegistrationChildEventEntityBuilder
         : EntityBuilderBase<RegistrationChildEvent>
     {
-
         public RegistrationChildEventEntityBuilder(ModelBuilder modelBuilder)
-            :base(modelBuilder)
+            : base(modelBuilder)
         {
         }
 

@@ -6,7 +6,7 @@ namespace DetroitHarps.Business.Registration.Entities
     {
         // TODO: is there a way to eliminate this id?
         public int Id { get; set; }
-        
+
         public Answer Answer { get; set; }
 
         public int EventId { get; set; }

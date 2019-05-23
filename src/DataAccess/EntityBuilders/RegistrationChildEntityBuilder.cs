@@ -9,10 +9,10 @@ namespace DetroitHarps.DataAccess.EntityBuilders
     public class RegistrationChildEntityBuilder : EntityBuilderBase<RegistrationChild>
     {
         public RegistrationChildEntityBuilder(ModelBuilder modelBuilder)
-            :base(modelBuilder)
+            : base(modelBuilder)
         {
         }
-        
+
         protected override void ConfigureEntity(EntityTypeBuilder<RegistrationChild> typeBuilder)
         {
             typeBuilder.Property(x => x.FirstName).HasMaxLength(Limits.NameLength).IsRequired(true);
