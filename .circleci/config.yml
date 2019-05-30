@@ -67,6 +67,11 @@ jobs:
             cd /tmp/detroitharps/src/Client/
             npm install
       - run:
+          name: nglint and prettier
+          command: |
+            cd /tmp/detroitharps/src/Client/
+            npm run check-format
+      - run:
         ## this step needs to be cleaner
           name: Build Client
           command: |
