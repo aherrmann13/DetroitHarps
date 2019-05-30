@@ -9,7 +9,7 @@ export const environment = {
   auth0: {
     clientID: 'WCmWyHK0ds6prgFZ3G2NphFwB2nnGTNe',
     domain: 'angband.auth0.com',
-    audience: "https://dev.api.detroitharps.com",
-    redirectUri: 'http://localhost:4200/admin/callback',
+    audience: 'https://dev.api.detroitharps.com',
+    redirectUri: 'http://localhost:4200/admin/callback'
   }
 };

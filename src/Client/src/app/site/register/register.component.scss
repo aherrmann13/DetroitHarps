@@ -1,40 +1,39 @@
-.single-card-container{
-    mat-card{
-        mat-card-content{
-            min-height: 380px;
-        }
-        
+.single-card-container {
+  mat-card {
+    mat-card-content {
+      min-height: 380px;
     }
+  }
 }
-.register-success{
-    max-width: 300px;
-    margin: auto;
+.register-success {
+  max-width: 300px;
+  margin: auto;
 }
 
 .registration-card-subtitle {
-    color: black;
+  color: black;
 }
 
 .child-registration-form {
-    padding-top: 20px;
-    padding-bottom: 10px;
-    .child-registration-gender-selector {
-        margin-left: 15px;
-    }
+  padding-top: 20px;
+  padding-bottom: 10px;
+  .child-registration-gender-selector {
+    margin-left: 15px;
+  }
 
-    .child-index {
-        font-weight: bold;
-    }
+  .child-index {
+    font-weight: bold;
+  }
 }
 
 .registration-event-form {
-    .registration-event-title {
-        font-weight: 500;
+  .registration-event-title {
+    font-weight: 500;
+  }
+  .registration-event-radio-buttons {
+    .registration-event-answer-selector {
+      padding: 10px 10px 15px 0px;
     }
-    .registration-event-radio-buttons {
-        .registration-event-answer-selector {
-            padding: 10px 10px 15px 0px;
-        }
-    }
-    padding-bottom: 30px;
+  }
+  padding-bottom: 30px;
 }

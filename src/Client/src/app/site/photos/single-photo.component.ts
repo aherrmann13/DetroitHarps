@@ -7,7 +7,7 @@ import { PhotoService, PhotoGroup } from './photos.service';
 @Component({
   selector: 'dh-single-photo',
   templateUrl: './single-photo.component.html',
-  styleUrls: [ './photos.component.scss' ]
+  styleUrls: ['./photos.component.scss']
 })
 export class SinglePhotoComponent implements OnInit, OnDestroy {
   currentPhotoId: number;
@@ -20,12 +20,11 @@ export class SinglePhotoComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _router: Router,
     private _photoService: PhotoService,
-    @Optional() @Inject(API_BASE_URL) private _baseUrl?: string) { }
+    @Optional() @Inject(API_BASE_URL) private _baseUrl?: string
+  ) {}
 
   ngOnInit() {
-    this._photoService.getAll().subscribe(
-      data => this.processPhotoGroupsReturned(data)
-    );
+    this._photoService.getAll().subscribe(data => this.processPhotoGroupsReturned(data));
   }
 
   ngOnDestroy() {
@@ -44,7 +43,7 @@ export class SinglePhotoComponent implements OnInit, OnDestroy {
   back(): void {
     const currentGroupPhotos = this.getCurrentPhotoGroupPhotos();
     const index = currentGroupPhotos.findIndex(x => x === this.currentPhotoId);
-    const newIndex =  index !== 0 ? index - 1 : currentGroupPhotos.length - 1;
+    const newIndex = index !== 0 ? index - 1 : currentGroupPhotos.length - 1;
     this._router.navigate(['/photos', this.groupId, currentGroupPhotos[newIndex]]);
   }
 
@@ -53,10 +52,7 @@ export class SinglePhotoComponent implements OnInit, OnDestroy {
   }
 
   private getCurrentPhotoGroupPhotos(): number[] {
-    return this.photoGroups
-      .find(x => x.group.id === this.groupId)
-      .photos
-      .map(x => x.photoId);
+    return this.photoGroups.find(x => x.group.id === this.groupId).photos.map(x => x.photoId);
   }
 
   private processPhotoGroupsReturned(groups: PhotoGroup[]): void {
@@ -66,9 +62,7 @@ export class SinglePhotoComponent implements OnInit, OnDestroy {
       this.id = +params['id'];
       this.currentPhotoId = this.photoGroups
         .find(x => x.group.id === this.groupId)
-        .photos
-        .find(x => x.photoId === this.id)
-        .photoId;
-   });
+        .photos.find(x => x.photoId === this.id).photoId;
+    });
   }
 }

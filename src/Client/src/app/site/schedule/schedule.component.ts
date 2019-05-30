@@ -6,18 +6,15 @@ import { descendingDateSorter, ascendingDateSorter } from '../../core/utilities/
 @Component({
   selector: 'dh-schedule',
   templateUrl: './schedule.component.html',
-  styleUrls: [ ]
+  styleUrls: []
 })
 export class ScheduleComponent implements OnInit {
-
   events: EventModel[];
 
-  constructor(private _client: Client) { }
+  constructor(private _client: Client) {}
 
   ngOnInit() {
-    this._client.getAllEvents().subscribe(
-      data => this.events = this.orderDates(data)
-    );
+    this._client.getAllEvents().subscribe(data => (this.events = this.orderDates(data)));
   }
 
   private orderDates(events: Array<EventModel>): Array<EventModel> {

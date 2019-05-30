@@ -14,11 +14,10 @@ import { environment } from '../../../environments/environment';
 import { ChildCountSelectorComponent } from './forms/children-information/child-count-selector.component';
 import { AbstractControl, FormArray } from '@angular/forms';
 
-
 @Component({
   selector: 'dh-register',
   templateUrl: './register.component.html',
-  styleUrls: [ './register.component.scss' ]
+  styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
   @ViewChild(ParentInformationComponent) parentInformation: ParentInformationComponent;
@@ -28,7 +27,7 @@ export class RegisterComponent implements OnInit {
   @ViewChild(EventRegistrationComponent) eventRegistration: EventRegistrationComponent;
   @ViewChild(CommentsComponent) comments: CommentsComponent;
   @ViewChild(PaymentInformationComponent) paymentInformation: PaymentInformationComponent;
-  
+
   formIndex = 0;
   isDev = !environment.production;
   isRegistering = false;
@@ -38,25 +37,18 @@ export class RegisterComponent implements OnInit {
   events: Array<EventModel>;
   registerModel: RegisterModel = new RegisterModel({});
 
-  constructor(
-    private _router: Router,
-    private _snackBar: MatSnackBar,
-    private _client: Client) {}
+  constructor(private _router: Router, private _snackBar: MatSnackBar, private _client: Client) {}
 
   get childrenInformationControl(): AbstractControl {
     return new FormArray([this.childrenInformation.control, this.childCount.childCount]);
   }
 
   get paymentType(): string {
-    return this.registerModel && this.registerModel.payment ? 
-      this.registerModel.payment.paymentType.toString() : null;
+    return this.registerModel && this.registerModel.payment ? this.registerModel.payment.paymentType.toString() : null;
   }
-  
+
   ngOnInit(): void {
-    this._client.getRegistrationEvents()
-      .subscribe(
-        data => this.eventRegistration.events = data
-      )
+    this._client.getRegistrationEvents().subscribe(data => (this.eventRegistration.events = data));
   }
 
   childCountChanged(change: number): void {
@@ -74,7 +66,7 @@ export class RegisterComponent implements OnInit {
 
   step(stepper: MatStepper): void {
     // mat stepper doesnt update till 1 ms after change
-    setTimeout(() => this.formIndex = stepper._getFocusIndex(), 1);
+    setTimeout(() => (this.formIndex = stepper._getFocusIndex()), 1);
   }
 
   register(stepper: MatStepper): void {
@@ -82,34 +74,26 @@ export class RegisterComponent implements OnInit {
     this.isRegistering = true;
     const message = this.getMessage();
 
-    if(message.body && message.body !== ''){
+    if (message.body && message.body !== '') {
       this.isSendingComment = true;
-      this._client.contact(message).subscribe(
-        () => this.isSendingComment = false,
-        this.registrationError
-      );
+      this._client.contact(message).subscribe(() => (this.isSendingComment = false), this.registrationError);
     }
-    this._client.register(this.registerModel)
-      .subscribe(
-      () => this.isRegistering = false,
-      err => this.registrationError(err)
-      )
+    this._client
+      .register(this.registerModel)
+      .subscribe(() => (this.isRegistering = false), err => this.registrationError(err));
   }
-  
+
   private getMessage(): MessageModel {
     return new MessageModel({
       firstName: this.registerModel.parent.firstName,
       lastName: this.registerModel.parent.lastName,
       email: this.registerModel.contactInformation.email,
       body: this.comments.data
-    });  
+    });
   }
 
-  private registrationError(err: any)  {
-    this._snackBar.open(
-      "error during registration, please try again",
-      "Dismiss",
-      { duration: 10000 });
+  private registrationError(err: any) {
+    this._snackBar.open('error during registration, please try again', 'Dismiss', { duration: 10000 });
     console.error(err);
     this._router.navigate(['/']);
   }

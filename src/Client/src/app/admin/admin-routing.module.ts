@@ -8,16 +8,16 @@ import { ScheduleComponent } from './schedule/schedule.component';
 import { ContactComponent } from './contact/contact.component';
 
 const routes: Routes = [
-  { 
-    path: '', 
+  {
+    path: '',
     component: AdminComponent,
     children: [
       { path: 'registration', component: RegistrationComponent },
       { path: 'schedule', component: ScheduleComponent },
-      { path: 'callback',  component: CallbackComponent },
-      { path: 'contact',  component: ContactComponent },
+      { path: 'callback', component: CallbackComponent },
+      { path: 'contact', component: ContactComponent }
     ],
-    canActivate: [ AuthGuard ]
+    canActivate: [AuthGuard]
   }
 ];
 
@@ -25,4 +25,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdminRoutingModule { }
+export class AdminRoutingModule {}

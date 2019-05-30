@@ -19,7 +19,7 @@
                     <dh-register-address-information [registration]='registerModel'></dh-register-address-information>
                 </mat-step>
                 <mat-step [stepControl]='childrenInformationControl'>
-                    <dh-child-count-selector (onInit)='childCountChanged($event)' (onChange)='childCountChanged($event)'></dh-child-count-selector>
+                    <dh-child-count-selector (onInit)='childCountChanged($event)' (change)='childCountChanged($event)'></dh-child-count-selector>
                     <ng-template matStepLabel>Child Information</ng-template>
                     <dh-register-children-information [registration]='registerModel'></dh-register-children-information>
                 </mat-step>

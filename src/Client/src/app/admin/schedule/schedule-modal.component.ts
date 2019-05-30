@@ -1,12 +1,9 @@
-import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from "@angular/material";
-import { Inject, Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, AbstractControl } from "@angular/forms";
-import {
-  formMatchValidator,
-  FORM_MATCH_ERROR 
-} from "../../core/validators/form-match.directive";
-import { Observable } from "rxjs";
-import { EventModel } from "../../core/client/api.client";
+import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
+import { Inject, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { formMatchValidator, FORM_MATCH_ERROR } from '../../core/validators/form-match.directive';
+import { Observable } from 'rxjs/Observable';
+import { EventModel } from '../../core/client/api.client';
 
 export interface ScheduleModalDialogInput {
   onClick: (EventModel) => Observable<EventModel>;
@@ -14,16 +11,14 @@ export interface ScheduleModalDialogInput {
 }
 
 @Component({
-    selector: 'dh-admin-schedule-modal',
-    templateUrl: 'schedule-modal.component.html',
-    styleUrls: [ 'schedule.component.scss' ]
+  selector: 'dh-admin-schedule-modal',
+  templateUrl: 'schedule-modal.component.html',
+  styleUrls: ['schedule.component.scss']
 })
 export class ScheduleModalDialogComponent implements OnInit {
-  
-  private _createHeader = "Create New Event";
-  private _editHeader = "Edit Event";
-  private _timeRegex =
-    new RegExp("(^$)|(^([0-9]|0[0-9]|1[0-2]):[0-5][0-9] (AM|PM|am|pm)$)");
+  private _createHeader = 'Create New Event';
+  private _editHeader = 'Edit Event';
+  private _timeRegex = new RegExp('(^$)|(^([0-9]|0[0-9]|1[0-2]):[0-5][0-9] (AM|PM|am|pm)$)');
   private _event: EventModel;
   loading = false;
   header: string;
@@ -34,33 +29,31 @@ export class ScheduleModalDialogComponent implements OnInit {
     private _dialogRef: MatDialogRef<ScheduleModalDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private _data: ScheduleModalDialogInput,
     private _formBuilder: FormBuilder,
-    private _snackBar: MatSnackBar) {
-      // TODO: validate data always passed in
-      if(_data.event){
-        this._event = _data.event;
-        this.header = this._editHeader
-      } else {
-        this._event = null;
-        this.header = this._createHeader;
-      }
+    private _snackBar: MatSnackBar
+  ) {
+    // TODO: validate data always passed in
+    if (_data.event) {
+      this._event = _data.event;
+      this.header = this._editHeader;
+    } else {
+      this._event = null;
+      this.header = this._createHeader;
+    }
   }
 
-  ngOnInit(){
-    const title = this._event ? this._event.title : "";
-    const startDate = this._event ? this._event.startDate : "";
-    const startTime = this._event ? this.getTime(this._event.startDate) : ""; 
-    const endDate = this._event ? this._event.endDate : "";
-    const endTime = this._event ? this.getTime(this._event.endDate) : ""; 
-    const description = this._event ? this._event.description : "";
+  ngOnInit() {
+    const title = this._event ? this._event.title : '';
+    const startDate = this._event ? this._event.startDate : '';
+    const startTime = this._event ? this.getTime(this._event.startDate) : '';
+    const endDate = this._event ? this._event.endDate : '';
+    const endTime = this._event ? this.getTime(this._event.endDate) : '';
+    const description = this._event ? this._event.description : '';
     this.formGroup = this._formBuilder.group({
-      title: [ title, Validators.required ],
-      startDate: [ startDate, Validators.required ],
-      startTime: [
-        startTime,
-        [ Validators.required, formMatchValidator(this._timeRegex) ]
-      ],
-      endDate: [ endDate ],
-      endTime: [ endTime, formMatchValidator(this._timeRegex)],
+      title: [title, Validators.required],
+      startDate: [startDate, Validators.required],
+      startTime: [startTime, [Validators.required, formMatchValidator(this._timeRegex)]],
+      endDate: [endDate],
+      endTime: [endTime, formMatchValidator(this._timeRegex)],
       description: [description]
     });
 
@@ -69,32 +62,25 @@ export class ScheduleModalDialogComponent implements OnInit {
 
   onAcceptClick(): void {
     this.loading = true;
-    if(this.formGroup.dirty){
+    if (this.formGroup.dirty) {
       this.formGroup.disable();
-      this._data.onClick(this.mapEvent())
-      .subscribe(
-        data => this.handleSuccess(data),
-        err => this.handleError(err))
+      this._data.onClick(this.mapEvent()).subscribe(data => this.handleSuccess(data), err => this.handleError(err));
     } else {
       this.onCancelClick();
     }
-    
   }
 
-  handleSuccess(data: EventModel): void{
+  handleSuccess(data: EventModel): void {
     this.loading = false;
     this.formGroup.enable();
     this._event = data;
     this._dialogRef.close(data);
   }
 
-  handleError(err: any): void{
+  handleError(err: any): void {
     this.loading = false;
     this.formGroup.enable();
-    this._snackBar.open(
-      "an error occurred",
-      "Dismiss",
-      { duration: 10000 });
+    this._snackBar.open('an error occurred', 'Dismiss', { duration: 10000 });
     console.error(err);
     this.onCancelClick();
   }
@@ -104,13 +90,13 @@ export class ScheduleModalDialogComponent implements OnInit {
   }
 
   getErrorMessage(control: AbstractControl): string {
-    if(control.hasError(FORM_MATCH_ERROR)){
-      return "format time hh:mm am/pm";
+    if (control.hasError(FORM_MATCH_ERROR)) {
+      return 'format time hh:mm am/pm';
     }
   }
 
   onRadioClick() {
-    if(this.formGroup.pristine){
+    if (this.formGroup.pristine) {
       this.formGroup.markAsDirty();
     }
   }
@@ -119,58 +105,47 @@ export class ScheduleModalDialogComponent implements OnInit {
     return new EventModel({
       id: this._event ? this._event.id : 0,
       title: this.formGroup.controls.title.value,
-      startDate: this.getDate(
-        this.formGroup.controls.startDate.value,
-        this.formGroup.controls.startTime.value),
-      endDate: this.getDate(
-        this.formGroup.controls.endDate.value,
-        this.formGroup.controls.endTime.value),
+      startDate: this.getDate(this.formGroup.controls.startDate.value, this.formGroup.controls.startTime.value),
+      endDate: this.getDate(this.formGroup.controls.endDate.value, this.formGroup.controls.endTime.value),
       description: this.formGroup.controls.description.value,
       canRegister: this.canRegisterChecked
     });
   }
 
   private getDate(date: Date, time: string): Date {
-    if(!date || !time) {
+    if (!date || !time) {
       return undefined;
     }
-    var timeParts = time.split(/[ :]+/);
-    if(timeParts.length !== 3) {
+    const timeParts = time.split(/[ :]+/);
+    if (timeParts.length !== 3) {
       console.log(time);
     }
-    const hours = timeParts[2].toLocaleLowerCase() === "am" ?
-      +timeParts[0] :
-      +timeParts[0] + 12;
+    const hours = timeParts[2].toLocaleLowerCase() === 'am' ? +timeParts[0] : +timeParts[0] + 12;
     const minutes = +timeParts[1];
 
-    return new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      hours,
-      minutes);
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), hours, minutes);
   }
 
   private getTime(time: Date): string {
-    if(!time){
+    if (!time) {
       return undefined;
     }
-    var hours = time.getHours();
+    let hours = time.getHours();
     const minutes = time.getMinutes();
-    var period = "am";
-    if(hours > 12){
-      period = "pm";
+    let period = 'am';
+    if (hours > 12) {
+      period = 'pm';
       hours = hours - 12;
-    } else if (hours == 12) {
-      period = "pm";
-    } else if (hours == 0){
+    } else if (hours === 12) {
+      period = 'pm';
+    } else if (hours === 0) {
       hours = 12;
     }
 
-    return `${this.addZero(hours)}:${this.addZero(minutes)} ${period}`
+    return `${this.addZero(hours)}:${this.addZero(minutes)} ${period}`;
   }
 
-  private addZero(num: number): string{
+  private addZero(num: number): string {
     return num < 10 ? `0${num}` : `${num}`;
   }
 }

@@ -7,10 +7,9 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'dh-contact',
   templateUrl: './contact.component.html',
-  styleUrls: [ ]
+  styleUrls: []
 })
 export class ContactComponent implements OnInit {
-
   // TODO this should be one form
   firstName = new FormControl('', [Validators.required]);
   lastName = new FormControl('', [Validators.required]);
@@ -19,22 +18,25 @@ export class ContactComponent implements OnInit {
 
   enableForm = true;
 
-  constructor(private _client: Client, private _router: Router) { }
-  ngOnInit() {
-  }
+  constructor(private _client: Client, private _router: Router) {}
+  ngOnInit() {}
 
   getErrorMessage() {
-    return this.email.hasError('required') ? 'You must enter a value' :
-        this.email.hasError('email') ? 'Not a valid email' :
-            '';
+    return this.email.hasError('required')
+      ? 'You must enter a value'
+      : this.email.hasError('email')
+      ? 'Not a valid email'
+      : '';
   }
 
   isValidForm() {
-    return !this.firstName.invalid &&
+    return (
+      !this.firstName.invalid &&
       !this.lastName.invalid &&
       !this.email.invalid &&
       !this.message.invalid &&
-      this.enableForm;
+      this.enableForm
+    );
   }
 
   send(): void {
@@ -45,15 +47,11 @@ export class ContactComponent implements OnInit {
       lastName: this.lastName.value,
       body: this.message.value
     });
-    this._client.contact(model).subscribe(
-      _ => this.onComplete()
-    );
+    this._client.contact(model).subscribe(_ => this.onComplete());
   }
 
   private onComplete() {
     this.enableForm = true;
     this._router.navigate(['/']);
   }
-
-
 }

@@ -1,9 +1,8 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'dh-paypal-footer',
   templateUrl: './paypal-footer.component.html',
-  styleUrls: [ './paypal-footer.component.scss' ]
+  styleUrls: ['./paypal-footer.component.scss']
 })
-export class PaypalFooterComponent {
-}
+export class PaypalFooterComponent {}

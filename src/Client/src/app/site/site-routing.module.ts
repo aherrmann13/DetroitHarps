@@ -11,21 +11,24 @@ import { SupportComponent } from './support/support.component';
 import { SiteComponent } from './site.component';
 
 const routes: Routes = [
-  { path: '', component: SiteComponent, children: [
-    { path: '',  component: HomeComponent },
-    { path: 'schedule', component: ScheduleComponent },
-    { path: 'contact', component: ContactComponent },
-    { path: 'photos', component: PhotosComponent },
-    { path: 'photos/:groupId/:id', component: SinglePhotoComponent },
-    { path: 'about', component: AboutComponent },
-    { path: 'register', component: RegisterComponent },
-    { path: 'support', component: SupportComponent }] },
-
+  {
+    path: '',
+    component: SiteComponent,
+    children: [
+      { path: '', component: HomeComponent },
+      { path: 'schedule', component: ScheduleComponent },
+      { path: 'contact', component: ContactComponent },
+      { path: 'photos', component: PhotosComponent },
+      { path: 'photos/:groupId/:id', component: SinglePhotoComponent },
+      { path: 'about', component: AboutComponent },
+      { path: 'register', component: RegisterComponent },
+      { path: 'support', component: SupportComponent }
+    ]
+  }
 ];
-
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class SiteRoutingModule { }
+export class SiteRoutingModule {}

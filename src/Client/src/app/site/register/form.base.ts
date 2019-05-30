@@ -1,30 +1,29 @@
-import { Input, OnInit } from "@angular/core";
-import { RegisterModel } from "../../core/client/api.client";
-import { AbstractControl, FormBuilder } from "@angular/forms";
+import { Input, OnInit } from '@angular/core';
+import { RegisterModel } from '../../core/client/api.client';
+import { AbstractControl, FormBuilder } from '@angular/forms';
 
 export abstract class FormBase implements OnInit {
-    @Input() registration: RegisterModel;
+  @Input() registration: RegisterModel;
 
-    constructor(protected FormBuilder: FormBuilder) {
-        this.buildControl();
-    }
+  constructor(protected formBuilder: FormBuilder) {
+    this.buildControl();
+  }
 
-    ngOnInit(): void {
-        this.control
-            .valueChanges
-            .subscribe(x => {
-                if(this.isControlValid()){
-                    this.updateModel();
-                }});
-    }
+  ngOnInit(): void {
+    this.control.valueChanges.subscribe(x => {
+      if (this.isControlValid()) {
+        this.updateModel();
+      }
+    });
+  }
 
-    abstract get control(): AbstractControl;
+  abstract get control(): AbstractControl;
 
-    protected abstract buildControl(): void;
+  protected abstract buildControl(): void;
 
-    protected abstract updateModel(): void;
+  protected abstract updateModel(): void;
 
-    protected isControlValid(): boolean {
-        return this.control.valid;
-    }
+  protected isControlValid(): boolean {
+    return this.control.valid;
+  }
 }

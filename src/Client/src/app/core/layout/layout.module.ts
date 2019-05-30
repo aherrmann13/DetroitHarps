@@ -10,23 +10,9 @@ import { DrawerComponent } from './drawer/drawer.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @NgModule({
-  declarations: [
-    ToolbarComponent,
-    DrawerComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    HttpClientModule,
-    MaterialModule,
-    ReactiveFormsModule,
-    RouterModule
-  ],
-  exports: [
-    ToolbarComponent,
-    DrawerComponent
-  ],
-  providers: [
-  ]
+  declarations: [ToolbarComponent, DrawerComponent],
+  imports: [CommonModule, FormsModule, HttpClientModule, MaterialModule, ReactiveFormsModule, RouterModule],
+  exports: [ToolbarComponent, DrawerComponent],
+  providers: []
 })
-export class LayoutModule { }
+export class LayoutModule {}

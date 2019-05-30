@@ -9,7 +9,6 @@ import { LayoutModule } from '../core/layout/layout.module';
 
 import { SiteRoutingModule } from './site-routing.module';
 
-
 import { SiteComponent } from './site.component';
 import { SinglePhotoComponent } from './photos/single-photo.component';
 import { HomeComponent } from './home/home.component';
@@ -64,9 +63,6 @@ import { PaypalFooterComponent } from './footer/paypal-footer.component';
     LayoutModule,
     LoggerModule
   ],
-  providers: [
-    PhotoService,
-    MatIconRegistry
-  ]
+  providers: [PhotoService, MatIconRegistry]
 })
-export class SiteModule { }
+export class SiteModule {}

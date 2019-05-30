@@ -5,7 +5,6 @@ import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class AuthService {
-
   private _accessToken: string;
   private _expiresAt: number;
 
@@ -32,15 +31,13 @@ export class AuthService {
   // using callbacks because the router was not working
   // properly when injected here
   // TODO: use router here
-  public handleAuthentication(
-    successCallback: Function,
-    errorCallback: Function): void {
+  public handleAuthentication(successCallback: Function, errorCallback: Function): void {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.localLogin(authResult);
         successCallback();
       } else if (err) {
-        errorCallback()
+        errorCallback();
       }
     });
   }
@@ -72,7 +69,7 @@ export class AuthService {
 
   private localLogin(authResult): void {
     // Set the time that the access token will expire at
-    const expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
+    const expiresAt = authResult.expiresIn * 1000 + new Date().getTime();
     this._accessToken = authResult.accessToken;
     this._expiresAt = expiresAt;
 
@@ -85,6 +82,6 @@ export class AuthService {
     const expiresAt = localStorage.getItem('expiresAt');
 
     this._accessToken = accessToken ? accessToken : this._accessToken;
-    this._expiresAt = expiresAt && !isNaN(+expiresAt) ? parseInt(expiresAt) : this._expiresAt;
+    this._expiresAt = expiresAt && !isNaN(+expiresAt) ? parseInt(expiresAt, 10) : this._expiresAt;
   }
 }

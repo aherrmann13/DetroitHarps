@@ -1,19 +1,18 @@
-mat-sidenav{
-    width: 250px;
-    button{
-        text-align: left;    
-        width: 100%;
-        mat-icon {
-            margin: 0px 12px;
-        }
-    }
-}
-
-mat-sidenav-container{
-    display: flex;
-}
-
-mat-sidenav-content{
+mat-sidenav {
+  width: 250px;
+  button {
+    text-align: left;
     width: 100%;
+    mat-icon {
+      margin: 0px 12px;
+    }
+  }
 }
 
+mat-sidenav-container {
+  display: flex;
+}
+
+mat-sidenav-content {
+  width: 100%;
+}

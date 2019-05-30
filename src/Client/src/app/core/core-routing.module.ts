@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   {
     path: 'admin',
-    loadChildren: '../admin/admin.module#AdminModule',
+    loadChildren: '../admin/admin.module#AdminModule'
   },
   {
     path: '',
@@ -17,4 +17,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class CoreRoutingModule { }
+export class CoreRoutingModule {}

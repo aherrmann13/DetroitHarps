@@ -9,6 +9,8 @@
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
+    "prettier": "prettier --config ./.prettierrc --list-different \"src/{app,environments,assets}/**/*{.ts,.js,.json,.css,.scss}\"",
+    "check-format": "npm run prettier && npm run lint",
     "e2e": "ng e2e",
     "generate": "nswag swagger2tsclient /runtime:NetCore20 /input:http://localhost:5000/swagger/doc/swagger.json /output:./src/app/core/client/api.client.ts /Template:Angular /ClientBaseClass:BaseClient /ExtensionCode:\"import { BaseClient } from './api.client.base'\" /BaseUrlTokenName:\"API_BASE_URL\" /UseTransformOptionsMethod:true /UseTransformResultMethod:true /InjectionTokenType:InjectionToken"
   },
@@ -42,6 +44,7 @@
     "@angular/compiler-cli": "^6.0.2",
     "@angular/language-service": "^6.0.2",
     "nswag": "^11.17.9",
+    "prettier": "^1.17.1",
     "typescript": "~2.7.2"
   }
 }

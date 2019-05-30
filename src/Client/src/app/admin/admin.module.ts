@@ -30,18 +30,7 @@ import { MessageModalComponent } from './contact/message-modal.component';
     ContactComponent,
     MessageModalComponent
   ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    MaterialModule,
-    ReactiveFormsModule,
-    AdminRoutingModule,
-    LayoutModule
-  ],
-  entryComponents: [
-    ScheduleModalDialogComponent,
-    DeletePromptDialogComponent,
-    MessageModalComponent
-  ]
+  imports: [CommonModule, FormsModule, MaterialModule, ReactiveFormsModule, AdminRoutingModule, LayoutModule],
+  entryComponents: [ScheduleModalDialogComponent, DeletePromptDialogComponent, MessageModalComponent]
 })
-export class AdminModule { }
+export class AdminModule {}
