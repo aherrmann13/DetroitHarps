@@ -1,18 +1,18 @@
-<div class='single-card-container sides-container'>
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title >
-                <span class='mat-title'>Schedule</span>
-            </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <mat-list>
-                <mat-list-item *ngFor='let event of events'>
-                    <mat-icon mat-list-icon>event</mat-icon>
-                    <h4 mat-line>{{event.title}}</h4>
-                    <p mat-line> {{event.startDate | date:'mediumDate':'UTC' }} </p>
-                </mat-list-item>
-            </mat-list>
-        </mat-card-content>
-    </mat-card>
+<div class="single-card-container sides-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <span class="mat-title">Schedule</span>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item *ngFor="let event of events">
+          <mat-icon mat-list-icon>event</mat-icon>
+          <h4 mat-line>{{ event.title }}</h4>
+          <p mat-line>{{ event.startDate | date: 'mediumDate':'UTC' }}</p>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
 </div>

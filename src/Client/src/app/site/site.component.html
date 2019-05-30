@@ -1,25 +1,25 @@
-<dh-toolbar [title]='title' (menuClick)='sidenav.toggle()'>
-    <a mat-button class='toolbar-icon' href='{{facebookUrl}}' target='_blank'>
-        <mat-icon svgIcon='facebook'></mat-icon>
-    </a>
-    <a mat-button class='toolbar-icon' href='{{twitterUrl}}' target='_blank'>
-        <mat-icon svgIcon='twitter'></mat-icon>
-    </a>
-    <a mat-button class='toolbar-icon' href='{{instagramUrl}}' target='_blank'>
-        <mat-icon svgIcon='instagram'></mat-icon>
-    </a>
-    <a mat-button class='toolbar-icon' href='{{shopUrl}}' target='_blank'>
-        <mat-icon>shop</mat-icon>
-    </a>
-    <a mat-button class='toolbar-icon' href='{{youtubeUrl}}' target='_blank'>
-        <mat-icon svgIcon='youtube'></mat-icon>
-    </a>
+<dh-toolbar [title]="title" (menuClick)="sidenav.toggle()">
+  <a mat-button class="toolbar-icon" href="{{ facebookUrl }}" target="_blank">
+    <mat-icon svgIcon="facebook"></mat-icon>
+  </a>
+  <a mat-button class="toolbar-icon" href="{{ twitterUrl }}" target="_blank">
+    <mat-icon svgIcon="twitter"></mat-icon>
+  </a>
+  <a mat-button class="toolbar-icon" href="{{ instagramUrl }}" target="_blank">
+    <mat-icon svgIcon="instagram"></mat-icon>
+  </a>
+  <a mat-button class="toolbar-icon" href="{{ shopUrl }}" target="_blank">
+    <mat-icon>shop</mat-icon>
+  </a>
+  <a mat-button class="toolbar-icon" href="{{ youtubeUrl }}" target="_blank">
+    <mat-icon svgIcon="youtube"></mat-icon>
+  </a>
 </dh-toolbar>
-<dh-drawer [items]='drawerItems'>
-    <div class="main-display">
-        <div class="body">
-            <router-outlet></router-outlet>
-        </div>
-        <dh-footer></dh-footer>
+<dh-drawer [items]="drawerItems">
+  <div class="main-display">
+    <div class="body">
+      <router-outlet></router-outlet>
     </div>
+    <dh-footer></dh-footer>
+  </div>
 </dh-drawer>
