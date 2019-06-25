@@ -10,7 +10,8 @@ import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'dh-admin-registration',
-  templateUrl: './registration.component.html'
+  templateUrl: './registration.component.html',
+  styleUrls: [ '../admin.component.scss' ]
 })
 export class RegistrationComponent implements OnInit {
   dataSource = new MatTableDataSource<RegisteredChildModel>();
@@ -20,6 +21,8 @@ export class RegistrationComponent implements OnInit {
     'childName',
     'gender',
     'emailAddress',
+    'address',
+    'phone',
     'dateOfBirth',
     'shirtSize',
     'edit'
@@ -77,6 +80,12 @@ export class RegistrationComponent implements OnInit {
         this.refreshDataSource();
       }
     });
+  }
+
+  getAddress(child: RegisteredChildModel): String {
+    const { address, address2, city, state, zip } = child.contactInformation;
+    const fullAddress = address2 ? address + '\n' + address2 : address;
+    return `${fullAddress}\n${city}, ${state}, ${zip}`;
   }
 
   private refreshDataSource() {

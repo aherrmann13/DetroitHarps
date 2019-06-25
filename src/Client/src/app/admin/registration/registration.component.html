@@ -1,5 +1,5 @@
 <dh-admin-toolbar [items]="items"></dh-admin-toolbar>
-<mat-table mat-table [dataSource]="dataSource">
+<mat-table mat-table [dataSource]="dataSource" class="registration-table">
   <ng-container matColumnDef="parentName">
     <mat-header-cell *matHeaderCellDef> Parent </mat-header-cell>
     <mat-cell *matCellDef="let child"> {{ child.parentFirstName }}&nbsp;{{ child.parentLastName }} </mat-cell>
@@ -13,6 +13,16 @@
   <ng-container matColumnDef="emailAddress">
     <mat-header-cell *matHeaderCellDef> EmailAddress </mat-header-cell>
     <mat-cell *matCellDef="let child"> {{ child.emailAddress }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="address">
+    <mat-header-cell *matHeaderCellDef> Address </mat-header-cell>
+    <mat-cell *matCellDef="let child">{{ getAddress(child) }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="phone">
+    <mat-header-cell *matHeaderCellDef> Phone </mat-header-cell>
+    <mat-cell *matCellDef="let child"> {{ child.contactInformation.phoneNumber }} </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="gender">

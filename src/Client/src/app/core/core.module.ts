@@ -15,6 +15,6 @@ import { ClientModule } from './client/client.module';
   imports: [CommonModule, CoreRoutingModule, MaterialModule, LoggerModule, ClientModule],
   declarations: [],
   exports: [LoggerModule, RouterModule, ClientModule],
-  providers: [AuthService, AuthGuardService, { provide: ErrorHandler, useClass: GlobalErrorHandler }]
+  providers: [AuthService, AuthGuardService]
 })
 export class CoreModule {}

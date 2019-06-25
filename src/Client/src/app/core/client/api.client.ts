@@ -2030,7 +2030,7 @@ export class RegisteredChildModel implements IRegisteredChildModel {
     firstName?: string;
     lastName?: string;
     gender: RegisteredChildModelGender;
-    emailAddress?: string;
+    contactInformation?: RegisteredChildContactInformationModel;
     dateOfBirth: Date;
     shirtSize?: string;
     events?: RegisteredChildEventModel[];
@@ -2052,7 +2052,7 @@ export class RegisteredChildModel implements IRegisteredChildModel {
             this.firstName = data["firstName"];
             this.lastName = data["lastName"];
             this.gender = data["gender"];
-            this.emailAddress = data["emailAddress"];
+            this.contactInformation = data["contactInformation"] ? RegisteredChildContactInformationModel.fromJS(data["contactInformation"]) : <any>undefined;
             this.dateOfBirth = data["dateOfBirth"] ? new Date(data["dateOfBirth"].toString()) : <any>undefined;
             this.shirtSize = data["shirtSize"];
             if (data["events"] && data["events"].constructor === Array) {
@@ -2078,7 +2078,7 @@ export class RegisteredChildModel implements IRegisteredChildModel {
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
         data["gender"] = this.gender;
-        data["emailAddress"] = this.emailAddress;
+        data["contactInformation"] = this.contactInformation ? this.contactInformation.toJSON() : <any>undefined;
         data["dateOfBirth"] = this.dateOfBirth ? this.dateOfBirth.toISOString() : <any>undefined;
         data["shirtSize"] = this.shirtSize;
         if (this.events && this.events.constructor === Array) {
@@ -2097,10 +2097,70 @@ export interface IRegisteredChildModel {
     firstName?: string;
     lastName?: string;
     gender: RegisteredChildModelGender;
-    emailAddress?: string;
+    contactInformation?: RegisteredChildContactInformationModel;
     dateOfBirth: Date;
     shirtSize?: string;
     events?: RegisteredChildEventModel[];
+}
+
+export class RegisteredChildContactInformationModel implements IRegisteredChildContactInformationModel {
+    emailAddress?: string;
+    phoneNumber?: string;
+    address?: string;
+    address2?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+
+    constructor(data?: IRegisteredChildContactInformationModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.emailAddress = data["emailAddress"];
+            this.phoneNumber = data["phoneNumber"];
+            this.address = data["address"];
+            this.address2 = data["address2"];
+            this.city = data["city"];
+            this.state = data["state"];
+            this.zip = data["zip"];
+        }
+    }
+
+    static fromJS(data: any): RegisteredChildContactInformationModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisteredChildContactInformationModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["emailAddress"] = this.emailAddress;
+        data["phoneNumber"] = this.phoneNumber;
+        data["address"] = this.address;
+        data["address2"] = this.address2;
+        data["city"] = this.city;
+        data["state"] = this.state;
+        data["zip"] = this.zip;
+        return data; 
+    }
+}
+
+export interface IRegisteredChildContactInformationModel {
+    emailAddress?: string;
+    phoneNumber?: string;
+    address?: string;
+    address2?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
 }
 
 export class RegisteredChildEventModel implements IRegisteredChildEventModel {
