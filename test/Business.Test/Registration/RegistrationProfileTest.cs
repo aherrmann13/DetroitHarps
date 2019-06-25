@@ -2,7 +2,6 @@ namespace DetroitHarps.Business.Test.Registration
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using AutoMapper;
     using DetroitHarps.Business.Registration;
     using DetroitHarps.Business.Registration.DataTypes;
@@ -198,7 +197,7 @@ namespace DetroitHarps.Business.Test.Registration
             Assert.Equal(registrationChild.Gender, registeredChildModel.Gender);
             Assert.Equal(registrationChild.DateOfBirth.Date, registeredChildModel.DateOfBirth.Date);
             Assert.Equal(registrationChild.ShirtSize, registeredChildModel.ShirtSize);
-            Assert.Null(registeredChildModel.EmailAddress);
+            Assert.Null(registeredChildModel.ContactInformation);
             Assert.Null(registeredChildModel.ParentFirstName);
             Assert.Null(registeredChildModel.ParentLastName);
             Assert.Equal(default(int), registeredChildModel.RegistrationId);
@@ -222,7 +221,12 @@ namespace DetroitHarps.Business.Test.Registration
                 },
                 ContactInformation = new RegistrationContactInformation
                 {
-                    Email = Guid.NewGuid().ToString()
+                    Email = Guid.NewGuid().ToString(),
+                    Address = Guid.NewGuid().ToString(),
+                    Address2 = Guid.NewGuid().ToString(),
+                    City = Guid.NewGuid().ToString(),
+                    State = Guid.NewGuid().ToString(),
+                    Zip = Guid.NewGuid().ToString(),
                 },
                 Children = new List<RegistrationChild>
                 {
@@ -257,7 +261,12 @@ namespace DetroitHarps.Business.Test.Registration
                     Assert.Equal(registration.Children[0].Gender, x.Gender);
                     Assert.Equal(registration.Children[0].DateOfBirth.Date, x.DateOfBirth.Date);
                     Assert.Equal(registration.Children[0].ShirtSize, x.ShirtSize);
-                    Assert.Equal(registration.ContactInformation.Email, x.EmailAddress);
+                    Assert.Equal(registration.ContactInformation.Email, x.ContactInformation.EmailAddress);
+                    Assert.Equal(registration.ContactInformation.Address, x.ContactInformation.Address);
+                    Assert.Equal(registration.ContactInformation.Address2, x.ContactInformation.Address2);
+                    Assert.Equal(registration.ContactInformation.City, x.ContactInformation.City);
+                    Assert.Equal(registration.ContactInformation.State, x.ContactInformation.State);
+                    Assert.Equal(registration.ContactInformation.Zip, x.ContactInformation.Zip);
                     Assert.Equal(registration.Parent.FirstName, x.ParentFirstName);
                     Assert.Equal(registration.Parent.LastName, x.ParentLastName);
                 },
@@ -269,7 +278,11 @@ namespace DetroitHarps.Business.Test.Registration
                     Assert.Equal(registration.Children[1].Gender, x.Gender);
                     Assert.Equal(registration.Children[1].DateOfBirth.Date, x.DateOfBirth.Date);
                     Assert.Equal(registration.Children[1].ShirtSize, x.ShirtSize);
-                    Assert.Equal(registration.ContactInformation.Email, x.EmailAddress);
+                    Assert.Equal(registration.ContactInformation.Address, x.ContactInformation.Address);
+                    Assert.Equal(registration.ContactInformation.Address2, x.ContactInformation.Address2);
+                    Assert.Equal(registration.ContactInformation.City, x.ContactInformation.City);
+                    Assert.Equal(registration.ContactInformation.State, x.ContactInformation.State);
+                    Assert.Equal(registration.ContactInformation.Zip, x.ContactInformation.Zip);
                     Assert.Equal(registration.Parent.FirstName, x.ParentFirstName);
                     Assert.Equal(registration.Parent.LastName, x.ParentLastName);
                 });
@@ -325,7 +338,12 @@ namespace DetroitHarps.Business.Test.Registration
                     Assert.Equal(registration.Children[1].Gender, x.Gender);
                     Assert.Equal(registration.Children[1].DateOfBirth.Date, x.DateOfBirth.Date);
                     Assert.Equal(registration.Children[1].ShirtSize, x.ShirtSize);
-                    Assert.Equal(registration.ContactInformation.Email, x.EmailAddress);
+                    Assert.Equal(registration.ContactInformation.Email, x.ContactInformation.EmailAddress);
+                    Assert.Equal(registration.ContactInformation.Address, x.ContactInformation.Address);
+                    Assert.Equal(registration.ContactInformation.Address2, x.ContactInformation.Address2);
+                    Assert.Equal(registration.ContactInformation.City, x.ContactInformation.City);
+                    Assert.Equal(registration.ContactInformation.State, x.ContactInformation.State);
+                    Assert.Equal(registration.ContactInformation.Zip, x.ContactInformation.Zip);
                     Assert.Equal(registration.Parent.FirstName, x.ParentFirstName);
                     Assert.Equal(registration.Parent.LastName, x.ParentLastName);
                 });

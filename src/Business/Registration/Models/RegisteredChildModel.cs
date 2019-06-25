@@ -18,7 +18,7 @@ namespace DetroitHarps.Business.Registration.Models
 
         public Gender Gender { get; set; }
 
-        public string EmailAddress { get; set; }
+        public RegisteredChildContactInformationModel ContactInformation { get; set; }
 
         public DateTimeOffset DateOfBirth { get; set; }
 

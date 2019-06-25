@@ -57,7 +57,7 @@ namespace DetroitHarps.Business.Registration
                     dest => dest.ParentLastName,
                     opt => opt.Ignore())
                 .ForMember(
-                    dest => dest.EmailAddress,
+                    dest => dest.ContactInformation,
                     opt => opt.Ignore());
 
             CreateMap<Registration, IEnumerable<RegisteredChildModel>>()
@@ -88,6 +88,12 @@ namespace DetroitHarps.Business.Registration
                     dest => dest.EventSnapshot,
                     opt => opt.Ignore());
 
+            CreateMap<RegistrationContactInformation,
+                RegisteredChildContactInformationModel>()
+                .ForMember(
+                    dest => dest.EmailAddress,
+                    opt => opt.MapFrom(src => src.Email));
+
             CreateMap<RegistrationChildEvent, RegisteredChildEventModel>();
 
             CreateMap<Event, RegistrationChildEventSnapshot>();
@@ -104,10 +110,12 @@ namespace DetroitHarps.Business.Registration
                 foreach (var child in source.Children.Where(x => !x.IsDisabled))
                 {
                     var childModel = Mapper.Map<RegisteredChildModel>(child);
-                    childModel.EmailAddress = source.ContactInformation.Email;
                     childModel.ParentFirstName = source.Parent.FirstName;
                     childModel.ParentLastName = source.Parent.LastName;
                     childModel.RegistrationId = source.Id;
+                    childModel.ContactInformation =
+                        Mapper.Map<RegisteredChildContactInformationModel>(
+                            source.ContactInformation);
 
                     yield return childModel;
                 }
