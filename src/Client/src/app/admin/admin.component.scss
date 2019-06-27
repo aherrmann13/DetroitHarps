@@ -1,3 +1,11 @@
+$SMALL_COLUMN: 0.75;
+$DEFAULT_COLUMN: 1;
+$LARGE_COLUMN: 1.25;
+$XLARGE_COLUMN: 1.5;
+@mixin column-size($size) {
+  flex: $size;
+}
+
 .dh-toolbar {
   .toolbar-icon {
     height: 100%;
@@ -26,4 +34,14 @@
   .mat-cell {
     white-space: pre;
   }
+}
+
+.cdk-column-emailAddress {
+  @include column-size($XLARGE_COLUMN);
+}
+.cdk-column-address {
+  @include column-size($LARGE_COLUMN);
+}
+.cdk-column-gender {
+  @include column-size($SMALL_COLUMN);
 }

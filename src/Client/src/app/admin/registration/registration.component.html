@@ -12,7 +12,7 @@
 
   <ng-container matColumnDef="emailAddress">
     <mat-header-cell *matHeaderCellDef> EmailAddress </mat-header-cell>
-    <mat-cell *matCellDef="let child"> {{ child.emailAddress }} </mat-cell>
+    <mat-cell *matCellDef="let child"> {{ child.contactInformation.emailAddress }} </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="address">

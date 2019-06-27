@@ -11,7 +11,7 @@ import { Observable } from 'rxjs/Observable';
 @Component({
   selector: 'dh-admin-registration',
   templateUrl: './registration.component.html',
-  styleUrls: [ '../admin.component.scss' ]
+  styleUrls: ['../admin.component.scss']
 })
 export class RegistrationComponent implements OnInit {
   dataSource = new MatTableDataSource<RegisteredChildModel>();
