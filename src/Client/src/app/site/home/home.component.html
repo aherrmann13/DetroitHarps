@@ -7,6 +7,9 @@
     <div class="header-button">
       <button mat-raised-button [routerLink]="['register']">{{ registrationText }}</button>
     </div>
+    <div *ngIf="displayCampRegistration" class="header-button">
+      <a mat-raised-button [href]="campRegistrationUrl">{{ campRegistrationText }}</a>
+    </div>
   </div>
 </header>
 <div class="home-content">
