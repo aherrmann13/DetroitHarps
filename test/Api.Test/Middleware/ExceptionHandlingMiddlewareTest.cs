@@ -3,6 +3,7 @@ namespace DetroitHarps.Api.Test.Middleware
     using System;
     using System.IO;
     using System.Net;
+    using System.Text;
     using DetroitHarps.Api.Middleware;
     using DetroitHarps.Business.Common.Exceptions;
     using Microsoft.AspNetCore.Http;
@@ -48,7 +49,7 @@ namespace DetroitHarps.Api.Test.Middleware
             await middleware.Invoke(context);
             context.Response.Body.Seek(0, SeekOrigin.Begin);
 
-            using (var reader = new StreamReader(context.Response.Body))
+            using (var reader = new StreamReader(context.Response.Body, Encoding.UTF8))
             {
                 var streamText = reader.ReadToEnd();
                 Assert.Equal(message, streamText);
