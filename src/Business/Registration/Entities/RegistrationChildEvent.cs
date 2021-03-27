@@ -2,7 +2,7 @@ namespace DetroitHarps.Business.Registration.Entities
 {
     using DetroitHarps.Business.Registration.DataTypes;
 
-    public class RegistrationChildEvent : IHasId
+    public class RegistrationChildEvent : IHasId<int>
     {
         // TODO: is there a way to eliminate this id?
         public int Id { get; set; }

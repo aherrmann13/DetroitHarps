@@ -1,8 +1,6 @@
 namespace DetroitHarps.Business.Photo.Entities
 {
-    using System.Collections.Generic;
-
-    public class PhotoGroup : IHasId
+    public class PhotoGroup : IHasId<int>
     {
         public int Id { get; set; }
 

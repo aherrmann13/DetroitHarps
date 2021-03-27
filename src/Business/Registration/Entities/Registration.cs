@@ -3,7 +3,7 @@ namespace DetroitHarps.Business.Registration.Entities
     using System;
     using System.Collections.Generic;
 
-    public class Registration : IHasId, IHasDisable
+    public class Registration : IHasId<int>, IHasDisable
     {
         public int Id { get; set; }
 

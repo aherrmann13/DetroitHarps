@@ -1,6 +1,6 @@
 namespace DetroitHarps.Business.Photo.Entities
 {
-    public class Photo : IHasId
+    public class Photo : IHasId<int>
     {
         public int Id { get; set; }
 

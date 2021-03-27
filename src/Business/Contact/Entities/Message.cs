@@ -2,7 +2,7 @@ namespace DetroitHarps.Business.Contact.Entities
 {
     using System;
 
-    public class Message : IHasId
+    public class Message : IHasId<int>
     {
         public int Id { get; set; }
 

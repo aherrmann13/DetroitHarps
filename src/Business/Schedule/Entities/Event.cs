@@ -2,7 +2,7 @@ namespace DetroitHarps.Business.Schedule.Entities
 {
     using System;
 
-    public class Event : IHasId
+    public class Event : IHasId<int>
     {
         public int Id { get; set; }
 

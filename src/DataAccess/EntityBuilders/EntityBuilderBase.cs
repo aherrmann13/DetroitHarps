@@ -6,8 +6,11 @@ namespace DetroitHarps.DataAccess.EntityBuilders
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using Tools;
 
+    // TODO: genericise `IHasId<int>`?
+    // causes problems with `dbContext.ChangeTracker.Entries<IHasId<int>>()`
+    // C# equivalent of [_] in scala
     public abstract class EntityBuilderBase<T> : IEntityBuilder
-        where T : class, IHasId
+        where T : class, IHasId<int>
     {
         private readonly ModelBuilder _modelBuilder;
 

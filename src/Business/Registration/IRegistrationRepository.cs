@@ -2,7 +2,7 @@ namespace DetroitHarps.Business.Registration
 {
     using DetroitHarps.Business.Registration.Entities;
 
-    public interface IRegistrationRepository : IRepository<Registration>
+    public interface IRegistrationRepository : IRepository<Registration, int>, IQueryableRepository<Registration, int>
     {
     }
 }

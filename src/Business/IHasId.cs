@@ -1,8 +1,7 @@
 namespace DetroitHarps.Business
 {
-    // TODO: where to put this
-    public interface IHasId
+    public interface IHasId<I>
     {
-        int Id { get; set; }
+        I Id { get; set; }
     }
 }

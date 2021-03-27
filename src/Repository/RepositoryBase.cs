@@ -9,8 +9,8 @@ namespace DetroitHarps.Repository
     using Microsoft.EntityFrameworkCore;
     using Tools;
 
-    public abstract class RepositoryBase<T> : IRepository<T>
-        where T : class, IHasId
+    public abstract class RepositoryBase<T, I> : IRepository<T, I>, IQueryableRepository<T, I>
+        where T : class, IHasId<I>
     {
         protected RepositoryBase(DetroitHarpsDbContext dbContext)
         {
@@ -26,7 +26,7 @@ namespace DetroitHarps.Repository
 
         protected virtual IQueryable<T> BaseQuery => DbContext.Set<T>();
 
-        public int Create(T entity)
+        public I Create(T entity)
         {
             Guard.NotNull(entity, nameof(entity));
             DbContext.Add(entity);
@@ -43,7 +43,7 @@ namespace DetroitHarps.Repository
             DbContext.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void Delete(I id)
         {
             var entity = GetSingleOrDefault(id);
 
@@ -54,7 +54,7 @@ namespace DetroitHarps.Repository
             }
         }
 
-        public bool Exists(int id) => DbContext.Set<T>().Any(x => x.Id == id);
+        public bool Exists(I id) => DbContext.Set<T>().Any(x => x.Id.Equals(id));
 
         public IList<T> GetAll() => BaseQuery.ToList();
 
@@ -72,6 +72,6 @@ namespace DetroitHarps.Repository
             return BaseQuery.AsNoTracking().SingleOrDefault(filterClause);
         }
 
-        public T GetSingleOrDefault(int id) => BaseQuery.AsNoTracking().FirstOrDefault(x => x.Id == id);
+        public T GetSingleOrDefault(I id) => BaseQuery.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id));
     }
 }

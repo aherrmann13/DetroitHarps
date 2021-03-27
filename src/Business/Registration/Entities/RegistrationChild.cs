@@ -4,7 +4,7 @@ namespace DetroitHarps.Business.Registration.Entities
     using System.Collections.Generic;
     using DetroitHarps.Business.Registration.DataTypes;
 
-    public class RegistrationChild : IHasId, IHasDisable
+    public class RegistrationChild : IHasId<int>, IHasDisable
     {
         // TODO: is there a way to eliminate this id?
         public int Id { get; set; }

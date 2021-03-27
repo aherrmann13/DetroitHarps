@@ -2,7 +2,7 @@ namespace DetroitHarps.Business.Photo
 {
     using DetroitHarps.Business.Photo.Entities;
 
-    public interface IPhotoRepository : IRepository<Photo>
+    public interface IPhotoRepository : IRepository<Photo, int>, IQueryableRepository<Photo, int>
     {
         void UpdateDisplayProperties(int id, PhotoDisplayProperties properties);
 

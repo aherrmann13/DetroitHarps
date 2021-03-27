@@ -1,16 +1,12 @@
 namespace DetroitHarps.Repository
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Linq.Expressions;
-    using DetroitHarps.Business;
     using DetroitHarps.Business.Photo;
     using DetroitHarps.Business.Photo.Entities;
     using DetroitHarps.DataAccess;
     using Tools;
 
-    public class PhotoRepository : RepositoryBase<Photo>, IPhotoRepository
+    public class PhotoRepository : RepositoryBase<Photo, int>, IPhotoRepository
     {
         public PhotoRepository(DetroitHarpsDbContext dbContext)
             : base(dbContext)

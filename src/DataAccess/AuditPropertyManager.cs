@@ -10,7 +10,7 @@ namespace DetroitHarps.DataAccess
         public void SetTimestamps(DbContext dbContext)
         {
             var now = DateTimeOffset.Now;
-            dbContext.ChangeTracker.Entries<IHasId>()
+            dbContext.ChangeTracker.Entries<IHasId<int>>()
                 .Where(x => x.State == EntityState.Added)
                 .ToList()
                 .ForEach(x =>
@@ -19,7 +19,7 @@ namespace DetroitHarps.DataAccess
                     x.Property<DateTimeOffset>(Constants.UpdateTimestampPropertyName).CurrentValue = now;
                 });
 
-            dbContext.ChangeTracker.Entries<IHasId>()
+            dbContext.ChangeTracker.Entries<IHasId<int>>()
                 .Where(x => x.State == EntityState.Modified)
                 .ToList()
                 .ForEach(x =>
