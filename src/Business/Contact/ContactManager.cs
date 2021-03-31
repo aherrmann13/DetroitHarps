@@ -6,7 +6,6 @@ namespace DetroitHarps.Business.Contact
     using System.Text;
     using AutoMapper;
     using DetroitHarps.Business.Common.Constants;
-    using DetroitHarps.Business.Common.Exceptions;
     using DetroitHarps.Business.Contact.Entities;
     using DetroitHarps.Business.Contact.Models;
     using Microsoft.Extensions.Logging;
@@ -15,20 +14,24 @@ namespace DetroitHarps.Business.Contact
 
     public class ContactManager : IContactManager
     {
-        private readonly IMessageRepository _repository;
+        private readonly IMessageRepository _messageRepository;
+        private readonly IMessageStatusRepository _messageStatusRepository;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ContactManager> _logger;
 
         public ContactManager(
-            IMessageRepository repository,
+            IMessageRepository messageRepository,
+            IMessageStatusRepository messageStatusRepository,
             IEmailSender emailSender,
             ILogger<ContactManager> logger)
         {
-            Guard.NotNull(repository, nameof(repository));
+            Guard.NotNull(messageRepository, nameof(messageRepository));
+            Guard.NotNull(messageStatusRepository, nameof(messageStatusRepository));
             Guard.NotNull(emailSender, nameof(emailSender));
             Guard.NotNull(logger, nameof(logger));
 
-            _repository = repository;
+            _messageRepository = messageRepository;
+            _messageStatusRepository = messageStatusRepository;
             _emailSender = emailSender;
             _logger = logger;
         }
@@ -51,46 +54,38 @@ namespace DetroitHarps.Business.Contact
                 _logger.LogError(ex, "error sending email");
             }
 
-            _repository.Create(Mapper.Map<Message>(model));
+            var entity = Mapper.Map<Message>(model);
+            _messageRepository.Create(entity);
+            _messageStatusRepository.SetAsUnread(entity.Id);
         }
 
-        public void MarkAsRead(int id)
+        public void MarkAsRead(Guid id)
         {
-            var message = GetMessageOrThrow(id);
-            if (message.IsRead)
-            {
-                _logger.LogInformation($"message with id {id} is already marked as read");
-            }
-            else
-            {
-                _logger.LogInformation($"marking message with id {id} as read");
-                message.IsRead = true;
-                _repository.Update(message);
-            }
+            _logger.LogInformation($"marking message with id {id} as read");
+            _messageStatusRepository.SetAsRead(id);
         }
 
-        public void MarkAsUnread(int id)
+        public void MarkAsUnread(Guid id)
         {
-            var message = GetMessageOrThrow(id);
-            if (message.IsRead)
-            {
-                _logger.LogInformation($"marking message with id {id} as unread");
-                message.IsRead = false;
-                _repository.Update(message);
-            }
-            else
-            {
-                _logger.LogInformation($"message with id {id} is already marked as unread");
-            }
+            _logger.LogInformation($"marking message with id {id} as unread");
+            _messageStatusRepository.SetAsUnread(id);
         }
 
-        public IEnumerable<MessageReadModel> GetAll() =>
-            _repository.GetAll().Select(Mapper.Map<MessageReadModel>);
-
-        private string FormatSubject(MessageModel model)
+        public IEnumerable<MessageReadModel> GetAll()
         {
-            return $"Message from {model.FirstName} {model.LastName}";
+            var unreadMessageIds = _messageStatusRepository.GetUnreadMessageIds();
+            return _messageRepository.GetAll()
+                .Select(
+                    x => Mapper.Map<Message, MessageReadModel>(
+                        x,
+                        opt => opt.AfterMap(
+                            (src, dest) =>
+                            {
+                                dest.IsRead = !unreadMessageIds.Contains(dest.Id);
+                            })));
         }
+
+        private string FormatSubject(MessageModel model) => $"Message from {model.FirstName} {model.LastName}";
 
         private string FormatBody(MessageModel model)
         {
@@ -100,12 +95,7 @@ namespace DetroitHarps.Business.Contact
             sb.AppendLine($"Email: {model.Email}");
             sb.AppendLine($"Body:");
             sb.Append(model.Body);
-
             return sb.ToString();
         }
-
-        private Message GetMessageOrThrow(int id) =>
-            _repository.GetSingleOrDefault(id) ??
-                throw new BusinessException($"message with id: {id} does not exist");
     }
 }

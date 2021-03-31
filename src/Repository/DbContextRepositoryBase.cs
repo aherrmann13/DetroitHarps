@@ -9,10 +9,10 @@ namespace DetroitHarps.Repository
     using Microsoft.EntityFrameworkCore;
     using Tools;
 
-    public abstract class RepositoryBase<T, I> : IRepository<T, I>, IQueryableRepository<T, I>
+    public abstract class DbContextRepositoryBase<T, I> : IRepository<T, I>, IQueryableRepository<T, I>
         where T : class, IHasId<I>
     {
-        protected RepositoryBase(DetroitHarpsDbContext dbContext)
+        protected DbContextRepositoryBase(DetroitHarpsDbContext dbContext)
         {
             // dont really think there is any need for a logger for now
             // dbContext can take care of logging - any derived class with

@@ -1,5 +1,6 @@
 namespace DetroitHarps.Api.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using DetroitHarps.Business.Contact;
     using DetroitHarps.Business.Contact.Models;
@@ -31,7 +32,7 @@ namespace DetroitHarps.Api.Controllers
 
         [HttpPut("MarkAsRead/{id}")]
         [SwaggerOperation(OperationId = "MarkAsRead")]
-        public ActionResult MarkAsRead([FromRoute] int id)
+        public ActionResult MarkAsRead([FromRoute] Guid id)
         {
             _contactManager.MarkAsRead(id);
             return Ok();
@@ -39,7 +40,7 @@ namespace DetroitHarps.Api.Controllers
 
         [HttpPut("MarkAsUnread/{id}")]
         [SwaggerOperation(OperationId = "MarkAsUnread")]
-        public ActionResult MarkAsUnread([FromRoute] int id)
+        public ActionResult MarkAsUnread([FromRoute] Guid id)
         {
             _contactManager.MarkAsUnread(id);
             return Ok();

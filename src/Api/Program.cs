@@ -44,6 +44,7 @@
 #if DEBUG
                 .AddYamlFile(LocalAppsettings, optional: true, reloadOnChange: false)
 #endif
+                .AddEnvironmentVariables()
                 .Build();
     }
 }

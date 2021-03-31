@@ -6,7 +6,7 @@ namespace DetroitHarps.Repository
     using DetroitHarps.DataAccess;
     using Microsoft.EntityFrameworkCore;
 
-    public class RegistrationRepository : RepositoryBase<Registration, int>, IRegistrationRepository
+    public class RegistrationRepository : DbContextRepositoryBase<Registration, int>, IRegistrationRepository
     {
         public RegistrationRepository(DetroitHarpsDbContext dbContext)
             : base(dbContext)

@@ -12,15 +12,15 @@ namespace DetroitHarps.Business.Contact
             CreateMap<MessageModel, Message>()
                 .ForMember(
                     dest => dest.Id,
-                    opt => opt.Ignore())
+                    opt => opt.MapFrom(_ => Guid.NewGuid()))
                 .ForMember(
                     dest => dest.Timestamp,
-                    opt => opt.MapFrom(val => DateTimeOffset.Now))
+                    opt => opt.MapFrom(val => DateTimeOffset.Now));
+
+            CreateMap<Message, MessageReadModel>()
                 .ForMember(
                     dest => dest.IsRead,
-                    opt => opt.MapFrom(x => false));
-
-            CreateMap<Message, MessageReadModel>();
+                    opt => opt.MapFrom(x => true));
         }
     }
 }

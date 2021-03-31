@@ -1,5 +1,6 @@
 namespace DetroitHarps.Business.Contact
 {
+    using System;
     using System.Collections.Generic;
     using DetroitHarps.Business.Contact.Models;
 
@@ -7,9 +8,9 @@ namespace DetroitHarps.Business.Contact
     {
         void Contact(MessageModel model);
 
-        void MarkAsRead(int id);
+        void MarkAsRead(Guid id);
 
-        void MarkAsUnread(int id);
+        void MarkAsUnread(Guid id);
 
         IEnumerable<MessageReadModel> GetAll();
     }

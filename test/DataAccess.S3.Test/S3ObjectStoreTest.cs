@@ -1,6 +1,7 @@
 namespace DetroitHarps.DataAccess.S3.Test
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Text;
     using System.Threading;
@@ -13,31 +14,54 @@ namespace DetroitHarps.DataAccess.S3.Test
 
     public class S3ObjectStoreTest
     {
-        private readonly Mock<IAmazonS3> _s3Client;
+        private readonly Mock<IAmazonS3> _mockS3Client;
         private readonly S3ObjectStoreSettings _settings;
+        private readonly Mock<IKeyConverter<int>> _mockKeyConverter;
         private readonly S3ObjectStore<TestObject, int> _store;
 
         public S3ObjectStoreTest()
         {
-            _s3Client = new Mock<IAmazonS3>();
+            _mockS3Client = new Mock<IAmazonS3>();
             _settings = new S3ObjectStoreSettings
             {
                 BucketName = "mybucket",
                 KeyPrefix = "keyprefix"
             };
-            _store = new S3ObjectStore<TestObject, int>(_s3Client.Object, _settings);
+            _mockKeyConverter = new Mock<IKeyConverter<int>>();
+            _store = new S3ObjectStore<TestObject, int>(_mockS3Client.Object, _settings, _mockKeyConverter.Object);
+
+            _mockKeyConverter.Setup(x => x.ToString(It.IsAny<int>())).Returns<int>(x => x.ToString());
+            _mockKeyConverter.Setup(x => x.FromString(It.IsAny<string>())).Returns<string>(x => int.Parse(x));
         }
 
         [Fact]
         public void NullIAmazonS3InConstructorThrowsTest()
         {
-            Assert.Throws<ArgumentNullException>(() => new S3ObjectStore<TestObject, int>(null, _settings));
+            Assert.Throws<ArgumentNullException>(
+                () => new S3ObjectStore<TestObject, int>(
+                    null,
+                    _settings,
+                    _mockKeyConverter.Object));
         }
 
         [Fact]
         public void NullS3ObjectStoreSettingsInConstructorThrowsTest()
         {
-            Assert.Throws<ArgumentNullException>(() => new S3ObjectStore<TestObject, int>(_s3Client.Object, null));
+            Assert.Throws<ArgumentNullException>(
+                () => new S3ObjectStore<TestObject, int>(
+                    _mockS3Client.Object,
+                    null,
+                    _mockKeyConverter.Object));
+        }
+
+        [Fact]
+        public void NullIKeyConverterInConstructorThrowsTest()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => new S3ObjectStore<TestObject, int>(
+                    _mockS3Client.Object,
+                    _settings,
+                    null));
         }
 
         [Fact]
@@ -45,7 +69,7 @@ namespace DetroitHarps.DataAccess.S3.Test
         {
             _store.Put(new TestObject { Id = 1, PropOne = "some property", PropTwo = 40 }).Wait();
 
-            _s3Client.Verify(
+            _mockS3Client.Verify(
                 x => x.PutObjectAsync(
                     It.Is<PutObjectRequest>(y => y.BucketName == "mybucket"), It.IsAny<CancellationToken>()),
                     Times.Once);
@@ -56,7 +80,7 @@ namespace DetroitHarps.DataAccess.S3.Test
         {
             _store.Put(new TestObject { Id = 1, PropOne = "some property", PropTwo = 40 }).Wait();
 
-            _s3Client.Verify(
+            _mockS3Client.Verify(
                 x => x.PutObjectAsync(
                     It.Is<PutObjectRequest>(y => y.Key == "keyprefix/1"), It.IsAny<CancellationToken>()),
                     Times.Once);
@@ -70,7 +94,7 @@ namespace DetroitHarps.DataAccess.S3.Test
             var expectedContent = "{\"Id\":1,\"PropOne\":\"some property\",\"PropTwo\":40}";
 
             // TODO: how does idisposable work in expression
-            _s3Client.Verify(
+            _mockS3Client.Verify(
                 x => x.PutObjectAsync(
                     It.Is<PutObjectRequest>(
                         y => new StreamReader(y.InputStream, Encoding.UTF8).ReadToEnd() == expectedContent),
@@ -82,7 +106,7 @@ namespace DetroitHarps.DataAccess.S3.Test
         public void PutThrowsDataAccessExceptionIfPutCallThrowsTest()
         {
             var ex = new Exception();
-            _s3Client
+            _mockS3Client
                 .Setup(x => x.PutObjectAsync(It.IsAny<PutObjectRequest>(), It.IsAny<CancellationToken>()))
                 .Throws(ex);
             var thrown = Assert.ThrowsAsync<DataAccessException>(
@@ -100,7 +124,7 @@ namespace DetroitHarps.DataAccess.S3.Test
             {
                 ResponseStream = new MemoryStream(obj)
             };
-            _s3Client
+            _mockS3Client
                 .Setup(
                     x => x.GetObjectAsync(
                         It.Is<GetObjectRequest>(
@@ -116,10 +140,40 @@ namespace DetroitHarps.DataAccess.S3.Test
         }
 
         [Fact]
+        public void GetReturnsObjectDefaultWhenKeyDoesntExistFromS3Test()
+        {
+            var ex = new AmazonS3Exception("test ex");
+            ex.StatusCode = System.Net.HttpStatusCode.NotFound;
+            _mockS3Client
+                .Setup(
+                    x => x.GetObjectAsync(
+                        It.Is<GetObjectRequest>(
+                            y => y.BucketName == "mybucket" && y.Key == "keyprefix/1"),
+                            It.IsAny<CancellationToken>()))
+                .ThrowsAsync(ex);
+
+            var result = _store.Get(1).Result;
+
+            Assert.Equal(default(TestObject), result);
+        }
+
+        [Fact]
         public void GetThrowsDataAccessExceptionIfGetCallThrowsTest()
         {
             var ex = new Exception();
-            _s3Client
+            _mockS3Client
+                .Setup(x => x.GetObjectAsync(It.IsAny<GetObjectRequest>(), It.IsAny<CancellationToken>()))
+                .Throws(ex);
+            var thrown = Assert.ThrowsAsync<DataAccessException>(() => _store.Get(1)).Result;
+            Assert.Equal("Error Getting File", thrown.Message);
+            Assert.Equal(ex, thrown.InnerException);
+        }
+
+        [Fact]
+        public void GetThrowsDataAccessExceptionIfGetCallThrowsAmazonS3ExceptionTest()
+        {
+            var ex = new AmazonS3Exception("test");
+            _mockS3Client
                 .Setup(x => x.GetObjectAsync(It.IsAny<GetObjectRequest>(), It.IsAny<CancellationToken>()))
                 .Throws(ex);
             var thrown = Assert.ThrowsAsync<DataAccessException>(() => _store.Get(1)).Result;
@@ -132,7 +186,7 @@ namespace DetroitHarps.DataAccess.S3.Test
         {
             _store.Delete(1).Wait();
 
-            _s3Client.Verify(
+            _mockS3Client.Verify(
                 x => x.DeleteObjectAsync(
                     It.Is<DeleteObjectRequest>(y => y.BucketName == "mybucket"), It.IsAny<CancellationToken>()),
                     Times.Once);
@@ -143,7 +197,7 @@ namespace DetroitHarps.DataAccess.S3.Test
         {
             _store.Delete(1).Wait();
 
-            _s3Client.Verify(
+            _mockS3Client.Verify(
                 x => x.DeleteObjectAsync(
                     It.Is<DeleteObjectRequest>(y => y.Key == "keyprefix/1"), It.IsAny<CancellationToken>()),
                     Times.Once);
@@ -153,11 +207,55 @@ namespace DetroitHarps.DataAccess.S3.Test
         public void DeleteThrowsDataAccessExceptionIfDeleteCallThrowsTest()
         {
             var ex = new Exception();
-            _s3Client
+            _mockS3Client
                 .Setup(x => x.DeleteObjectAsync(It.IsAny<DeleteObjectRequest>(), It.IsAny<CancellationToken>()))
                 .Throws(ex);
             var thrown = Assert.ThrowsAsync<DataAccessException>(() => _store.Delete(1)).Result;
             Assert.Equal("Error Deleting File", thrown.Message);
+            Assert.Equal(ex, thrown.InnerException);
+        }
+
+        [Fact]
+        public void GetAllIdsReturnsAllIdsFromListObjectsV2Test()
+        {
+            var response = new ListObjectsV2Response
+            {
+                S3Objects = new List<S3Object>()
+                {
+                    new S3Object { Key = "keyprefix/1" },
+                    new S3Object { Key = "keyprefix/2" },
+                    new S3Object { Key = "keyprefix/3" }
+                }
+            };
+            _mockS3Client
+                .Setup(
+                    x => x.ListObjectsV2Async(
+                        It.Is<ListObjectsV2Request>(
+                            y => y.BucketName == "mybucket" && y.Prefix == "keyprefix/" && y.Delimiter == "/"),
+                        It.IsAny<CancellationToken>()))
+                .ReturnsAsync(response);
+
+            var result = _store.GetAllIds().Result;
+
+            Assert.Equal(3, result.Count);
+            Assert.Contains(1, result);
+            Assert.Contains(2, result);
+            Assert.Contains(3, result);
+        }
+
+        [Fact]
+        public void GetAllIdsThrowsDataAccessExceptionIfListObjectsV2CallThrowsTest()
+        {
+            var ex = new Exception();
+            _mockS3Client
+                .Setup(
+                    x => x.ListObjectsV2Async(
+                        It.Is<ListObjectsV2Request>(
+                            y => y.BucketName == "mybucket" && y.Prefix == "keyprefix/" && y.Delimiter == "/"),
+                        It.IsAny<CancellationToken>()))
+                .ThrowsAsync(ex);
+            var thrown = Assert.ThrowsAsync<DataAccessException>(() => _store.GetAllIds()).Result;
+            Assert.Equal("Error Listing Objects", thrown.Message);
             Assert.Equal(ex, thrown.InnerException);
         }
 

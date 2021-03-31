@@ -1,5 +1,7 @@
 namespace DetroitHarps.Business
 {
+    using System.Collections.Generic;
+
     public interface IRepository<T, I>
         where T : IHasId<I>
     {
@@ -12,5 +14,7 @@ namespace DetroitHarps.Business
         bool Exists(I id);
 
         T GetSingleOrDefault(I id);
+
+        IList<T> GetAll();
     }
 }

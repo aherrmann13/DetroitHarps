@@ -6,7 +6,7 @@ namespace DetroitHarps.Repository
     using DetroitHarps.DataAccess;
     using Tools;
 
-    public class PhotoRepository : RepositoryBase<Photo, int>, IPhotoRepository
+    public class PhotoRepository : DbContextRepositoryBase<Photo, int>, IPhotoRepository
     {
         public PhotoRepository(DetroitHarpsDbContext dbContext)
             : base(dbContext)

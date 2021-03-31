@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../DataAccess/DataAccess.csproj" />
+    <ProjectReference Include="../DataAccess.S3/DataAccess.S3.csproj" />
     <ProjectReference Include="../Tools/Tools.csproj" />
   </ItemGroup>
 

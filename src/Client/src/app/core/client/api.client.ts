@@ -132,7 +132,7 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
-    markAsRead(id: number): Observable<void> {
+    markAsRead(id: string): Observable<void> {
         let url_ = this.baseUrl + "/Contact/MarkAsRead/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -179,7 +179,7 @@ export class Client extends BaseClient {
     /**
      * @return Success
      */
-    markAsUnread(id: number): Observable<void> {
+    markAsUnread(id: string): Observable<void> {
         let url_ = this.baseUrl + "/Contact/MarkAsUnread/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1484,7 +1484,7 @@ export interface IMessageModel {
 }
 
 export class MessageReadModel implements IMessageReadModel {
-    id: number;
+    id: string;
     timestamp: Date;
     isRead: boolean;
     firstName?: string;
@@ -1534,7 +1534,7 @@ export class MessageReadModel implements IMessageReadModel {
 }
 
 export interface IMessageReadModel {
-    id: number;
+    id: string;
     timestamp: Date;
     isRead: boolean;
     firstName?: string;

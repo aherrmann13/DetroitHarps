@@ -3,21 +3,20 @@ namespace DetroitHarps.Repository.Test
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using DetroitHarps.Business.Common.Exceptions;
     using DetroitHarps.DataAccess;
     using Microsoft.EntityFrameworkCore;
     using Moq;
     using Xunit;
 
-    public class RepositoryBaseTest
+    public class DbContextRepositoryBaseTest
     {
         private readonly Mock<DetroitHarpsDbContext> _dbContextMock;
-        private readonly ConcreteRepository _repository;
+        private readonly DbContextConcreteRepository _repository;
 
-        public RepositoryBaseTest()
+        public DbContextRepositoryBaseTest()
         {
             _dbContextMock = new Mock<DetroitHarpsDbContext>(new DbContextOptions<DetroitHarpsDbContext>());
-            _repository = new ConcreteRepository(_dbContextMock.Object);
+            _repository = new DbContextConcreteRepository(_dbContextMock.Object);
         }
 
         [Fact]
@@ -199,6 +198,14 @@ namespace DetroitHarps.Repository.Test
             var entityReturned = _repository.GetSingleOrDefault(entities.Max(x => x.Id) + 1);
 
             Assert.Null(entityReturned);
+        }
+
+        private class DbContextConcreteRepository : DbContextRepositoryBase<TestEntity, int>
+        {
+            public DbContextConcreteRepository(DetroitHarpsDbContext dbContext)
+                : base(dbContext)
+            {
+            }
         }
     }
 }

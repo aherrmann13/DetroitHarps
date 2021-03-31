@@ -41,7 +41,6 @@ namespace DetroitHarps.DataAccess
         private static void AddEntityBuilders(IServiceCollection serviceCollection) =>
             serviceCollection
                 .AddTransient<IEntityBuilder, EventEntityBuilder>()
-                .AddTransient<IEntityBuilder, MessageEntityBuilder>()
                 .AddTransient<IEntityBuilder, PhotoEntityBuilder>()
                 .AddTransient<IEntityBuilder, PhotoGroupEntityBuilder>()
                 .AddTransient<IEntityBuilder, RegistrationChildEntityBuilder>()

@@ -4,7 +4,7 @@ namespace DetroitHarps.Business.Contact.Models
 
     public class MessageReadModel : MessageModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public DateTimeOffset Timestamp { get; set; }
 

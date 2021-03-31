@@ -7,6 +7,11 @@ Auth0:
   Authority: "https://angband.auth0.com"
   ApiIdentifier: "https://dev.api.detroitharps.com"
 
+
+S3:
+  Url: "https://nyc3.digitaloceanspaces.com"
+  BucketName: "detroitharps-app-storage"
+
 Serilog:
   MinimumLevel:
     Default: Information

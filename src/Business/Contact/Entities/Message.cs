@@ -2,13 +2,11 @@ namespace DetroitHarps.Business.Contact.Entities
 {
     using System;
 
-    public class Message : IHasId<int>
+    public class Message : IHasId<Guid>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public DateTimeOffset Timestamp { get; set; }
-
-        public bool IsRead { get; set; }
 
         public string FirstName { get; set; }
 

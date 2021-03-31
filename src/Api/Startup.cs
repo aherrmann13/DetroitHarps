@@ -3,6 +3,7 @@
     using System.Linq;
     using DetroitHarps.Api.Authentication;
     using DetroitHarps.Api.Services.Email;
+    using DetroitHarps.Api.Settings;
     using DetroitHarps.DataAccess;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
@@ -81,7 +82,12 @@
             services.AddSwagger();
 
             var connectionString = _config.GetConnectionString(ConnectionStringName);
+            var s3Settings = _config
+                .GetSection(S3Settings.SectionName)
+                .Get<S3Settings>();
+
             services.AddDbContext(connectionString);
+            services.AddS3ObjectStores(s3Settings);
             services.AddRepositories();
             services.AddManagers();
             services.AddCsvWriter();

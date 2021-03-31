@@ -43,6 +43,7 @@
     "@angular/cli": "^6.0.3",
     "@angular/compiler-cli": "^6.0.2",
     "@angular/language-service": "^6.0.2",
+    "node-sass": "^5.0.0",
     "nswag": "^11.17.9",
     "prettier": "^1.17.1",
     "typescript": "~2.7.2"

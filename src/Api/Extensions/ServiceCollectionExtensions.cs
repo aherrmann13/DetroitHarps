@@ -1,22 +1,25 @@
 namespace Microsoft.Extensions.DependencyInjection
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Amazon.S3;
     using AutoMapper;
     using DetroitHarps.Api.Authentication;
-    using DetroitHarps.Api.Middleware;
     using DetroitHarps.Api.Services.ClientLogging;
     using DetroitHarps.Api.Services.Email;
+    using DetroitHarps.Api.Settings;
     using DetroitHarps.Api.Swagger;
     using DetroitHarps.Business;
     using DetroitHarps.Business.Contact;
+    using DetroitHarps.Business.Contact.Entities;
     using DetroitHarps.Business.Photo;
     using DetroitHarps.Business.Registration;
     using DetroitHarps.Business.Schedule;
     using DetroitHarps.DataAccess;
+    using DetroitHarps.DataAccess.S3;
     using DetroitHarps.Repository;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Builder;
+    using DetroitHarps.Repository.Internal;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Swashbuckle.AspNetCore.Swagger;
@@ -45,6 +48,44 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+        public static IServiceCollection AddS3ObjectStores(this IServiceCollection services, S3Settings settings)
+        {
+            services.AddSingleton<GuidKeyConverter>(_ => new GuidKeyConverter());
+            services.AddSingleton<StringKeyConverter>(_ => new StringKeyConverter());
+
+            services.AddSingleton<IAmazonS3>(
+                _ => S3ClientFactory.CreateClient(settings.Key, settings.Secret, settings.Url));
+
+            services.AddSingleton<IS3ObjectStore<Message, Guid>>(
+                provider =>
+                {
+                    var s3Client = provider.GetService<IAmazonS3>();
+                    var keyConverter = provider.GetService<GuidKeyConverter>();
+                    var storeSettings = new S3ObjectStoreSettings
+                    {
+                        BucketName = settings.BucketName,
+                        KeyPrefix = nameof(Message)
+                    };
+
+                    return new S3ObjectStore<Message, Guid>(s3Client, storeSettings, keyConverter);
+                });
+
+            services.AddSingleton<IS3ObjectStore<MessageStatusContainer, string>>(
+                provider =>
+                {
+                    var s3Client = provider.GetService<IAmazonS3>();
+                    var keyConverter = provider.GetService<StringKeyConverter>();
+                    var storeSettings = new S3ObjectStoreSettings
+                    {
+                        BucketName = settings.BucketName,
+                        KeyPrefix = nameof(MessageStatusContainer)
+                    };
+
+                    return new S3ObjectStore<MessageStatusContainer, string>(s3Client, storeSettings, keyConverter);
+                });
+            return services;
+        }
+
         public static IServiceCollection AddManagers(
             this IServiceCollection services)
         {
@@ -68,6 +109,7 @@ namespace Microsoft.Extensions.DependencyInjection
             Guard.NotNull(services, nameof(services));
 
             services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<IMessageStatusRepository, MessageStatusRepository>();
             services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IPhotoGroupRepository, PhotoGroupRepository>();
             services.AddScoped<IRegistrationRepository, RegistrationRepository>();

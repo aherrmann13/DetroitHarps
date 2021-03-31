@@ -15,33 +15,61 @@ namespace DetroitHarps.Business.Test.Contact
     [Collection("AutoMapper")]
     public class ContactManagerTest
     {
-        private readonly Mock<IMessageRepository> _repositoryMock;
+        private readonly Mock<IMessageRepository> _messageRepositoryMock;
+        private readonly Mock<IMessageStatusRepository> _messageStatusRepositoryMock;
         private readonly Mock<IEmailSender> _emailSenderMock;
         private readonly Mock<ILogger<ContactManager>> _loggerMock;
 
         public ContactManagerTest()
         {
-            _repositoryMock = new Mock<IMessageRepository>();
+            _messageRepositoryMock = new Mock<IMessageRepository>();
+            _messageStatusRepositoryMock = new Mock<IMessageStatusRepository>();
             _emailSenderMock = new Mock<IEmailSender>();
             _loggerMock = new Mock<ILogger<ContactManager>>();
         }
 
         [Fact]
-        public void NullRepositoryInConstructorThrowsTestTest()
+        public void NullMessageRepositoryInConstructorThrowsTestTest()
         {
-            Assert.Throws<ArgumentNullException>(() => new ContactManager(null, _emailSenderMock.Object, _loggerMock.Object));
+            Assert.Throws<ArgumentNullException>(
+                () => new ContactManager(
+                    null,
+                    _messageStatusRepositoryMock.Object,
+                    _emailSenderMock.Object,
+                    _loggerMock.Object));
+        }
+
+        [Fact]
+        public void NullMessageStatusRepositoryInConstructorThrowsTestTest()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => new ContactManager(
+                    _messageRepositoryMock.Object,
+                    null,
+                    _emailSenderMock.Object,
+                    _loggerMock.Object));
         }
 
         [Fact]
         public void NullEmailSenderInConstructorThrowsTestTest()
         {
-            Assert.Throws<ArgumentNullException>(() => new ContactManager(_repositoryMock.Object, null, _loggerMock.Object));
+            Assert.Throws<ArgumentNullException>(
+                () => new ContactManager(
+                    _messageRepositoryMock.Object,
+                    _messageStatusRepositoryMock.Object,
+                    null,
+                    _loggerMock.Object));
         }
 
         [Fact]
         public void NullLoggerInConstructorThrowsTestTest()
         {
-            Assert.Throws<ArgumentNullException>(() => new ContactManager(_repositoryMock.Object, _emailSenderMock.Object, null));
+            Assert.Throws<ArgumentNullException>(
+                () => new ContactManager(
+                    _messageRepositoryMock.Object,
+                    _messageStatusRepositoryMock.Object,
+                    _emailSenderMock.Object,
+                    null));
         }
 
         [Fact]
@@ -105,8 +133,21 @@ namespace DetroitHarps.Business.Test.Contact
 
             manager.Contact(model);
 
-            _repositoryMock.Verify(
+            _messageRepositoryMock.Verify(
                 x => x.Create(It.Is<Message>(y => y != null)),
+                Times.Once);
+        }
+
+        [Fact]
+        public void ContactSetsMessageAsUnreadTest()
+        {
+            var manager = GetManager();
+            var model = new MessageModel();
+
+            manager.Contact(model);
+
+            _messageStatusRepositoryMock.Verify(
+                x => x.SetAsUnread(It.Is<Guid>(y => y != default(Guid))),
                 Times.Once);
         }
 
@@ -131,75 +172,31 @@ namespace DetroitHarps.Business.Test.Contact
                     It.Is<Exception>(y => y.Equals(ex)),
                     It.IsAny<Func<object, Exception, string>>()),
                 Times.Once());
-            _repositoryMock.Verify(
+            _messageRepositoryMock.Verify(
                 x => x.Create(It.Is<Message>(y => y != null)),
                 Times.Once);
         }
 
         [Fact]
-        public void MarkAsReadThrowsWhenNonExistantTest()
+        public void MarkAsReadMarksAsReadInMessageStatusRepositoryTest()
         {
+            var id = Guid.NewGuid();
             var manager = GetManager();
-            _repositoryMock.Setup(x => x.GetSingleOrDefault(It.IsAny<int>())).Returns((Message)null);
 
-            Assert.Throws<BusinessException>(() => manager.MarkAsRead(1));
+            manager.MarkAsRead(id);
+
+            _messageStatusRepositoryMock.Verify(x => x.SetAsRead(It.Is<Guid>(y => y.Equals(id))), Times.Once);
         }
 
         [Fact]
-        public void MarkAsReadDoesNotUpdateWhenAlreadyReadTest()
+        public void MarkAsUnreadMarksAsUnreadInMessageStatusRepositoryTest()
         {
+            var id = Guid.NewGuid();
             var manager = GetManager();
-            _repositoryMock.Setup(x => x.GetSingleOrDefault(It.IsAny<int>())).Returns(new Message { IsRead = true });
 
-            manager.MarkAsRead(1);
+            manager.MarkAsUnread(id);
 
-            _repositoryMock.Verify(x => x.Update(It.IsAny<Message>()), Times.Never);
-        }
-
-        [Fact]
-        public void MarkAsReadUpdatesWhenNotReadTest()
-        {
-            var manager = GetManager();
-            var message = new Message { IsRead = false };
-            _repositoryMock.Setup(x => x.GetSingleOrDefault(It.IsAny<int>())).Returns(message);
-
-            manager.MarkAsRead(1);
-
-            _repositoryMock
-                .Verify(x => x.Update(It.Is<Message>(y => y.Equals(message) && y.IsRead)), Times.Once);
-        }
-
-        [Fact]
-        public void MarkAsUnReadThrowsWhenNonExistantTest()
-        {
-            var manager = GetManager();
-            _repositoryMock.Setup(x => x.GetSingleOrDefault(It.IsAny<int>())).Returns((Message)null);
-
-            Assert.Throws<BusinessException>(() => manager.MarkAsUnread(1));
-        }
-
-        [Fact]
-        public void MarkAsUnreadDoesNotUpdateWhenAlreadyUnreadTest()
-        {
-            var manager = GetManager();
-            _repositoryMock.Setup(x => x.GetSingleOrDefault(It.IsAny<int>())).Returns(new Message { IsRead = false });
-
-            manager.MarkAsUnread(1);
-
-            _repositoryMock.Verify(x => x.Update(It.IsAny<Message>()), Times.Never);
-        }
-
-        [Fact]
-        public void MarkAsUnreadUpdatesWhenReadTest()
-        {
-            var manager = GetManager();
-            var message = new Message { IsRead = true };
-            _repositoryMock.Setup(x => x.GetSingleOrDefault(It.IsAny<int>())).Returns(message);
-
-            manager.MarkAsUnread(1);
-
-            _repositoryMock
-                .Verify(x => x.Update(It.Is<Message>(y => y.Equals(message) && !y.IsRead)), Times.Once);
+            _messageStatusRepositoryMock.Verify(x => x.SetAsUnread(It.Is<Guid>(y => y.Equals(id))), Times.Once);
         }
 
         [Fact]
@@ -207,11 +204,12 @@ namespace DetroitHarps.Business.Test.Contact
         {
             var models = new List<Message>()
             {
-                new Message(),
-                new Message()
+                new Message { Id = Guid.NewGuid() },
+                new Message { Id = Guid.NewGuid() }
             };
-            _repositoryMock.Setup(x => x.GetAll())
-                .Returns(models);
+            var unreadIds = new List<Guid> { models[0].Id };
+            _messageRepositoryMock.Setup(x => x.GetAll()).Returns(models);
+            _messageStatusRepositoryMock.Setup(x => x.GetUnreadMessageIds()).Returns(unreadIds);
 
             var manager = GetManager();
 
@@ -219,9 +217,15 @@ namespace DetroitHarps.Business.Test.Contact
 
             Assert.Equal(models.Count, modelsFromManager.Count());
             Assert.All(modelsFromManager, x => Assert.NotNull(x));
+            Assert.All(modelsFromManager.Where(x => unreadIds.Contains(x.Id)), x => Assert.False(x.IsRead));
+            Assert.All(modelsFromManager.Where(x => !unreadIds.Contains(x.Id)), x => Assert.True(x.IsRead));
         }
 
         private ContactManager GetManager() =>
-            new ContactManager(_repositoryMock.Object, _emailSenderMock.Object, _loggerMock.Object);
+            new ContactManager(
+                _messageRepositoryMock.Object,
+                _messageStatusRepositoryMock.Object,
+                _emailSenderMock.Object,
+                _loggerMock.Object);
     }
 }

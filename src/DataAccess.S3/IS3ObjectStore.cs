@@ -1,5 +1,6 @@
 namespace DetroitHarps.DataAccess.S3
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using DetroitHarps.Business;
 
@@ -11,5 +12,7 @@ namespace DetroitHarps.DataAccess.S3
         Task<T> Get(I id);
 
         Task Delete(I id);
+
+        Task<IList<I>> GetAllIds();
     }
 }
