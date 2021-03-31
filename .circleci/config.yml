@@ -10,7 +10,7 @@ general:
 jobs:
   checkout:
     docker:
-      - image: microsoft/dotnet:sdk
+      - image: aherrmann13/dotnet-sdk:2.2
     steps:
       - run:
           name: create common dir
@@ -27,7 +27,7 @@ jobs:
 
   test:
     docker:
-      - image: microsoft/dotnet:sdk
+      - image: aherrmann13/dotnet-sdk:2.2
     steps:
       - restore_cache:
           key: checkout-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
@@ -37,7 +37,7 @@ jobs:
 
   publish-api:
     docker:
-      - image: microsoft/dotnet:sdk
+      - image: aherrmann13/dotnet-sdk:2.2
     steps:
       - restore_cache:
           key: checkout-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
@@ -86,7 +86,7 @@ jobs:
 
   deploy-dev:
     docker:
-      - image: microsoft/dotnet:sdk
+      - image: aherrmann13/dotnet-sdk:2.2
         environment:
           IP_ADDRESS: '157.230.51.199'
           SSH_ADDR: 'detroitharps@157.230.51.199'
@@ -138,7 +138,7 @@ jobs:
 
   deploy-prod:
     docker:
-      - image: microsoft/dotnet:sdk
+      - image: aherrmann13/dotnet-sdk:2.2
         environment:
           IP_ADDRESS: '134.209.77.76'
           SSH_ADDR: 'detroitharps@134.209.77.76'
@@ -198,7 +198,7 @@ jobs:
   health-check-dev:
     # TODO: machine not dotnet sdk
     docker:
-      - image: microsoft/dotnet:sdk
+      - image: aherrmann13/dotnet-sdk:2.2
     steps:
       - restore_cache:
           key: checkout-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
@@ -209,7 +209,7 @@ jobs:
   health-check-prod:
     # TODO: machine not dotnet sdk
     docker:
-      - image: microsoft/dotnet:sdk
+      - image: aherrmann13/dotnet-sdk:2.2
     steps:
       - restore_cache:
           key: checkout-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
