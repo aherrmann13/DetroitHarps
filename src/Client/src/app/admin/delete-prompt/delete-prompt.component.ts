@@ -24,7 +24,10 @@ export class DeletePromptDialogComponent {
 
   onYesClick() {
     this.loading = true;
-    this._data.onClick().subscribe(_ => this.handleSuccess(), err => this.handleError(err));
+    this._data.onClick().subscribe(
+      _ => this.handleSuccess(),
+      err => this.handleError(err)
+    );
   }
   onNoClick() {
     this._dialogRef.close({ yes: false });

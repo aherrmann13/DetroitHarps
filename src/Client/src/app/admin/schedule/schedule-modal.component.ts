@@ -64,7 +64,10 @@ export class ScheduleModalDialogComponent implements OnInit {
     this.loading = true;
     if (this.formGroup.dirty) {
       this.formGroup.disable();
-      this._data.onClick(this.mapEvent()).subscribe(data => this.handleSuccess(data), err => this.handleError(err));
+      this._data.onClick(this.mapEvent()).subscribe(
+        data => this.handleSuccess(data),
+        err => this.handleError(err)
+      );
     } else {
       this.onCancelClick();
     }

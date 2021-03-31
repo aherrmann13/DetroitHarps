@@ -78,9 +78,10 @@ export class RegisterComponent implements OnInit {
       this.isSendingComment = true;
       this._client.contact(message).subscribe(() => (this.isSendingComment = false), this.registrationError);
     }
-    this._client
-      .register(this.registerModel)
-      .subscribe(() => (this.isRegistering = false), err => this.registrationError(err));
+    this._client.register(this.registerModel).subscribe(
+      () => (this.isRegistering = false),
+      err => this.registrationError(err)
+    );
   }
 
   private getMessage(): MessageModel {
