@@ -46,7 +46,7 @@ namespace DetroitHarps.Api.Middleware
             else
             {
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                _logger.LogError(exception.Message, exception);
+                _logger.LogError(exception, exception.Message);
 
                 return Task.CompletedTask;
             }
