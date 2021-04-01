@@ -65,20 +65,25 @@ jobs:
           name: Npm Install
           command: |
             cd /tmp/detroitharps/src/Client/
-            npm install
+            sudo npm install
+      - run:
+          name: Install node-sass
+          command: |
+            cd /tmp/detroitharps/src/Client/ 
+            sudo npm install --unsafe-perm node-sass@4.14.1
       - run:
           name: nglint and prettier
           command: |
             cd /tmp/detroitharps/src/Client/
-            npm run check-format
+            sudo npm run check-format
       - run:
         ## this step needs to be cleaner
           name: Build Client
           command: |
             cd /tmp/detroitharps/src/Client/
             echo $CIRCLE_BRANCH
-            if [ "$CIRCLE_BRANCH" = "master" ]; then npm run build -- --output-path /tmp/detroitharps/publish/Client; fi
-            if [ "$CIRCLE_BRANCH" = "dev" ]; then npm run build-dev -- --output-path /tmp/detroitharps/publish/Client; fi
+            if [ "$CIRCLE_BRANCH" = "master" ]; then sudo npm run build -- --output-path /tmp/detroitharps/publish/Client; fi
+            if [ "$CIRCLE_BRANCH" = "dev" ]; then sudo npm run build-dev -- --output-path /tmp/detroitharps/publish/Client; fi
       - save_cache:
           key: publish-client-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
