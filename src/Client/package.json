@@ -45,6 +45,6 @@
     "node-sass": "^4.14.1",
     "nswag": "^13.10.8",
     "prettier": "^1.17.1",
-    "typescript": "^3.1.8"
+    "typescript": "^3.4.5"
   }
 }
