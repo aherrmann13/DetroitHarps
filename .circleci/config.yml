@@ -58,6 +58,8 @@ jobs:
   publish-client:
     docker:
       - image: circleci/node:10.24.0
+        environment:
+           NG_CLI_ANALYTICS: "false"
     steps:
       - restore_cache:
           key: checkout-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
@@ -65,12 +67,12 @@ jobs:
           name: Install node-sass
           command: |
             cd /tmp/detroitharps/src/Client/ 
-            sudo npm install --unsafe-perm node-sass@4.14.1
+            sudo -E npm install --unsafe-perm node-sass@4.14.1
       - run:
           name: Npm Install
           command: |
             cd /tmp/detroitharps/src/Client/
-            sudo npm install
+            sudo -E npm install
       - run:
           name: nglint and prettier
           command: |
