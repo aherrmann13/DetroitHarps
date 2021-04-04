@@ -29,7 +29,7 @@ export class ContactComponent implements OnInit {
       data: message
     });
 
-    dialogRef.beforeClose().subscribe(() => this.markAsRead(message));
+    dialogRef.beforeClosed().subscribe(() => this.markAsRead(message));
   }
 
   private refreshDataSource(): void {

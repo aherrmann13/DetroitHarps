@@ -93,10 +93,12 @@ export class ScheduleComponent implements OnInit {
 
   private createEvent(event: EventModel): Observable<EventModel> {
     const createModel = <EventCreateModel>event;
-    return this._client.createEvent(createModel).pipe(map(x => {
-      const createdModel = new EventModel({ ...createModel, id: x });
-      return createdModel;
-    }));
+    return this._client.createEvent(createModel).pipe(
+      map(x => {
+        const createdModel = new EventModel({ ...createModel, id: x });
+        return createdModel;
+      })
+    );
   }
 
   private updateEvent(event: EventModel): Observable<EventModel> {

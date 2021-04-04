@@ -18,8 +18,7 @@ export class PhotoService {
     const photoGroupObservable = this._client.getAllPhotoGroups();
     const photoObservable = this._client.getAllPhotos();
 
-    return forkJoin([photoGroupObservable, photoObservable])
-      .pipe(map(x => this.groupPhotos(x[0], x[1])));
+    return forkJoin([photoGroupObservable, photoObservable]).pipe(map(x => this.groupPhotos(x[0], x[1])));
   }
 
   private groupPhotos(
