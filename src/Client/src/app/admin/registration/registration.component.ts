@@ -3,10 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { RegisteredChildModel, Client, FileResponse, EventModel } from '../../core/client/api.client';
 
 import { saveAs } from 'file-saver';
-import 'rxjs/add/observable/forkJoin';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { DeletePromptDialogComponent } from '../delete-prompt/delete-prompt.component';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'dh-admin-registration',

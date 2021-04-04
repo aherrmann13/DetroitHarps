@@ -1,6 +1,6 @@
 import { Inject, Component } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 export interface DeletePromptDialogInput {
   onClick: () => Observable<void>;

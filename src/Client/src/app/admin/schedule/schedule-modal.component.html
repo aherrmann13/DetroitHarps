@@ -34,8 +34,7 @@
     </mat-form-field>
 
     <mat-checkbox
-      [(ngModel)]="canRegisterChecked"
-      [ngModelOptions]="{ standalone: true }"
+      formControlName="canRegisterChecked"
       (click)="onRadioClick()"
       color="primary"
     >

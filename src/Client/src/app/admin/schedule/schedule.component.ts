@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Client, EventModel, EventCreateModel } from '../../core/client/api.client';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { ScheduleModalDialogComponent } from './schedule-modal.component';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { DeletePromptDialogComponent } from '../delete-prompt/delete-prompt.component';
 import { ascendingDateSorter } from '../../core/utilities/date-functions';
 
@@ -92,14 +93,14 @@ export class ScheduleComponent implements OnInit {
 
   private createEvent(event: EventModel): Observable<EventModel> {
     const createModel = <EventCreateModel>event;
-    return this._client.createEvent(createModel).map(x => {
+    return this._client.createEvent(createModel).pipe(map(x => {
       const createdModel = new EventModel({ ...createModel, id: x });
       return createdModel;
-    });
+    }));
   }
 
   private updateEvent(event: EventModel): Observable<EventModel> {
-    return this._client.updateEvent(event).map(x => event);
+    return this._client.updateEvent(event).pipe(map(x => event));
   }
 
   private deleteEvent(id: number): Observable<void> {

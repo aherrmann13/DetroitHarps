@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5000',
+  apiUrl: 'https://dev.api.detroitharps.com',
   auth0: {
     clientID: 'WCmWyHK0ds6prgFZ3G2NphFwB2nnGTNe',
     domain: 'angband.auth0.com',

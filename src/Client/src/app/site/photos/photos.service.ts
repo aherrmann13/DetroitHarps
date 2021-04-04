@@ -1,6 +1,6 @@
 import { Client, PhotoGroupModel, PhotoDisplayPropertiesDetailModel } from '../../core/client/api.client';
-import { Observable } from 'rxjs/Observable';
-import { forkJoin } from 'rxjs/observable/forkJoin';
+import { Observable, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 
 export interface PhotoGroup {
@@ -18,7 +18,8 @@ export class PhotoService {
     const photoGroupObservable = this._client.getAllPhotoGroups();
     const photoObservable = this._client.getAllPhotos();
 
-    return forkJoin(photoGroupObservable, photoObservable).map(x => this.groupPhotos(x[0], x[1]));
+    return forkJoin([photoGroupObservable, photoObservable])
+      .pipe(map(x => this.groupPhotos(x[0], x[1])));
   }
 
   private groupPhotos(

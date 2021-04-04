@@ -2,7 +2,7 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
 import { Inject, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { formMatchValidator, FORM_MATCH_ERROR } from '../../core/validators/form-match.directive';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { EventModel } from '../../core/client/api.client';
 
 export interface ScheduleModalDialogInput {
@@ -23,7 +23,6 @@ export class ScheduleModalDialogComponent implements OnInit {
   loading = false;
   header: string;
   formGroup: FormGroup;
-  canRegisterChecked = false;
 
   constructor(
     private _dialogRef: MatDialogRef<ScheduleModalDialogComponent>,
@@ -47,6 +46,7 @@ export class ScheduleModalDialogComponent implements OnInit {
     const startTime = this._event ? this.getTime(this._event.startDate) : '';
     const endDate = this._event ? this._event.endDate : '';
     const endTime = this._event ? this.getTime(this._event.endDate) : '';
+    const canRegisterChecked = this._event ? this._event.canRegister : false;
     const description = this._event ? this._event.description : '';
     this.formGroup = this._formBuilder.group({
       title: [title, Validators.required],
@@ -54,10 +54,9 @@ export class ScheduleModalDialogComponent implements OnInit {
       startTime: [startTime, [Validators.required, formMatchValidator(this._timeRegex)]],
       endDate: [endDate],
       endTime: [endTime, formMatchValidator(this._timeRegex)],
+      canRegisterChecked: [canRegisterChecked],
       description: [description]
     });
-
-    this.canRegisterChecked = this._event ? this._event.canRegister : false;
   }
 
   onAcceptClick(): void {
@@ -111,7 +110,7 @@ export class ScheduleModalDialogComponent implements OnInit {
       startDate: this.getDate(this.formGroup.controls.startDate.value, this.formGroup.controls.startTime.value),
       endDate: this.getDate(this.formGroup.controls.endDate.value, this.formGroup.controls.endTime.value),
       description: this.formGroup.controls.description.value,
-      canRegister: this.canRegisterChecked
+      canRegister: this.formGroup.controls.canRegisterChecked.value
     });
   }
 

@@ -1,11 +1,9 @@
-import { Response, RequestOptionsArgs } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/empty';
+import { Observable } from 'rxjs';
+import { HttpResponseBase } from '@angular/common/http';
 
-/* tslint:disable:deprecation */
 export class BaseClient {
 
-  protected transformOptions(options: RequestOptionsArgs): Promise<RequestOptionsArgs> {
+  protected transformOptions(options: HttpResponseBase): Promise<HttpResponseBase> {
 
     const token = localStorage.getItem('token');
     if (token != null) {
@@ -14,8 +12,11 @@ export class BaseClient {
     return Promise.resolve(options);
   }
 
-  protected transformResult(url: string, response: Response, processor: (response: Response) => any): Observable<any> {
-
+  protected transformResult(
+    url: string,
+    response: HttpResponseBase,
+    processor: (response: HttpResponseBase) => any
+  ): Observable<any> {
     if (response.status === 401) {
       console.warn('The user is not authenticated');
     }
