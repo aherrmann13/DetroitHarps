@@ -11,7 +11,7 @@ import { DrawerComponent } from '../core/layout/drawer/drawer.component';
   styleUrls: ['./site.component.scss']
 })
 export class SiteComponent {
-  @ViewChild(DrawerComponent) sidenav: DrawerComponent;
+  @ViewChild(DrawerComponent, { static: true }) sidenav: DrawerComponent;
   title = 'Detroit Harps';
   facebookUrl = 'https://www.facebook.com/DetroitHarpsYouthGFC/';
   twitterUrl = 'https://twitter.com/DetroitHarps';

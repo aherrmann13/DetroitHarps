@@ -14,7 +14,7 @@ export class DrawerComponent {
 
   router = this._router;
 
-  @ViewChild('sidenav')
+  @ViewChild('sidenav', { static: true })
   private sidenav: MatSidenav;
 
   constructor(private _router: Router) {}

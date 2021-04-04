@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
-  @ViewChild(DrawerComponent) sidenav: DrawerComponent;
+  @ViewChild(DrawerComponent, { static: true }) sidenav: DrawerComponent;
   title = 'Detroit Harps Admin';
   drawerItems: DrawerItemModel[] = [
     { text: 'Home', icon: 'home', path: '' },

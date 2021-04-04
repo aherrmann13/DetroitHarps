@@ -20,13 +20,13 @@ import { AbstractControl, FormArray } from '@angular/forms';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  @ViewChild(ParentInformationComponent) parentInformation: ParentInformationComponent;
-  @ViewChild(AddressInformationComponent) addressInformation: AddressInformationComponent;
-  @ViewChild(ChildrenInformationComponent) childrenInformation: ChildrenInformationComponent;
-  @ViewChild(ChildCountSelectorComponent) childCount: ChildCountSelectorComponent;
-  @ViewChild(EventRegistrationComponent) eventRegistration: EventRegistrationComponent;
-  @ViewChild(CommentsComponent) comments: CommentsComponent;
-  @ViewChild(PaymentInformationComponent) paymentInformation: PaymentInformationComponent;
+  @ViewChild(ParentInformationComponent, { static: true }) parentInformation: ParentInformationComponent;
+  @ViewChild(AddressInformationComponent, { static: true }) addressInformation: AddressInformationComponent;
+  @ViewChild(ChildrenInformationComponent, { static: true }) childrenInformation: ChildrenInformationComponent;
+  @ViewChild(ChildCountSelectorComponent, { static: true }) childCount: ChildCountSelectorComponent;
+  @ViewChild(EventRegistrationComponent, { static: true }) eventRegistration: EventRegistrationComponent;
+  @ViewChild(CommentsComponent, { static: true }) comments: CommentsComponent;
+  @ViewChild(PaymentInformationComponent, { static: true }) paymentInformation: PaymentInformationComponent;
 
   formIndex = 0;
   isDev = !environment.production;

@@ -4,11 +4,11 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   {
     path: 'admin',
-    loadChildren: '../admin/admin.module#AdminModule'
+    loadChildren: () => import('../admin/admin.module').then(m => m.AdminModule)
   },
   {
     path: '',
-    loadChildren: '../site/site.module#SiteModule'
+    loadChildren: () => import('../site/site.module').then(m => m.SiteModule)
   },
   { path: '**', redirectTo: '' }
 ];

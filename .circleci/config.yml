@@ -57,7 +57,7 @@ jobs:
 
   publish-client:
     docker:
-      - image: circleci/node:9.9.0
+      - image: circleci/node:10.24.0
     steps:
       - restore_cache:
           key: checkout-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
