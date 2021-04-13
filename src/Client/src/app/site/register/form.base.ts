@@ -2,7 +2,6 @@ import { Input, OnInit, Directive } from '@angular/core';
 import { RegisterModel } from '../../core/client/api.client';
 import { AbstractControl, FormBuilder } from '@angular/forms';
 
-@Directive()
 export abstract class FormBase implements OnInit {
   @Input() registration: RegisterModel;
 

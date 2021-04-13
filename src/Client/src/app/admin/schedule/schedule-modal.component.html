@@ -45,9 +45,7 @@
   </div>
 </form>
 <div mat-dialog-actions>
-  <button mat-button [disabled]="loading" (click)="onCancelClick()" color="warn">
-    Cancel
-  </button>
+  <button mat-button [disabled]="loading" (click)="onCancelClick()" color="warn">Cancel</button>
   <button
     mat-button
     [disabled]="formGroup.invalid || loading"

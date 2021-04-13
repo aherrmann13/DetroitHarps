@@ -3,10 +3,6 @@
   <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 </div>
 <div mat-dialog-actions>
-  <button mat-button [disabled]="loading" (click)="onNoClick()">
-    No
-  </button>
-  <button mat-button [disabled]="loading" (click)="onYesClick()" mat-raised-button color="warn">
-    Yes
-  </button>
+  <button mat-button [disabled]="loading" (click)="onNoClick()">No</button>
+  <button mat-button [disabled]="loading" (click)="onYesClick()" mat-raised-button color="warn">Yes</button>
 </div>
