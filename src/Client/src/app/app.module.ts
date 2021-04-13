@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
@@ -9,7 +9,7 @@ import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserAnimationsModule, BrowserModule, OverlayModule, CoreModule],
+  imports: [BrowserAnimationsModule, BrowserModule, OverlayModule, CoreModule, HammerModule],
   providers: [],
   bootstrap: [AppComponent]
 })

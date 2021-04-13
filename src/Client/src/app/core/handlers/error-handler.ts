@@ -2,7 +2,7 @@ import { ErrorHandler, Injectable, Optional, InjectionToken, Inject, Injector, i
 import { LogService } from '../logger/log.service';
 import { Router } from '@angular/router';
 import { LoggerModule } from '../logger/logger.module';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 // based on
 // https://blog.angularindepth.com/expecting-the-unexpected-best-practices-for-error-handling-in-angular-21c3662ef9e4
 @Injectable()

@@ -1,5 +1,6 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
-import { MatStepper, MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatStepper } from '@angular/material/stepper';
 
 import { Client, MessageModel, EventModel, RegisterModel } from '../../core/client/api.client';
 import { ParentInformationComponent } from './forms/parent-information/parent-information.component';

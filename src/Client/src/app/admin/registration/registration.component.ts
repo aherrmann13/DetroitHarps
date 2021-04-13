@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { RegisteredChildModel, Client, FileResponse, EventModel } from '../../core/client/api.client';
 
 import { saveAs } from 'file-saver';
-import { MatDialog, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { DeletePromptDialogComponent } from '../delete-prompt/delete-prompt.component';
 import { Observable } from 'rxjs';
 

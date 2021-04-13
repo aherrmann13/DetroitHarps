@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Client, EventModel, EventCreateModel } from '../../core/client/api.client';
-import { MatDialog, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { ScheduleModalDialogComponent } from './schedule-modal.component';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
