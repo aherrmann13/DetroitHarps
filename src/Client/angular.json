@@ -25,7 +25,10 @@
             ],
             "scripts": [
               "node_modules/hammerjs/hammer.min.js"
-            ]
+            ],
+            "allowedCommonJsDependencies": [
+              "file-saver"
+           ]
           },
           "configurations": {
             "production": {

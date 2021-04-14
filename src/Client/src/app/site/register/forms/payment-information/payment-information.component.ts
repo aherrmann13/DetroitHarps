@@ -1,11 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { FormBase } from '../../form.base';
-import {
-  RegisterPaymentModel,
-  RegisterPaymentModelPaymentType,
-  RegisterModel
-} from '../../../../core/client/api.client';
+import { FormBaseDirective } from '../../form-base.directive';
+import { RegisterPaymentModel, RegisterPaymentModelPaymentType } from '../../../../core/client/api.client';
 
 export interface PaymentInformationComponentData {
   type: string;
@@ -16,21 +12,19 @@ export interface PaymentInformationComponentData {
   templateUrl: 'payment-information.component.html',
   styleUrls: ['../../register.component.scss']
 })
-export class PaymentInformationComponent extends FormBase {
+export class PaymentInformationComponent extends FormBaseDirective implements OnInit {
   formGroup: FormGroup;
 
   cash = RegisterPaymentModelPaymentType.Cash;
   paypal = RegisterPaymentModelPaymentType.Paypal;
   other = RegisterPaymentModelPaymentType.AlreadyPaid;
 
-  private _registration: RegisterModel;
-
   constructor(formBuilder: FormBuilder) {
     super(formBuilder);
   }
 
-  @Input() set registration(val: RegisterModel) {
-    this._registration = val;
+  ngOnInit(): void {
+    super.ngOnInit();
     this.updateModel();
   }
 
@@ -45,7 +39,7 @@ export class PaymentInformationComponent extends FormBase {
   }
 
   protected updateModel(): void {
-    this._registration.payment = new RegisterPaymentModel({
+    this.registration.payment = new RegisterPaymentModel({
       paymentType: this.formGroup.value.paymentType
     });
   }

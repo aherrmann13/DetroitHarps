@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, AbstractControl, Validators, FormBuilder } from '@angular/forms';
 
-import { FormBase } from '../../form.base';
+import { FormBaseDirective } from '../../form-base.directive';
 import { RegisterParentModel, RegisterContactInformationModel } from '../../../../core/client/api.client';
 
 @Component({
@@ -9,7 +9,7 @@ import { RegisterParentModel, RegisterContactInformationModel } from '../../../.
   templateUrl: 'parent-information.component.html',
   styleUrls: ['../../register.component.scss']
 })
-export class ParentInformationComponent extends FormBase {
+export class ParentInformationComponent extends FormBaseDirective {
   formGroup: FormGroup;
 
   constructor(formBuilder: FormBuilder) {

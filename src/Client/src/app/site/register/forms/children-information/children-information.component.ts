@@ -3,14 +3,14 @@ import { FormBuilder, Validators, FormArray, AbstractControl } from '@angular/fo
 
 import { configuration } from '../../../../configuration';
 import { RegisterChildModel, RegisterChildModelGender } from '../../../../core/client/api.client';
-import { FormBase } from '../../form.base';
+import { FormBaseDirective } from '../../form-base.directive';
 
 @Component({
   selector: 'dh-register-children-information',
   templateUrl: './children-information.component.html',
   styleUrls: ['../../register.component.scss']
 })
-export class ChildrenInformationComponent extends FormBase {
+export class ChildrenInformationComponent extends FormBaseDirective {
   shirtSizes = configuration.shirtSizes;
 
   male = RegisterChildModelGender.Male;

@@ -6,14 +6,14 @@ import {
   RegisterChildEventModelAnswer
 } from '../../../../core/client/api.client';
 import { Validators, AbstractControl, FormBuilder, FormArray } from '@angular/forms';
-import { FormBase } from '../../form.base';
+import { FormBaseDirective } from '../../form-base.directive';
 
 @Component({
   selector: 'dh-register-events',
   templateUrl: './event-registration.component.html',
   styleUrls: ['../../register.component.scss']
 })
-export class EventRegistrationComponent extends FormBase {
+export class EventRegistrationComponent extends FormBaseDirective {
   options = [RegisterChildEventModelAnswer.Yes, RegisterChildEventModelAnswer.No, RegisterChildEventModelAnswer.Maybe];
 
   yes = RegisterChildEventModelAnswer.Yes;

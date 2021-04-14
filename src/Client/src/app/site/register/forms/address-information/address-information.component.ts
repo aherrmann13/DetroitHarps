@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { FormBase } from '../../form.base';
+import { FormBaseDirective } from '../../form-base.directive';
 import { RegisterContactInformationModel } from '../../../../core/client/api.client';
 
 export const STATES: string[] = [
@@ -63,7 +63,7 @@ export const STATES: string[] = [
   templateUrl: './address-information.component.html',
   styleUrls: ['../../register.component.scss']
 })
-export class AddressInformationComponent extends FormBase {
+export class AddressInformationComponent extends FormBaseDirective {
   formGroup: FormGroup;
 
   filteredStates: Observable<string[]>;
