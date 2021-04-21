@@ -23,11 +23,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [
-              "node_modules/hammerjs/hammer.min.js"
-            ],
             "allowedCommonJsDependencies": [
-              "file-saver"
+              "file-saver",
+              "hammerjs"
            ]
           },
           "configurations": {
@@ -41,7 +39,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -70,7 +67,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": true,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -106,9 +102,6 @@
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [
-              "node_modules/hammerjs/hammer.min.js"
-            ],
             "styles": [
               "src/styles.scss"
             ],

@@ -64,11 +64,6 @@ jobs:
       - restore_cache:
           key: checkout-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - run:
-          name: Install node-sass
-          command: |
-            cd /tmp/detroitharps/src/Client/ 
-            sudo -E npm install --unsafe-perm node-sass@4.14.1
-      - run:
           name: Npm Install
           command: |
             cd /tmp/detroitharps/src/Client/
