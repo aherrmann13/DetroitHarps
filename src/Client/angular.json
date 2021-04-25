@@ -26,7 +26,7 @@
             "allowedCommonJsDependencies": [
               "file-saver",
               "hammerjs"
-           ]
+            ]
           },
           "configurations": {
             "production": {
@@ -111,13 +111,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
             ]
           }
         }
@@ -152,5 +150,8 @@
     "@schematics/angular:service": {
       "skipTests": true
     }
+  },
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
   }
 }

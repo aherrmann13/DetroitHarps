@@ -18,13 +18,13 @@ import { FormControl, Validators } from '@angular/forms';
   styleUrls: ['../../register.component.scss']
 })
 export class ChildCountSelectorComponent implements OnInit {
-  @Output() change = new EventEmitter<number>();
+  @Output() countChange = new EventEmitter<number>();
 
   childCount = new FormControl('', [Validators.required]);
 
   numberOfChildrenSelector: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   ngOnInit() {
-    this.childCount.valueChanges.subscribe(x => this.change.emit(this.childCount.value));
+    this.childCount.valueChanges.subscribe(x => this.countChange.emit(this.childCount.value));
   }
 }

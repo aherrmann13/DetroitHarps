@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   templateUrl: './contact.component.html',
   styleUrls: []
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent {
   // TODO this should be one form
   firstName = new FormControl('', [Validators.required]);
   lastName = new FormControl('', [Validators.required]);
@@ -19,7 +19,6 @@ export class ContactComponent implements OnInit {
   enableForm = true;
 
   constructor(private _client: Client, private _router: Router) {}
-  ngOnInit() {}
 
   getErrorMessage() {
     return this.email.hasError('required')

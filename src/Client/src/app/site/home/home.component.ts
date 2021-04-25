@@ -6,7 +6,7 @@ import { configuration } from '../../configuration';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   title = 'Detroit Harps';
   registrationText = `Register Summer ${configuration.year}`;
 
@@ -15,6 +15,4 @@ export class HomeComponent implements OnInit {
   campRegistrationText = 'Register 2019 Camp July 30 & 31';
 
   constructor() {}
-
-  ngOnInit() {}
 }

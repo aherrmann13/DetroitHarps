@@ -5,15 +5,15 @@ export class ConsoleSink implements LogSink {
   log(entry: LogEntry) {
     switch (entry.level) {
       case LogLevel.Debug:
-        // tslint:disable-next-line:no-console
+        // eslint-disable-next-line no-console
         console.debug(this.getLog(entry));
         break;
       case LogLevel.Info:
-        // tslint:disable-next-line:no-console
+        // eslint-disable-next-line no-console
         console.log(this.getLog(entry));
         break;
       case LogLevel.Error:
-        // tslint:disable-next-line:no-console
+        // eslint-disable-next-line no-console
         console.error(this.getLog(entry));
         break;
     }
