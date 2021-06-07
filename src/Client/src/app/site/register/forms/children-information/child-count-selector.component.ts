@@ -1,13 +1,12 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
-import { MatSelectChange } from '@angular/material/select';
-import { FormControl, Validators } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'dh-child-count-selector',
   template: `
     <mat-form-field>
       <mat-label>Number of Children</mat-label>
-      <mat-select [formControl]="childCount" required>
+      <mat-select [formControl]="form" required>
         <mat-option *ngFor="let number of numberOfChildrenSelector" [value]="number">
           {{ number }}
         </mat-option>
@@ -17,14 +16,8 @@ import { FormControl, Validators } from '@angular/forms';
   `,
   styleUrls: ['../../register.component.scss']
 })
-export class ChildCountSelectorComponent implements OnInit {
-  @Output() countChange = new EventEmitter<number>();
-
-  childCount = new FormControl('', [Validators.required]);
+export class ChildCountSelectorComponent {
+  @Input() form: FormControl;
 
   numberOfChildrenSelector: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-  ngOnInit() {
-    this.childCount.valueChanges.subscribe(x => this.countChange.emit(this.childCount.value));
-  }
 }

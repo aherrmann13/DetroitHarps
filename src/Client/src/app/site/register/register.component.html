@@ -9,54 +9,67 @@
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content class="registration-content">
-      <mat-horizontal-stepper [linear]="true" #stepper (selectionChange)="step(stepper)">
-        <mat-step [stepControl]="parentInformation.control">
+      <mat-horizontal-stepper [linear]="true" #stepper>
+        <mat-step [stepControl]="form.controls.parent">
           <ng-template matStepLabel>Contact Information</ng-template>
-          <dh-register-parent-information [registration]="registerModel"></dh-register-parent-information>
+          <dh-register-parent-information [form]="form.controls.parent"> </dh-register-parent-information>
         </mat-step>
-        <mat-step [stepControl]="addressInformation.control">
+        <mat-step [stepControl]="form.controls.address">
           <ng-template matStepLabel>Address</ng-template>
-          <dh-register-address-information [registration]="registerModel"></dh-register-address-information>
+          <dh-register-address-information [form]="form.controls.address"></dh-register-address-information>
         </mat-step>
-        <mat-step [stepControl]="childrenInformationControl">
-          <dh-child-count-selector
-            (onInit)="childCountChanged($event)"
-            (countChange)="childCountChanged($event)"
-          ></dh-child-count-selector>
+        <mat-step [stepControl]="form.controls.children">
           <ng-template matStepLabel>Child Information</ng-template>
-          <dh-register-children-information [registration]="registerModel"></dh-register-children-information>
+          <dh-child-count-selector [form]="form.controls.childCount"></dh-child-count-selector>
+          <dh-register-children-information [form]="form.controls.children"></dh-register-children-information>
         </mat-step>
-        <mat-step [stepControl]="eventRegistration.control">
+        <mat-step [stepControl]="form.controls.events">
           <ng-template matStepLabel>Event Registration</ng-template>
-          <dh-register-events [registration]="registerModel"></dh-register-events>
+          <dh-register-events
+            [form]="form.controls.events"
+            [children]="children"
+            [events]="events"
+          ></dh-register-events>
         </mat-step>
-        <mat-step [stepControl]="comments.control">
+        <mat-step [stepControl]="form.controls.comments">
           <ng-template matStepLabel>Comments</ng-template>
-          <dh-register-comments></dh-register-comments>
+          <dh-register-comments [form]="form.controls.comments"></dh-register-comments>
         </mat-step>
-        <mat-step [stepControl]="paymentInformation.control">
+        <mat-step [stepControl]="form.controls.paymentInformation">
           <ng-template matStepLabel>Payment Type</ng-template>
-          <dh-register-payment-information [registration]="registerModel"></dh-register-payment-information>
+          <dh-register-payment-information [form]="form.controls.paymentInformation"></dh-register-payment-information>
         </mat-step>
         <mat-step>
           <ng-template matStepLabel>Done</ng-template>
           <dh-register-final-step
             [loading]="isRegistering || isSendingComment"
-            [paymentType]="paymentType"
+            [paymentType]="payment"
           ></dh-register-final-step>
         </mat-step>
       </mat-horizontal-stepper>
     </mat-card-content>
     <mat-card-actions>
       <span class="spacer"></span>
-      <button mat-raised-button color="primary" *ngIf="formIndex !== 0 && formIndex != 6" (click)="goBack(stepper)">
+      <button
+        mat-raised-button
+        color="primary"
+        *ngIf="stepIndex(stepper) !== 0 && stepIndex(stepper) != 6"
+        (click)="goBack(stepper)"
+      >
         Previous
       </button>
-      <button mat-raised-button color="primary" *ngIf="formIndex !== 5 && formIndex != 6" (click)="goForward(stepper)">
+      <button
+        mat-raised-button
+        color="primary"
+        *ngIf="stepIndex(stepper) !== 5 && stepIndex(stepper) != 6"
+        (click)="goForward(stepper)"
+      >
         Next
       </button>
-      <button mat-raised-button color="primary" *ngIf="formIndex === 5" (click)="register(stepper)">Register</button>
-      <button mat-raised-button color="primary" *ngIf="formIndex === 6" [routerLink]="['/schedule']">
+      <button mat-raised-button color="primary" *ngIf="stepIndex(stepper) === 5" (click)="register(stepper)">
+        Register
+      </button>
+      <button mat-raised-button color="primary" *ngIf="stepIndex(stepper) === 6" [routerLink]="['/schedule']">
         Season Schedule
       </button>
     </mat-card-actions>

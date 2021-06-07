@@ -96,18 +96,10 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "src/test.ts",
-            "karmaConfig": "./karma.conf.js",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "styles": [
-              "src/styles.scss"
-            ],
-            "assets": [
-              "src/assets"
-            ]
+            "configPath": "jest.config.js",
+            "tsConfig": "tsconfig.spec.json"
           }
         },
         "lint": {
@@ -130,7 +122,6 @@
     "@schematics/angular:component": {
       "inlineStyle": true,
       "inlineTemplate": true,
-      "skipTests": true,
       "prefix": "dh",
       "style": "scss"
     },

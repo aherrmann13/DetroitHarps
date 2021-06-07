@@ -1,4 +1,4 @@
-<form [formGroup]="formGroup">
+<form [formGroup]="form">
   <mat-radio-group formControlName="paymentType">
     <br />
     <mat-radio-button [value]="cash">Cash/Check</mat-radio-button>
@@ -11,10 +11,10 @@
     <br />
     <br />
   </mat-radio-group>
-  <p *ngIf="formGroup.value.paymentType === 'cash'">
+  <p *ngIf="form.value.paymentType === 'cash'">
     If paying by check please make out to "Detroit Youth GAA" and send to 28156 North Clement Circle, Livonia MI 48150.
     For cash payments catch up with us this summer.
   </p>
-  <p *ngIf="formGroup.value.paymentType === 'paypal'">Link to pay will be on next page</p>
+  <p *ngIf="form.value.paymentType === 'paypal'">Link to pay will be on next page</p>
   <p>After selecting payment option, click 'register'</p>
 </form>

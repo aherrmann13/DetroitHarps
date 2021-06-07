@@ -1,26 +1,20 @@
-<div *ngIf="eventsLoaded && formsLoaded">
-  <form
-    *ngFor="let formGroup of formArray.controls; index as i"
-    [formGroup]="formGroup"
-    class="registration-event-form"
-  >
-    <div class="registration-event-child-name">
-      <h1>{{ getChildName(i) }}</h1>
-    </div>
-    <mat-list>
-      <mat-list-item *ngFor="let event of events">
-        <mat-icon mat-list-icon>event</mat-icon>
-        <h4 mat-line class="registration-event-title">{{ event.title }}</h4>
-        <p mat-line *ngIf="event.endDate">
-          {{ event.startDate | date: 'short' }} - {{ event.endDate | date: 'short' }}
-        </p>
-        <p mat-line *ngIf="!event.endDate">{{ event.startDate | date: 'short' }}</p>
-        <mat-radio-group mat-line color="primary" [formControlName]="event.id" class="registration-event-radio-buttons">
-          <mat-radio-button class="registration-event-answer-selector" [value]="yes">Yes </mat-radio-button>
-          <mat-radio-button class="registration-event-answer-selector" [value]="no">No </mat-radio-button>
-          <mat-radio-button class="registration-event-answer-selector" [value]="maybe">Maybe </mat-radio-button>
-        </mat-radio-group>
-      </mat-list-item>
-    </mat-list>
-  </form>
-</div>
+<form *ngFor="let formGroup of form.controls; index as i" [formGroup]="formGroup" class="registration-event-form">
+  <div class="registration-event-child-name">
+    <h1>{{ children[i].firstName }}</h1>
+  </div>
+  <mat-list>
+    <mat-list-item *ngFor="let event of events">
+      <mat-icon mat-list-icon>event</mat-icon>
+      <h4 mat-line class="registration-event-title">{{ event.title }}</h4>
+      <p mat-line *ngIf="!!event.endDate">
+        {{ event.startDate | date: 'short' }} - {{ event.endDate | date: 'short' }}
+      </p>
+      <p mat-line *ngIf="!event.endDate">{{ event.startDate | date: 'short' }}</p>
+      <mat-radio-group mat-line color="primary" [formControlName]="event.id" class="registration-event-radio-buttons">
+        <mat-radio-button class="registration-event-answer-selector" [value]="yes">Yes </mat-radio-button>
+        <mat-radio-button class="registration-event-answer-selector" [value]="no">No </mat-radio-button>
+        <mat-radio-button class="registration-event-answer-selector" [value]="maybe">Maybe </mat-radio-button>
+      </mat-radio-group>
+    </mat-list-item>
+  </mat-list>
+</form>

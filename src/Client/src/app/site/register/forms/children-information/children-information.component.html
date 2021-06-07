@@ -1,4 +1,4 @@
-<form class="child-registration-form" *ngFor="let formGroup of formArray.controls; index as i" [formGroup]="formGroup">
+<form class="child-registration-form" *ngFor="let formGroup of form.controls; index as i" [formGroup]="formGroup">
   <span class="child-index">Child {{ i + 1 }} </span>
   <br />
   <mat-form-field>
