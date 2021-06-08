@@ -14,7 +14,10 @@ export class ScheduleComponent implements OnInit {
   constructor(private _client: Client) {}
 
   ngOnInit() {
-    this._client.getAllEvents().subscribe(data => (this.events = this.orderDates(data)));
+    const currentYear = new Date().getFullYear();
+    this._client.getAllEvents().subscribe(data => {
+      this.events = this.orderDates(data).filter(evt => evt.startDate.getFullYear() >= currentYear);
+    });
   }
 
   private orderDates(events: Array<EventModel>): Array<EventModel> {
