@@ -12,8 +12,8 @@ namespace DetroitHarps.Business.Registration
 
         void DeleteChild(int id, string firstName, string lastName);
 
-        IEnumerable<RegisteredParentModel> GetAllRegisteredParents();
+        IEnumerable<RegisteredParentModel> GetRegisteredParents(int year);
 
-        IEnumerable<RegisteredChildModel> GetAllRegisteredChildren();
+        IEnumerable<RegisteredChildModel> GetRegisteredChildren(int year);
     }
 }

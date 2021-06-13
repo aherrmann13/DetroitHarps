@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { DeletePromptDialogComponent } from '../delete-prompt/delete-prompt.component';
 import { Observable } from 'rxjs';
+import { configuration } from 'app/configuration';
 
 @Component({
   selector: 'dh-admin-registration',
@@ -31,7 +32,7 @@ export class RegistrationComponent implements OnInit {
   items = [
     {
       icon: 'file_download',
-      onClick: () => this._client.getAllChildrenCsv().subscribe(this.downloadFile)
+      onClick: () => this._client.getChildrenCsv(configuration.year).subscribe(this.downloadFile)
     }
   ];
 
@@ -43,7 +44,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._client.getAllChildren().subscribe(data => {
+    this._client.getChildren(configuration.year).subscribe(data => {
       (this._info = data), this.refreshDataSource();
     });
     this._client.getRegistrationEvents().subscribe(data => {

@@ -66,17 +66,16 @@ namespace DetroitHarps.Business.Test.Registration
             };
 
             var byteArray = Guid.NewGuid().ToByteArray();
-            _managerMock.Setup(x => x.GetAllRegisteredParents())
-                .Returns(list);
+            _managerMock.Setup(x => x.GetRegisteredParents(It.IsAny<int>())).Returns(list);
 
             _csvWriterMock.Setup(x =>
                 x.GetAsCsv(It.IsAny<IList<RegisteredParentModel>>()))
                 .Returns(byteArray);
 
-            var result = _manager.GetAllRegisteredParents();
+            var result = _manager.GetRegisteredParents(1234);
 
             Assert.Equal(byteArray, result);
-            _managerMock.Verify(x => x.GetAllRegisteredParents(), Times.Once);
+            _managerMock.Verify(x => x.GetRegisteredParents(It.Is<int>(y => y == 1234)), Times.Once);
             _csvWriterMock.Verify(
                 x => x.GetAsCsv(
                     It.Is<IList<RegisteredParentModel>>(y => y.Count == 1)),
@@ -91,8 +90,7 @@ namespace DetroitHarps.Business.Test.Registration
                 new RegisteredChildModel()
             };
             var byteArray = Guid.NewGuid().ToByteArray();
-            _managerMock.Setup(x => x.GetAllRegisteredChildren())
-                .Returns(list);
+            _managerMock.Setup(x => x.GetRegisteredChildren(It.IsAny<int>())).Returns(list);
 
             _csvWriterMock.Setup(x =>
                 x.GetAsCsv<RegisteredChildModel, RegisteredChildEventModel>(
@@ -100,10 +98,10 @@ namespace DetroitHarps.Business.Test.Registration
                     It.IsAny<ListPivot<RegisteredChildModel, RegisteredChildEventModel>>()))
                 .Returns(byteArray);
 
-            var result = _manager.GetAllRegisteredChildren();
+            var result = _manager.GetRegisteredChildren(1234);
 
             Assert.Equal(byteArray, result);
-            _managerMock.Verify(x => x.GetAllRegisteredChildren(), Times.Once);
+            _managerMock.Verify(x => x.GetRegisteredChildren(It.Is<int>(y => y == 1234)), Times.Once);
             _csvWriterMock.Verify(
                 x => x.GetAsCsv(
                     It.Is<IList<RegisteredChildModel>>(y => y.Count == 1),
@@ -126,7 +124,7 @@ namespace DetroitHarps.Business.Test.Registration
             {
                 Events = new List<RegisteredChildEventModel>()
             };
-            _manager.GetAllRegisteredChildren();
+            _manager.GetRegisteredChildren(1234);
 
             Assert.Equal(
                 registeredChildModel.Events,
@@ -159,7 +157,7 @@ namespace DetroitHarps.Business.Test.Registration
                     }
                 }
             };
-            _manager.GetAllRegisteredChildren();
+            _manager.GetRegisteredChildren(1234);
 
             var name = listPivot.ColumnNameAccess(registeredChildModel.Events[0]);
 
@@ -192,7 +190,7 @@ namespace DetroitHarps.Business.Test.Registration
                     }
                 }
             };
-            _manager.GetAllRegisteredChildren();
+            _manager.GetRegisteredChildren(1234);
 
             var answer = listPivot.ColumnValueAccess(registeredChildModel.Events[0]);
 

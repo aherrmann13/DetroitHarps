@@ -25,10 +25,10 @@ namespace DetroitHarps.Business.Registration
             _csvWriter = csvWriter;
         }
 
-        public byte[] GetAllRegisteredParents() =>
-            _csvWriter.GetAsCsv(_manager.GetAllRegisteredParents().ToList());
+        public byte[] GetRegisteredParents(int year) =>
+            _csvWriter.GetAsCsv(_manager.GetRegisteredParents(year).ToList());
 
-        public byte[] GetAllRegisteredChildren()
+        public byte[] GetRegisteredChildren(int year)
         {
             var pivot = new ListPivot<RegisteredChildModel, RegisteredChildEventModel>(
                 nameof(RegisteredChildModel.Events),
@@ -37,7 +37,7 @@ namespace DetroitHarps.Business.Registration
                 x => x.Answer.ToString());
 
             return _csvWriter.GetAsCsv(
-                _manager.GetAllRegisteredChildren().ToList(),
+                _manager.GetRegisteredChildren(year).ToList(),
                 pivot);
         }
     }

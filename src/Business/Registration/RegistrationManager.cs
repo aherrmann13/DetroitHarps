@@ -72,12 +72,13 @@ namespace DetroitHarps.Business.Registration
             }
         }
 
-        public IEnumerable<RegisteredParentModel> GetAllRegisteredParents() =>
-            _repository.GetMany(x => !x.IsDisabled)
+        public IEnumerable<RegisteredParentModel> GetRegisteredParents(int year) =>
+            _repository.GetMany(x => !x.IsDisabled && x.SeasonYear == year)
                 .Select(Mapper.Map<RegisteredParentModel>);
 
-        public IEnumerable<RegisteredChildModel> GetAllRegisteredChildren() =>
-            _repository.GetMany(x => !x.IsDisabled)
+
+        public IEnumerable<RegisteredChildModel> GetRegisteredChildren(int year) =>
+            _repository.GetMany(x => !x.IsDisabled && x.SeasonYear == year)
                 .SelectMany(Mapper.Map<IEnumerable<RegisteredChildModel>>);
 
         private RegistrationChild GetChild(

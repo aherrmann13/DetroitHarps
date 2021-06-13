@@ -1,12 +1,9 @@
 namespace DetroitHarps.Business.Registration
 {
-    using System.Collections.Generic;
-    using DetroitHarps.Business.Registration.Models;
-
     public interface IRegistrationCsvManager
     {
-        byte[] GetAllRegisteredParents();
+        byte[] GetRegisteredParents(int year);
 
-        byte[] GetAllRegisteredChildren();
+        byte[] GetRegisteredChildren(int year);
     }
 }

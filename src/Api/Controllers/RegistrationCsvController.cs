@@ -1,21 +1,16 @@
 namespace DetroitHarps.Api.Controllers
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using DetroitHarps.Business.Registration;
-    using DetroitHarps.Business.Registration.Models;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using Tools;
-    using Tools.Csv;
 
     [Route("[Controller]")]
     public class RegistrationCsvController : Controller
     {
         private const string CsvContentType = "text/csv";
-        private const string GetAllParentsCsvName = "parents.csv";
-        private const string GetAllChildrenCsvName = "children.csv";
+        private const string GetParentsCsvName = "parents.csv";
+        private const string GetChildrenCsvName = "children.csv";
 
         private readonly IRegistrationCsvManager _registrationCsvManager;
 
@@ -26,22 +21,22 @@ namespace DetroitHarps.Api.Controllers
             _registrationCsvManager = registrationCsvManager;
         }
 
-        [HttpGet("GetAllParents")]
-        [SwaggerOperation(OperationId = "GetAllParentsCsv")]
+        [HttpGet("GetParents/{year}")]
+        [SwaggerOperation(OperationId = "GetParentsCsv")]
         [Produces(CsvContentType, Type = typeof(FileResult))]
-        public FileResult GetAllParentsCsv()
+        public FileResult GetParentsCsv([FromRoute] int year)
         {
-            var fileBytes = _registrationCsvManager.GetAllRegisteredParents();
-            return File(fileBytes, CsvContentType, GetAllParentsCsvName);
+            var fileBytes = _registrationCsvManager.GetRegisteredParents(year);
+            return File(fileBytes, CsvContentType, GetParentsCsvName);
         }
 
-        [HttpGet("GetAllChildren")]
-        [SwaggerOperation(OperationId = "GetAllChildrenCsv")]
+        [HttpGet("GetChildren/{year}")]
+        [SwaggerOperation(OperationId = "GetChildrenCsv")]
         [Produces(CsvContentType, Type = typeof(FileResult))]
-        public FileResult GetAllChildrenCsv()
+        public FileResult GetChildrenCsv([FromRoute] int year)
         {
-            var fileBytes = _registrationCsvManager.GetAllRegisteredChildren();
-            return File(fileBytes, CsvContentType, GetAllChildrenCsvName);
+            var fileBytes = _registrationCsvManager.GetRegisteredChildren(year);
+            return File(fileBytes, CsvContentType, GetChildrenCsvName);
         }
     }
 }

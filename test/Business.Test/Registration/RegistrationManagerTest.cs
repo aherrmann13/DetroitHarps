@@ -369,10 +369,10 @@ namespace DetroitHarps.Business.Test.Registration
 
             var manager = GetManager();
 
-            var modelsFromManager = manager.GetAllRegisteredParents();
+            var modelsFromManager = manager.GetRegisteredParents(1234);
 
             _repositoryMock.Verify(
-                x => x.GetMany(It.Is<Expression<Func<Registration, bool>>>(y => ValidateFiltersIsDisabled(y))),
+                x => x.GetMany(It.Is<Expression<Func<Registration, bool>>>(y => ValidateFiltersIsDisabled(y, 1234))),
                 Times.Once());
             Assert.Equal(entities.Count, modelsFromManager.Count());
             Assert.All(modelsFromManager, x => Assert.NotNull(x));
@@ -408,22 +408,23 @@ namespace DetroitHarps.Business.Test.Registration
                 .Returns(entities);
             var manager = GetManager();
 
-            var childrenFromManager = manager.GetAllRegisteredChildren();
+            var childrenFromManager = manager.GetRegisteredChildren(1234);
 
             _repositoryMock.Verify(
-                x => x.GetMany(It.Is<Expression<Func<Registration, bool>>>(y => ValidateFiltersIsDisabled(y))),
+                x => x.GetMany(It.Is<Expression<Func<Registration, bool>>>(y => ValidateFiltersIsDisabled(y, 1234))),
                 Times.Once());
 
             Assert.Equal(entities.SelectMany(x => x.Children).ToList().Count, childrenFromManager.Count());
             Assert.All(childrenFromManager, x => Assert.NotNull(x));
         }
 
-        private bool ValidateFiltersIsDisabled(Expression<Func<Registration, bool>> expr)
+        private bool ValidateFiltersIsDisabled(Expression<Func<Registration, bool>> expr, int year)
         {
-            var shouldBeFalse = expr.Compile()(new Registration { IsDisabled = true });
-            var shouldBeTrue = expr.Compile()(new Registration { IsDisabled = false });
+            var shouldBeFalseDisabled = expr.Compile()(new Registration { IsDisabled = true, SeasonYear = year });
+            var shouldBeTrue = expr.Compile()(new Registration { IsDisabled = false, SeasonYear = year });
+            var shouldBeFalseYear = expr.Compile()(new Registration { IsDisabled = true, SeasonYear = year + 1 });
 
-            return shouldBeTrue && !shouldBeFalse;
+            return shouldBeTrue && !shouldBeFalseDisabled && !shouldBeFalseYear;
         }
 
         private RegistrationManager GetManager() =>

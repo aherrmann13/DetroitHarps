@@ -1,14 +1,12 @@
 namespace DetroitHarps.Api.Controllers
 {
     using System.Collections.Generic;
-    using System.Linq;
     using DetroitHarps.Business.Registration;
     using DetroitHarps.Business.Registration.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Swashbuckle.AspNetCore.Annotations;
     using Tools;
-    using Tools.Csv;
 
     [Route("[Controller]")]
     public class RegistrationController : Controller
@@ -50,19 +48,19 @@ namespace DetroitHarps.Api.Controllers
             return Ok();
         }
 
-        [HttpGet("GetAllParents")]
-        [SwaggerOperation(OperationId = "GetAllParents")]
-        public ActionResult<IEnumerable<RegisteredParentModel>> GetAllParents()
+        [HttpGet("GetParents/{year}")]
+        [SwaggerOperation(OperationId = "GetParents")]
+        public ActionResult<IEnumerable<RegisteredParentModel>> GetParents([FromRoute] int year)
         {
-            var result = _registrationManager.GetAllRegisteredParents();
+            var result = _registrationManager.GetRegisteredParents(year);
             return Ok(result);
         }
 
-        [HttpGet("GetAllChildren")]
-        [SwaggerOperation(OperationId = "GetAllChildren")]
-        public ActionResult<IEnumerable<RegisteredChildModel>> GetAllChildren()
+        [HttpGet("GetChildren/{year}")]
+        [SwaggerOperation(OperationId = "GetChildren")]
+        public ActionResult<IEnumerable<RegisteredChildModel>> GetChildren([FromRoute] int year)
         {
-            var result = _registrationManager.GetAllRegisteredChildren();
+            var result = _registrationManager.GetRegisteredChildren(year);
             return Ok(result);
         }
     }
