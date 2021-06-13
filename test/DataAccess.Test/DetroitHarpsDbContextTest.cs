@@ -28,7 +28,7 @@ namespace DetroitHarps.DataAccess.Test
 
             var types = _dbContext.Model.GetEntityTypes();
 
-            Assert.Equal(13, types.Count());
+            Assert.Equal(12, types.Count());
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace DetroitHarps.DataAccess.Test
 
             _dbContext.SaveChanges();
 
-           mock.Verify(x => x.SetTimestamps(It.Is<DbContext>(y => y.Equals(_dbContext))));
+            mock.Verify(x => x.SetTimestamps(It.Is<DbContext>(y => y.Equals(_dbContext))));
         }
     }
 }

@@ -1,7 +1,7 @@
 namespace DetroitHarps.DataAccess.Test
 {
     using System;
-    using DetroitHarps.Business.Contact.Entities;
+    using DetroitHarps.Business.Photo.Entities;
     using Microsoft.EntityFrameworkCore;
     using Xunit;
 
@@ -21,8 +21,8 @@ namespace DetroitHarps.DataAccess.Test
             var auditPropertyManager = new AuditPropertyManager();
 
             // can use any EntityWithId
-            var message = new Message();
-            _dbContext.Add(message);
+            var photoGroup = new PhotoGroup();
+            _dbContext.Add(photoGroup);
 
             var before = DateTimeOffset.Now;
 
@@ -31,11 +31,11 @@ namespace DetroitHarps.DataAccess.Test
 
             var after = DateTimeOffset.Now;
 
-            Assert.InRange(_dbContext.Entry(message).Property<DateTimeOffset>(Constants.InsertTimestampPropertyName).CurrentValue, before, after);
-            Assert.InRange(_dbContext.Entry(message).Property<DateTimeOffset>(Constants.UpdateTimestampPropertyName).CurrentValue, before, after);
+            Assert.InRange(_dbContext.Entry(photoGroup).Property<DateTimeOffset>(Constants.InsertTimestampPropertyName).CurrentValue, before, after);
+            Assert.InRange(_dbContext.Entry(photoGroup).Property<DateTimeOffset>(Constants.UpdateTimestampPropertyName).CurrentValue, before, after);
             Assert.Equal(
-                _dbContext.Entry(message).Property<DateTimeOffset>(Constants.InsertTimestampPropertyName).CurrentValue,
-                _dbContext.Entry(message).Property<DateTimeOffset>(Constants.UpdateTimestampPropertyName).CurrentValue);
+                _dbContext.Entry(photoGroup).Property<DateTimeOffset>(Constants.InsertTimestampPropertyName).CurrentValue,
+                _dbContext.Entry(photoGroup).Property<DateTimeOffset>(Constants.UpdateTimestampPropertyName).CurrentValue);
         }
 
         [Fact]
@@ -44,11 +44,11 @@ namespace DetroitHarps.DataAccess.Test
             var auditPropertyManager = new AuditPropertyManager();
 
             // can use any EntityWithId
-            var message = new Message();
-            _dbContext.Add(message);
+            var photoGroup = new PhotoGroup();
+            _dbContext.Add(photoGroup);
             _dbContext.SaveChanges();
 
-            _dbContext.Entry(message).State = EntityState.Modified;
+            _dbContext.Entry(photoGroup).State = EntityState.Modified;
 
             var before = DateTimeOffset.Now;
 
@@ -57,11 +57,11 @@ namespace DetroitHarps.DataAccess.Test
 
             var after = DateTimeOffset.Now;
 
-            Assert.NotInRange(_dbContext.Entry(message).Property<DateTimeOffset>(Constants.InsertTimestampPropertyName).CurrentValue, before, after);
-            Assert.InRange(_dbContext.Entry(message).Property<DateTimeOffset>(Constants.UpdateTimestampPropertyName).CurrentValue, before, after);
+            Assert.NotInRange(_dbContext.Entry(photoGroup).Property<DateTimeOffset>(Constants.InsertTimestampPropertyName).CurrentValue, before, after);
+            Assert.InRange(_dbContext.Entry(photoGroup).Property<DateTimeOffset>(Constants.UpdateTimestampPropertyName).CurrentValue, before, after);
             Assert.NotEqual(
-                _dbContext.Entry(message).Property<DateTimeOffset>(Constants.InsertTimestampPropertyName).CurrentValue,
-                _dbContext.Entry(message).Property<DateTimeOffset>(Constants.UpdateTimestampPropertyName).CurrentValue);
+                _dbContext.Entry(photoGroup).Property<DateTimeOffset>(Constants.InsertTimestampPropertyName).CurrentValue,
+                _dbContext.Entry(photoGroup).Property<DateTimeOffset>(Constants.UpdateTimestampPropertyName).CurrentValue);
         }
     }
 }
