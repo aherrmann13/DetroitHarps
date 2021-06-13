@@ -211,7 +211,7 @@ export class RegisterComponent implements OnInit {
       children: value?.children.map((child, i) => {
         return new RegisterChildModel({
           firstName: child?.childFirstName,
-          lastName: child?.childFirstName,
+          lastName: child?.childLastName,
           gender: child?.childGender,
           dateOfBirth: child?.childDob,
           shirtSize: child?.childShirtSize,
