@@ -1,4 +1,4 @@
 export const configuration = {
-  year: 2021,
+  year: 2022,
   shirtSizes: ['YXS', 'YS', 'YM', 'YL', 'YXL', 'AS', 'AM', 'AL', 'AXL']
 };
