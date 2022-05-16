@@ -12,7 +12,7 @@ namespace DetroitHarps.Business.Schedule
 
         void Delete(int id);
 
-        IEnumerable<EventModel> GetAll();
+        IEnumerable<EventModel> GetAll(int? year = null);
 
         IEnumerable<EventModel> GetUpcoming(DateTime? untilDate = null);
 

@@ -126,16 +126,58 @@ namespace DetroitHarps.Business.Test.Schedule
                 new Event(),
                 new Event()
             };
-            _repositoryMock.Setup(x => x.GetAll())
+            _repositoryMock.Setup(x => x.GetMany(It.IsAny<Expression<Func<Event, bool>>>()))
                 .Returns(models);
 
             var manager = GetManager();
 
             var modelsFromManager = manager.GetAll();
 
+            _repositoryMock.Verify(
+                x => x.GetMany(It.Is<Expression<Func<Event, bool>>>(y => ValidateAllEventsPass(y))),
+                Times.Once());
             Assert.Equal(models.Count, modelsFromManager.Count());
             Assert.All(modelsFromManager, x => Assert.NotNull(x));
         }
+
+        private bool ValidateAllEventsPass(Expression<Func<Event, bool>> expr)
+        {
+            var shouldBeTrue = expr.Compile()(new Event());
+
+            return shouldBeTrue;
+        }
+
+        [Fact]
+        public void GetAllWithYearReturnsModelsInYearTest()
+        {
+            var models = new List<Event>()
+            {
+                new Event(),
+                new Event()
+            };
+            _repositoryMock.Setup(x => x.GetMany(It.IsAny<Expression<Func<Event, bool>>>()))
+                .Returns(models);
+
+            var manager = GetManager();
+
+            var modelsFromManager = manager.GetAll(2022);
+
+            _repositoryMock.Verify(
+                x => x.GetMany(It.Is<Expression<Func<Event, bool>>>(y => ValidateSomeEventsPass(y, 2022))),
+                Times.Once());
+            Assert.Equal(models.Count, modelsFromManager.Count());
+            Assert.All(modelsFromManager, x => Assert.NotNull(x));
+        }
+
+        private bool ValidateSomeEventsPass(Expression<Func<Event, bool>> expr, int year)
+        {
+            var false1 = expr.Compile()(new Event { StartDate = new DateTime(2021, 01, 01) });
+            var true1 = expr.Compile()(new Event { StartDate = new DateTime(2022, 01, 01) });
+            var false2 = expr.Compile()(new Event { StartDate = new DateTime(2023, 01, 01) });
+
+            return true1 && !false1 && !false2;
+        }
+
 
         [Fact]
         public void GetUpcomingCurrentDatePassedIntoFilterExpressionTest()

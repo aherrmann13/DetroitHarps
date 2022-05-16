@@ -7,9 +7,10 @@
       <mat-icon mat-list-icon>event</mat-icon>
       <h4 mat-line class="registration-event-title">{{ event.title }}</h4>
       <p mat-line *ngIf="!!event.endDate">
-        {{ event.startDate | date: 'short' }} - {{ event.endDate | date: 'short' }}
+        {{ event.startDate | date: (event.showTime ? 'short' : 'shortDate') }} -
+        {{ event.endDate | date: (event.showTime ? 'short' : 'shortDate') }}
       </p>
-      <p mat-line *ngIf="!event.endDate">{{ event.startDate | date: 'short' }}</p>
+      <p mat-line *ngIf="!event.endDate">{{ event.startDate | date: (event.showTime ? 'short' : 'shortDate') }}</p>
       <mat-radio-group mat-line color="primary" [formControlName]="event.id" class="registration-event-radio-buttons">
         <mat-radio-button class="registration-event-answer-selector" [value]="yes">Yes </mat-radio-button>
         <mat-radio-button class="registration-event-answer-selector" [value]="no">No </mat-radio-button>

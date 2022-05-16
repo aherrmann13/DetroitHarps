@@ -52,7 +52,7 @@ export class ScheduleModalDialogComponent implements OnInit {
     this.formGroup = this._formBuilder.group({
       title: [title, Validators.required],
       startDate: [startDate, Validators.required],
-      startTime: [startTime, [Validators.required, formMatchValidator(this._timeRegex)]],
+      startTime: [startTime, [formMatchValidator(this._timeRegex)]],
       endDate: [endDate],
       endTime: [endTime, formMatchValidator(this._timeRegex)],
       canRegisterChecked: [canRegisterChecked],
@@ -111,15 +111,16 @@ export class ScheduleModalDialogComponent implements OnInit {
       startDate: this.getDate(this.formGroup.controls.startDate.value, this.formGroup.controls.startTime.value),
       endDate: this.getDate(this.formGroup.controls.endDate.value, this.formGroup.controls.endTime.value),
       description: this.formGroup.controls.description.value,
-      canRegister: this.formGroup.controls.canRegisterChecked.value
+      canRegister: this.formGroup.controls.canRegisterChecked.value,
+      showTime: !!this.formGroup.controls.startTime.value
     });
   }
 
-  private getDate(date: Date, time: string): Date {
-    if (!date || !time) {
+  private getDate(date: Date, time: string | undefined): Date | undefined {
+    if (!date) {
       return undefined;
     }
-    const timeParts = time.split(/[ :]+/);
+    const timeParts = !!time ? time.split(/[ :]+/) : ['0', '0', 'am'];
     if (timeParts.length !== 3) {
       console.log(time);
     }

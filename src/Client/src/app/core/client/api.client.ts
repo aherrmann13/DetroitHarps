@@ -1418,6 +1418,66 @@ export class Client extends BaseClient {
     }
 
     /**
+     * @return Success
+     */
+    getAllEventsForYear(year: number): Observable<EventModel[]> {
+        let url_ = this.baseUrl + "/Schedule/GetAll/{year}";
+        if (year === undefined || year === null)
+            throw new Error("The parameter 'year' must be defined.");
+        url_ = url_.replace("{year}", encodeURIComponent("" + year));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return _observableFrom(this.transformOptions(options_)).pipe(_observableMergeMap(transformedOptions_ => {
+            return this.http.request("get", url_, transformedOptions_);
+        })).pipe(_observableMergeMap((response_: any) => {
+            return this.transformResult(url_, response_, (r) => this.processGetAllEventsForYear(<any>r));
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.transformResult(url_, response_, (r) => this.processGetAllEventsForYear(<any>r));
+                } catch (e) {
+                    return <Observable<EventModel[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<EventModel[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllEventsForYear(response: HttpResponseBase): Observable<EventModel[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(EventModel.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<EventModel[]>(<any>null);
+    }
+
+    /**
      * @param until (optional) 
      * @return Success
      */
@@ -2353,6 +2413,7 @@ export class EventCreateModel implements IEventCreateModel {
     title?: string | undefined;
     description?: string | undefined;
     canRegister!: boolean;
+    showTime!: boolean;
 
     constructor(data?: IEventCreateModel) {
         if (data) {
@@ -2370,6 +2431,7 @@ export class EventCreateModel implements IEventCreateModel {
             this.title = _data["title"];
             this.description = _data["description"];
             this.canRegister = _data["canRegister"];
+            this.showTime = _data["showTime"];
         }
     }
 
@@ -2387,6 +2449,7 @@ export class EventCreateModel implements IEventCreateModel {
         data["title"] = this.title;
         data["description"] = this.description;
         data["canRegister"] = this.canRegister;
+        data["showTime"] = this.showTime;
         return data; 
     }
 }
@@ -2397,6 +2460,7 @@ export interface IEventCreateModel {
     title?: string | undefined;
     description?: string | undefined;
     canRegister: boolean;
+    showTime: boolean;
 }
 
 export class EventModel implements IEventModel {
@@ -2406,6 +2470,7 @@ export class EventModel implements IEventModel {
     title?: string | undefined;
     description?: string | undefined;
     canRegister!: boolean;
+    showTime!: boolean;
 
     constructor(data?: IEventModel) {
         if (data) {
@@ -2424,6 +2489,7 @@ export class EventModel implements IEventModel {
             this.title = _data["title"];
             this.description = _data["description"];
             this.canRegister = _data["canRegister"];
+            this.showTime = _data["showTime"];
         }
     }
 
@@ -2442,6 +2508,7 @@ export class EventModel implements IEventModel {
         data["title"] = this.title;
         data["description"] = this.description;
         data["canRegister"] = this.canRegister;
+        data["showTime"] = this.showTime;
         return data; 
     }
 }
@@ -2453,6 +2520,7 @@ export interface IEventModel {
     title?: string | undefined;
     description?: string | undefined;
     canRegister: boolean;
+    showTime: boolean;
 }
 
 export enum RegisterPaymentModelPaymentType {

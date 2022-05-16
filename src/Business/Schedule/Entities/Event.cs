@@ -15,5 +15,7 @@ namespace DetroitHarps.Business.Schedule.Entities
         public string Description { get; set; }
 
         public bool CanRegister { get; set; }
+
+        public bool ShowTime { get; set; }
     }
 }

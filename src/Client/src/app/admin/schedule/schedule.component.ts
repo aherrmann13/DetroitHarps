@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DeletePromptDialogComponent } from '../delete-prompt/delete-prompt.component';
 import { ascendingDateSorter } from '../../core/utilities/date-functions';
+import { configuration } from 'app/configuration';
 
 @Component({
   selector: 'dh-admin-schedule',
@@ -60,7 +61,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._client.getAllEvents().subscribe(data => {
+    this._client.getAllEventsForYear(configuration.year).subscribe(data => {
       (this._events = data), this.refreshDataSource();
     });
   }

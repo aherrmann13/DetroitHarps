@@ -41,7 +41,7 @@ describe('EventRegistrationComponent', () => {
     fixture = TestBed.createComponent(EventRegistrationComponent);
     component = fixture.componentInstance;
 
-    const baseEventProps = { canRegister: true, description: 'n/a' };
+    const baseEventProps = { canRegister: true, description: 'n/a', showTime: true };
 
     events = [
       new EventModel({ id: 1, title: 'evt1', startDate: new Date('2021-06-05'), ...baseEventProps }),
@@ -52,6 +52,14 @@ describe('EventRegistrationComponent', () => {
         startDate: new Date('2021-06-12'),
         endDate: new Date('2021-06-13'),
         ...baseEventProps
+      }),
+      new EventModel({
+        ...baseEventProps,
+        id: 3,
+        title: 'evt3',
+        startDate: new Date('2021-06-12'),
+        endDate: new Date('2021-06-13'),
+        showTime: false
       })
     ];
 
@@ -92,7 +100,7 @@ describe('EventRegistrationComponent', () => {
     childForms.forEach(childForm => {
       const eventSelectors = childForm.queryAll(By.css('mat-list-item'));
 
-      expect(eventSelectors.length).toBe(3);
+      expect(eventSelectors.length).toBe(4);
 
       expect(eventSelectors[0].query(By.css('h4')).nativeElement.innerHTML.trim()).toBe('evt1');
       expect(eventSelectors[1].query(By.css('h4')).nativeElement.innerHTML.trim()).toBe('evt2');
@@ -132,5 +140,18 @@ describe('EventRegistrationComponent', () => {
 
     const formattedStart = pipe.transform(events[1].startDate, 'short');
     expect(date[0].nativeElement.innerHTML.trim()).toBe(`${formattedStart}`);
+  });
+
+  it('should not display time for event with showTime set to false', () => {
+    const childForms = fixture.debugElement.queryAll(By.css('.registration-event-form'));
+
+    const eventSelectors = childForms[1].queryAll(By.css('mat-list-item'));
+    const date = eventSelectors[3].queryAll(By.css('p'));
+
+    expect(date.length).toBe(1);
+
+    const formattedStart = pipe.transform(events[2].startDate, 'shortDate');
+    const formattedEnd = pipe.transform(events[2].endDate, 'shortDate');
+    expect(date[0].nativeElement.innerHTML.trim()).toBe('6/11/21 - 6/12/21');
   });
 });

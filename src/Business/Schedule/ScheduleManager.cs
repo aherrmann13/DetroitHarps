@@ -53,8 +53,9 @@ namespace DetroitHarps.Business.Schedule
             _repository.Delete(id);
         }
 
-        public IEnumerable<EventModel> GetAll() =>
-            _repository.GetAll()
+        public IEnumerable<EventModel> GetAll(int? year = null) =>
+            _repository
+                .GetMany(x => year == null || x.StartDate.Year == year)
                 .Select(Mapper.Map<EventModel>);
 
         public IEnumerable<EventModel> GetUpcoming(DateTime? untilDate = null)

@@ -6,7 +6,6 @@ namespace DetroitHarps.Api.Controllers
     using DetroitHarps.Business.Schedule.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Swashbuckle.AspNetCore;
     using Swashbuckle.AspNetCore.Annotations;
     using Tools;
 
@@ -52,6 +51,15 @@ namespace DetroitHarps.Api.Controllers
         public ActionResult<IEnumerable<EventModel>> GetAll()
         {
             var result = _scheduleManager.GetAll();
+            return Ok(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("GetAll/{year}")]
+        [SwaggerOperation(OperationId = "GetAllEventsForYear")]
+        public ActionResult<IEnumerable<EventModel>> GetAllEventsForYear([FromRoute] int year)
+        {
+            var result = _scheduleManager.GetAll(year);
             return Ok(result);
         }
 
