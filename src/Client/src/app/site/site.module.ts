@@ -27,7 +27,6 @@ import { FinalStepComponent } from './register/forms/final-step/final-step.compo
 
 import { PhotoService } from './photos/photos.service';
 import { LoggerModule } from '../core/logger/logger.module';
-import { FooterComponent } from './footer/footer.component';
 import { EventRegistrationComponent } from './register/forms/children-information/event-registration.component';
 import { ChildCountSelectorComponent } from './register/forms/children-information/child-count-selector.component';
 import { PaypalFooterComponent } from './footer/paypal-footer.component';
@@ -52,7 +51,6 @@ import { PaypalFooterComponent } from './footer/paypal-footer.component';
     CommentsComponent,
     FinalStepComponent,
     PaypalFooterComponent,
-    FooterComponent
   ],
   imports: [
     CommonModule,
