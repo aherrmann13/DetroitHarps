@@ -50,7 +50,7 @@ import { PaypalFooterComponent } from './footer/paypal-footer.component';
     EventRegistrationComponent,
     CommentsComponent,
     FinalStepComponent,
-    PaypalFooterComponent,
+    PaypalFooterComponent
   ],
   imports: [
     CommonModule,
